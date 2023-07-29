@@ -2,12 +2,14 @@ from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 import geocoder
 
-# Create your models here.
+
+
+''' USER MANAGEMENT '''
 
 class UserManager(BaseUserManager):
 
     def _create_user(self, username, password=None, **extra_fields):
-        #Create and save a User with the given email and password.
+        #Create and save a User with the given ID and password.
         if not username:
             raise ValueError('The given ID must be set')
         user = self.model(username=username, **extra_fields)
@@ -83,6 +85,36 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
+''' ADOLESCENT MODEL'''
+
+class Adolescent(models.Model):
+
+    PRIMARY = 'PR'
+    SECONDARY = 'SC'
+    COMMUNITY = 'CM'
+
+    ADOLESCENT_TYPE_CHOICES = [
+        (PRIMARY, 'Primary'),
+        (SECONDARY, 'Secondary'),
+        (COMMUNITY, 'Community'),
+    ]
+
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pid = models.CharField(unique=True, max_length=10)
+    dob = models.DateField(null=True, blank=True)
+    location = models.CharField(max_length=50)
+    adolescent_type = models.CharField(max_length=30, choices=ADOLESCENT_TYPE_CHOICES)
+
+
+
+    def __str__(self):
+        return self.username
+
+
+
+''' ACTIVITY LOG MODEL'''
+
 class ActivityLog(models.Model):
     username = models.CharField(max_length=100)
     action = models.TextField()
@@ -98,15 +130,4 @@ class ActivityLog(models.Model):
 
 
 
-class Adolescent(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    pid = models.CharField(unique=True, max_length=10)
-    dob = models.DateField(null=True, blank=True)
-    location = models.CharField(max_length=50)
-    type = models.CharField(max_length=30)
-
-
-
-    def __str__(self):
-        return self.username
 
