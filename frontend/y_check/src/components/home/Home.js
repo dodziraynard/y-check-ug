@@ -3,7 +3,7 @@ import './home.scss'
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 function Home() {
   return (
-    <div className=''>
+    <div className='home'>
       <div className='circle'>
         <div className='image'>
             <img src={ug_logo} alt="Logo" />
