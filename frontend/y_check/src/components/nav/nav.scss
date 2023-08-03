@@ -34,6 +34,8 @@
   
   .logo span {
     color: var(--ug_blue);
+    font-weight: 700;
+
   }
   
   .search-bar {
@@ -46,6 +48,7 @@
   
   .search-icon {
     color: #b9b9bb;
+    cursor: pointer;
     margin-right: 5px; /* Adjust the margin as needed to control the distance between the icon and the input */
   }
   
@@ -64,6 +67,7 @@
   .person img {
     width: 40px; /* Adjust the size as needed */
     height: 40px; /* Adjust the size as needed */
+    cursor: pointer;
     border-radius: 50%;
   }
   
@@ -74,18 +78,19 @@
   
   .person span {
     font-size: 12px;
+    color: var(--ug_blue);
     margin-right: 10px;
   }
   
   .notification {
     margin-right: 15px;
+    color: var(--ug_blue);
+    cursor: pointer;
   }
   
   /* Search Bar */
   /* Adjust the margin-right on .logo to move the search-bar closer to the logo */
-  .logo {
-    margin-right: -1000px;
-  }
+  
   
 
 /* Search Bar */
