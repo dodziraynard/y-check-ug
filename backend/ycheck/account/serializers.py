@@ -1,17 +1,17 @@
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
-from . models import *
+from .models import User
 
-class UserSerializerWithToken(serializers.ModelSerializer):
-    token = serializers.SerializerMethodField(read_only=True)
-
+class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'token', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'username', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser']
 
-    def get_token(self, obj):
-        token = RefreshToken.for_user(obj)
-        return str(token.access_token)
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
 
-
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user

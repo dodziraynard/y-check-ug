@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='qd#3^56(!u=x*&ij8f3x$&iuvzan%#6@ge)ssbqq_87ahoxifp')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -41,15 +41,20 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'account.apps.AccountConfig',
-    'setup'
+    'setup',
+    'rest_framework.authtoken',
+    
 ]
+
+
+AUTH_USER_MODEL = 'account.User'
 
 
 
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
 

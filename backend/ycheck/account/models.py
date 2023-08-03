@@ -5,12 +5,8 @@ from django.contrib.auth.models import Group, Permission
 
 
 
-''' USER MANAGEMENT '''
-
 class UserManager(BaseUserManager):
-
     def _create_user(self, username, password=None, **extra_fields):
-        #Create and save a User with the given ID and password.
         if not username:
             raise ValueError('The given ID must be set')
         user = self.model(username=username, **extra_fields)
@@ -18,24 +14,16 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
     def create_user(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(username, password, **extra_fields)
 
-
     def create_superuser(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-
         return self._create_user(username, password, **extra_fields)
+
 
 
 
@@ -59,7 +47,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     deleted = models.BooleanField(default=False)
 
 
-    # fields from PermissionsMixin
     is_superuser = models.BooleanField(default=False)
     groups = models.ManyToManyField(
         Group,
@@ -102,48 +89,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return super().save(*args, **kwargs)
 
 
-
-''' ADOLESCENT MODEL'''
-
-# class Adolescent(models.Model):
-
-#     PRIMARY = 'PR'
-#     SECONDARY = 'SC'
-#     COMMUNITY = 'CM'
-
-#     ADOLESCENT_TYPE_CHOICES = [
-#         (PRIMARY, 'Primary'),
-#         (SECONDARY, 'Secondary'),
-#         (COMMUNITY, 'Community'),
-#     ]
-
-
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     pid = models.CharField(unique=True, max_length=10)
-#     dob = models.DateField(null=True, blank=True)
-#     location = models.CharField(max_length=50)
-#     adolescent_type = models.CharField(max_length=30, choices=ADOLESCENT_TYPE_CHOICES)
-
-
-
-#     def __str__(self):
-#         return self.username
-
-
-
-''' ACTIVITY LOG MODEL'''
-
-# class ActivityLog(models.Model):
-#     username = models.CharField(max_length=100)
-#     action = models.TextField()
-#     ip = models.CharField(max_length=100, null=True, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self) -> str:
-#         return "%s %s" % (self.username, self.action)
-
-#     def get_latlng(self):
-#         return geocoder.ip(self.registration_ip).latlng
 
 
 
