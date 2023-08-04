@@ -1,0 +1,11 @@
+.card{
+    padding: 1rem 2rem 3rem 2rem;
+    border-radius: 1rem;
+    background-color: #212121;
+    color: white;
+}
+section{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1rem;
+}
