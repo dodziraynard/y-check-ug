@@ -14,3 +14,15 @@
     margin-left: 1rem;
     margin-top: -3rem;
 }
+@media screen  and (min-width:280px) and (max-width:1180px){
+   .section{
+    width: 95%;
+   } 
+    
+}
+@media screen  and (min-width:280px) and (max-width:990px){
+    .section{
+     width: 90%;
+    } 
+     
+ }

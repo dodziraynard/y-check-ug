@@ -70,3 +70,9 @@
     background: var(--ug_blue);
     margin-right: calc(1rem - 8px);
 }
+
+@media screen  and (min-width:280px) and (max-width:622px){
+    .sidebar{
+        display: none;
+    }
+}

@@ -37,3 +37,17 @@ margin-right: 4rem;
     margin-top: -5rem;
     height: 100%;
 }
+
+@media screen  and (min-width:280px) and (max-width:1180px){
+    section{
+        grid-template-columns: 1fr;
+    }
+    .move{
+        margin-top: 0rem;
+        height: 80%;
+    }
+    .card{
+        height: 65%;
+    }
+    
+}
