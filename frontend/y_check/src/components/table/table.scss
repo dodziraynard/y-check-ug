@@ -1,6 +1,11 @@
+:root {
+    --ug_gold: #B5965C;
+    --ug_blue: #173D70;
+    --active:#E0E3FD;
+}
 .section-table{
     margin-left: 1rem;
-    margin-top: -2rem;
+    margin-top: -3rem;
 }
 .MuiTableRow-root>*{
     padding: 10px;
@@ -22,4 +27,5 @@ Table:first-child{
     justify-content: flex-start;
     gap: 2rem;
     margin-left: 2rem;
+    color: var(--ug_blue);
 }
