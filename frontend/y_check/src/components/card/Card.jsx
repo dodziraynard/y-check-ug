@@ -23,7 +23,7 @@ function Card() {
                 <h5>Appointment</h5>
             </div>
         </div>
-        <div className='card'>
+        <div className='card move'>
             <div className="logo">
             <Icon path={mdiDoctor} size={3} />
             </div>
@@ -32,7 +32,7 @@ function Card() {
                 <h5>Total Users</h5>
             </div>
         </div>
-        <div className='card'>
+        <div className='card move'>
             <div className="logo">
             <Icon path={mdiAccountSupervisor} size={3} />
             </div>
