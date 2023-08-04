@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '../../components/card/Card'
 import Chart from '../../components/chart/Chart'
 import './dashboard.scss'
-import CustomizedTables from '../../components/table/Table'
+import BasicTable from '../../components/table/Table'
 function Dashboard() {
   return (
     <section>
@@ -12,7 +12,7 @@ function Dashboard() {
           <Chart/>
         </div>
         <div className="row_two">
-          <CustomizedTables/>
+          <BasicTable/>
         </div>
         
       </div>
