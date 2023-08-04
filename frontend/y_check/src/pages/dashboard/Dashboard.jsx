@@ -10,7 +10,8 @@ function Dashboard() {
           <Card/>
           <Chart/>
         </div>
-        <div className="row_two"></div>
+        <div className="row_two">
+        </div>
         
       </div>
     </section>
