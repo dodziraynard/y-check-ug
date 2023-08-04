@@ -21,6 +21,7 @@ function Sidebar() {
                 </div>
             )
         })}
+       
         <div className='menu-item-down'>
             <div className='down-items'>
                 <Icon className='' path={mdiCog} size={1} />
@@ -31,7 +32,6 @@ function Sidebar() {
                 <span>Logout</span>
             </div>
         </div>
-       
       </div>
     </div>
   )

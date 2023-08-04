@@ -47,6 +47,16 @@
     display: flex;
     align-items: center;
     gap: 2rem;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 2rem;
+}
+.down-items:hover{
+    background: var(--active);
+    
+
 }
 .active{
     background: var(--active);
@@ -58,4 +68,5 @@
     width: 8px;
     height: 180%;
     background: var(--ug_blue);
+    margin-right: calc(1rem - 8px);
 }
