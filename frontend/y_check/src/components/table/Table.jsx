@@ -49,7 +49,18 @@ export default function BasicTable() {
     <div className='section-table'>
     <TableContainer component={Paper}
     style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)',width:'105%'}}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <div className='list'>
+            <div className="list-items">
+                <h4>Users</h4>
+            </div>
+            <div className="list-items">
+                <h4>Patients</h4>
+            </div>
+            <div className="list-items">
+                <h4>Group</h4>
+            </div>
+        </div>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table" style={{marginLeft:'1rem'}}>
         <TableHead>
           <TableRow>
             <TableCell>Staff ID</TableCell>

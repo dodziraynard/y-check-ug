@@ -4,14 +4,22 @@
 }
 .MuiTableRow-root>*{
     padding: 10px;
+
 }
-.MuiTableRow-root.MuiTableRow-head>*{
-    font-weight: bold !important;
-}
+
 Table td, th{
     border: none !important;
+
 
 }
 Table:first-child{
     border-radius: 0.7rem !important;
+
+}
+.list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 2rem;
+    margin-left: 2rem;
 }
