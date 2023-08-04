@@ -1,0 +1,33 @@
+
+:root {
+    --ug_gold: #B5965C;
+    --ug_blue: #173D70;
+    --active:#E0E3FD;
+}
+section{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1rem;
+}
+.card{
+    padding: 1rem ;
+    background-color: #ffffff;
+    color: var(--ug_blue);
+    display: flex;
+    border-radius: 5px;
+    justify-content: space-evenly;
+    align-items: center;
+    transition: 0.5s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.content{
+    margin-right: 4rem;
+
+}
+.content h2 {
+    margin-bottom: -1rem; 
+}
+.content h5 {
+    font-size: 12px;
+    font-weight: 400;
+}

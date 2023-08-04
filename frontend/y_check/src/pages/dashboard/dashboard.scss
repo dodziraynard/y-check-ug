@@ -1,0 +1,15 @@
+section{
+    height: 100%;
+    margin-left: 1rem;
+}
+.grid{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.row_one{
+    display: grid;
+    gap: 1rem;
+}
