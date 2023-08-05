@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
-import geocoder
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
+
+import geocoder
 
 
 
@@ -42,26 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
     changed_password = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
-
-
-    is_superuser = models.BooleanField(default=False)
-    groups = models.ManyToManyField(
-        Group,
-        blank=True,
-        related_name="account_user_related",
-        related_query_name="account_users",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        blank=True,
-        related_name="account_user_related",
-        related_query_name="account_users",
-    )
-
-
 
     objects = UserManager()
 
@@ -78,19 +63,87 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_photo_url(self):
         if self.image:
             return self.image.url
-        return "/static/images/default_profile.jpg"
+        return "/static/images/user-default.svg"
 
     def get_name(self):
-        if self.first_name and self.last_names:
-            return f"{self.last_name.title()} {self.first_names.title()}"
+        if self.first_name and self.last_name:
+            return f"{self.first_name.title()} {self.last_name.title()}"
         return self.username
 
+
+
+
+
+class Adolescent(models.Model):
+
+    PRIMARY = 'PR'
+    SECONDARY = 'SC'
+    COMMUNITY = 'CM'
+
+    ADOLESCENT_TYPE_CHOICES = [
+        (PRIMARY, 'Primary'),
+        (SECONDARY, 'Secondary'),
+        (COMMUNITY, 'Community'),
+    ]
+
+    MALE = 'ML'
+    FEMALE = 'FM'
+
+    ADOLESCENT_SEX_TYPE = [
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+    ]
+
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    pid = models.CharField(unique=True, max_length=10)
+    dob = models.DateField(null=True, blank=True)
+    location = models.CharField(max_length=50)
+    adolescent_type = models.CharField(max_length=2, choices=ADOLESCENT_TYPE_CHOICES)
+    sex_type = models.CharField(max_length=2, choices=ADOLESCENT_SEX_TYPE)
+    questionnaire_completed = models.BooleanField(default=False)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+    last_updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_updated')
+
+
+
+
+    def __str__(self):
+        return f'{self.first_name} {self.first_name}'
+
+
+
+
+class SecurityQuestion(models.Model):
+    question = models.CharField(max_length=250, null=False)
+
+class SecurityQuestionAnswer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    security_question = models.ForeignKey(SecurityQuestion, on_delete=models.CASCADE)
+    answer = models.CharField(max_length=64)
+
+    class Meta:
+        unique_together = ['user', 'security_question']
+
     def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)
+        self.answer = make_password(self.answer)
+        super().save(*args, **kwargs)
 
 
 
 
+
+class ActivityLog(models.Model):
+    username = models.CharField(max_length=100)
+    action = models.TextField()
+    ip = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return "%s %s" % (self.username, self.action)
+
+    def get_latlng(self):
+        return geocoder.ip(self.registration_ip).latlng
 
 
 
