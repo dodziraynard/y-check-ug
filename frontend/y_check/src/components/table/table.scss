@@ -29,3 +29,12 @@ Table:first-child{
     margin-left: 2rem;
     color: var(--ug_blue);
 }
+.table-container{
+    background-color: #B5965C;
+}
+@media screen  and (min-width:280px) and (max-width:1180px){
+    .table-cont{
+        width: 50%;
+    }
+    
+}
