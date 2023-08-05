@@ -72,19 +72,16 @@
 }
 
 
-@media screen  and (min-width:280px) and (max-width:730px){
-    .items>span{
-        display: none;
-    }
-    .down-items>span{
-        display: none;
-    }
-    .down-items{
-        margin-left: -3rem;
-    }
-}
 @media screen  and (min-width:280px) and (max-width:622px){
     .sidebar{
-        display: none;
+        position: fixed;
+        z-index: 9;
+        background-color: #ffffff;
+        height: 100%;
+        padding: 1rem;
+        width: 55%;
+    }
+    .down-items{
+        margin-left: -6rem;
     }
 }
