@@ -130,11 +130,12 @@ background-color: #F0F0F0;
 margin-right: 10px;
 }
 
-@media screen  and (min-width:280px) and (max-width:500px){
+@media screen  and (min-width:280px) and (max-width:622px){
   .logo span {
-      display: none;
-  }
+    display: none;
 }
+}
+
 
 @media screen  and (min-width:200px) and (max-width:380px){
   .person>img {
