@@ -58,7 +58,7 @@ margin-right: 4rem;
     }
     .move{
         margin-top: 0rem;
-        height: 80%;
+        height: 100%;
     }
     .card{
         height: 65%;
@@ -78,7 +78,21 @@ margin-right: 4rem;
     }
     .card{
         height: 65%;
-        width: 50%;
+        width: 100%;
+    }
+    
+}
+@media screen  and (min-width:200px) and (max-width:380px){
+    section{
+        grid-template-columns: 1fr;
+    }
+    .move{
+        margin-top: 0rem;
+        height: 100%;
+    }
+    .card{
+        height: 60%;
+        width: 60%;
     }
     
 }

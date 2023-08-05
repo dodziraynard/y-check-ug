@@ -34,7 +34,13 @@
  }
 @media screen  and (min-width:280px) and (max-width:730px){
     .section{
-     width: 65%;
+     width: 90%;
     } 
      
+}
+@media screen  and (min-width:200px) and (max-width:380px){
+    
+    .section{
+        width: 75%;
+    } 
 }

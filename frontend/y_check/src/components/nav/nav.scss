@@ -135,3 +135,12 @@ margin-right: 10px;
       display: none;
   }
 }
+
+@media screen  and (min-width:200px) and (max-width:380px){
+  .person>img {
+      display: none;
+  }
+  .person>span{
+    display: none;
+  }
+}
