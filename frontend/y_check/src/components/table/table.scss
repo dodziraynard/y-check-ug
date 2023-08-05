@@ -6,11 +6,13 @@
 .section-table{
     margin-left: 1rem;
     margin-top: -3rem;
+    width: 103%;
 }
 .MuiTableRow-root>*{
     padding: 10px;
 
 }
+
 
 Table td, th{
     border: none !important;
@@ -29,12 +31,31 @@ Table:first-child{
     margin-left: 2rem;
     color: var(--ug_blue);
 }
-.table-container{
-    background-color: #B5965C;
-}
-@media screen  and (min-width:280px) and (max-width:1180px){
-    .table-cont{
-        width: 50%;
+
+@media screen  and (min-width:280px) and (max-width:924px){
+    .section-table{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 40rem;
     }
-    
+}
+@media screen  and (min-width:280px) and (max-width:830px){
+    .section-table{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 27rem;
+    }
+}
+@media screen  and (min-width:280px) and (max-width:412px){
+    .section-table{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 23rem;
+    }
 }

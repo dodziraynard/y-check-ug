@@ -48,7 +48,7 @@ export default function BasicTable() {
   return (
     <div className='section-table'>
     <TableContainer component={Paper} className='table-container'
-    style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)',width:'105%'}}>
+    style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)'}}>
         <div className='list'>
             <div className="list-items">
                 <h4>Users</h4>
