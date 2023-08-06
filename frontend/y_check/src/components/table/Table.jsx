@@ -39,15 +39,13 @@ const rows = [
   createData('St0001', 'seyram@gmail.com', '0246031105', 'DR', 'Dentist','Available','View'),
   createData('St0002', 'seyram@gmail.com', '0246031105', 'RN', 'Assistant','Available','View'),
   createData('St0003', 'seyram@gmail.com', '0246031105', 'NS', 'Nurse','Available','View'),
-  createData('St0004', 'seyram@gmail.com', '0246031105', 'RN', 'Assistant','Available','View'),
-  createData('St0005', 'seyram@gmail.com', '0246031105', 'DR', 'Dentist','Available','View'),
   
 ];
 
 export default function BasicTable() {
   return (
     <div className='section-table'>
-    <TableContainer component={Paper} className='table-container'
+    <TableContainer component={Paper} 
     style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)'}}>
         <div className='list'>
             <div className="list-items">

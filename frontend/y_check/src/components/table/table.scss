@@ -4,8 +4,7 @@
     --active:#E0E3FD;
 }
 .section-table{
-    margin-left: 1rem;
-    margin-top: -3rem;
+    margin-left: 7rem;
     width: 103%;
 }
 .MuiTableRow-root>*{
@@ -50,6 +49,13 @@ Table:first-child{
         width: 27rem;
     }
 }
+@media screen  and (min-width:280px) and (max-width:622){
+    .section-table{
+       margin-left: 10rem;
+       background-color: #B5965C;
+       display: none;
+    }
+}
 @media screen  and (min-width:280px) and (max-width:412px){
     .section-table{
         position: relative;
@@ -57,5 +63,12 @@ Table:first-child{
         flex-direction: column;
         align-items: center;
         width: 23rem;
+        
+    }
+}
+@media screen  and (min-width:200px) and (max-width:380px){
+    .section-table{
+        
+        
     }
 }

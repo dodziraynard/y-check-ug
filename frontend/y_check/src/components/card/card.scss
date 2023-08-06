@@ -8,7 +8,8 @@ section{
     display: grid;
     grid-template-columns: repeat(2,1fr);
     gap: 3rem;
-    margin-right: 2rem;
+    margin-top: 2rem;
+
 }
 .card{
     padding: 1rem ;
@@ -79,6 +80,20 @@ margin-right: 4rem;
     .card{
         height: 65%;
         width: 100%;
+    }
+    
+}
+@media screen  and (min-width:280px) and (max-width:622px){
+    section{
+        grid-template-columns: 1fr;
+    }
+    .move{
+        margin-top: 0rem;
+        height: 80%;
+    }
+    .card{
+        height: 65%;
+        width: 80%;
     }
     
 }

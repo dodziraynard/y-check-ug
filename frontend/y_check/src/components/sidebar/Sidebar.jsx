@@ -6,10 +6,17 @@ import { mdiLogout,mdiCog,mdiViewHeadline } from '@mdi/js';
 import './sidebar.scss'
 function Sidebar() {
     const [seleted,setSeleted] = useState(0)
-    const [expanded,setExpanded] = useState(true)
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    const toggleSidebar = () => {
+      setIsSidebarVisible(!isSidebarVisible);
+    };
+  
   return (
     <>
-      <div className='sidebar'>
+      <div className='bars'>
+      <Icon className='' path={mdiViewHeadline} size={1} onClick={toggleSidebar} />
+      </div>
+      <div className={`sidebar ${isSidebarVisible ? 'visible' : ''}`} >
         <div className='menu'>
           {SidebarData.map((item,index)=>{
               return (

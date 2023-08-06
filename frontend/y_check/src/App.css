@@ -1,5 +1,6 @@
 .App {
   font-family: 'Inter', sans-serif;
   background-color: #f1f1f1;
+  min-height: 100vh;
 }
 

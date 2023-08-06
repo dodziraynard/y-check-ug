@@ -6,8 +6,6 @@
     height: 70%;
     border-radius: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-     
-    
 }
 
 .chart-container{
@@ -38,9 +36,19 @@
     } 
      
 }
+@media screen  and (min-width:280px) and (max-width:622px){
+    .section{
+     width: 70%;
+    } 
+     
+}
 @media screen  and (min-width:200px) and (max-width:380px){
     
     .section{
-        width: 75%;
+        width: 60%;
     } 
+    .chart-container{
+        margin-left: 0;
+
+    }
 }
