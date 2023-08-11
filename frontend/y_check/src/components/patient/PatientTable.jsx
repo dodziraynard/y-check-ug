@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper'
 import Icon from '@mdi/react';
+import Histogragh from './Histogragh';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify} from '@mdi/js';
 
 function createData(PIP, Type, Sex, dob, check_location, Action) {
@@ -24,6 +25,7 @@ const rows = [
 
 export default function PatientTable() {
   return (
+    <div className='mac'>
     <div className='patient-table'>
     <TableContainer component={Paper} 
     style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)'}}>
@@ -66,6 +68,8 @@ export default function PatientTable() {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
+    <Histogragh/>
     </div>
   );
 }
