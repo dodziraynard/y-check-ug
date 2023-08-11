@@ -1,0 +1,31 @@
+.patient-container{
+    margin-top: 5rem;
+    margin-left: 15rem;
+    background-color: aqua;
+}
+.patient{
+    display: flex;
+}
+.filter {
+    flex: 1; 
+    padding: 30px; 
+    background-color: #ffffff; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+
+.fit-icons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color:  #b9b9bb;
+}
+.filter-items{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.filter-item{
+    margin-bottom: 1rem;
+}

@@ -49,11 +49,14 @@ Table:first-child{
         width: 27rem;
     }
 }
-@media screen  and (min-width:280px) and (max-width:622){
+@media screen  and (min-width:280px) and (max-width:622px){
     .section-table{
-       margin-left: 10rem;
-       background-color: #B5965C;
-       display: none;
+        margin-left: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 26rem;
     }
 }
 @media screen  and (min-width:280px) and (max-width:412px){
