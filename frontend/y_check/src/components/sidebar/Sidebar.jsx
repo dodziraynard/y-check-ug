@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import Icon from '@mdi/react';
 import { SidebarData } from '../../Data/Data';
 import { mdiLogout,mdiCog,mdiViewHeadline } from '@mdi/js';
+import { Link } from 'react-router-dom';
 
 import './sidebar.scss'
 function Sidebar() {
@@ -25,7 +26,7 @@ function Sidebar() {
                   onClick={()=>setSeleted(index)}>
                       <div className='items'>
                       <Icon className='icon' path={item.icon} size={1} />
-                      <span>{item.heading}</span>
+                      <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><span>{item.heading}</span></Link> 
                       </div>
                   </div>
               )

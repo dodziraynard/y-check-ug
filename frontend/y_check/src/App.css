@@ -1,12 +1,12 @@
 .App {
   font-family: 'Inter', sans-serif;
-  background-color: #f1f1f1;
   min-height: 100vh;
+  background-color: #f1f1f1;
+
 }
 .main{
   display: grid;
   overflow: hidden;
   width: 100%;
-  height: 100%;
   grid-template-columns: 13rem auto;
 }

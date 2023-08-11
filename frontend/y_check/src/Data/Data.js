@@ -6,11 +6,13 @@ import { mdiViewDashboardOutline,
 export const SidebarData = [
     {
         icon: mdiViewDashboardOutline,
-        heading:'Dashboard'
+        heading:'Dashboard',
+        url:'/dashboard'
     },
     {
         icon: mdiAccountMultiplePlus,
-        heading:'Patients'
+        heading:'Patients',
+        url:'/patients'
     },
     {
         icon: mdiCalendarAlertOutline,
