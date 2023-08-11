@@ -1,12 +1,12 @@
 import React from 'react'
 import './patient.scss'
 import Filter from './Filter'
-import BasicTable from '../table/Table'
+import PatientTable from './PatientTable'
 const Patient = () => {
   return (
     <div className='patient-main'>
         <Filter/>
-        <BasicTable/>
+        <PatientTable/>
     </div>
     
   )

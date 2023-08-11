@@ -1,0 +1,150 @@
+.patient-table{
+    margin-top: 5rem;
+    margin-left: 18rem;
+    width: 90%;
+}
+
+.search-bar-patient {
+    display: flex; 
+    align-items: center; 
+    border-radius: 5px;
+    padding: 5px;
+    width: 30%;
+    border: 1px solid #ABAAAA;
+    margin-top: 1rem;
+    margin-left: 2rem;
+  }
+  
+.search-icon {
+    color: #b9b9bb;
+    cursor: pointer;
+    margin-right: 5px; 
+}
+  
+.search-input {
+    flex: 1; 
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 24px;
+    outline: none;
+    border: none;
+    color: #b9b9bb;
+}
+
+@media screen  and (min-width:200px) and (max-width:1180px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 18rem;
+        width: 70%;
+    }
+    
+}
+    
+@media screen  and (min-width:200px) and (max-width:1130px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 18rem;
+        width: 50%;
+    }
+    
+}
+@media screen  and (min-width:200px) and (max-width:900px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 18rem;
+        width: 40%;
+    }
+    
+}
+
+@media screen  and (min-width:200px) and (max-width:850px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 15rem;
+        width: 68%;
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+@media screen  and (min-width:200px) and (max-width:830px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 15rem;
+        width: 60%;
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+@media screen  and (min-width:200px) and (max-width:750px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 15rem;
+        width: 50%;
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+@media screen  and (min-width:200px) and (max-width:660px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 15rem;
+        width: 40%;
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+@media screen  and (min-width:200px) and (max-width:622px){
+
+    .patient-table{
+        width: 80%;
+        margin-left: 2rem;
+
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+    
+@media screen  and (min-width:200px) and (max-width:560px){
+
+    .patient-table{
+        width: 60%;
+        margin-left: 2rem;
+
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+@media screen  and (min-width:200px) and (max-width:430px){
+
+    .patient-table{
+        width: 40%;
+        margin-left: 2rem;
+
+    }
+    .search-bar-patient{
+        width: 60%;
+    }
+    
+  }
+    

@@ -4,7 +4,6 @@ import './filter.scss'
 import { mdiFilter } from '@mdi/js';
 const Filter = () => {
   return (
-    <div className="patient-container">
         <div className='patient'>
             <div className="filter">
                 <div className="fit-icons">
@@ -27,7 +26,6 @@ const Filter = () => {
                 </div>
             </div>
         </div>
-    </div>
   )
 }
 

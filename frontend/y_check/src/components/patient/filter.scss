@@ -1,16 +1,19 @@
-.patient-container{
-    margin-top: 5rem;
-    margin-left: 15rem;
-    background-color: aqua;
-}
+
 .patient{
     display: flex;
+    margin-top: 5rem;
+    margin-left: 15rem;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
 }
 .filter {
     flex: 1; 
     padding: 30px; 
     background-color: #ffffff; 
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
   }
   
 
@@ -27,5 +30,17 @@
     justify-content: flex-start;
 }
 .filter-item{
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+@media screen  and (min-width:200px) and (max-width:850px){
+    .patient{
+        width: 30%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:622px){
+    .patient{
+        width: 30%;
+        margin-top: 5rem;
+        margin-left: 2rem;
+    }
 }
