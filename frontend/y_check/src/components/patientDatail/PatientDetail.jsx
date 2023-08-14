@@ -1,8 +1,10 @@
 import React from 'react'
 import { useState } from 'react';
 import './patient_detail.scss'
+import Detail from './Detail';
+
 const PatientDetail = () => {
-    const [activeRecord, setActiveRecord] = useState(null);
+    const [activeRecord, setActiveRecord] = useState(0);
     const handleRecordClick = (recordIndex) => {
     setActiveRecord(recordIndex);
   };
@@ -26,6 +28,7 @@ const PatientDetail = () => {
                 <span>Status</span>
             </div>
         </div>
+        <Detail/>
     </div>
   )
 }

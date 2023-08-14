@@ -1,12 +1,13 @@
 .detail{
     margin-left: 15rem;
     margin-top: 5rem;
-    width: 300%;
+    width: 550%;
 }
 .top-nav{
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    width: 50%;
 }
 .record{
     display: flex;
@@ -32,4 +33,167 @@
 .active-nav{
     background: #6564F0;
     color: #ffffff;
+}
+
+.patient-detail-main{
+    display: flex;
+    gap: 4rem;
+}
+.left-side{
+    background-color: #EDF2FE;
+    margin-top: 1rem;
+    width: 200%;
+    padding: 20px;
+}
+.picture {
+    display: flex; 
+    align-items: center; 
+  }
+  
+.picture img {
+    width: 60px; 
+    height: 60px; 
+    cursor: pointer;
+    border-radius: 50%;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+.type{
+    display: flex;
+    flex-direction: column;
+    margin-left: 2rem;
+    margin-top: 1rem;
+
+}
+.type button{
+    background: #54B20D;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 8px;
+
+}
+.picture span {
+    color: black;
+  
+}
+
+.nav-left{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.last-two-icons{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    width: 30%;
+}
+.edit-pen{
+    background: #3A86FF;
+    align-items: center;
+    padding: 10px;
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.information{
+    display: grid;
+    grid-template-columns: max-content auto;
+    column-gap: 15rem; 
+    margin-left: 1rem;
+}
+.info-details{
+    display: contents;
+}
+.info-details span{
+    color: #9F9BA0;
+    align-self: center;
+    margin-bottom: 0.5rem;
+
+}
+.info-details h4{
+    color: #173D70;
+    font-weight: 400;
+    margin: 0;
+    align-self: center;
+}
+.hr-divider-top {
+    border: none; 
+    border-top: 1px solid #A6ABB7;
+    margin: 2rem 0; 
+}
+.next {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center; 
+}
+  
+.next .hr-divider {
+    width: 100%; 
+    border: none;
+    border-top: 1px solid #E0E0E0;
+    margin: 1rem 0;
+}
+.next .button-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+    margin-top: 0.5rem; 
+    cursor: pointer;
+}
+.next .section-heading {
+    margin-bottom: 0.5rem; /* Adjust this margin as needed */
+    color: #173D70;
+}
+.button-container button{
+    border: none;
+    outline: none;
+    background: #3A86FF;
+    color: #ffffff;
+}
+.chevron{
+    color: #173D70;
+}
+.right-side{
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.appointment{
+    font-weight: 500;
+    background: #E7E6EB;
+    color: #173D70;
+    height: 50px;
+    border-top: 1px solid #C9CDD2;
+    border-right: 1px solid #C9CDD2;
+    border-left: 1px solid #C9CDD2;;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    
+}
+.appointment h5{
+    margin-left: 1rem;
+}
+.appointment-detail{
+    background: #ffffff;
+    height: 50px;
+    border-bottom: 1px solid #C9CDD2;
+    border-right: 1px solid #C9CDD2;
+    border-left: 1px solid #C9CDD2;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.appointment-detail p{
+    margin-left: 2rem;
+    font-size: 12px;
 }
