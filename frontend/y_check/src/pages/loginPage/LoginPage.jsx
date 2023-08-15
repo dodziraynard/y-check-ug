@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react';
 import './login.scss'
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import Icon from '@mdi/react';
-import { mdiAccount,mdiEyeOutline } from '@mdi/js';
+import { mdiAccount,mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js';
+
 const LoginPage = () => {
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [password, setPassword] = useState('');
+
+    const handleTogglePasswordVisibility = () => {
+    setPasswordVisible(prevState => !prevState);
+  };
+
   return (
     <div className='login'>
         <div className='login-container'>
@@ -20,8 +29,16 @@ const LoginPage = () => {
                     <Icon className='login-icon' path={mdiAccount} size={1} />
                 </div>
                 <div className="input-with-icon">
-                    <input type="password" placeholder='Password:'/>
-                    <Icon className='login-icon' path={mdiEyeOutline} size={1} />
+                    <input type={passwordVisible ? 'text' : 'password'}
+                    placeholder='Password:'
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}/>
+                    <Icon className='login-icon' 
+                    path={passwordVisible ? mdiEyeOffOutline : mdiEyeOutline}
+                    size={1} 
+                    onClick={handleTogglePasswordVisibility}
+                    style={{cursor:'pointer'}}
+                    />
                 </div>
                 <span>Forget password? <span style={{color:'#B5965C',cursor:'pointer'}}>reset</span></span>
                 <button>LOGIN</button>
