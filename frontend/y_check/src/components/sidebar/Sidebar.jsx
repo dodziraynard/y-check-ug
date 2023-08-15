@@ -25,7 +25,7 @@ function Sidebar() {
                   key={index}
                   onClick={()=>setSeleted(index)}>
                       <div className='items'>
-                      <Icon className='icon' path={item.icon} size={1} />
+                        <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><Icon className='icon' path={item.icon} size={1} /></Link>
                       <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><span>{item.heading}</span></Link> 
                       </div>
                   </div>

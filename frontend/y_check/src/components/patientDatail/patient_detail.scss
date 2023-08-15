@@ -22,6 +22,7 @@
     color: #837F85;
 
 }
+
 .first{
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -196,4 +197,208 @@
 .appointment-detail p{
     margin-left: 2rem;
     font-size: 12px;
+}
+
+
+@media screen  and (min-width:200px) and (max-width:1350px){
+    .detail{
+        width: 450%;
+    }
+    .record span{
+        font-size: 12px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+    }
+
+}
+@media screen  and (min-width:200px) and (max-width:1180px){
+    .detail{
+        width: 400%;
+    }
+    .record span{
+        font-size: 11px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+    }
+   
+
+}
+@media screen  and (min-width:200px) and (max-width:1070px){
+    .detail{
+        width: 400%;
+    }
+    .record span{
+        font-size: 11px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+        display: block;
+    }
+    .left-side{
+        width: 80%;
+
+    }
+    .right-side{
+        width: 85%;
+    }
+    
+
+}
+@media screen  and (min-width:200px) and (max-width:900px){
+    .detail{
+        width: 400%;
+    }
+    .record span{
+        font-size: 11px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+        display: block;
+    }
+    .left-side{
+        width: 60%;
+
+    }
+    .right-side{
+        width: 65%;
+    }
+    
+
+}
+@media screen  and (min-width:200px) and (max-width:780px){
+    .detail{
+        width: 400%;
+    }
+    .record span{
+        font-size: 11px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+        display: block;
+    }
+    .left-side{
+        width: 45%;
+
+    }
+    .right-side{
+        width: 50%;
+    }
+    .information{
+        column-gap: 5rem; 
+    }
+    .edit-pen{
+        width: 50%;
+    }
+    .edit-pen span{
+        display: none;
+    }
+
+}
+@media screen  and (min-width:200px) and (max-width:622px){
+    .detail{
+        width: 400%;
+        margin-left: 2rem;
+
+    }
+    .record span{
+        font-size: 11px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+        display: block;
+    }
+    .left-side{
+        width: 60%;
+
+    }
+    .right-side{
+        width: 65%;
+    }
+    .information{
+        column-gap: 5rem; 
+    }
+    .edit-pen{
+        width: 10%;
+    }
+    .edit-pen span{
+        display: none;
+    }
+
+}
+@media screen  and (min-width:200px) and (max-width:570px){
+    .detail{
+        width: 400%;
+        margin-left: 2rem;
+
+    }
+    .record span{
+        font-size: 11px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+        display: block;
+    }
+    .left-side{
+        width: 45%;
+
+    }
+    .right-side{
+        width: 50%;
+    }
+    .information{
+        column-gap: 5rem; 
+    }
+    .edit-pen{
+        width: 15%;
+    }
+    .edit-pen span{
+        display: none;
+    }
+
+}
+@media screen  and (min-width:200px) and (max-width:450px){
+    .detail{
+        width: 280%;
+        margin-left: 1rem;
+
+    }
+    .record span{
+        font-size: 9px;
+    }
+    .patient-detail-main{
+        gap: 2rem;
+        display: block;
+    }
+    .left-side{
+        width: 45%;
+
+    }
+    .right-side{
+        width: 50%;
+    }
+    .information{
+        column-gap: 0.5rem; 
+    }
+    .edit-pen{
+        width: 20%;
+        margin-right: -1.5rem;
+        margin-left: 1rem;
+    }
+    .edit-pen span{
+        display: none;
+    }
+    .picture img{
+        margin-left: 0rem;
+    }
+    .type{
+        margin-left: 1rem;
+    }
+    .top-nav{
+        width: 60%;
+        
+    }
+    
+
 }
