@@ -14,12 +14,12 @@ function Home() {
             <p>Y-Check Adolescent Questionaire</p>
         </div>
         <div>
-            < Link to='/dashboard'><button >Login</button></Link>
+            < Link to='/login'><button >Login</button></Link>
             <button>Sign Up</button>
         </div>
       </div>
       <div className='mobile'>
-            < Link to='/dashboard' style={{padding:'none',margin:'0'}}><button >Login</button></Link>
+            < Link to='/login' style={{padding:'none',margin:'0'}}><button >Login</button></Link>
             <button>Sign Up</button>
         </div>
     </div>

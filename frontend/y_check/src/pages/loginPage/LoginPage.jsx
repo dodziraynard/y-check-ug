@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './login.scss'
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import Icon from '@mdi/react';
+import { Link } from 'react-router-dom';
 import { mdiAccount,mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js';
 
 const LoginPage = () => {
@@ -41,7 +42,7 @@ const LoginPage = () => {
                     />
                 </div>
                 <span>Forget password? <span style={{color:'#B5965C',cursor:'pointer'}}>reset</span></span>
-                <button>LOGIN</button>
+                <Link to='/dashboard'><button>LOGIN</button></Link>
                 <span>Don't have an account?<span style={{color:'#B5965C',cursor:'pointer'}}> sign up</span></span>
             </div>
         </div>

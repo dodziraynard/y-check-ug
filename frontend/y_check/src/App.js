@@ -10,7 +10,8 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route path='/'element={<LoginPage/>}/>
+      <Route path='/'element={<Home/>}/>
+      <Route path='/login'element={<LoginPage/>}/>
       <Route path='/dashboard'element={<MainPage/>}/>
       <Route path='/patients' element={<PatientPage/>}/>
       <Route path='/patient-view' element={<PatientViewPage/>}/>
