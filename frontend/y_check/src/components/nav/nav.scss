@@ -9,85 +9,88 @@
 /* ... your other styles ... */
 
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #FFFFFF;
-    border: 1px solid #ABAAAA;
-    height: 30px;
-    padding: 10px;
-    margin-top: 5px;
-    margin-left: 10px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
-  
-  .logo {
-    display: flex; /* Use flexbox to align items horizontally */
-    align-items: center; /* Center items vertically */
-  }
-  
-  .logo img {
-    width: 25px;
-    height: 29.98px;
-    margin-right: 5px;
-  }
-  
-  .logo span {
-    color: var(--ug_blue);
-    font-weight: 700;
-
-  }
-  
-  .search-bar {
-    display: flex; /* Use flexbox to align items horizontally */
-    align-items: center; /* Center items vertically */
-    border-radius: 5px;
-    padding: 5px;
-    border: 1px solid #ABAAAA;
-  }
-  
-  .search-icon {
-    color: #b9b9bb;
-    cursor: pointer;
-    margin-right: 5px; /* Adjust the margin as needed to control the distance between the icon and the input */
-  }
-  
-  .search-input {
-    flex: 1; /* Take remaining width in the container */
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 24px;
-    outline: none;
-    border: none;
-    color: #b9b9bb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid #ABAAAA;
+  height: 30px;
+  padding: 10px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  position: fixed;
+  width: 97%;
+  z-index: 9;
 }
   
-  .person img {
-    width: 40px; /* Adjust the size as needed */
-    height: 40px; /* Adjust the size as needed */
-    cursor: pointer;
-    border-radius: 50%;
-  }
+.logo {
+  display: flex; /* Use flexbox to align items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+.logo img {
+  width: 25px;
+  height: 29.98px;
+  margin-right: 5px;
+}
+
+.logo span {
+  color: var(--ug_blue);
+  font-weight: 700;
+
+}
   
-  .person {
-    display: flex; /* Use flexbox to align items horizontally */
-    align-items: center; /* Center items vertically */
-  }
+.search-bar {
+  display: flex; /* Use flexbox to align items horizontally */
+  align-items: center; /* Center items vertically */
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #ABAAAA;
+}
+
+.search-icon {
+  color: #b9b9bb;
+  cursor: pointer;
+  margin-right: 5px; /* Adjust the margin as needed to control the distance between the icon and the input */
+}
+
+.search-input {
+  flex: 1; /* Take remaining width in the container */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 24px;
+  outline: none;
+  border: none;
+  color: #b9b9bb;
+}
   
-  .person span {
-    font-size: 12px;
-    color: var(--ug_blue);
-    margin-right: 10px;
-  }
-  
-  .notification {
-    margin-right: 15px;
-    color: var(--ug_blue);
-    cursor: pointer;
-  }
+.person img {
+  width: 40px; /* Adjust the size as needed */
+  height: 40px; /* Adjust the size as needed */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.person {
+  display: flex; /* Use flexbox to align items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+.person span {
+  font-size: 12px;
+  color: var(--ug_blue);
+  margin-right: 10px;
+}
+
+.notification {
+  margin-right: 15px;
+  color: var(--ug_blue);
+  cursor: pointer;
+}
   
   /* Search Bar */
   /* Adjust the margin-right on .logo to move the search-bar closer to the logo */
@@ -130,8 +133,21 @@ background-color: #F0F0F0;
 margin-right: 10px;
 }
 
-@media screen  and (min-width:280px) and (max-width:500px){
+@media screen  and (min-width:280px) and (max-width:622px){
   .logo span {
+    display: none;
+}
+}
+
+
+@media screen  and (min-width:200px) and (max-width:380px){
+  .person>img {
       display: none;
+  }
+  .person>span{
+    display: none;
+  }
+  .notification{
+    display: none;
   }
 }
