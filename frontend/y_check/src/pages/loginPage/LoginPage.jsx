@@ -71,7 +71,7 @@ const LoginPage = () => {
                     />
                 </div>
                 <span>Forget password? <span style={{color:'#B5965C',cursor:'pointer'}}>reset</span></span>
-                <button style={{cursor:'pointer'}}>LOGIN</button>
+                <button className='login-button' style={{cursor:'pointer'}}>LOGIN</button>
                 <span>Don't have an account?<span style={{color:'#B5965C',cursor:'pointer'}}> sign up</span></span>
             </form>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Icon from '@mdi/react';
-import { mdiAccount,mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js';
+import { mdiAccount } from '@mdi/js';
 
 const PersonalInfo = () => {
     
@@ -35,9 +35,6 @@ const PersonalInfo = () => {
             required/>
             <Icon className='login-icon' path={mdiAccount} size={1} />
         </div>
-
-        <button style={{cursor:'pointer'}}>Proceed</button>
-
     </>
   )
 }

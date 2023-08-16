@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import Icon from '@mdi/react';
 import {mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js'
 const Password = () => {
@@ -10,6 +10,7 @@ const Password = () => {
     };
   return (
     <>
+        <span>Please input the correct credential</span>
       <div className="input-with-icon">
             <input type={passwordVisible ? 'text' : 'password'}
             placeholder='Password:'
@@ -34,7 +35,6 @@ const Password = () => {
             style={{cursor:'pointer'}}
             />
         </div>
-        <button style={{cursor:'pointer'}}>LOGIN</button>
     </>
   )
 }
