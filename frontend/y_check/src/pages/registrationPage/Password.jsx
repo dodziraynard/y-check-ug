@@ -6,6 +6,7 @@ const Password = ({ formData, handleInputChange }) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordMessage,setPasswordMessage] = useState(false)
 
+// HANDLE PASSWORD CHECK
     useEffect(() => {
       if (formData.password && formData.confirm_password && formData.password !== formData.confirm_password) {
         setPasswordMessage(true);

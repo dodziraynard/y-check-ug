@@ -9,8 +9,8 @@ import './register.scss'
 const Register = () => {
     const [page, setPage] = useState(0)
     
-    const pageTitles = ["Sign Up","Personal Info","Security Questions"]
-    const totalPages = pageTitles.length - 1
+    const pageTitles = ["Personal Information","Password Section","Security Questions"]
+    const totalPages = pageTitles.length - 1 // get the total number of pages
 // HANGLE PAGE CHANGE
     const handlePageChange = pageNumber => {
         if (pageNumber >= 0 && pageNumber <= totalPages) {
@@ -25,7 +25,7 @@ const Register = () => {
     const handlePrePage = () => {
         handlePageChange(page - 1);
     };
-//
+// useState FOR THE VARIOUS USER INPUT FIELDS
     const [formData, setFormData] = useState({
         staff_id: "",
         firstname: "",
@@ -34,6 +34,7 @@ const Register = () => {
         password:"",
         confirm_password:"",
     });
+// HANDLE INPUT CHANGED
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevFormData) => ({
@@ -41,10 +42,17 @@ const Register = () => {
         [name]: value,
         }));
     };
-    //
+// HANDLE FORM SUBMIT
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log(formData.staff_id,formData.firstname)
+        console.log(
+            formData.staff_id,
+            formData.firstname,
+            formData.lastname,
+            formData.phone_number,
+            formData.confirm_password,
+            formData.password
+        )
 
     }
 
