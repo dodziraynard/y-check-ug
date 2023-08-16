@@ -33,6 +33,8 @@ const Register = () => {
         phone_number: "",
         password:"",
         confirm_password:"",
+        town:"",
+        food:"",
     });
 // HANDLE INPUT CHANGED
     const handleInputChange = (event) => {
@@ -51,7 +53,9 @@ const Register = () => {
             formData.lastname,
             formData.phone_number,
             formData.confirm_password,
-            formData.password
+            formData.password,
+            formData.town,
+            formData.food
         )
 
     }
@@ -62,7 +66,7 @@ const Register = () => {
         } else if(page === 1){
             return<Password handleInputChange={handleInputChange} formData={formData}/>
         }else{
-            return<SecurityQuestion/>
+            return<SecurityQuestion handleInputChange={handleInputChange} formData={formData}/>
         }
     }
     return (
