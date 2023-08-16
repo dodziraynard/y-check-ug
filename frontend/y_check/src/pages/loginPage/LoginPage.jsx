@@ -8,11 +8,33 @@ import { mdiAccount,mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js';
 const LoginPage = () => {
 
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [password, setPassword] = useState('');
 
+    const [user, setUser] = useState({
+        staff_id: "",
+        password: "",
+    })
+// HANDLE GET THE USER INPUT (staff_id and password)
+    const handleChange = (event) => {
+        let name = event.target.name;
+        let value = event.target.value;
+    
+        setUser({ ...user, [name]: value });
+    };
+// HANDLE PASSWORD VISIBILITY
     const handleTogglePasswordVisibility = () => {
     setPasswordVisible(prevState => !prevState);
-  };
+    };
+// HANDLE FORM SUBMIT 
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        console.log(user.staff_id,user.password)
+
+// Clear input fields after form submission
+        setUser({
+            staff_id: "",
+            password: "",
+        });
+    }
 
   return (
     <div className='login'>
@@ -23,17 +45,24 @@ const LoginPage = () => {
             <div className="login-title">
                 <h2>Login</h2>
             </div>
-            <div className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
                 <span>Please input the correct credential</span>
                 <div className="input-with-icon">
-                    <input type="text" placeholder='Staff ID:'/>
+                    <input type="text" 
+                    placeholder='Staff ID:'
+                    name='staff_id'
+                    onChange={handleChange}
+                    value={user.staff_id}
+                    required/>
                     <Icon className='login-icon' path={mdiAccount} size={1} />
                 </div>
                 <div className="input-with-icon">
                     <input type={passwordVisible ? 'text' : 'password'}
                     placeholder='Password:'
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}/>
+                    name='password'
+                    value={user.password}
+                    onChange={handleChange}
+                    required/>
                     <Icon className='login-icon' 
                     path={passwordVisible ? mdiEyeOffOutline : mdiEyeOutline}
                     size={1} 
@@ -42,9 +71,9 @@ const LoginPage = () => {
                     />
                 </div>
                 <span>Forget password? <span style={{color:'#B5965C',cursor:'pointer'}}>reset</span></span>
-                <Link to='/dashboard'><button>LOGIN</button></Link>
+                <button style={{cursor:'pointer'}}>LOGIN</button>
                 <span>Don't have an account?<span style={{color:'#B5965C',cursor:'pointer'}}> sign up</span></span>
-            </div>
+            </form>
         </div>
     </div>
 
