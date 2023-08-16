@@ -25,9 +25,30 @@ const Register = () => {
     const handlePrePage = () => {
         handlePageChange(page - 1);
     };
+//
+    const [formData, setFormData] = useState({
+        staff_id: "",
+        firstname: "",
+        lastname: "",
+        phone_number: "",
+    });
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+        }));
+    };
+    //
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        console.log(formData.staff_id,formData.firstname)
+
+    }
+
     const displayPage = ()=>{
         if(page === 0){
-            return < PersonalInfo/>
+            return <PersonalInfo handleInputChange={handleInputChange} formData={formData} />;
         } else if(page === 1){
             return<Password/>
         }else{
@@ -35,25 +56,43 @@ const Register = () => {
         }
     }
     return (
-        <div className='login'>
-            <div className='login-container'>
-                <div className='login-image'>
-                    <img src={ug_logo} alt="Logo" />
+        <div className='page-progress'>
+            {page === 0 ? (
+                <span className='page'>page 1/3</span>
+            ) : page === 1?(
+                <span className='page'>page 2/3</span>
+
+            ) : (
+                <span className='page'>page 3/3</span>
+
+            )}
+    
+            <div className='login'>
+            
+                <div className='login-container'>
+                    <div className='login-image'>
+                        <img src={ug_logo} alt="Logo" />
+                    </div>
+                    <div className="login-title">
+                        <h2>{pageTitles[page]}</h2>
+                    </div>
+                    <form className="login-form" onSubmit={handleSubmit}>
+                        {displayPage()}
+                        {page === 0 ? (
+                            <button className='login-button'  onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
+                        ) : page === 1?(
+                            <div className='buttons-group password-info'>
+                            <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                            <button className='register-pre register-next' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
+                            </div>
+                        ) : (
+                            <div className='buttons-group security'>
+                            <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                            <button className='register-pre register-next'  style={{ cursor: 'pointer' }}>Sign Up</button>
+                            </div>
+                        )}
+                    </form>
                 </div>
-                <div className="login-title">
-                    <h2>{pageTitles[page]}</h2>
-                </div>
-                <form className="login-form">
-                    {displayPage()}
-                    {page === 0 ? (
-                        <button className='login-button'  onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
-                    ) : (
-                        <div className='buttons-group'>
-                        <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                        <button className='register-pre register-next' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
-                        </div>
-                    )}
-                </form>
             </div>
         </div>
     

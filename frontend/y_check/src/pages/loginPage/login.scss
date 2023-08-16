@@ -93,12 +93,23 @@
     width: 125%;
     margin-top: 2rem;
 }
-
+.page{
+    color: var(--ug_blue);
+    margin-left: 70rem;
+    display: none;
+}
+.page-progress{
+    background: #ffffff;
+}
 @media screen  and (min-width:200px) and (max-width:380px){
 
     .login{
         margin-left: -4rem;
     }
-    
+    .page{
+        color: var(--ug_blue);
+        display: block;
+        margin-left: 18rem;
+
+    }
 }
-  
