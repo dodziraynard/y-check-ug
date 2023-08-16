@@ -31,6 +31,8 @@ const Register = () => {
         firstname: "",
         lastname: "",
         phone_number: "",
+        password:"",
+        confirm_password:"",
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -50,7 +52,7 @@ const Register = () => {
         if(page === 0){
             return <PersonalInfo handleInputChange={handleInputChange} formData={formData} />;
         } else if(page === 1){
-            return<Password/>
+            return<Password handleInputChange={handleInputChange} formData={formData}/>
         }else{
             return<SecurityQuestion/>
         }

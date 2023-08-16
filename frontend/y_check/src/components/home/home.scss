@@ -43,6 +43,10 @@
     color: white;
     z-index: 1;
 }
+.login-button-group{
+    display: flex;
+    gap: 2rem;
+}
 .mobile{
     display: none;
 }

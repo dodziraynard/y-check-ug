@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Icon from '@mdi/react';
 import {mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js'
-const Password = () => {
+
+const Password = ({ formData, handleInputChange }) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordMessage,setPasswordMessage] = useState(false)
+
+    useEffect(() => {
+      if (formData.password && formData.confirm_password && formData.password !== formData.confirm_password) {
+        setPasswordMessage(true);
+      } else {
+          setPasswordMessage(false);
+      }
+  }, [formData.password, formData.confirm_password]);
 
 // HANDLE PASSWORD VISIBILITY
     const handleTogglePasswordVisibility = () => {
@@ -15,6 +25,8 @@ const Password = () => {
             <input type={passwordVisible ? 'text' : 'password'}
             placeholder='Password:'
             name='password'
+            value={formData.password}
+            onChange={handleInputChange}
             required/>
             <Icon className='login-icon' 
             path={passwordVisible ? mdiEyeOffOutline : mdiEyeOutline}
@@ -26,6 +38,8 @@ const Password = () => {
         <div className="input-with-icon">
             <input type={passwordVisible ? 'text' : 'password'}
             placeholder='Confirm Password:'
+            value={formData.confirm_password}
+            onChange={handleInputChange}
             name='confirm_password'
             required/>
             <Icon className='login-icon' 
@@ -35,6 +49,7 @@ const Password = () => {
             style={{cursor:'pointer'}}
             />
         </div>
+        {passwordMessage ? <span style={{color:'red'}}>wrong password</span> : ('')}
     </>
   )
 }
