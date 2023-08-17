@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import person from '../../images/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiChevronLeft,mdiChevronRight} from '@mdi/js';
-
+import Modal from '@mui/material/Modal'; 
+import Fade from '@mui/material/Fade';
 const Detail = () => {
     const propertiesPerPage = 8; // Number of items per page
     
@@ -49,6 +50,21 @@ const Detail = () => {
     const handlePreviousPage = () => {
         handlePageChange(currentPage - 1);
     };
+
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+    const handleDeleteClick = () => {
+        setDeleteModalOpen(true);
+    };
+    // CONFIRM DELETION METHOD 
+    const handleDeleteConfirm = () => {
+        setDeleteModalOpen(false);
+    };
+    // CANCEL DELETION METHOD
+    const handleDeleteCancel = () => {
+        setDeleteModalOpen(false);
+    };
     
   return (
     <div className="patient-detail-main">
@@ -67,11 +83,43 @@ const Detail = () => {
                             <span>Edit</span>
                         </div>
                         <div className="edit-pen">
-                            <Icon path={mdiTrashCanOutline} size={0.8} />
-                            <span>Delete</span>
+                            <Icon path={mdiTrashCanOutline} 
+                            size={0.8}
+                            onClick={() => handleDeleteClick()}/>
+                            <span onClick={() => handleDeleteClick()}>Delete</span>
                         </div>
                     </div>
                 </div>
+                <Modal
+                    open={deleteModalOpen}
+                    onClose={handleDeleteCancel}
+                    
+                
+                >
+                    <Fade in={deleteModalOpen}>
+                    <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        background: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: -1,
+                        transition: 'opacity 500ms',
+                    }} 
+                    >
+                        <div className="delete-modal">
+                        <h2>Confirm Deletion</h2>
+                        <p>Are you sure you want to delete this row?</p>
+                        <div className="modal-buttons">
+                            <button onClick={handleDeleteCancel}>Cancel</button>
+                            <button onClick={handleDeleteConfirm}>Confirm</button>
+                        </div>
+                        </div>
+                    </div>
+                    </Fade>
+                </Modal>
                 <hr className='hr-divider-top'/>
                 <div className='information'>
                 {currentProperties.map(property => (

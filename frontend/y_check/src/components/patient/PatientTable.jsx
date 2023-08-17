@@ -12,7 +12,6 @@ import Histogragh from './Histogragh';
 import { Link } from 'react-router-dom';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 
-import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 
 function createData(PIP, Type, Sex, dob, check_location, Action) {
