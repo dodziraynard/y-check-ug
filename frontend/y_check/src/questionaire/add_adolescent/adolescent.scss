@@ -1,0 +1,19 @@
+.input-radio {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.input-radio input[type="radio"] {
+    margin-left: 150px; /* Adjust as needed */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.input-radio label {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ug_blue);
+    
+}
