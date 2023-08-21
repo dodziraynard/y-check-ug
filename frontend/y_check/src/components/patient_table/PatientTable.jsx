@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper'
 import Icon from '@mdi/react';
-import Histogragh from './Histogragh';
+import Histogragh from '../histogragh/Histograph';
 import { Link } from 'react-router-dom';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 
@@ -81,7 +81,7 @@ export default function PatientTable() {
               <TableCell align="left">{row.check_location}</TableCell>
               <TableCell align="left">
                 <Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiPencilOutline} size={0.7} />
-                <Link to='/patient-view'><Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiEyeOutline} size={0.7} /></Link>
+                <Link to='/patient_detail'><Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiEyeOutline} size={0.7} /></Link>
                 <Icon 
                 style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer'}}
                  className='delete-icon' 

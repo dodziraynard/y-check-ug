@@ -1,15 +1,13 @@
 import React from 'react'
-import Nav from '../../components/nav/Nav'
-import Sidebar from '../../components/sidebar/Sidebar'
-import Patient from '../../components/patient/Patient'
+import PatientTable from '../../components/patient_table/PatientTable'
+import Filter from '../../components/filter/Filter'
+import './patient_page.scss'
+
 const PatientPage = () => {
   return (
-    <div>
-        <Nav/>
-        <div className='main'>
-          <Sidebar/>
-          <Patient/>
-        </div>
+    <div className='patient-main'>
+        <Filter/>
+        <PatientTable/>
     </div>
     
   )
