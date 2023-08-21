@@ -3,10 +3,17 @@ import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import PIP from './PIP';
 import Location from './Location';
 import Type from './Type';
+import DateOfBirth from './DateOfBirth';
 import './adolescent.scss'
+
+//MAIN FUNCTION
 const AddAdolescent = () => {
     const [page, setPage] = useState(0)
-    
+    const [adolescentFormData, setAdolescentFormData] = useState({
+        date: "",
+        
+        
+    });
     const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent "]
     const totalPages = pageTitles.length - 1 // get the total number of pages
 // HANGLE PAGE CHANGE
@@ -24,13 +31,23 @@ const AddAdolescent = () => {
         handlePageChange(page - 1);
     };
 
+// HANDLE INPUT CHANGED
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setAdolescentFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+        }));
+    };
 // HANDLE FORM SUBMIT
     const handleSubmit = (e)=>{
         e.preventDefault();
-        
+        console.log(
+            adolescentFormData.date
+        )
     }
     const displayPage = ()=>{
-        return <Type/>
+        return <DateOfBirth handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
     }
 
     return (
