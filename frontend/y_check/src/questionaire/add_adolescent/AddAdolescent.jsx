@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import PIP from './PIP';
+import Location from './Location';
+import Type from './Type';
 import './adolescent.scss'
 const AddAdolescent = () => {
     const [page, setPage] = useState(0)
@@ -28,7 +30,7 @@ const AddAdolescent = () => {
         
     }
     const displayPage = ()=>{
-        return <PIP/>
+        return <Type/>
     }
 
     return (
