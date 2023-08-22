@@ -14,7 +14,7 @@ const AddAdolescent = () => {
         
         
     });
-    const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent "]
+    const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent "]
     const totalPages = pageTitles.length - 1 // get the total number of pages
 // HANGLE PAGE CHANGE
     const handlePageChange = pageNumber => {
@@ -47,7 +47,19 @@ const AddAdolescent = () => {
         )
     }
     const displayPage = ()=>{
-        return <DateOfBirth handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+        if (page === 0){
+            return <PIP/>
+        }
+        else if(page === 1){
+            return <Type/>
+        }
+        else if(page === 2){
+            return<Location/>
+        }
+        else{
+
+            return <DateOfBirth handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+        }
     }
 
     return (
@@ -65,15 +77,10 @@ const AddAdolescent = () => {
                         {displayPage()}
                         {page === 0 ? (
                             <button className='login-button'  onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
-                        ) : page === 1?(
-                            <div className='buttons-group password-info'>
-                            <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='register-pre register-next' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
-                            </div>
-                        ) : (
-                            <div className='buttons-group security'>
-                            <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='register-pre register-next'  style={{ cursor: 'pointer' }}>Sign Up</button>
+                        ) :(
+                            <div className='adolescent-button'>
+                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                            <button className='adolescent-pre ' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
                             </div>
                         )}
                     </form>

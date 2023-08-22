@@ -20,7 +20,6 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    margin-left: 2rem;
 }
 
 .login-image img {
@@ -45,7 +44,6 @@
 .login-title {
     margin: 10px 0;
     color: var(--ug_blue);
-    margin-left: 2rem;
 
 }
   
@@ -53,6 +51,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 .input-with-icon {
     position: relative;
@@ -64,7 +63,7 @@
   
 .input-with-icon input {
     padding: 15px; 
-    width: 110%;
+    width: 90%;
     border: 2px solid var(--ug_blue);
     outline: none;
     border-radius: 8px;
@@ -76,7 +75,7 @@
     margin-right: -3rem;
     color: var(--ug_blue);
     top: 50%; 
-    right: 5px; 
+    margin-left: 250px;
     transform: translateY(-50%);
 }
 .login-form input::placeholder {
@@ -91,7 +90,7 @@
     border-radius: 20px;
     color: #ffffff;
     padding: 15px;
-    width: 125%;
+    width: 100%;
     margin-top: 2rem;
 }
 .page{

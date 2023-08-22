@@ -95,14 +95,14 @@ const Register = () => {
                         {page === 0 ? (
                             <button className='login-button'  onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
                         ) : page === 1?(
-                            <div className='buttons-group password-info'>
-                            <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='register-pre register-next' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
+                            <div className='adolescent-button'>
+                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                            <button className='adolescent-pre ' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
                             </div>
                         ) : (
-                            <div className='buttons-group security'>
-                            <button className='register-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='register-pre register-next'  style={{ cursor: 'pointer' }}>Sign Up</button>
+                            <div className='adolescent-button'>
+                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                            <button className='adolescent-pre'  style={{ cursor: 'pointer' }}>Sign Up</button>
                             </div>
                         )}
                     </form>

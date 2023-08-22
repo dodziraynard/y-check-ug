@@ -34,8 +34,8 @@
 }
 
 .input-select select {
-    width: 150%;
-    padding: 8px;
+    width: 100%;
+    padding: 10px;
     border: 1.2px solid var(--ug_blue);
     border-radius: 4px;
 }
@@ -44,4 +44,17 @@
 .input-select select:focus {
     border-color: var(--ug_blue);
     outline: none;
+}
+.adolescent-button{
+    display: flex;
+    gap: 2rem;
+}
+.adolescent-pre{
+    background: var(--ug_blue);
+    color: #ffffff;
+    width: 200%;
+    padding: 15px;
+    outline: none;
+    border: none;
+    border-radius: 20px;
 }
