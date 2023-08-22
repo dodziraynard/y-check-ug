@@ -14,6 +14,8 @@ const AddAdolescent = () => {
         other_names:"",
         adolescent_type:"",
         visit_type:"",
+        check_up_location:"",
+        school:"",
         date: "",
         gender:"",
         
@@ -63,7 +65,9 @@ const handleInputChange = (event) => {
             adolescentFormData.surname,
             adolescentFormData.other_names,
             adolescentFormData.adolescent_type,
-            adolescentFormData.visit_type
+            adolescentFormData.visit_type,
+            adolescentFormData.check_up_location,
+            adolescentFormData.school
         )
     }
     const displayPage = ()=>{
@@ -74,7 +78,7 @@ const handleInputChange = (event) => {
             return <Type handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
         }
         else if(page === 2){
-            return<Location/>
+            return<Location handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
         }
         else{
 
