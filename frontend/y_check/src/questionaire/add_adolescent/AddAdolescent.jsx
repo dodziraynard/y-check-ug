@@ -10,8 +10,12 @@ import './adolescent.scss'
 const AddAdolescent = () => {
     const [page, setPage] = useState(0)
     const [adolescentFormData, setAdolescentFormData] = useState({
+        surname:"",
+        other_names:"",
+        adolescent_type:"",
+        visit_type:"",
         date: "",
-        
+        gender:"",
         
     });
     const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent "]
@@ -32,26 +36,42 @@ const AddAdolescent = () => {
     };
 
 // HANDLE INPUT CHANGED
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setAdolescentFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-        }));
-    };
+const handleInputChange = (event) => {
+    const { name, value, type, checked } = event.target;
+
+    // Handle radio buttons
+    if (type === "radio") {
+        setAdolescentFormData({
+            ...adolescentFormData,
+            [name]: value
+        });
+    } else {
+        // Handle other input types
+        setAdolescentFormData({
+            ...adolescentFormData,
+            [name]: value
+        });
+    }
+};
+
 // HANDLE FORM SUBMIT
     const handleSubmit = (e)=>{
         e.preventDefault();
         console.log(
-            adolescentFormData.date
+            adolescentFormData.date,
+            adolescentFormData.gender,
+            adolescentFormData.surname,
+            adolescentFormData.other_names,
+            adolescentFormData.adolescent_type,
+            adolescentFormData.visit_type
         )
     }
     const displayPage = ()=>{
         if (page === 0){
-            return <PIP/>
+            return <PIP handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
         }
         else if(page === 1){
-            return <Type/>
+            return <Type handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
         }
         else if(page === 2){
             return<Location/>
@@ -75,12 +95,17 @@ const AddAdolescent = () => {
                     </div>
                     <form className="login-form" onSubmit={handleSubmit}>
                         {displayPage()}
-                        {page === 0 ? (
-                            <button className='login-button'  onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
-                        ) :(
+                        {page === totalPages ? (
                             <div className='adolescent-button'>
-                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='adolescent-pre ' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
+                                <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                                <button className='adolescent-pre' style={{ cursor: 'pointer' }} type='submit'>Submit</button>
+                            </div>
+                        ) : page === 0 ? (
+                            <button className='login-button' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
+                        ) : (
+                            <div className='adolescent-button'>
+                                <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                                <button className='adolescent-pre' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
                             </div>
                         )}
                     </form>

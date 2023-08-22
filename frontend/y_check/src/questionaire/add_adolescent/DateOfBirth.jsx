@@ -43,11 +43,25 @@ const DateOfBirth = ({ adolescentFormData, handleInputChange }) => {
             <span>Select Gender:</span>
             <div className="input-radio">
                 <label htmlFor="primary-radio">Male</label>
-                <input type="radio" name="gender" value="Male" required />
+                <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={adolescentFormData.gender === "Male"}
+                onChange={handleInputChange}
+                required
+                />
             </div>
             <div className="input-radio">
                 <label htmlFor="secondary-radio">Female</label>
-                <input type="radio" name="gender" value="Female" required />
+                <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={adolescentFormData.gender === "Female"}
+                onChange={handleInputChange}
+                required
+                />
             </div>
             <span>Take Picture</span>
             <div className="input-with-icon">
