@@ -101,8 +101,10 @@ const Register = () => {
                             </div>
                         ) : (
                             <div className='adolescent-button'>
-                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='adolescent-pre'  style={{ cursor: 'pointer' }}>Sign Up</button>
+                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer', width:'50%' }}>Back</button>
+                            <Link to='/landing'>
+                                <button className='adolescent-pre' style={{ cursor: 'pointer' }}>Sign Up</button>
+                            </Link>
                             </div>
                         )}
                     </form>
