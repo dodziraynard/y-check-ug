@@ -25,14 +25,14 @@
     justify-content: center;
 }
 .first-circle button{
-    margin-top: -150px;
+    margin-top: 50px;
     outline: none;
     border: none;
     border-radius: 20px;
     color: var(--ug_blue);
     padding: 15px;
     font-weight: 700;
-    width: 90%;
+    width: 150%;
     margin-left: 1rem;
     cursor: pointer;
 }
@@ -60,7 +60,7 @@
 }
 .circle-text{
     display: flex;
-    margin-top: 14rem;
+    margin-top: 16rem;
     margin-left: -10rem;
     color: #ffffff;
     font-size: 20px;
@@ -76,8 +76,8 @@
     display: none;
 }
 .second-circle {
-    width: 1000px;
-    height: 1000px;
+    width: 800px;
+    height: 800px;
     border-radius: 50%;
     position: relative;
     background-color: var(--ug_blue);
@@ -133,16 +133,14 @@
         margin-top: 1rem;
     }
     .link{
-        width: 100%;
-        margin-top: -150px;
+        margin-top: -200px;
         outline: none;
         border: none;
         border-radius: 20px;
         color: var(--ug_blue);
         padding: 15px;
         font-weight: 700;
-        width: 40%;
-        margin-left: 4rem;
+        width: 20%;
         cursor: pointer;
     }
 
