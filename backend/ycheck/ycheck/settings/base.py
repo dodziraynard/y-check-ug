@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'setup',
     'rest_framework.authtoken',
+    'dashboard',
     
 ]
 

@@ -97,6 +97,7 @@ class Adolescent(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     pid = models.CharField(unique=True, max_length=10)
+    # picture = models.ImageField()
     dob = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=50)
     adolescent_type = models.CharField(max_length=2, choices=ADOLESCENT_TYPE_CHOICES)
