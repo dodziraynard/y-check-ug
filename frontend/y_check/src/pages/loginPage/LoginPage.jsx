@@ -4,15 +4,25 @@ import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
 import { mdiAccount,mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js';
+import { useSelector,useDispatch } from 'react-redux'
+import { login } from '../../actions/userActions';
 
+// MAIN FUNCTION 
 const LoginPage = () => {
-
+    const dispatch = useDispatch()
     const [passwordVisible, setPasswordVisible] = useState(false);
-
+    
+// useState Field FOR USER LOGIN
     const [user, setUser] = useState({
         staff_id: "",
         password: "",
+        
     })
+
+// GETTING THE STATE FROM THE STORE 
+    const user_login = useSelector(state => state.user_login)
+    const { error, loading, userInfo } = user_login
+
 // HANDLE GET THE USER INPUT (staff_id and password)
     const handleChange = (event) => {
         let name = event.target.name;
@@ -27,6 +37,7 @@ const LoginPage = () => {
 // HANDLE FORM SUBMIT 
     const handleSubmit = (e) =>{
         e.preventDefault();
+        dispatch(login(user.staff_id,user.password))
         console.log(user.staff_id,user.password)
 
 // Clear input fields after form submission
