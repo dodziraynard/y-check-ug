@@ -32,6 +32,34 @@
     border: none;
     color: #b9b9bb;
 }
+.delete-modal{
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 8rem;
+    justify-content: center; 
+    align-items: center; 
+
+}
+.modal-buttons{
+    display: flex;
+    gap: 2rem;
+}
+.modal-buttons button{
+    background: var(--ug_blue);
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 13px;
+    width: 150%;
+    margin-top: 2rem;
+    cursor: pointer;
+}
 
 @media screen  and (min-width:200px) and (max-width:1180px){
 

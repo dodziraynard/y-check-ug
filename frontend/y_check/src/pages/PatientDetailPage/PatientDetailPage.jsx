@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
-import './patient_detail.scss'
+import './patient_detail_page.scss'
 import Detail from './Detail';
-const PatientDetail = () => {
+const PatientDetailPage = () => {
     const [activeRecord, setActiveRecord] = useState(0);
     const handleRecordClick = (recordIndex) => {
     setActiveRecord(recordIndex);
@@ -32,4 +32,4 @@ const PatientDetail = () => {
   )
 }
 
-export default PatientDetail
+export default PatientDetailPage

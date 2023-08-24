@@ -1,21 +1,30 @@
 import './App.css';
-import Home from './components/home/Home';
+import Nav from './components/nav/Nav';
+import Sidebar from './components/sidebar/Sidebar';
 import MainPage from './pages/main/MainPage';
-import PatientPage from './pages/PatientPage/PatientPage';
-import PatientViewPage from './pages/PatientViewPage/PatientViewPage';
-import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
-
+import AuthRoute from './AuthRoute';
 function App() {
+  const isAppRoute = 
+    window.location.pathname.startsWith('/dashboard') ||
+    window.location.pathname.startsWith('/patients') ||
+    window.location.pathname.startsWith('/patient-view');
   return (
-    <Router>
-      <Routes>
-      <Route path='/'element={<Home/>}/>
-      <Route path='/dashboard'element={<MainPage/>}/>
-      <Route path='/patients' element={<PatientPage/>}/>
-      <Route path='/patient-view' element={<PatientViewPage/>}/>
-      </Routes>
-    </Router>
-  );
+    <>
+      {isAppRoute ? (
+      <div>
+      <Nav />
+        <div className='main'>
+          <Sidebar />
+          <MainPage />
+        </div>
+      </div>
+      ) : (
+        <>
+        <AuthRoute/>
+        </>
+      )}
+    </>
+  ) ;
 }
 
 export default App;

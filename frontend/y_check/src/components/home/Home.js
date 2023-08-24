@@ -13,14 +13,15 @@ function Home() {
             <h2>Welcome</h2>
             <p>Y-Check Adolescent Questionaire</p>
         </div>
-        <div>
-            < Link to='/dashboard'><button >Login</button></Link>
-            <button>Sign Up</button>
+        <div className='login-button-group'>
+            < Link to='/login'><button >Login</button></Link>
+            < Link to='/register' style={{padding:'none',margin:'0'}}><button>Sign Up</button></Link>
         </div>
       </div>
       <div className='mobile'>
-            < Link to='/dashboard' style={{padding:'none',margin:'0'}}><button >Login</button></Link>
-            <button>Sign Up</button>
+            < Link to='/login' style={{padding:'none',margin:'0'}}><button >Login</button></Link>
+            < Link to='/register' style={{padding:'none',margin:'0'}}><button>Sign Up</button></Link>
+            
         </div>
     </div>
   )

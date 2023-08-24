@@ -22,7 +22,9 @@
     color: #837F85;
 
 }
-
+.next-button{
+    cursor: pointer;
+}
 .first{
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -45,6 +47,7 @@
     margin-top: 1rem;
     width: 200%;
     padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .picture {
     display: flex; 
@@ -155,7 +158,7 @@
     margin-bottom: 0.5rem; /* Adjust this margin as needed */
     color: #173D70;
 }
-.button-container button{
+.button-container .next-button{
     border: none;
     outline: none;
     background: #3A86FF;
@@ -163,6 +166,12 @@
 }
 .chevron{
     color: #173D70;
+    cursor: pointer;
+}
+.active-page{
+    background: #3A86FF;
+    width: 200%;
+    color: #fff;
 }
 .right-side{
     width: 100%;
@@ -198,7 +207,11 @@
     margin-left: 2rem;
     font-size: 12px;
 }
-
+.pre{
+    border: none;
+    outline: none;
+    background: none;
+}
 
 @media screen  and (min-width:200px) and (max-width:1350px){
     .detail{
