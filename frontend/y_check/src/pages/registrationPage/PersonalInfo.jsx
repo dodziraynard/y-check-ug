@@ -19,8 +19,8 @@ const PersonalInfo = ({ formData, handleInputChange }) => {
         <div className="input-with-icon">
             <input type="text" 
             placeholder='First Name:'
-            name='firstname'
-            value={formData.firstname}
+            name='first_name'
+            value={formData.first_name}
             onChange={handleInputChange}
             required/>
             <Icon className='login-icon' path={mdiAccount} size={1} />
@@ -28,17 +28,17 @@ const PersonalInfo = ({ formData, handleInputChange }) => {
         <div className="input-with-icon">
             <input type="text" 
             placeholder='Last Name:'
-            name='lastname'
-            value={formData.lastname}
+            name='last_name'
+            value={formData.last_name}
             onChange={handleInputChange}
             required/>
             <Icon className='login-icon' path={mdiAccount} size={1} />
         </div>
         <div className="input-with-icon">
-            <input type="number" 
+            <input type="text" 
             placeholder='Phone Number:'
-            name='phone_number'
-            value={formData.phone_number}
+            name='phone'
+            value={formData.phone}
             onChange={handleInputChange}
             required/>
             <Icon className='login-icon' path={mdiAccount} size={1} />

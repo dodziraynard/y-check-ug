@@ -1,6 +1,4 @@
 import React from 'react'
-import Icon from '@mdi/react';
-import { mdiMapMarker,mdiFoodApple } from '@mdi/js';
 const SecurityQuestion = ({ formData, handleInputChange }) => {
   return (
     <>
@@ -8,8 +6,8 @@ const SecurityQuestion = ({ formData, handleInputChange }) => {
             <label htmlFor="">Where do you live?</label>
             <input type="text" 
             placeholder='Eg: Mampong'
-            name='town'
-            value={formData.town}
+            name='security_answer_1'
+            value={formData.security_answer_1}
             onChange={handleInputChange}
             required />
 
@@ -18,9 +16,9 @@ const SecurityQuestion = ({ formData, handleInputChange }) => {
             <label htmlFor="">What is your favorite food?</label>
             <input type="text" 
             placeholder='Eg: Akple'
-            value={formData.food}
+            value={formData.security_answer_2}
             onChange={handleInputChange}
-            name='food'
+            name='security_answer_2'
             required />
 
         </div>

@@ -1,10 +1,11 @@
 import {legacy_createStore as createStore,combineReducers,applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { user_login_reducer } from '../reducers/AuthReducer'
+import { user_login_reducer,user_registrstion_reducer } from '../reducers/AuthReducer'
 
 const reducer = combineReducers({
     user_login: user_login_reducer,
+    user_registration:user_registrstion_reducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

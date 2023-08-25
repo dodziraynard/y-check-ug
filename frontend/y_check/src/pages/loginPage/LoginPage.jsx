@@ -52,10 +52,10 @@ const LoginPage = () => {
 // FUNCTION REDIRECT THE USER
     useEffect(() => {
         if (userInfo) {
-            // Redirect to /landing after successful login
+// Redirect to /landing after successful login
             navigate('/landing');
         } 
-    }, [userInfo, error, navigate]);
+    }, [userInfo, navigate]);
 
   return (
     <div className='login'>
