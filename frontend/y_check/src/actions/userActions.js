@@ -51,9 +51,6 @@ export const logout = ()=>(dispatch) =>{
 // USER REGISTRACTION ACTION
 export const register = (
     staff_id,
-    first_name, 
-    last_name,
-    phone,
     security_question_1,
     security_answer_1,
     security_question_2,
@@ -70,12 +67,9 @@ export const register = (
             }
         }
         const {data} = await axios.post(
-            'http://127.0.0.1:8000/account/api/register-view/',
+            'http://127.0.0.1:8000/account/register-view/',
             {
                 'username':staff_id,
-                'first_name':first_name,
-                'last_name':last_name,
-                'phone':phone,
                 'security_question_1':security_question_1,
                 'security_answer_1':security_answer_1,
                 'security_question_2':security_question_2,

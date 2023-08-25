@@ -1,3 +1,4 @@
+import axios from "axios";
 import { 
     SECURITY_QUESTION_REQUEST,
     SECURITY_QUESTION_SUCCESS,
@@ -6,10 +7,10 @@ import {
 
 
 
-export const security_questions = () => async (dispatch)=>{
+export const get_security_questions = () => async (dispatch)=>{
     try {
         dispatch({type:SECURITY_QUESTION_REQUEST})
-        const {data} = await axios.get('/api/security/')
+        const {data} = await axios.get('http://127.0.0.1:8000/account/all_security_questions/')
         dispatch({
             type: SECURITY_QUESTION_SUCCESS,
             payload: data

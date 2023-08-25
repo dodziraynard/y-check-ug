@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import Icon from '@mdi/react';
-import {mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js'
+import {mdiEyeOutline,mdiEyeOffOutline,mdiAccount } from '@mdi/js'
 
 const Password = ({ formData, handleInputChange }) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -22,6 +22,15 @@ const Password = ({ formData, handleInputChange }) => {
   return (
     <>
         <span>Please input the correct credential</span>
+      <div className="input-with-icon">
+          <input type="text" 
+          placeholder='Staff ID:'
+          name='staff_id'
+          value={formData.staff_id}
+          onChange={handleInputChange}
+          required/>
+          <Icon className='login-icon' path={mdiAccount} size={1} />
+      </div>
       <div className="input-with-icon">
             <input type={passwordVisible ? 'text' : 'password'}
             placeholder='Password:'
