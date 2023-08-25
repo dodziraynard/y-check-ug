@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './login.scss'
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
 import { mdiAccount,mdiEyeOutline,mdiEyeOffOutline } from '@mdi/js';
 import { useSelector,useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+
 import { login } from '../../actions/userActions';
 
 // MAIN FUNCTION 
 const LoginPage = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate();
+
     const [passwordVisible, setPasswordVisible] = useState(false);
-    
+
 // useState Field FOR USER LOGIN
     const [user, setUser] = useState({
         staff_id: "",
@@ -38,7 +42,6 @@ const LoginPage = () => {
     const handleSubmit = (e) =>{
         e.preventDefault();
         dispatch(login(user.staff_id,user.password))
-        console.log(user.staff_id,user.password)
 
 // Clear input fields after form submission
         setUser({
@@ -46,6 +49,13 @@ const LoginPage = () => {
             password: "",
         });
     }
+// FUNCTION REDIRECT THE USER
+    useEffect(() => {
+        if (userInfo) {
+            // Redirect to /landing after successful login
+            navigate('/landing');
+        } 
+    }, [userInfo, error, navigate]);
 
   return (
     <div className='login'>
@@ -57,6 +67,7 @@ const LoginPage = () => {
                 <h2>Login</h2>
             </div>
             <form className="login-form" onSubmit={handleSubmit}>
+            {error? <span style={{color:'red'}}> Invalid Credentials</span>:''}
                 <span>Please input the correct credential</span>
                 <div className="input-with-icon">
                     <input type="text" 

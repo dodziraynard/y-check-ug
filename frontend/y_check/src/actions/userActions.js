@@ -11,14 +11,13 @@ import {
         dispatch({
             type: USER_LOGIN_REQUEST,
         })
-        dispatch({type: USER_LOGIN_REQUEST})
         const config = {
             headers:{
                 'content-type':'application/json'
             }
         }
         const {data} = await axios.post(
-            'api/login-view',
+            'http://127.0.0.1:8000/account/api/login-view/',
             {'username':staff_id,'password':password},
             config
         )
@@ -27,7 +26,7 @@ import {
             payload:data
         })
         localStorage.setItem('userInfo',JSON.stringify(data))
-        
+
     } catch (error) {
         dispatch({
             type:USER_LOGIN_FAILED,
