@@ -11,6 +11,8 @@ import { register } from '../../actions/userActions';
 
 const Register = () => {
     const [page, setPage] = useState(0)
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
@@ -72,11 +74,15 @@ const Register = () => {
 
     }
 
-    // FUNCTION REDIRECT THE USER
+// FUNCTION REDIRECT THE USER
     useEffect(() => {
         if (userInfo) {
-// Redirect to /landing after successful login
-            navigate('/landing');
+            setShowSuccessMessage(true);
+// Delay the redirection to allow the user to see the message
+            const timer = setTimeout(() => {
+                navigate('/landing');
+            }, 1000); 
+            return () => clearTimeout(timer);
         } 
     }, [userInfo, navigate]);
 
@@ -111,7 +117,8 @@ const Register = () => {
                     <div className="login-title">
                         <h2>{pageTitles[page]}</h2>
                     </div>
-                    {error? <span style={{color:'red'}}>{error}</span>:''}
+                    {error? <span className='login-error'>{error}</span>:''}
+                    {showSuccessMessage ? <span className='login-success'> Login Successful</span> : ''}
                     <form className="login-form" onSubmit={handleSubmit}>
                         {displayPage()}
                         {page === 0 ? (

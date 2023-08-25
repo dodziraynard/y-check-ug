@@ -15,6 +15,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
 // useState Field FOR USER LOGIN
     const [user, setUser] = useState({
@@ -52,8 +53,12 @@ const LoginPage = () => {
 // FUNCTION REDIRECT THE USER
     useEffect(() => {
         if (userInfo) {
-// Redirect to /landing after successful login
-            navigate('/landing');
+            setShowSuccessMessage(true);
+// Delay the redirection to allow the user to see the message
+            const timer = setTimeout(() => {
+                navigate('/landing');
+            }, 1000); 
+            return () => clearTimeout(timer);
         } 
     }, [userInfo, navigate]);
 
@@ -67,7 +72,8 @@ const LoginPage = () => {
                 <h2>Login</h2>
             </div>
             <form className="login-form" onSubmit={handleSubmit}>
-            {error? <span style={{color:'red'}}> Invalid Credentials</span>:''}
+            {error? <span className='login-error'> Invalid Credentials</span>:''}
+            {showSuccessMessage ? <span className='login-success'> Login Successful</span> : ''}
                 <span>Please input the correct credential</span>
                 <div className="input-with-icon">
                     <input type="text" 
