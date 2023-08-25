@@ -19,20 +19,22 @@ from rest_framework.permissions import AllowAny
 
 
 class ProfileView(APIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request):
-        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_authenticated:
+            serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -40,8 +42,6 @@ class ProfileView(APIView):
 
 
 class LoginView(APIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
     permission_classes = [AllowAny]
     def post(self, request):
         username = request.data['username']
@@ -77,7 +77,8 @@ class UserRegistrationView(APIView):
 
 
 class GetSecurityQuestionView(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk):
         try:
             question = SecurityQuestion.objects.get(pk=pk)
@@ -91,7 +92,8 @@ class GetSecurityQuestionView(APIView):
 
 
 class PasswordResetView(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         username = request.data.get('username')
         try:
@@ -109,7 +111,8 @@ class PasswordResetView(APIView):
 
 
 class PasswordResetConfirmView(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         username = request.data.get('username')
         answer1 = request.data.get('answer1')
@@ -135,9 +138,8 @@ class PasswordResetConfirmView(APIView):
 
 
 class LogoutView(APIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         request.user.auth_token.delete()
