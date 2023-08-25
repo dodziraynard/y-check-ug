@@ -1,56 +1,144 @@
-from django.shortcuts import render
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .models import User
-from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserOutputSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes, permission_classes
+from .models import (User, PasswordResetToken, SecurityQuestion, SecurityQuestionAnswer)
+from .serializers import (UserLoginSerializer, 
+UserRegistrationSerializer, UserOutputSerializer, SecurityQuestionSerializer, UserProfileSerializer, SecurityQuestionAnswerSerializer)
 from django.contrib.auth import authenticate
 from rest_framework import status
 from django.http import JsonResponse
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.hashers import check_password
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 
-@api_view(['POST'])
-def loginView(request):
-    if request.method == 'POST':
+class ProfileView(APIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+class LoginView(APIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    def post(self, request):
         username = request.data['username']
         password = request.data['password']
-
-        if password and username:
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-                serializer = UserLoginSerializer(user, many=False)
-                token, created = Token.objects.get_or_create(user=user)
-                data = serializer.data
-                data['token'] = token.key
-                return Response(data, status=status.HTTP_200_OK)
-
+        user = authenticate(request, username=username, password=password)
+        if user:
+            serializer = UserLoginSerializer(user, many=False)
+            token, created = Token.objects.get_or_create(user=user)
+            data = serializer.data
+            data['token'] = token.key
+            return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
 
-@api_view(['POST'])
-def userRegistration(request):
-    if request.method == 'POST':
-        serializer = UserRegistrationSerializer(data=request.data)
 
+class UserRegistrationView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             token, created = Token.objects.get_or_create(user=user)
             output_serializer = UserOutputSerializer(user)
             data = output_serializer.data
             data['token'] = token.key
-            logger.debug(f"Response data: {data}")
             return JsonResponse(data, status=201)
-
-        logger.debug(f"Serializer errors: {serializer.errors}")
         return JsonResponse(serializer.errors, status=400)
 
 
 
+
+
+class GetSecurityQuestionView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, pk):
+        try:
+            question = SecurityQuestion.objects.get(pk=pk)
+        except SecurityQuestion.DoesNotExist:
+            return Response({'error': 'Security question not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = SecurityQuestionSerializer(question)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+class PasswordResetView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        username = request.data.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        security_questions = SecurityQuestionAnswer.objects.filter(user=user)
+        serializer = SecurityQuestionAnswerSerializer(security_questions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        username = request.data.get('username')
+        answer1 = request.data.get('answer1')
+        answer2 = request.data.get('answer2')
+        new_password = request.data.get('new_password')
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        security_answers = SecurityQuestionAnswer.objects.filter(user=user)
+
+        if not check_password(answer1, security_answers[0].answer) or \
+           not check_password(answer2, security_answers[1].answer):
+            return Response({'error': 'Incorrect answers'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({'message': 'Password reset successful'}, status=status.HTTP_200_OK)
+
+
+
+
+class LogoutView(APIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        request.user.auth_token.delete()
+        return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)

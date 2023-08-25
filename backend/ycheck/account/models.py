@@ -3,6 +3,10 @@ from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, Permi
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
+from django.utils.crypto import get_random_string
+from django.utils import timezone
+
+
 
 import geocoder
 
@@ -96,8 +100,8 @@ class Adolescent(models.Model):
 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    pid = models.CharField(unique=True, max_length=10)
-    # picture = models.ImageField()
+    pid = models.CharField(unique=True, blank=True, max_length=10)
+    picture = models.ImageField()
     dob = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=50)
     adolescent_type = models.CharField(max_length=2, choices=ADOLESCENT_TYPE_CHOICES)
@@ -109,6 +113,21 @@ class Adolescent(models.Model):
 
 
 
+    def save(self, *args, **kwargs):
+        if not self.pid:
+            prefix = self.adolescent_type
+
+            max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(max_pid=models.Max('pid'))['max_pid']
+            if max_pid:
+                next_pid_number = int(max_pid[2:]) + 1
+            else:
+                next_pid_number = 1
+
+            self.pid = f'{prefix}{next_pid_number:05}'
+
+        super().save(*args, **kwargs)
+
+
     def __str__(self):
         return f'{self.first_name} {self.first_name}'
 
@@ -116,7 +135,11 @@ class Adolescent(models.Model):
 
 
 class SecurityQuestion(models.Model):
-    question = models.CharField(max_length=250, null=False)
+    question = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question
+
 
 class SecurityQuestionAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -129,6 +152,25 @@ class SecurityQuestionAnswer(models.Model):
     def save(self, *args, **kwargs):
         self.answer = make_password(self.answer)
         super().save(*args, **kwargs)
+
+
+
+
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = get_random_string(64)
+        super().save(*args, **kwargs)
+
+    def is_valid(self):
+        expiration_date = self.created_at + timezone.timedelta(hours=24)
+        return timezone.now() < expiration_date
+
 
 
 
