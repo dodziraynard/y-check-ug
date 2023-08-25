@@ -101,7 +101,7 @@ class Adolescent(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     pid = models.CharField(unique=True, blank=True, max_length=10)
-    picture = models.ImageField()
+    picture = models.ImageField(upload_to='images/',blank=True, null=True)
     dob = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=50)
     adolescent_type = models.CharField(max_length=2, choices=ADOLESCENT_TYPE_CHOICES)

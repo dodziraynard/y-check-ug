@@ -74,7 +74,15 @@ class UserRegistrationView(APIView):
 
 
 
+class GetAllSecurityQuestionsView(APIView):
+    permission_classes = [AllowAny]
 
+    def get(self, request, format=None):
+        security_questions = SecurityQuestion.objects.all()
+        serializer = SecurityQuestionSerializer(security_questions, many=True)
+        return Response(serializer.data)
+
+        
 
 class GetSecurityQuestionView(APIView):
     authentication_classes = [TokenAuthentication]
