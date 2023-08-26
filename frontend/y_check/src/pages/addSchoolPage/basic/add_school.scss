@@ -1,0 +1,54 @@
+:root {
+    --ug_gold: #B5965C;
+    --ug_blue: #173D70;
+}
+
+.add_school_main{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Three equal-width columns */
+}
+.basic_form{
+    margin-top: 5rem;
+    margin-left: 8rem;
+    width: 82%;
+    background-color: white;
+    padding: 30px;
+}
+.basic_form h1{
+    color: var(--ug_blue);
+}
+.form-input{
+    display: flex;
+    flex-direction: column;
+    
+}
+.form-input label{
+    color: var(--ug_blue);
+    margin-bottom: 10px;
+}
+.form-input input{
+    padding: 10px; 
+    width: 95%;
+    border: 2px solid var(--ug_blue);
+    outline: none;
+    border-radius: 5px;
+}
+.form-input button{
+    background: var(--ug_blue);
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 15px;
+    width: 100%;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+@media screen  and (min-width:200px) and (max-width:850px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    
+}

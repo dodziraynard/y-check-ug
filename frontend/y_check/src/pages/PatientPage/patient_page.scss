@@ -1,7 +1,7 @@
 .patient-main{
     display: grid;
-    grid-template-columns: 13rem auto;
-  }
+    grid-template-columns: repeat(2, 1fr); /* Three equal-width columns */
+}
   
   
   @media screen  and (min-width:200px) and (max-width:850px){
