@@ -29,7 +29,7 @@ const AddAdolescent = () => {
         gender:"",
         
     });
-    const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent "]
+    const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent "]
     const totalPages = pageTitles.length - 1 // get the total number of pages
 // HANGLE PAGE CHANGE
     const handlePageChange = pageNumber => {

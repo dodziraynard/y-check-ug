@@ -2,7 +2,6 @@ import React from 'react';
 
 const Location = ({ adolescentFormData, handleInputChange }) => {
   let locationJSX;
-  console.log(adolescentFormData.adolescent_type)
 
   if (adolescentFormData.adolescent_type === 'Primary') {
     locationJSX = (
