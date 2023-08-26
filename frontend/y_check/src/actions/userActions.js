@@ -21,7 +21,7 @@ export const login = (staff_id, password) => async(dispatch) =>{
             }
         }
         const {data} = await axios.post(
-            'http://127.0.0.1:8000/account/api/login-view/',
+            'http://127.0.0.1:8000/account/login-view/',
             {'username':staff_id,'password':password},
             config
         )

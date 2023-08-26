@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import PIP from './PIP';
-import Location from './Location';
+import Community from './Community';
 import Type from './Type';
 import DateOfBirth from './DateOfBirth';
 import './adolescent.scss'
+import Consent from './Consent';
+import School from './School';
+import Location from './Location';
 
 //MAIN FUNCTION
 const AddAdolescent = () => {
     const [page, setPage] = useState(0)
+
     const [adolescentFormData, setAdolescentFormData] = useState({
         surname:"",
         other_names:"",
         adolescent_type:"",
         visit_type:"",
+        year:"",
+        consent:"",
+        community:"",
         check_up_location:"",
         school:"",
+        resident_status:"",
         date: "",
+        age_confirmation:"",
         gender:"",
         
     });
-    const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent "]
+    const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent "]
     const totalPages = pageTitles.length - 1 // get the total number of pages
 // HANGLE PAGE CHANGE
     const handlePageChange = pageNumber => {
@@ -79,6 +88,13 @@ const handleInputChange = (event) => {
         }
         else if(page === 2){
             return<Location handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+        } else if(page === 3){
+            return<Consent handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+        } else if(page === 4){
+            return<Community handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+        } else if (page === 5){
+            return<School handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+
         }
         else{
 

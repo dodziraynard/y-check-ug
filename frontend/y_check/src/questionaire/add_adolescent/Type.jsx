@@ -32,26 +32,7 @@ const Type = ({ adolescentFormData, handleInputChange }) => {
             required/>
             <label htmlFor="community-radio">Community</label>
         </div>
-        <span> Type of Visit:</span>
-        <div className="input-radio">
-            <label htmlFor="primary-radio">Initial</label>
-            <input 
-            type="radio" 
-            name="visit_type" 
-            value="Initial" 
-            checked={adolescentFormData.visit_type === "Initial"}
-            onChange={handleInputChange} 
-            required/>
-        </div>
-        <div className="input-radio">
-            <label htmlFor="secondary-radio">1st Follow-up</label>
-            <input type="radio" 
-            name="visit_type" 
-            value="1st Follow-up" 
-            checked={adolescentFormData.visit_type === "1st Follow-up"}
-            onChange={handleInputChange} 
-            required/>
-        </div>
+        
     </>
   )
 }

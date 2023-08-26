@@ -130,7 +130,7 @@ const Register = () => {
                         <h2>{pageTitles[page]}</h2>
                     </div>
                     {error? <span className='login-error'>{error}</span>:''}
-                    {showSuccessMessage ? <span className='login-success'> Login Successful</span> : ''}
+                    {showSuccessMessage ? <span className='login-success'> Registration Successful</span> : ''}
                     <form className="login-form" onSubmit={handleSubmit}>
                         {displayPage()}
                         {page === 0 ? (
