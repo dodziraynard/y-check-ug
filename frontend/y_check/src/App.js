@@ -7,7 +7,11 @@ function App() {
   const isAppRoute = 
     window.location.pathname.startsWith('/dashboard') ||
     window.location.pathname.startsWith('/patients') ||
-    window.location.pathname.startsWith('/patient-view');
+    window.location.pathname.startsWith('/patient-view')||
+    window.location.pathname.startsWith('/add_community')||
+    window.location.pathname.startsWith('/add_school')||
+    window.location.pathname.startsWith('/add_shs')
+
   return (
     <>
       {isAppRoute ? (

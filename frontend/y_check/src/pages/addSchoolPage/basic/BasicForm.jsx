@@ -1,11 +1,19 @@
-import React from 'react'
+import React, {useState} from 'react'
 import BasicSchoolTableList from '../../../components/schoolList/BasicSchoolTableList';
 
-const handleSubmit = (e) =>{
-    e.preventDefault();
-
-}
 const BasicForm = () => {
+  const [basic, setBasic] = useState('')
+
+    const handleChange = (event) => {
+        let value = event.target.value;
+        setBasic(value);
+      };
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        console.log(basic)
+    
+    }
   return (
     <div>
         <div className='basic_form'>
@@ -14,7 +22,10 @@ const BasicForm = () => {
             <label htmlFor=""> School Name</label>
             <input 
             type="text"
-            placeholder='Enter School Name' />
+            placeholder='Enter School Name'
+            name="basic" 
+            value={basic}
+            onChange={handleChange}/>
             <button>Add Basic School</button>
         </form>
         </div>

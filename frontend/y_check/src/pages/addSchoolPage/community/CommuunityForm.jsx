@@ -1,11 +1,23 @@
-import React from 'react'
-import BasicSchoolTableList from '../../../components/schoolList/BasicSchoolTableList';
+import React, {useState} from 'react'
+import CommunityableList from '../../../components/schoolList/CommunityTableList';
 
-const handleSubmit = (e) =>{
-    e.preventDefault();
 
-}
+
+
 const CommunityForm = () => {
+
+    const [community, setCommunity] = useState('')
+
+    const handleChange = (event) => {
+        let value = event.target.value;
+        setCommunity(value);
+      };
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+    
+    }
+
   return (
     <div>
         <div className='basic_form'>
@@ -14,11 +26,14 @@ const CommunityForm = () => {
             <label htmlFor=""> Community Name</label>
             <input 
             type="text"
-            placeholder='Enter Community Name' />
+            placeholder='Enter Community Name'
+            name="community"
+            value={community}
+            onChange={handleChange} />
             <button>Add Community </button>
         </form>
         </div>
-    <BasicSchoolTableList/>
+    <CommunityableList/>
     </div>
   )
 }

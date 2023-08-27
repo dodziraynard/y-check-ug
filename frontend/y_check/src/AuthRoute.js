@@ -9,11 +9,11 @@ import AddAdolescent from './questionaire/add_adolescent/AddAdolescent';
 const AuthRoute = () => {
     return (
         <Routes>
-        <Route path='/'element={<Home/>}/>
-        <Route path='/add_adolescent'element={<AddAdolescent/>}/>
-        <Route path='/landing'element={<LandingPage/>}/>
-        <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/register' element={<Register/>}/>
+            <Route path='/'element={<Home/>}/>
+            <Route path='/add_adolescent'element={<AddAdolescent/>}/>
+            <Route path='/landing'element={<LandingPage/>}/>
+            <Route path='/login' element={<LoginPage/>}/>
+            <Route path='/register' element={<Register/>}/>
         </Routes>
     );
 }

@@ -19,7 +19,7 @@ function createData(PIP,  Action) {
     createData('YC0001', 'View'),    
   ];
   
-const BasicSchoolTableList = () => {
+const CommunityableList = () => {
     return (
         <div className='mac'>
         <div className='patient-table basic_table'>
@@ -28,7 +28,7 @@ const BasicSchoolTableList = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table" style={{marginLeft:'1rem'}}>
             <TableHead>
               <TableRow>
-                <TableCell>Basic School Name</TableCell>                
+                <TableCell>Community Name</TableCell>                
                 <TableCell>Action</TableCell>                
               </TableRow>
             </TableHead>
@@ -62,4 +62,4 @@ const BasicSchoolTableList = () => {
     );
 }
 
-export default BasicSchoolTableList
+export default CommunityableList

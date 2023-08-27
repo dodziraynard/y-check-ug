@@ -1,9 +1,17 @@
-import React from 'react'
-import BasicSchoolTableList from '../../../components/schoolList/BasicSchoolTableList'
+import React, {useState} from 'react'
+import SHSTableList from '../../../components/schoolList/SHSTableList'
 
 const SHSForm = () => {
+    const [shs, setShs] = useState('')
+
+    const handleChange = (event) => {
+        let value = event.target.value;
+        setShs(value);
+      };
+
     const handleSubmit = (e) =>{
         e.preventDefault();
+        console.log(shs)
     
     }
     return (
@@ -14,11 +22,14 @@ const SHSForm = () => {
                 <label htmlFor=""> School Name</label>
                 <input 
                 type="text"
-                placeholder='Enter School Name' />
+                placeholder='Enter School Name'
+                name="shs"
+                value={shs}
+                onChange={handleChange}  />
                 <button>Add Senior High School</button>
             </form>
             </div>
-        <BasicSchoolTableList/>
+        <SHSTableList/>
         </div>
   )
 }
