@@ -1,7 +1,6 @@
 import React, {useState,useEffect} from 'react'
-import BasicSchoolTableList from '../../../components/schoolList/BasicSchoolTableList';
 import { useSelector,useDispatch } from 'react-redux'
-import { add_basic_school,get_basic_schools } from '../../../actions/SchoolActions';
+import { add_basic_school } from '../../../actions/SchoolActions';
 import { useNavigate } from 'react-router-dom';
 
 const BasicForm = () => {

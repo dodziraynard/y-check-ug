@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import PIP from './PIP';
 import Community from './Community';
@@ -8,10 +8,34 @@ import './adolescent.scss'
 import Consent from './Consent';
 import School from './School';
 import Location from './Location';
+import { useSelector,useDispatch } from 'react-redux'
+import { get_basic_schools, get_shs_schools, get_communities } from '../../actions/SchoolActions';
 
 //MAIN FUNCTION
 const AddAdolescent = () => {
     const [page, setPage] = useState(0)
+
+    const dispatch = useDispatch()
+
+   // GET THE ALL  SCHOOLS
+    const basic_school_list = useSelector(state => state.basic_school_list);
+    const { schools } = basic_school_list;
+
+    // GET ALL COMMUNITIES 
+    const community_list = useSelector(state => state.community_list);
+    const { communities } = community_list;
+
+    // GET ALL SENIOR HIGH SCHOOLS 
+    const shs_school_list = useSelector(state => state.shs_school_list);
+    const { shs_schools } = shs_school_list;
+
+
+    useEffect(() => {
+        dispatch(get_basic_schools());
+        dispatch(get_communities())
+        dispatch(get_shs_schools())
+    }, [dispatch]);
+
 
     const [adolescentFormData, setAdolescentFormData] = useState({
         surname:"",
@@ -87,13 +111,25 @@ const handleInputChange = (event) => {
             return <Type handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
         }
         else if(page === 2){
-            return<Location handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+            return<Location 
+            handleInputChange={handleInputChange} 
+            adolescentFormData={adolescentFormData}
+            schools={schools}
+            shs_schools={shs_schools}
+            communities={communities}/>
         } else if(page === 3){
             return<Consent handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
         } else if(page === 4){
-            return<Community handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+            return<Community 
+            handleInputChange={handleInputChange} 
+            adolescentFormData={adolescentFormData}
+            communities={communities}/>
         } else if (page === 5){
-            return<School handleInputChange={handleInputChange} adolescentFormData={adolescentFormData}/>
+            return<School 
+            handleInputChange={handleInputChange} 
+            adolescentFormData={adolescentFormData}
+            schools={schools}
+            shs_schools={shs_schools}/>
 
         }
         else{

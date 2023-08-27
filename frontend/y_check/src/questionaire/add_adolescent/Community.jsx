@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Community = ({ adolescentFormData, handleInputChange }) => {
+const Community = ({ adolescentFormData, handleInputChange,communities }) => {
   return (
     <>
     <span>Tell us about yourself:</span>
@@ -33,10 +33,11 @@ const Community = ({ adolescentFormData, handleInputChange }) => {
             value={adolescentFormData.community}
             onChange={handleInputChange}
             required>
-                <option value="Efutu">Efutu</option>
-                <option value="Kwaprow">Kwaprow</option>
-                <option value="Ekon">Ekon</option>
-                <option value="Abura">Abura</option>
+                {communities.map((community) => (
+                <option key={community.id} value={community.community_name}>
+                    {community.community_name}
+                </option>
+                ))}       
             </select>
         </div>
         

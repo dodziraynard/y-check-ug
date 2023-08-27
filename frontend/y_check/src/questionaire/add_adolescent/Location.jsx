@@ -1,7 +1,8 @@
 import React from 'react';
 
-const Location = ({ adolescentFormData, handleInputChange }) => {
+const Location = ({ adolescentFormData, handleInputChange, schools, communities,shs_schools}) => {
   let locationJSX;
+
 
   if (adolescentFormData.adolescent_type === 'Primary') {
     locationJSX = (
@@ -13,9 +14,11 @@ const Location = ({ adolescentFormData, handleInputChange }) => {
           onChange={handleInputChange}
           required
         >
-          <option value="Kwaprow MA Basic School">Kwaprow MA Basic School</option>
-          <option value="Ekon MA Basic School">Ekon MA Basic School</option>
-          <option value="Efutu Basic School">Efutu Basic School</option>
+          {schools.map((school) => (
+          <option key={school.id} value={school.school_name}>
+            {school.school_name}
+          </option>
+          ))}        
         </select>
       </div>
     );
@@ -29,10 +32,11 @@ const Location = ({ adolescentFormData, handleInputChange }) => {
           onChange={handleInputChange}
           required
         >
-          <option value="Efutu High Senior Technical School">Efutu High Senior Technical School</option>
-          <option value="Ogua High School Technical School">Ogua High School Technical School</option>
-          <option value="Ghana national Senior High School">Ghana national Senior High School</option>
-          <option value="University Practice Senior High School">University Practice Senior High School</option>
+         {shs_schools.map((shs) => (
+          <option key={shs.id} value={shs.school_name}>
+            {shs.school_name}
+          </option>
+          ))}       
         </select>
       </div>
     );
@@ -46,10 +50,11 @@ const Location = ({ adolescentFormData, handleInputChange }) => {
           onChange={handleInputChange}
           required
         >
-          <option value="Efutu">Efutu</option>
-          <option value="Kwaprow">Kwaprow</option>
-          <option value="Ekon">Ekon</option>
-          <option value="Abura">Abura</option>
+         {communities.map((community) => (
+          <option key={community.id} value={community.community_name}>
+            {community.community_name}
+          </option>
+          ))}       
         </select>
       </div>
     );

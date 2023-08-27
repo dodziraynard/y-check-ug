@@ -1,7 +1,13 @@
 import { 
     BASIC_SCHOOL_REQUEST,
     BASIC_SCHOOL_SUCCESS,
-    BASIC_SCHOOL_FAILED
+    BASIC_SCHOOL_FAILED,
+    COMMUNITY_REQUEST,
+    COMMUNITY_SUCCESS,
+    COMMUNITY_FAILED,
+    SHS_SCHOOL_REQUEST,
+    SHS_SCHOOL_SUCCESS,
+    SHS_SCHOOL_FAILED
  } from "../constants/SchoolConstants"
 
 
@@ -43,13 +49,13 @@ export const basic_school_list_reducer = (state = {schools:[]},action)=>{
 // SHS SCHOOL  REDUCER
 export const shs_school_reducer = (state = {} ,action)=>{
     switch(action.type){
-        case BASIC_SCHOOL_REQUEST:
+        case SHS_SCHOOL_REQUEST:
             return{loading:true}
 
-        case BASIC_SCHOOL_SUCCESS:
+        case SHS_SCHOOL_SUCCESS:
             return {loading:false, school:action.payload}
 
-        case  BASIC_SCHOOL_FAILED:
+        case  SHS_SCHOOL_FAILED:
             return {loading:false, error:action.payload}
 
         default:
@@ -59,15 +65,15 @@ export const shs_school_reducer = (state = {} ,action)=>{
 
 
 // SHS SCHOOL LIST   REDUCER
-export const shs_school_list_reducer = (state = {schools:[]},action)=>{
+export const shs_school_list_reducer = (state = {shs_schools:[]},action)=>{
     switch(action.type){
-        case BASIC_SCHOOL_REQUEST:
-            return{loading:true,schools:[]}
+        case SHS_SCHOOL_REQUEST:
+            return{loading:true,shs_schools:[]}
 
-        case BASIC_SCHOOL_SUCCESS:
-            return {loading:false,schools:action.payload}
+        case SHS_SCHOOL_SUCCESS:
+            return {loading:false,shs_schools:action.payload}
 
-        case BASIC_SCHOOL_FAILED:
+        case SHS_SCHOOL_FAILED:
             return {loading:false,error:action.payload}
 
         default:
@@ -77,13 +83,13 @@ export const shs_school_list_reducer = (state = {schools:[]},action)=>{
 // COMMUNITY  REDUCER
 export const community_reducer = (state = {} ,action)=>{
     switch(action.type){
-        case BASIC_SCHOOL_REQUEST:
+        case COMMUNITY_REQUEST:
             return{loading:true}
 
-        case BASIC_SCHOOL_SUCCESS:
+        case COMMUNITY_SUCCESS:
             return {loading:false, community_name:action.payload}
 
-        case  BASIC_SCHOOL_FAILED:
+        case  COMMUNITY_FAILED:
             return {loading:false, error:action.payload}
 
         default:
@@ -95,13 +101,13 @@ export const community_reducer = (state = {} ,action)=>{
 // COMMUNITY LIST   REDUCER
 export const community_list_reducer = (state = {communities:[]},action)=>{
     switch(action.type){
-        case BASIC_SCHOOL_REQUEST:
+        case COMMUNITY_REQUEST:
             return{loading:true,communities:[]}
 
-        case BASIC_SCHOOL_SUCCESS:
+        case COMMUNITY_SUCCESS:
             return {loading:false,communities:action.payload}
 
-        case BASIC_SCHOOL_FAILED:
+        case COMMUNITY_FAILED:
             return {loading:false,error:action.payload}
 
         default:

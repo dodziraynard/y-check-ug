@@ -2,7 +2,13 @@ import axios from "axios";
 import { 
     BASIC_SCHOOL_REQUEST,
     BASIC_SCHOOL_SUCCESS,
-    BASIC_SCHOOL_FAILED
+    BASIC_SCHOOL_FAILED,
+    COMMUNITY_REQUEST,
+    COMMUNITY_SUCCESS,
+    COMMUNITY_FAILED,
+    SHS_SCHOOL_REQUEST,
+    SHS_SCHOOL_SUCCESS,
+    SHS_SCHOOL_FAILED
  } from "../constants/SchoolConstants"
 
 
@@ -60,7 +66,7 @@ export const get_basic_schools = () => async (dispatch)=>{
 export const add_shs_school = (school_name) => async(dispatch) =>{
     try {
         dispatch({
-            type: BASIC_SCHOOL_REQUEST,
+            type: SHS_SCHOOL_REQUEST,
         })
         const config = {
             headers:{
@@ -73,13 +79,13 @@ export const add_shs_school = (school_name) => async(dispatch) =>{
             config
         )
         dispatch({
-            type: BASIC_SCHOOL_SUCCESS,
+            type: SHS_SCHOOL_SUCCESS,
             payload:data
         })
 
     } catch (error) {
         dispatch({
-            type:BASIC_SCHOOL_FAILED,
+            type:SHS_SCHOOL_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message
@@ -89,15 +95,15 @@ export const add_shs_school = (school_name) => async(dispatch) =>{
 
 export const get_shs_schools = () => async (dispatch)=>{
     try {
-        dispatch({type:BASIC_SCHOOL_REQUEST})
+        dispatch({type:SHS_SCHOOL_REQUEST})
         const {data} = await axios.get('http://127.0.0.1:8000/account/shs-school/')
         dispatch({
-            type: BASIC_SCHOOL_SUCCESS,
+            type: SHS_SCHOOL_SUCCESS,
             payload: data
         })
     } catch (error) {
         dispatch({
-            type:BASIC_SCHOOL_FAILED,
+            type:SHS_SCHOOL_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message
@@ -109,7 +115,7 @@ export const get_shs_schools = () => async (dispatch)=>{
 export const add_community = (community_name) => async(dispatch) =>{
     try {
         dispatch({
-            type: BASIC_SCHOOL_REQUEST,
+            type: COMMUNITY_REQUEST,
         })
         const config = {
             headers:{
@@ -122,13 +128,13 @@ export const add_community = (community_name) => async(dispatch) =>{
             config
         )
         dispatch({
-            type: BASIC_SCHOOL_SUCCESS,
+            type: COMMUNITY_SUCCESS,
             payload:data
         })
 
     } catch (error) {
         dispatch({
-            type:BASIC_SCHOOL_FAILED,
+            type:COMMUNITY_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message
@@ -138,15 +144,15 @@ export const add_community = (community_name) => async(dispatch) =>{
 
 export const get_communities = () => async (dispatch)=>{
     try {
-        dispatch({type:BASIC_SCHOOL_REQUEST})
+        dispatch({type:COMMUNITY_REQUEST})
         const {data} = await axios.get('http://127.0.0.1:8000/account/community/')
         dispatch({
-            type: BASIC_SCHOOL_SUCCESS,
+            type: COMMUNITY_SUCCESS,
             payload: data
         })
     } catch (error) {
         dispatch({
-            type:BASIC_SCHOOL_FAILED,
+            type:COMMUNITY_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message

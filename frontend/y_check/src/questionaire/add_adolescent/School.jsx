@@ -1,6 +1,6 @@
 import React from 'react'
 
-const School = ({ adolescentFormData, handleInputChange }) => {
+const School = ({ adolescentFormData, handleInputChange,schools,shs_schools }) => {
     let locationJSX;
     if (adolescentFormData.adolescent_type === 'Primary') {
         locationJSX = (
@@ -11,9 +11,11 @@ const School = ({ adolescentFormData, handleInputChange }) => {
             value={adolescentFormData.school}
             onChange={handleInputChange}
             required>
-                <option value="Kwaprow MA Basic School">Kwaprow MA Basic School</option>
-                <option value="Ekon MA Basic School">Ekon MA Basic School</option>
-                <option value="Efutu Basic School">Efutu Basic School</option>
+                {schools.map((school) => (
+                <option key={school.id} value={school.school_name}>
+                  {school.school_name}
+                </option>
+                ))}       
             </select>
         </div>
         );
@@ -27,11 +29,11 @@ const School = ({ adolescentFormData, handleInputChange }) => {
                 value={adolescentFormData.school}
                 onChange={handleInputChange}
                 required>
-                    <option value="Efutu High Senior Technical School">Efutu High Senior Technical School</option>
-                    <option value="Ogua High School Technical School">Ogua High School Technical School</option>
-                    <option value="Ghana national Senior High School">Ghana national Senior High School</option>
-                    <option value="University Practice Senior High School">University Practice Senior High School</option>
-                    
+                    {shs_schools.map((shs) => (
+                    <option key={shs.id} value={shs.school_name}>
+                      {shs.school_name}
+                    </option>
+                    ))}       
                 </select>
             </div>
             <span>School resident status:</span>
