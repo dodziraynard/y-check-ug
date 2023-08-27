@@ -19,10 +19,10 @@ const SchoolLabel = () => {
                     <Link to='/get_all_basic_all'style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>All Basic Schools</span></Link> 
                     </div>
                     <div className="filter-item">
-                    <Link to='/add_community'style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Community</span></Link> 
+                    <Link to='/get_all_shs'style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>All SNR Schools</span></Link> 
                     </div>
                     <div className="filter-item">
-                    <Link to='/add_community'style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Community</span></Link> 
+                    <Link to='/get_all_communities'style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>All Communities</span></Link> 
                     </div>
                 </div>
             </div>

@@ -11,7 +11,9 @@ function App() {
     window.location.pathname.startsWith('/add_community')||
     window.location.pathname.startsWith('/add_school')||
     window.location.pathname.startsWith('/add_shs')||
-    window.location.pathname.startsWith('/get_all_basic_all')
+    window.location.pathname.startsWith('/get_all_basic_all')||
+    window.location.pathname.startsWith('/get_all_shs')||
+    window.location.pathname.startsWith('/get_all_communities')
 
   return (
     <>
