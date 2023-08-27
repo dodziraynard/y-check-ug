@@ -14,6 +14,8 @@ const SHSForm = () => {
         console.log(shs)
     
     }
+
+    
     return (
         <div>
             <div className='basic_form'>
