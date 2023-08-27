@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (ProfileView, LoginView, LogoutView, UserRegistrationView, 
-GetSecurityQuestionView, PasswordResetView, PasswordResetConfirmView,GetAllSecurityQuestionsView,)
+GetSecurityQuestionView, PasswordResetView, PasswordResetConfirmView,GetAllSecurityQuestionsView,
+BasicSchoolView,SNRSchoolView,CommunityView,)
 
 urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile_view'),
@@ -11,4 +12,7 @@ urlpatterns = [
     path('password-reset/', PasswordResetView.as_view(), name='password-reset'),
     path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('basic-school/', BasicSchoolView.as_view(), name='basic-school'),
+    path('shs-school/', SNRSchoolView.as_view(), name='shs-school'),
+    path('community/', CommunityView.as_view(), name='community'),
 ]

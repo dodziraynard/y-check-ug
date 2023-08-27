@@ -151,3 +151,49 @@ class LogoutView(APIView):
     def post(self, request):
         request.user.auth_token.delete()
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+
+
+class BasicSchoolView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        schools = BasicSchool.objects.all()
+        serializer = BasicSchoolSerializer(schools, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = BasicSchoolSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class SNRSchoolView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        schools = SNRSchool.objects.all()
+        serializer = SNRSchoolSerializer(schools, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = SNRSchoolSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class CommunityView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        communities = Community.objects.all()
+        serializer = CommunitySerializer(communities, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CommunitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
