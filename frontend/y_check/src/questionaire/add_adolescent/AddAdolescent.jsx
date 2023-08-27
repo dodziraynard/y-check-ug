@@ -35,6 +35,7 @@ const AddAdolescent = () => {
         dispatch(get_communities())
         dispatch(get_shs_schools())
     }, [dispatch]);
+    console.log(shs_schools)
 
 
     const [adolescentFormData, setAdolescentFormData] = useState({

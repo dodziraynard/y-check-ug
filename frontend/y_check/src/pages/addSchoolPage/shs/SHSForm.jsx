@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react'
 import { add_shs_school } from '../../../actions/SchoolActions';
 import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-
+import SHSTableList from '../../../components/schoolList/SHSTableList';
 // MAIN FUNCTION
 const SHSForm = () => {
     const [shs, setShs] = useState('')
@@ -60,6 +60,7 @@ const SHSForm = () => {
                 <button>Add Senior High School</button>
             </form>
             </div>
+            <SHSTableList/>
         </div>
   )
 }

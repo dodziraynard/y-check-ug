@@ -1,4 +1,5 @@
 import React, {useState,useEffect} from 'react'
+import BasicSchoolTableList from '../../../components/schoolList/BasicSchoolTableList';
 import { useSelector,useDispatch } from 'react-redux'
 import { add_basic_school } from '../../../actions/SchoolActions';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,7 @@ const BasicForm = () => {
   const basic_school = useSelector(state => state.basic_school);
   const { error, school } = basic_school;
 
-  
+
   const handleChange = (event) => {
 
     let value = event.target.value;
@@ -28,7 +29,7 @@ const BasicForm = () => {
     setBasic("")
   
   }
- 
+  
   
   useEffect(() => {
     if (school) {
@@ -63,6 +64,7 @@ const BasicForm = () => {
             <button>Add Basic School</button>
         </form>
         </div>
+    <BasicSchoolTableList />
     </div>
   )
 }

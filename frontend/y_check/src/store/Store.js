@@ -9,7 +9,8 @@ import {
     shs_school_reducer,
     shs_school_list_reducer,
     community_list_reducer,
-    community_reducer
+    community_reducer,
+    basic_school_delete_reducer
 } from '../reducers/SchoolReducer'
 
 const reducer = combineReducers({
@@ -21,7 +22,8 @@ const reducer = combineReducers({
     shs_school:shs_school_reducer,
     shs_school_list:shs_school_list_reducer,
     community:community_reducer,
-    community_list:community_list_reducer
+    community_list:community_list_reducer,
+    basic_school_delete:basic_school_delete_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

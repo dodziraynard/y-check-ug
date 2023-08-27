@@ -3,6 +3,12 @@ import {
     BASIC_SCHOOL_REQUEST,
     BASIC_SCHOOL_SUCCESS,
     BASIC_SCHOOL_FAILED,
+    BASIC_SCHOOL_DELETE_REQUEST,
+    BASIC_SCHOOL_DELETE_SUCCESS,
+    BASIC_SCHOOL_DELETE_FAILED,
+    BASIC_SCHOOL_LIST_REQUEST,
+    BASIC_SCHOOL_LIST_SUCCESS,
+    BASIC_SCHOOL_LIST_FAILED,
     COMMUNITY_REQUEST,
     COMMUNITY_SUCCESS,
     COMMUNITY_FAILED,
@@ -42,23 +48,53 @@ export const add_basic_school = (school_name) => async(dispatch) =>{
         })
     }
 }
-
+// GET ALL BASIC SCHOOLS ACTION
 export const get_basic_schools = () => async (dispatch)=>{
     try {
-        dispatch({type:BASIC_SCHOOL_REQUEST})
+        dispatch({type:BASIC_SCHOOL_LIST_REQUEST})
         const {data} = await axios.get('http://127.0.0.1:8000/account/basic-school/')
         dispatch({
-            type: BASIC_SCHOOL_SUCCESS,
+            type: BASIC_SCHOOL_LIST_SUCCESS,
             payload: data
         })
     } catch (error) {
         dispatch({
-            type:BASIC_SCHOOL_FAILED,
+            type:BASIC_SCHOOL_LIST_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message
         })
         
+    }
+}
+
+// DELETE BASIC SCHOOL ACTION
+export const delete_basic_school = (id) => async(dispatch) =>{
+    try {
+        dispatch({
+            type: BASIC_SCHOOL_DELETE_REQUEST,
+        })
+        const config = {
+            headers:{
+                'content-type':'application/json'
+            }
+        }
+        await axios.delete(
+            `http://127.0.0.1:8000/account/basic-school/${id}`,
+            config
+        )
+        dispatch({
+            type: BASIC_SCHOOL_DELETE_SUCCESS,
+            payload:id
+        })
+
+    } catch (error) {
+        dispatch({
+            type:BASIC_SCHOOL_DELETE_FAILED,
+            payload: error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        })
     }
 }
 

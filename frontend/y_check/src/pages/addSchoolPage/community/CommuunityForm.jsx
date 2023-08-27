@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react'
 import { add_community } from '../../../actions/SchoolActions';
 import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-
+import CommunityableList from '../../../components/schoolList/CommunityTableList';
 // MAIN FUNCTION
 const CommunityForm = () => {
 
@@ -43,7 +43,7 @@ const CommunityForm = () => {
 
   return (
     <div>
-        <div className='basic_form' style={{width:'165%'}}>
+        <div className='basic_form' style={{width:'82%'}}>
           {error? <span className='login-error'>{error}</span>:''}
           {showSuccessMessage ? <span className='login-success'> Community Added Successfully</span> : ''}
           <h1>Add Community Form </h1>
@@ -59,6 +59,7 @@ const CommunityForm = () => {
             <button>Add Community </button>
         </form>
         </div>
+        <CommunityableList/>
     </div>
   )
 }
