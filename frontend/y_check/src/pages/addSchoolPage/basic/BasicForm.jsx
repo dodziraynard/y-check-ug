@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import BasicSchoolTableList from '../../../components/schoolList/BasicSchoolTableList';
 import { useSelector,useDispatch } from 'react-redux'
-import { add_basic_school } from '../../../actions/SchoolActions';
+import { add_basic_school,get_basic_schools } from '../../../actions/SchoolActions';
 import { useNavigate } from 'react-router-dom';
 
 const BasicForm = () => {
@@ -12,11 +12,11 @@ const BasicForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
+  // GET THE ADDED SCHOOL
+  const basic_school = useSelector(state => state.basic_school);
+  const { error, school } = basic_school;
 
-  const all_basic_schools = useSelector(state => state.basic_school);
-  const { error, school } = all_basic_schools;
-
-
+  
   const handleChange = (event) => {
 
     let value = event.target.value;
@@ -29,16 +29,22 @@ const BasicForm = () => {
     setBasic("")
   
   }
+ 
+  
   useEffect(() => {
     if (school) {
         setShowSuccessMessage(true);
-// Delay the redirection to allow the user to see the message
+        
         const timer = setTimeout(() => {
+            setShowSuccessMessage(false); // Hide the success message after 20 seconds
             navigate('/add_school');
         }, 1000); 
+
         return () => clearTimeout(timer);
-    } 
-  }, [school, navigate]);   
+    }
+  }, [school, navigate]);
+  
+  
 
   return (
     <div>
@@ -53,11 +59,11 @@ const BasicForm = () => {
             placeholder='Enter School Name'
             name="basic" 
             value={basic}
-            onChange={handleChange}/>
+            onChange={handleChange}
+            required/>
             <button>Add Basic School</button>
         </form>
         </div>
-    <BasicSchoolTableList/>
     </div>
   )
 }
