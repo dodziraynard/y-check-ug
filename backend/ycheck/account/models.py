@@ -190,3 +190,24 @@ class ActivityLog(models.Model):
 
 
 
+# BASIC SCHOOL MODEL
+class BasicSchool(models.Model):
+    school_name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.school_name
+    
+# SENIOR HIGH MODEL  
+class SNRSchool(models.Model):
+    school_name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.school_name
+    
+# COMMUNITY MODEL   
+class Community(models.Model):
+    community_name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.community_name
+    
