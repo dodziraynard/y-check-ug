@@ -13,6 +13,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from django.http import Http404
 
 
 
@@ -167,10 +168,25 @@ class BasicSchoolView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BasicSchoolDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return BasicSchool.objects.get(pk=pk)
+        except BasicSchool.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        school = self.get_object(pk)
+        school.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+ 
     
 class SNRSchoolView(APIView):
     permission_classes = [AllowAny]
-
+        
     def get(self, request, format=None):
         schools = SNRSchool.objects.all()
         serializer = SNRSchoolSerializer(schools, many=True)
@@ -183,6 +199,22 @@ class SNRSchoolView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+   
+    
+class SNRSchoolDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return SNRSchool.objects.get(pk=pk)
+        except SNRSchool.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        school = self.get_object(pk)
+        school.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class CommunityView(APIView):
     permission_classes = [AllowAny]
 
@@ -197,3 +229,17 @@ class CommunityView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommunityDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return Community.objects.get(pk=pk)
+        except Community.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        community = self.get_object(pk)
+        community.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
