@@ -3,9 +3,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import authentication_classes, permission_classes
-from .models import (User, PasswordResetToken, SecurityQuestion, SecurityQuestionAnswer)
-from .serializers import (UserLoginSerializer, 
-UserRegistrationSerializer, UserOutputSerializer, SecurityQuestionSerializer, UserProfileSerializer, SecurityQuestionAnswerSerializer)
+from .models import *
+from .serializers import *
 from django.contrib.auth import authenticate
 from rest_framework import status
 from django.http import JsonResponse

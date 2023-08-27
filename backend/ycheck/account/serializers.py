@@ -1,6 +1,6 @@
 import hashlib
 from rest_framework import serializers
-from .models import User, SecurityQuestion, SecurityQuestionAnswer
+from .models import User, SecurityQuestion, SecurityQuestionAnswer,BasicSchool,SNRSchool,Community
 from django.contrib.auth.password_validation import validate_password
 
 
@@ -95,3 +95,19 @@ class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
         model = SecurityQuestionAnswer
         fields = ['question']
 
+
+
+class BasicSchoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BasicSchool
+        fields = '__all__'
+        
+class SNRSchoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SNRSchool
+        fields = '__all__'
+        
+class CommunitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = '__all__'
