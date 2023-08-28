@@ -2,7 +2,7 @@ import React from 'react'
 
 const Consent = ({ adolescentFormData, handleInputChange }) => {
     let locationJSX;
-    if (adolescentFormData.adolescent_type === 'Secondary') {
+    if (adolescentFormData.adolescent_type === 'SC') {
         locationJSX = (
           <>
             <span> Select your School Year</span>

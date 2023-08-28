@@ -4,7 +4,7 @@ const Location = ({ adolescentFormData, handleInputChange, schools, communities,
   let locationJSX;
 
 
-  if (adolescentFormData.adolescent_type === 'Primary') {
+  if (adolescentFormData.adolescent_type === 'PR') {
     locationJSX = (
       <div className="input-select">
         <label htmlFor="check_up_location">Select check-up location</label>
@@ -22,7 +22,7 @@ const Location = ({ adolescentFormData, handleInputChange, schools, communities,
         </select>
       </div>
     );
-  } else if (adolescentFormData.adolescent_type === 'Secondary') {
+  } else if (adolescentFormData.adolescent_type === 'SC') {
     locationJSX = (
       <div className="input-select">
         <label htmlFor="check_up_location">Select check-up location</label>

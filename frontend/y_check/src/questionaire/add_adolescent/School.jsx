@@ -2,7 +2,7 @@ import React from 'react'
 
 const School = ({ adolescentFormData, handleInputChange,schools,shs_schools }) => {
     let locationJSX;
-    if (adolescentFormData.adolescent_type === 'Primary') {
+    if (adolescentFormData.adolescent_type === 'PR') {
         locationJSX = (
             <div className="input-select">
             <label htmlFor="school">Select School</label>

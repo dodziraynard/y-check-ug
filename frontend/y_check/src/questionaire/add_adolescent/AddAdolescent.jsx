@@ -52,7 +52,8 @@ const AddAdolescent = () => {
         date: "",
         age_confirmation:"",
         gender:"",
-        
+        created_by:"",
+        picture:"",
     });
     const pageTitles = ["Add Adolescent","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent ","Add Adolescent "]
     const totalPages = pageTitles.length - 1 // get the total number of pages

@@ -8,8 +8,8 @@ const Type = ({ adolescentFormData, handleInputChange }) => {
             <input 
             type="radio" 
             name="adolescent_type" 
-            value="Primary"
-            checked={adolescentFormData.adolescent_type === "Primary"}
+            value="PR"
+            checked={adolescentFormData.adolescent_type === "PR"}
             onChange={handleInputChange} required/>
             <label htmlFor="primary-radio">Primary</label>
         </div>
@@ -17,8 +17,8 @@ const Type = ({ adolescentFormData, handleInputChange }) => {
             <input 
             type="radio" 
             name="adolescent_type" 
-            value="Secondary"  
-            checked={adolescentFormData.adolescent_type === "Secondary"}
+            value="SC"  
+            checked={adolescentFormData.adolescent_type === "SC"}
             onChange={handleInputChange} 
             required/>
             <label htmlFor="secondary-radio">Secondary</label>
@@ -26,8 +26,8 @@ const Type = ({ adolescentFormData, handleInputChange }) => {
         <div className="input-radio">
             <input type="radio" 
             name="adolescent_type" 
-            value="Community"  
-            checked={adolescentFormData.adolescent_type === "Community"}
+            value="CM"  
+            checked={adolescentFormData.adolescent_type === "CM"}
             onChange={handleInputChange} 
             required/>
             <label htmlFor="community-radio">Community</label>

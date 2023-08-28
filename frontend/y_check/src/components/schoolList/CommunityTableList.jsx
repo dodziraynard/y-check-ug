@@ -10,7 +10,7 @@ import Icon from '@mdi/react';
 import { mdiTrashCanOutline } from '@mdi/js';
 import './basic_table.scss';
 import { useSelector,useDispatch } from 'react-redux'
-import { get_basic_schools,delete_basic_school } from '../../actions/SchoolActions';
+import { get_communities,delete_community } from '../../actions/SchoolActions';
 import Modal from '@mui/material/Modal'; 
 import Fade from '@mui/material/Fade';
 import { useNavigate } from 'react-router-dom';
@@ -26,15 +26,15 @@ const CommunityTableList = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   // GET THE ALL  SCHOOLS
-  const basic_school_delete = useSelector(state => state.basic_school_delete);
-  const { delete_school } = basic_school_delete;
+  const community_delete = useSelector(state => state.community_delete);
+  const { delete_school } = community_delete;
 
-  const basic_school_list = useSelector(state => state.basic_school_list);
-  const { schools } = basic_school_list;
+  const community_list = useSelector(state => state.community_list);
+  const { communities } = community_list;
 
 
   useEffect(() => {
-   dispatch(get_basic_schools());
+   dispatch(get_communities());
   }, [dispatch]);
 
   const handleDeleteClick = (school) => {
@@ -43,13 +43,13 @@ const CommunityTableList = () => {
   };
 // CONFIRM DELETION METHOD 
   const handleDeleteConfirm = (id) => {
-    dispatch(delete_basic_school(id))
+    dispatch(delete_community(id))
     setDeleteModalOpen(false);
     setShowSuccessMessage(true);
 
     const timer = setTimeout(() => {
         setShowSuccessMessage(false);
-        navigate('/get_all_basic_all');
+        navigate('/add_community');
     }, 1000); 
     return () => clearTimeout(timer);
   };
@@ -67,19 +67,19 @@ const CommunityTableList = () => {
     <div className='mac'>
       <div className='patient-table basic_table'>
         <TableContainer component={Paper} style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}>
-            {showSuccessMessage ? <span className='login-success'> School Deleted Successfully</span> : ''}
+            {showSuccessMessage ? <span className='login-success'> Community Deleted Successfully</span> : ''}
           <Table sx={{ minWidth: 650 }} aria-label="simple table" style={{ marginLeft: '1rem' }}>
             <TableHead>
               <TableRow>
-                <TableCell>Basic School Name</TableCell>
+                <TableCell>Community Name</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {schools.map((school) => (
+              {communities.map((school) => (
                 <TableRow key={school.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                   <TableCell component="th" scope="row">
-                    {school.school_name}
+                    {school.community_name}
                   </TableCell>
                   <TableCell align="left">
                     <Icon
@@ -123,7 +123,7 @@ const CommunityTableList = () => {
                           Are you sure you want to delete the school:
                         </p>
                         <div style={{marginTop:"30px"}}>
-                        <h4>School Name: <span style={{color:"#173D70"}}>{selectedSchool.school_name}</span></h4>
+                        <h4>Community Name: <span style={{color:"#173D70"}}>{selectedSchool.community_name}</span></h4>
                         </div>
                       <div className="modal-buttons">
                         <button onClick={handleDeleteCancel}>Cancel</button>
