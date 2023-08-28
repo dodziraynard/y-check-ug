@@ -110,26 +110,32 @@ class Adolescent(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
     last_updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_updated')
 
-
-
-
+    
     def save(self, *args, **kwargs):
         if not self.pid:
-            prefix = self.adolescent_type
+            prefix_mapping = {
+                self.PRIMARY: 'PR',
+                self.SECONDARY: 'SC',
+                self.COMMUNITY: 'CM',
+            }
+            prefix = prefix_mapping.get(self.adolescent_type, '')
 
-            max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(max_pid=models.Max('pid'))['max_pid']
-            if max_pid:
-                next_pid_number = int(max_pid[2:]) + 1
+            if prefix:
+                max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(max_pid=models.Max('pid'))['max_pid']
+                if max_pid:
+                    next_pid_number = int(max_pid[2:]) + 1
+                else:
+                    next_pid_number = 1
+
+                self.pid = f'{prefix}{next_pid_number:05}'
             else:
-                next_pid_number = 1
-
-            self.pid = f'{prefix}{next_pid_number:05}'
+                raise ValueError("Invalid adolescent type")
 
         super().save(*args, **kwargs)
 
 
     def __str__(self):
-        return f'{self.first_name} {self.first_name}'
+        return f'{self.first_name} {self.last_name}'
 
 
 

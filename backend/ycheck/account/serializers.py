@@ -24,47 +24,48 @@ class UserLoginSerializer(serializers.ModelSerializer):
         'is_active', 'is_staff', 'is_superuser']
 
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    security_question_1 = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
-    security_answer_1 = serializers.CharField(max_length=200)
-    security_question_2 = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
-    security_answer_2 = serializers.CharField(max_length=200)
 
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'password', 'security_question_1', 
-                  'security_answer_1', 'security_question_2', 'security_answer_2']
+        fields = ['username', 'password']
         extra_kwargs = {'password': {'write_only': True}}
-
 
     def validate_username(self, value):
         if not value.startswith('YC'):
             raise serializers.ValidationError("Username must start with 'YC'")
         return value
 
-
     def create(self, validated_data):
-        security_question_1 = validated_data.pop('security_question_1')
-        security_answer_1 = validated_data.pop('security_answer_1')
-        security_question_2 = validated_data.pop('security_question_2')
-        security_answer_2 = validated_data.pop('security_answer_2')
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
         user.save()
-
-        SecurityQuestionAnswer.objects.create(
-            user=user,
-            security_question=security_question_1,
-            answer=security_answer_1
-        )
-        SecurityQuestionAnswer.objects.create(
-            user=user,
-            security_question=security_question_2,
-            answer=security_answer_2
-        )
-
         return user
+
+
+
+
+class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
+    security_question = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
+    answer = serializers.CharField(max_length=200)
+
+    class Meta:
+        model = SecurityQuestionAnswer
+        fields = ['security_question', 'answer']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        security_question = validated_data.get('security_question')
+        answer = validated_data.get('answer')
+
+        SecurityQuestionAnswer.objects.create(
+            user=user,
+            security_question=security_question,
+            answer=answer
+        )
+        return validated_data
 
 
 
@@ -88,10 +89,11 @@ class SecurityQuestionSerializer(serializers.ModelSerializer):
 
 
 
-class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
-    question = serializers.StringRelatedField(source='security_question.question')
+# class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
+#     security_question = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
+#     answer = serializers.CharField(max_length=200)
 
-    class Meta:
-        model = SecurityQuestionAnswer
-        fields = ['question']
+#     class Meta:
+#         model = SecurityQuestionAnswer
+#         fields = ['security_question', 'answer']
 

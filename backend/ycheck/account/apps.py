@@ -2,10 +2,12 @@ from django.apps import AppConfig
 from django.db.utils import OperationalError
 
 
+
 class AccountConfig(AppConfig):
     name = 'account'
 
     def ready(self):
+        import account.signals
         try:
             from .models import SecurityQuestion
             questions = [

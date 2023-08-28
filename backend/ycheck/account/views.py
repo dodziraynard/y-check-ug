@@ -14,6 +14,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from django.db import transaction
+
 
 
 
@@ -76,6 +78,31 @@ class UserRegistrationView(APIView):
 
 
 
+class SecurityQuestionSetupView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        questions_and_answers = request.data.get('questions_and_answers', [])
+      
+
+
+        for qa in questions_and_answers:
+            serializer = SecurityQuestionAnswerSerializer(data=qa)
+            if serializer.is_valid():
+                with transaction.atomic(): 
+                    serializer.save(user=user)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Security questions set up successfully"}, status=status.HTTP_201_CREATED)
+
+
+
+
+
+
+
 class GetSecurityQuestionView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -86,6 +113,17 @@ class GetSecurityQuestionView(APIView):
             return Response({'error': 'Security question not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = SecurityQuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class GetAllSecurityQuestionsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        questions = SecurityQuestion.objects.all()
+        serializer = SecurityQuestionSerializer(questions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 
@@ -108,11 +146,10 @@ class PasswordResetView(APIView):
 
 
 
-
-
 class PasswordResetConfirmView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         username = request.data.get('username')
         answer1 = request.data.get('answer1')
@@ -125,6 +162,9 @@ class PasswordResetConfirmView(APIView):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
         security_answers = SecurityQuestionAnswer.objects.filter(user=user)
+
+        if security_answers.count() < 2:
+            return Response({'error': 'Not enough security questions found'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not check_password(answer1, security_answers[0].answer) or \
            not check_password(answer2, security_answers[1].answer):
