@@ -216,7 +216,7 @@ class BasicSchoolDeleteView(APIView):
         
     def delete(self, request, pk, format=None):
         school = self.get_object(pk)
-        deleted_data = {'message': 'Community deleted successfully.'}
+        deleted_data = {'message': 'Basic deleted successfully.'}
         school.delete()
         return Response(deleted_data,status=status.HTTP_204_NO_CONTENT)
 
@@ -299,3 +299,18 @@ class AddAdolescentView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    
+class AdolescentDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return Adolescent.objects.get(pk=pk)
+        except Adolescent.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        adolescent = self.get_object(pk)
+        adolescent.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+ 
