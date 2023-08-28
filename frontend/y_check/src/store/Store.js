@@ -15,6 +15,9 @@ import {
     shs_school_delete_reducer
 } from '../reducers/SchoolReducer'
 
+import { adolescent_registration_reducer } from '../reducers/AddAdolescentReducer'
+
+// COMBINE REDUCERS START
 const reducer = combineReducers({
     user_login: user_login_reducer,
     user_registration:user_registrstion_reducer,
@@ -27,7 +30,8 @@ const reducer = combineReducers({
     community_list:community_list_reducer,
     basic_school_delete:basic_school_delete_reducer,
     community_delete:community_delete_reducer,
-    shs_school_delete:shs_school_delete_reducer
+    shs_school_delete:shs_school_delete_reducer,
+    adolescent_registration:adolescent_registration_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?
