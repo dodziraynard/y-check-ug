@@ -3,9 +3,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import authentication_classes, permission_classes
-from .models import (User, PasswordResetToken, SecurityQuestion, SecurityQuestionAnswer)
-from .serializers import (UserLoginSerializer, 
-UserRegistrationSerializer, UserOutputSerializer, SecurityQuestionSerializer, UserProfileSerializer, SecurityQuestionAnswerSerializer)
+from .models import *
+from .serializers import *
 from django.contrib.auth import authenticate
 from rest_framework import status
 from django.http import JsonResponse
@@ -14,8 +13,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from django.db import transaction
-
 
 
 
@@ -101,7 +98,15 @@ class SecurityQuestionSetupView(APIView):
 
 
 
+class GetAllSecurityQuestionsView(APIView):
+    permission_classes = [AllowAny]
 
+    def get(self, request, format=None):
+        security_questions = SecurityQuestion.objects.all()
+        serializer = SecurityQuestionSerializer(security_questions, many=True)
+        return Response(serializer.data)
+
+        
 
 class GetSecurityQuestionView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -184,3 +189,113 @@ class LogoutView(APIView):
     def post(self, request):
         request.user.auth_token.delete()
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+
+
+class BasicSchoolView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        schools = BasicSchool.objects.all()
+        serializer = BasicSchoolSerializer(schools, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = BasicSchoolSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BasicSchoolDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return BasicSchool.objects.get(pk=pk)
+        except BasicSchool.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        school = self.get_object(pk)
+        deleted_data = {'message': 'Community deleted successfully.'}
+        school.delete()
+        return Response(deleted_data,status=status.HTTP_204_NO_CONTENT)
+
+ 
+    
+class SNRSchoolView(APIView):
+    permission_classes = [AllowAny]
+        
+    def get(self, request, format=None):
+        schools = SNRSchool.objects.all()
+        serializer = SNRSchoolSerializer(schools, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = SNRSchoolSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+   
+    
+class SNRSchoolDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return SNRSchool.objects.get(pk=pk)
+        except SNRSchool.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        school = self.get_object(pk)
+        school.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommunityView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        communities = Community.objects.all()
+        serializer = CommunitySerializer(communities, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CommunitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommunityDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return Community.objects.get(pk=pk)
+        except Community.DoesNotExist:
+            raise Http404
+        
+    def delete(self, request, pk, format=None):
+        community = self.get_object(pk)
+        community.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+    
+class AddAdolescentView(APIView):
+    permission_classes = [AllowAny]
+        
+    def get(self, request, format=None):
+        adolescents = Adolescent.objects.all()
+        serializer = AdolescentSerializer(adolescents, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = AdolescentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

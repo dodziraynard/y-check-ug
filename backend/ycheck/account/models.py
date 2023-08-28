@@ -98,44 +98,45 @@ class Adolescent(models.Model):
         (FEMALE, 'Female'),
     ]
 
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
     pid = models.CharField(unique=True, blank=True, max_length=10)
-    picture = models.ImageField()
+    surname = models.CharField(max_length=50)
+    other_names = models.CharField(max_length=50)
+    visit_type = models.CharField(max_length=50,blank=True, null=True)
+    year = models.CharField(max_length=50,blank=True, null=True)
+    consent = models.CharField(max_length=5,blank=True, null=True)
+    community = models.CharField(max_length=50,blank=True, null=True)
+    picture = models.ImageField(upload_to='images/',blank=True, null=True)
     dob = models.DateField(null=True, blank=True)
-    location = models.CharField(max_length=50)
+    school = models.CharField(max_length=50,blank=True, null=True)
+    check_up_location = models.CharField(max_length=50)
     adolescent_type = models.CharField(max_length=2, choices=ADOLESCENT_TYPE_CHOICES)
-    sex_type = models.CharField(max_length=2, choices=ADOLESCENT_SEX_TYPE)
+    gender = models.CharField(max_length=50,blank=True, null=True)
+    resident_status = models.CharField(max_length=50,blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
+    age_confirmation = models.CharField(max_length=50,blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
-    last_updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_updated')
+    date = models.DateTimeField(auto_now_add=True)
 
-    
+
+
+
     def save(self, *args, **kwargs):
         if not self.pid:
-            prefix_mapping = {
-                self.PRIMARY: 'PR',
-                self.SECONDARY: 'SC',
-                self.COMMUNITY: 'CM',
-            }
-            prefix = prefix_mapping.get(self.adolescent_type, '')
+            prefix = self.adolescent_type
 
-            if prefix:
-                max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(max_pid=models.Max('pid'))['max_pid']
-                if max_pid:
-                    next_pid_number = int(max_pid[2:]) + 1
-                else:
-                    next_pid_number = 1
-
-                self.pid = f'{prefix}{next_pid_number:05}'
+            max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(max_pid=models.Max('pid'))['max_pid']
+            if max_pid:
+                next_pid_number = int(max_pid[2:]) + 1
             else:
-                raise ValueError("Invalid adolescent type")
+                next_pid_number = 1
+
+            self.pid = f'{prefix}{next_pid_number:05}'
 
         super().save(*args, **kwargs)
 
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.surname} {self.other_names}'
 
 
 
@@ -196,3 +197,24 @@ class ActivityLog(models.Model):
 
 
 
+# BASIC SCHOOL MODEL
+class BasicSchool(models.Model):
+    school_name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.school_name
+    
+# SENIOR HIGH MODEL  
+class SNRSchool(models.Model):
+    school_name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.school_name
+    
+# COMMUNITY MODEL   
+class Community(models.Model):
+    community_name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.community_name
+    
