@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DateOfBirth = ({ adolescentFormData, handleInputChange }) => {
+const DateOfBirth = ({ adolescentFormData, handleInputChange,handleFileChange }) => {
 
 // METHOD TO CALCULATE THE ADOLESCENT AGE
     const calculateAge = (birthDate) => {
@@ -70,7 +70,13 @@ const DateOfBirth = ({ adolescentFormData, handleInputChange }) => {
             ) : null}
             <span>Take Picture</span>
             <div className="input-with-icon">
-                <input type="file" name="picture" required style={{ cursor: 'pointer' }} />
+                <input
+                    type="file"
+                    name="picture"
+                    onChange={handleFileChange}
+                    required
+                    style={{ cursor: 'pointer' }}
+                />
             </div>
         </>
     );

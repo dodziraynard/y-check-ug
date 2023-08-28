@@ -43,7 +43,7 @@ const Consent = ({ adolescentFormData, handleInputChange }) => {
                 value="Yes parental consent"
                 checked={adolescentFormData.consent === "Yes parental consent"}
                 onChange={handleInputChange} required/>
-                <label htmlFor="primary-radio">Yes parental consent</label>
+                <label htmlFor="consent">Yes parental consent</label>
             </div>
             <div className="input-radio">
                 <input 
@@ -52,7 +52,7 @@ const Consent = ({ adolescentFormData, handleInputChange }) => {
                 value="Yes adolescent consent/assent"
                 checked={adolescentFormData.consent === "Yes adolescent consent/assent"}
                 onChange={handleInputChange} required/>
-                <label htmlFor="primary-radio">Yes adolescent consent/assent</label>
+                <label htmlFor="consent">Yes adolescent consent/assent</label>
             </div>
             <div className="input-radio">
                 <input 
@@ -61,7 +61,7 @@ const Consent = ({ adolescentFormData, handleInputChange }) => {
                 value="No"
                 checked={adolescentFormData.consent === "No"}
                 onChange={handleInputChange} required/>
-                <label htmlFor="primary-radio">No</label>
+                <label htmlFor="consent">No</label>
             </div>
           </>
         );

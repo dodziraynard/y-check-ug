@@ -1,11 +1,17 @@
 import { 
     ADD_ADOLESCENT_REQUEST,
     ADD_ADOLESCENT_SUCCESS,
-    ADD_ADOLESCENT_FAILED
+    ADD_ADOLESCENT_FAILED,
+    RESET_ADOLESCENT_INFO,
+    ADOLESCENT_LIST_REQUEST,
+    ADOLESCENT_LIST_SUCCESS,
+    ADOLESCENT_LIST_FAILED,
+    ADOLESCENT_DELETE_SUCCESS
+
 } from "../constants/AddAdolescentConstants";
 
 
-// USER REGISTRATION REDUCER
+// ADOLESCENT REGISTRATION REDUCER
 export const adolescent_registration_reducer = (state = {} ,action)=>{
     switch(action.type){
         case ADD_ADOLESCENT_REQUEST:
@@ -17,6 +23,31 @@ export const adolescent_registration_reducer = (state = {} ,action)=>{
         case ADD_ADOLESCENT_FAILED:
             return {loading:false, error:action.payload}
 
+        case RESET_ADOLESCENT_INFO:
+            return { ...state, adolescent_info: null };
+
+        default:
+            return state
+    }
+}
+
+// ADOLESCENT  LIST   REDUCER
+export const adoloscent_list_reducer = (state = {adolescents:[]},action)=>{
+    switch(action.type){
+        case ADOLESCENT_LIST_REQUEST:
+            return{...state,loading:true,adolescents:[]}
+
+        case ADOLESCENT_LIST_SUCCESS:
+            return {...state,loading:false,adolescents:action.payload}
+
+        case ADOLESCENT_LIST_FAILED:
+            return {...state,loading:false,error:action.payload}
+
+        case ADOLESCENT_DELETE_SUCCESS:
+            return {
+                ...state,
+                adolescents: state.adolescents.filter(adolescent => adolescent.id !== action.payload),
+            };
         default:
             return state
     }

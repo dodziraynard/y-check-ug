@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './patient_table.scss'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,23 +13,23 @@ import { Link } from 'react-router-dom';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 
 import Fade from '@mui/material/Fade';
-
-function createData(PIP, Type, Sex, dob, check_location, Action) {
-  return { PIP, Type, Sex, dob, check_location,Action };
-}
-
-
-const rows = [
-  createData('YC0001', 'Primary', 'Male', '25/08/2007', 'Madina','View'),
-  createData('YC0002', 'Primary', 'Male', '25/08/2007', 'Madina','View'),
-  createData('YC0003', 'Primary', 'Male', '25/08/2007', 'Madina','View'),
-  
-];
+import { useSelector,useDispatch } from 'react-redux'
+import { get_adolescents } from '../../actions/AddAdolescentAction';
 
 
 export default function PatientTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const dispatch = useDispatch()
+
+  const adoloscent_list = useSelector(state => state.adoloscent_list);
+  const { adolescents } = adoloscent_list;
+
+  useEffect(() => {
+    dispatch(get_adolescents());
+  }, [dispatch]);
+
+  console.log(adolescents)
 
   const handleDeleteClick = (row) => {
     setSelectedRow(row);
@@ -58,27 +58,33 @@ export default function PatientTable() {
         <TableHead>
           <TableRow>
             <TableCell>PIP</TableCell>
-            <TableCell align="left">Type</TableCell>
-            <TableCell align="left">Sex</TableCell>
-            <TableCell align="left">Date of Birth</TableCell>
-            <TableCell align="left">Check-Up-Location</TableCell>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="left">Other Name(s)</TableCell>
+            <TableCell align="left">Gender</TableCell>
+            <TableCell align="left">Adolescent Type</TableCell>
             <TableCell align="left">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {adolescents.map((adolescent) => (
             <TableRow
-              key={row.PIP}
+              key={adolescent.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.PIP}
+                {adolescent.pid}
               </TableCell>
-              <TableCell align="left">{row.Type}</TableCell>
-              <TableCell align="left">{row.Sex}</TableCell>
-              <TableCell align="left">{row.dob}
+              <TableCell align="left">{adolescent.surname}</TableCell>
+              <TableCell align="left">{adolescent.other_names}</TableCell>
+              <TableCell align="left">{adolescent.gender}
               </TableCell>
-              <TableCell align="left">{row.check_location}</TableCell>
+              <TableCell align="left">
+                {adolescent.adolescent_type === 'Pr'
+                    ? 'Primary'
+                    : adolescent.adolescent_type === 'SC'
+                    ? 'Secondary'
+                    : 'Community'}
+              </TableCell>
               <TableCell align="left">
                 <Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiPencilOutline} size={0.7} />
                 <Link to='/patient_detail'><Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiEyeOutline} size={0.7} /></Link>
@@ -87,7 +93,7 @@ export default function PatientTable() {
                  className='delete-icon' 
                  path={mdiTrashCanOutline} 
                  size={0.7} 
-                 onClick={() => handleDeleteClick(row)}/>
+                 onClick={() => handleDeleteClick(adolescent)}/>
                 </TableCell>
             </TableRow>
           ))}
