@@ -15,7 +15,7 @@ const AppRoutes = () => {
             <Route path='/add_community'element={<AddCommunity/>}/>
             <Route path='/patients' element={<PatientPage/>}/>
             <Route path='/add_school' element={<AddSchool/>}/>
-            <Route path='/patient_detail' element={<PatientDetailPage/>}/>
+            <Route path='/patient_detail/:id/' element={<PatientDetailPage/>}/>
         </Routes>
     );
 }

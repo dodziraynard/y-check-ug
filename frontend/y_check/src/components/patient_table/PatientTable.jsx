@@ -14,30 +14,44 @@ import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify} from '@md
 import Modal from '@mui/material/Modal'; 
 import Fade from '@mui/material/Fade';
 import { useSelector,useDispatch } from 'react-redux'
-import { get_adolescents } from '../../actions/AddAdolescentAction';
+import { get_adolescents,delete_adolescent } from '../../actions/AddAdolescentAction';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function PatientTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const adoloscent_list = useSelector(state => state.adoloscent_list);
   const { adolescents } = adoloscent_list;
+
+  const adolescent_delete = useSelector(state => state.adolescent_delete);
+  const { adolescent } = adolescent_delete;
 
   useEffect(() => {
     dispatch(get_adolescents());
   }, [dispatch]);
 
-  console.log(adolescents)
 
-  const handleDeleteClick = (row) => {
-    setSelectedRow(row);
+  const handleDeleteClick = (adolescent) => {
+    setSelectedRow(adolescent);
     setDeleteModalOpen(true);
   };
 // CONFIRM DELETION METHOD 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = (id) => {
+    dispatch(delete_adolescent(id))
     setDeleteModalOpen(false);
+    setShowSuccessMessage(true);
+
+    const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate('/patients');
+    }, 1000); 
+    return () => clearTimeout(timer);
   };
 // CANCEL DELETION METHOD
   const handleDeleteCancel = () => {
@@ -50,6 +64,7 @@ export default function PatientTable() {
     <div className='patient-table'>
     <TableContainer component={Paper} 
     style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)'}}>
+        {showSuccessMessage ? <span className='login-success'> School Deleted Successfully</span> : ''}
         <div className="search-bar-patient">
             <Icon path={mdiMagnify} size={1} className="search-icon" />
             <input type="text" placeholder="Search for Adolescent..." className="search-input" />
@@ -87,7 +102,7 @@ export default function PatientTable() {
               </TableCell>
               <TableCell align="left">
                 <Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiPencilOutline} size={0.7} />
-                <Link to='/patient_detail'><Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiEyeOutline} size={0.7} /></Link>
+                <Link to={`/patient_detail/${adolescent.id}/`} ><Icon style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer',marginRight:'3px'}} className='delete-icon' path={mdiEyeOutline} size={0.7} /></Link>
                 <Icon 
                 style={{background:'#548CFF',color:'#ffffff',padding:'10px',borderRadius:'5px', cursor:'pointer'}}
                  className='delete-icon' 
@@ -118,12 +133,21 @@ export default function PatientTable() {
           }} 
           >
             <div className="delete-modal">
-              <h2>Confirm Deletion</h2>
-              <p>Are you sure you want to delete this row?</p>
-              <div className="modal-buttons">
-                <button onClick={handleDeleteCancel}>Cancel</button>
-                <button onClick={handleDeleteConfirm}>Confirm</button>
-              </div>
+            {selectedRow && (
+              <div>
+                  <p>
+                    Are you sure you want to delete the Adolescent:
+                  </p>
+                  <div style={{marginTop:"30px"}}>
+                  <h4>PID: <span style={{color:"#173D70"}}>{selectedRow.pid}</span></h4>
+                  <h4>Name: <span style={{color:"#173D70"}}>{selectedRow.surname} {selectedRow.other_names}</span></h4>
+                  </div>
+                <div className="modal-buttons">
+                  <button onClick={handleDeleteCancel}>Cancel</button>
+                  <button onClick={()=>handleDeleteConfirm(selectedRow.id)}>Confirm</button>
+                </div>
+                </div>
+              )}
             </div>
           </div>
         </Fade>

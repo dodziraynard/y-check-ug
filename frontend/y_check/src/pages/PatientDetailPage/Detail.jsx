@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import person from '../../images/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiChevronLeft,mdiChevronRight} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 
 import Fade from '@mui/material/Fade';
+import { useParams } from 'react-router-dom'
+import { useDispatch,useSelector } from 'react-redux'
+import { get_single_adolescent } from '../../actions/AddAdolescentAction';
+
+// MAIN FUNCTION 
 const Detail = () => {
     const propertiesPerPage = 8; // Number of items per page
-    
+    const params = useParams();
+    const id = params.id;
+    const dispatch = useDispatch()
+
+    const get_adolescent = useSelector(state => state.get_adolescent)
+    const {adolescent} = get_adolescent
+    console.log(adolescent)
+   
+    ///
+    useEffect(()=>{
+        dispatch(get_single_adolescent(id))
+    },[id])
 
     const initialData = {
         PIP: 'yc100w',
@@ -28,7 +44,7 @@ const Detail = () => {
         Cell: 'no',
     };
       
-    const propertyKeys = Object.keys(initialData);
+    const propertyKeys = adolescent ? Object.keys(adolescent) : [];
     const totalPages = Math.ceil(propertyKeys.length / propertiesPerPage);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +87,7 @@ const Detail = () => {
             <div className="left-side">
                 <div className="nav-left">
                     <div className="picture">
-                        <img src={person} alt="Logo" />
+                        <img src={adolescent?.picture} alt="Logo" />
                         <div className='type'>
                             <span>Louis Seyram</span>
                             <button>Primary</button>
@@ -125,7 +141,7 @@ const Detail = () => {
                 {currentProperties.map(property => (
                 <div key={property} className='info-details'>
                     <h4>{property}</h4>
-                    <span>{initialData[property]}</span>
+                    <span>{adolescent[property]}</span>
                 </div>
                 ))}
                 </div>
