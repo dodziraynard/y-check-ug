@@ -1,6 +1,6 @@
 import hashlib
 from rest_framework import serializers
-from .models import User, SecurityQuestion, SecurityQuestionAnswer,BasicSchool,SNRSchool,Community
+from .models import *
 from django.contrib.auth.password_validation import validate_password
 
 
@@ -111,3 +111,13 @@ class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
         fields = '__all__'
+        
+class AdolescentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Adolescent
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        response=super().to_representation(instance)
+        response['created_by']=UserLoginSerializer(instance.created_by).data
+        return response
