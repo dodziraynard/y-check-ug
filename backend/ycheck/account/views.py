@@ -129,11 +129,6 @@ class GetAllSecurityQuestionsView(APIView):
         serializer = SecurityQuestionSerializer(questions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-
-
-
 class PasswordResetView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -307,6 +302,12 @@ class AdolescentDeleteView(APIView):
             return Adolescent.objects.get(pk=pk)
         except Adolescent.DoesNotExist:
             raise Http404
+        
+        
+    def get(self, request, pk, format=None):
+        adolescent = self.get_object(pk)
+        serializer = AdolescentSerializer(adolescent)
+        return Response(serializer.data)
         
     def delete(self, request, pk, format=None):
         adolescent = self.get_object(pk)
