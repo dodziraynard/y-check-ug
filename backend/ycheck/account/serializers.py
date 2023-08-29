@@ -119,7 +119,13 @@ class AdolescentSerializer(serializers.ModelSerializer):
         model = Adolescent
         fields = '__all__'
 
-    def to_representation(self, instance):
+    """def to_representation(self, instance):
         response=super().to_representation(instance)
         response['created_by']=UserLoginSerializer(instance.created_by).data
-        return response
+        return response"""
+
+
+class HomeQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeQuestion
+        fields = '__all__'

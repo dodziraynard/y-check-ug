@@ -218,3 +218,12 @@ class Community(models.Model):
     def __str__(self):
         return self.community_name
     
+    
+# HOME QUESTION MODEL
+class HomeQuestion(models.Model):
+    title = models.CharField(max_length=200)
+    type = models.CharField(max_length=100)
+    options = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
