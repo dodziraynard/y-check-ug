@@ -21,7 +21,9 @@ import {
     adolescent_delete_reducer,
     get_adolescent_reducer
 } from '../reducers/AddAdolescentReducer'
-
+import { 
+    home_questions_list_reducer
+} from '../reducers/HomeQuestionsReducer'
 // COMBINE REDUCERS START
 const reducer = combineReducers({
     // USER REDUCER
@@ -43,7 +45,10 @@ const reducer = combineReducers({
     adolescent_registration:adolescent_registration_reducer,
     adoloscent_list:adoloscent_list_reducer,
     adolescent_delete:adolescent_delete_reducer,
-    get_adolescent:get_adolescent_reducer
+    get_adolescent:get_adolescent_reducer,
+
+    // HOME QUESTION REDUCER
+    home_questions_list:home_questions_list_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

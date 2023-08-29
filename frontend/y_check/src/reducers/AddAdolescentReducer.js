@@ -58,7 +58,7 @@ export const adoloscent_list_reducer = (state = {adolescents:[]},action)=>{
     }
 }
 
-// ADOLESCENT  LIST   REDUCER
+// DELETE  ADOLESCENT   REDUCER
 export const adolescent_delete_reducer = (state = {} ,action)=>{
     switch(action.type){
         case ADOLESCENT_DELETE_REQUEST:
