@@ -48,9 +48,13 @@ const reducer = combineReducers({
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?
     JSON.parse(localStorage.getItem('userInfo')):null
+    
+const adolescentInfoFromStorage = localStorage.getItem('adolescent')?
+    JSON.parse(localStorage.getItem('adolescent')):null
 
 const initailState = {
-    user_login:{userInfo:userInfoFromStorage}
+    user_login:{userInfo:userInfoFromStorage},
+    get_adolescent:{adolescent:adolescentInfoFromStorage}
 }
 
 const midlleWare = [thunk]

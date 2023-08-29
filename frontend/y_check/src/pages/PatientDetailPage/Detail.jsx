@@ -17,7 +17,6 @@ const Detail = () => {
 
     const get_adolescent = useSelector(state => state.get_adolescent)
     const {adolescent} = get_adolescent
-    console.log(adolescent)
    
     ///
     useEffect(()=>{

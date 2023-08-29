@@ -80,6 +80,8 @@ export const get_single_adolescent = (id) => async(dispatch) =>{
             type: ADOLESCENT_SUCCESS,
             payload:data
         })
+        localStorage.setItem('adolescent',JSON.stringify(data))
+
 
     } catch (error) {
         dispatch({

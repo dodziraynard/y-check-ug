@@ -10,13 +10,12 @@ import Paper from '@mui/material/Paper'
 import Icon from '@mdi/react';
 import Histogragh from '../histogragh/Histograph';
 import { Link } from 'react-router-dom';
-import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify} from '@mdi/js';
+import { mdiTrashCanOutline,mdiPencilOutline,mdiEyeOutline,mdiMagnify,mdiChevronLeft,mdiChevronRight} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 
 import Fade from '@mui/material/Fade';
 import { useSelector,useDispatch } from 'react-redux'
 import { get_adolescents,delete_adolescent } from '../../actions/AddAdolescentAction';
 import { useNavigate } from 'react-router-dom';
-
 
 export default function PatientTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -35,6 +34,29 @@ export default function PatientTable() {
   useEffect(() => {
     dispatch(get_adolescents());
   }, [dispatch]);
+
+  const propertiesPerPage = 5; 
+
+  const totalPages = Math.ceil(adolescents.length / propertiesPerPage);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * propertiesPerPage;
+  const endIndex = startIndex + propertiesPerPage;
+  const currentProperties = adolescents.slice(startIndex, endIndex);
+
+  const handlePageChange = pageNumber => {
+      if (pageNumber >= 1 && pageNumber <= totalPages) {
+          setCurrentPage(pageNumber);
+      }
+  };
+
+  const handleNextPage = () => {
+      handlePageChange(currentPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+      handlePageChange(currentPage - 1);
+  };
 
 
   const handleDeleteClick = (adolescent) => {
@@ -81,7 +103,7 @@ export default function PatientTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {adolescents.map((adolescent) => (
+          {currentProperties.map((adolescent) => (
             <TableRow
               key={adolescent.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -153,6 +175,20 @@ export default function PatientTable() {
         </Fade>
       </Modal>
       </Table>
+      <div className='next'>
+      <h5 className="section-heading">Showing Section {currentPage} of {totalPages}</h5>
+      <div className="button-container">
+      <button className='pre' onClick={handlePreviousPage}>
+          <Icon className='chevron' path={mdiChevronLeft} size={1} />
+      </button>
+          <button className='next-button'>
+          {currentPage}
+          </button>
+      <button className='pre'onClick={handleNextPage}>
+          <Icon className='chevron' path={mdiChevronRight} size={1} />
+      </button>
+      </div>
+  </div>
     </TableContainer>
     </div>
     <Histogragh/>
