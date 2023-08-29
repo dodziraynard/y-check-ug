@@ -1,15 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
-import { Link } from 'react-router-dom';
-import PersonalInfo from './PersonalInfo';
 import Password from './Password';
 import SecurityQuestion from './SecurityQuestion';
 import './register.scss'
+import { useSelector,useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import { register } from '../../actions/userActions';
+import { get_security_questions } from '../../actions/SecurityQuestionActions';
 
 const Register = () => {
     const [page, setPage] = useState(0)
-    
-    const pageTitles = ["Personal Information","Password Section","Security Questions"]
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+
+    // GETTING THE SECURITY QUESTIONS FROM THE SERVER
+
+    const all_security_question = useSelector(state => state.all_security_question);
+    const { security_questions } = all_security_question;
+
+    useEffect(() => {
+        dispatch(get_security_questions());
+    }, [dispatch]);
+
+    const firstSecurityQuestion = security_questions[0];
+    const secondSecurityQuestion = security_questions[1];
+
+    let security_question_1= null;
+    let security_question_2= null;
+    if (security_questions && security_questions.length > 0) {
+        security_question_1 = security_questions[0].id;
+        security_question_2 = security_questions[1].id;
+    }
+
+
+
+    // GETTING THE STATE FROM THE STORE 
+    const user_registration = useSelector(state => state.user_registration)
+    const { error, loading, userInfo } = user_registration
+
+    const pageTitles = ["Personal Information","Security Questions"]
     const totalPages = pageTitles.length - 1 // get the total number of pages
 // HANGLE PAGE CHANGE
     const handlePageChange = pageNumber => {
@@ -28,13 +59,10 @@ const Register = () => {
 // useState FOR THE VARIOUS USER INPUT FIELDS
     const [formData, setFormData] = useState({
         staff_id: "",
-        firstname: "",
-        lastname: "",
-        phone_number: "",
         password:"",
         confirm_password:"",
-        town:"",
-        food:"",
+        security_answer_1:"",
+        security_answer_2:"",
     });
 // HANDLE INPUT CHANGED
     const handleInputChange = (event) => {
@@ -47,37 +75,48 @@ const Register = () => {
 // HANDLE FORM SUBMIT
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log(
+        console.log(formData.security_answer_1)
+        dispatch(register(
             formData.staff_id,
-            formData.firstname,
-            formData.lastname,
-            formData.phone_number,
-            formData.confirm_password,
-            formData.password,
-            formData.town,
-            formData.food
-        )
+            security_question_1,
+            formData.security_answer_1,
+            security_question_2,
+            formData.security_answer_2,
+            formData.password
+        ))
 
     }
 
+// FUNCTION REDIRECT THE USER
+    useEffect(() => {
+        if (userInfo) {
+            setShowSuccessMessage(true);
+// Delay the redirection to allow the user to see the message
+            const timer = setTimeout(() => {
+                navigate('/landing');
+            }, 1000); 
+            return () => clearTimeout(timer);
+        } 
+    }, [userInfo, navigate]);
+
+
     const displayPage = ()=>{
         if(page === 0){
-            return <PersonalInfo handleInputChange={handleInputChange} formData={formData} />;
-        } else if(page === 1){
-            return<Password handleInputChange={handleInputChange} formData={formData}/>
+            return<Password handleInputChange={handleInputChange} formData={formData} />
         }else{
-            return<SecurityQuestion handleInputChange={handleInputChange} formData={formData}/>
+            return<SecurityQuestion 
+            handleInputChange={handleInputChange} 
+            formData={formData} 
+            firstSecurityQuestion={firstSecurityQuestion}
+            secondSecurityQuestion={secondSecurityQuestion}/>
         }
     }
     return (
         <div className='page-progress'>
             {page === 0 ? (
-                <span className='page'>page 1/3</span>
-            ) : page === 1?(
-                <span className='page'>page 2/3</span>
-
+                <span className='page'>page 1/2</span>
             ) : (
-                <span className='page'>page 3/3</span>
+                <span className='page'>page 2/2</span>
 
             )}
     
@@ -90,21 +129,16 @@ const Register = () => {
                     <div className="login-title">
                         <h2>{pageTitles[page]}</h2>
                     </div>
+                    {error? <span className='login-error'>{error}</span>:''}
+                    {showSuccessMessage ? <span className='login-success'> Registration Successful</span> : ''}
                     <form className="login-form" onSubmit={handleSubmit}>
                         {displayPage()}
                         {page === 0 ? (
                             <button className='login-button'  onClick={handleNextPage} style={{ cursor: 'pointer' }}>Proceed</button>
-                        ) : page === 1?(
-                            <div className='adolescent-button'>
-                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
-                            <button className='adolescent-pre ' onClick={handleNextPage} style={{ cursor: 'pointer' }}>Next</button>
-                            </div>
                         ) : (
                             <div className='adolescent-button'>
-                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer', width:'50%' }}>Back</button>
-                            <Link to='/landing'>
-                                <button className='adolescent-pre' style={{ cursor: 'pointer' }}>Sign Up</button>
-                            </Link>
+                            <button className='adolescent-pre' onClick={handlePrePage} style={{ cursor: 'pointer' }}>Back</button>
+                            <button className='adolescent-pre' style={{ cursor: 'pointer' }}>Sign Up</button>
                             </div>
                         )}
                     </form>

@@ -22,6 +22,11 @@ export const SidebarData = [
         icon: mdiAccountCog,
         heading:'User Setting'
     },
+    {
+        icon: mdiAccountCog,
+        heading:'Add School',
+        url:'/add_school'
+    },
    
     
 ]

@@ -101,6 +101,17 @@
 .page-progress{
     background: #ffffff;
 }
+
+.login-error{
+    background: rgba(210, 160, 171, 0.5);
+    padding: 10px;
+    color: var(--ug_blue);
+}
+.login-success{
+    background: rgba(179, 230, 205, 0.5);
+    padding: 10px;
+    color: var(--ug_blue);
+}
 @media screen  and (min-width:200px) and (max-width:380px){
 
     .login{

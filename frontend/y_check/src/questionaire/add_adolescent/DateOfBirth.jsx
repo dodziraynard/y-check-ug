@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DateOfBirth = ({ adolescentFormData, handleInputChange }) => {
+const DateOfBirth = ({ adolescentFormData, handleInputChange,handleFileChange }) => {
 
 // METHOD TO CALCULATE THE ADOLESCENT AGE
     const calculateAge = (birthDate) => {
@@ -40,32 +40,43 @@ const DateOfBirth = ({ adolescentFormData, handleInputChange }) => {
                     </p>
                 )}
             </div>
-            <span>Select Gender:</span>
-            <div className="input-radio">
-                <label htmlFor="primary-radio">Male</label>
+            {isEligible ? (
+            <div>
+                <span>You are  <strong style={{color:"green"}}>{calculatedAge}</strong> years old. Is that correct?</span>
+                <div className="input-radio">
+                <label htmlFor="primary-radio">Yes</label>
                 <input
-                type="radio"
-                name="gender"
-                value="Male"
-                checked={adolescentFormData.gender === "Male"}
-                onChange={handleInputChange}
-                required
+                    type="radio"
+                    name="age_confirmation"
+                    value="Yes"
+                    checked={adolescentFormData.age_confirmation === "Yes"}
+                    onChange={handleInputChange}
+                    required
                 />
-            </div>
-            <div className="input-radio">
-                <label htmlFor="secondary-radio">Female</label>
+                </div>
+
+                <div className="input-radio">
+                <label htmlFor="primary-radio">No</label>
                 <input
-                type="radio"
-                name="gender"
-                value="Female"
-                checked={adolescentFormData.gender === "Female"}
-                onChange={handleInputChange}
-                required
+                    type="radio"
+                    name="age_confirmation"
+                    value="No"
+                    checked={adolescentFormData.age_confirmation === "No"}
+                    onChange={handleInputChange}
+                    required
                 />
+                </div>
             </div>
+            ) : null}
             <span>Take Picture</span>
             <div className="input-with-icon">
-                <input type="file" name="picture" required style={{ cursor: 'pointer' }} />
+                <input
+                    type="file"
+                    name="picture"
+                    onChange={handleFileChange}
+                    required
+                    style={{ cursor: 'pointer' }}
+                />
             </div>
         </>
     );

@@ -6,7 +6,7 @@ const PIP = ({ adolescentFormData, handleInputChange }) => {
         <span>PIP Number</span>
         <div className="input-with-icon">
             <input type="text" 
-            placeholder='YC1001'
+            placeholder='The PIP will auto generated'
             name='PIP'
             required
             disabled/>

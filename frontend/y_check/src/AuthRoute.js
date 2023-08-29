@@ -5,15 +5,16 @@ import Register from './pages/registrationPage/Register'
 import LandingPage from './questionaire/landingPage/LandingPage';
 import {Routes,Route } from 'react-router-dom';
 import AddAdolescent from './questionaire/add_adolescent/AddAdolescent';
-
+import HomeQuestion from './questionaire/home_questions/HomeQuestion';
 const AuthRoute = () => {
     return (
         <Routes>
-        <Route path='/'element={<Home/>}/>
-        <Route path='/add_adolescent'element={<AddAdolescent/>}/>
-        <Route path='/landing'element={<LandingPage/>}/>
-        <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/register' element={<Register/>}/>
+            <Route path='/'element={<Home/>}/>
+            <Route path='/add_adolescent'element={<AddAdolescent/>}/>
+            <Route path='/landing'element={<LandingPage/>}/>
+            <Route path='/login' element={<LoginPage/>}/>
+            <Route path='/register' element={<Register/>}/>
+            <Route path='/questionaire' element={<HomeQuestion/>}/>
         </Routes>
     );
 }
