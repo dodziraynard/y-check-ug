@@ -43,22 +43,23 @@ export default function PatientTable() {
   const startIndex = (currentPage - 1) * propertiesPerPage;
   const endIndex = startIndex + propertiesPerPage;
   const currentProperties = adolescents.slice(startIndex, endIndex);
-
+  
+// HANDLE THE PAGE LIMIT 
   const handlePageChange = pageNumber => {
       if (pageNumber >= 1 && pageNumber <= totalPages) {
           setCurrentPage(pageNumber);
       }
   };
-
+// PAGINATION NEXT PAGE
   const handleNextPage = () => {
       handlePageChange(currentPage + 1);
   };
-
+// PAGINATION PREVIUOS PAGE
   const handlePreviousPage = () => {
       handlePageChange(currentPage - 1);
   };
 
-
+  //
   const handleDeleteClick = (adolescent) => {
     setSelectedRow(adolescent);
     setDeleteModalOpen(true);
