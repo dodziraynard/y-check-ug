@@ -18,8 +18,31 @@ const HomeQuestion = () => {
         dispatch(get_home_questions());
     }, [dispatch]);
 
-    console.log(home_questions)
+    const propertiesPerPage = 1; 
 
+    const totalPages = Math.ceil(home_questions.length / propertiesPerPage);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const startIndex = (currentPage - 1) * propertiesPerPage;
+    const endIndex = startIndex + propertiesPerPage;
+    const currentQuestions = home_questions.slice(startIndex, endIndex);
+        
+        // HANDLE THE PAGE LIMIT 
+    const handlePageChange = pageNumber => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
+    // PAGINATION NEXT PAGE
+    const handleNextPage = () => {
+        handlePageChange(currentPage + 1);
+    };
+    // PAGINATION PREVIUOS PAGE
+    const handlePreviousPage = () => {
+        handlePageChange(currentPage - 1);
+    };
+    
+    
 
  
   return (
@@ -31,15 +54,26 @@ const HomeQuestion = () => {
                         <img src={ug_logo} alt="Logo" />
                     </div>
                     <div className="login-title">
-                        <h2>Questionaire</h2>
+                        {currentQuestions.map((question,index) => (
+                            <h2 key={index}>{question.title}</h2>
+                        ))}
                     </div>
                     <form className="login-form"> 
-                       <RadioType home_questions={home_questions}/>
-                       <CheckBoxType/>
-
+                    {currentQuestions.map((question, index) => (
+                        question.type === "multiple_choice" ? (
+                            <RadioType key={index} currentQuestions={currentQuestions} />
+                        ) : (
+                            question.type === "checkbox" ? (
+                                <CheckBoxType key={index} currentQuestions={currentQuestions} />
+                            ) : (
+                                <InputType key={index} currentQuestions={currentQuestions} />
+                                
+                            )
+                        )
+                        ))}
                        <div className='adolescent-button'>
-                            <button className='adolescent-pre' style={{ cursor: 'pointer' }} type="button">Back</button>
-                            <button className='adolescent-pre'  style={{ cursor: 'pointer' }} type="button">Next</button>
+                            <button className='adolescent-pre'onClick={handlePreviousPage} style={{ cursor: 'pointer' }} type="button">Back</button>
+                            <button className='adolescent-pre'onClick={handleNextPage}  style={{ cursor: 'pointer' }} type="button">Next</button>
                         </div>
                     </form>
                 </div>
