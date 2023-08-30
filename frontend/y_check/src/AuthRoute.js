@@ -6,6 +6,7 @@ import LandingPage from './questionaire/landingPage/LandingPage';
 import {Routes,Route } from 'react-router-dom';
 import AddAdolescent from './questionaire/add_adolescent/AddAdolescent';
 import HomeQuestion from './questionaire/home_questions/HomeQuestion';
+import Questionaire from './questionaire/home_questions/Questionaire';
 const AuthRoute = () => {
     return (
         <Routes>
@@ -14,7 +15,7 @@ const AuthRoute = () => {
             <Route path='/landing'element={<LandingPage/>}/>
             <Route path='/login' element={<LoginPage/>}/>
             <Route path='/register' element={<Register/>}/>
-            <Route path='/questionaire' element={<HomeQuestion/>}/>
+            <Route path='/questionaire' element={<Questionaire/>}/>
         </Routes>
     );
 }

@@ -54,9 +54,7 @@ const HomeQuestion = () => {
                         <img src={ug_logo} alt="Logo" />
                     </div>
                     <div className="login-title">
-                        {currentQuestions.map((question,index) => (
-                            <h2 key={index}>{question.title}</h2>
-                        ))}
+                        
                     </div>
                     <form className="login-form"> 
                     {currentQuestions.map((question, index) => (

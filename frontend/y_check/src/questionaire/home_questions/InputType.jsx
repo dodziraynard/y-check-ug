@@ -4,9 +4,9 @@ const InputType = ({ currentQuestions }) => {
     return (
       <>
         {currentQuestions.map((question, index) => (
-          <div key={index}>
-            <span>{question.title}</span>
-            <div className="input-with-icon">
+          <div className='questionaire-text' key={index}>
+            <h2>{question.title}</h2>
+            <div className="questionaire-input">
               <input
                 type="text"
                 placeholder={`Enter ${question.title}:`}

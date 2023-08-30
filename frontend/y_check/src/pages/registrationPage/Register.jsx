@@ -75,7 +75,6 @@ const Register = () => {
 // HANDLE FORM SUBMIT
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log(formData.security_answer_1)
         dispatch(register(
             formData.staff_id,
             security_question_1,
