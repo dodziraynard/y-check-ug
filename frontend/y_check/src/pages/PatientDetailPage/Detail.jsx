@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from 'react';
-import person from '../../images/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline,mdiPencilOutline,mdiChevronLeft,mdiChevronRight} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 

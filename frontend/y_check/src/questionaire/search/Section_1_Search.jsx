@@ -9,9 +9,8 @@ const Section_1_Search = () => {
     const dispatch = useDispatch()
     // GET THE ALL  SCHOOLS
     const adoloscent_search_list = useSelector(state => state.adoloscent_search_list);
-    const { adolescent_search_results } = adoloscent_search_list;
-    console.log(adolescent_search_results)
-    console.log(search)
+    const {error, adolescent_search_results } = adoloscent_search_list;
+    
     const handleInputChange = event => {
         setSearch(event.target.value);
     };
@@ -40,11 +39,12 @@ const Section_1_Search = () => {
                     <button  className='search-button' style={{ cursor: 'pointer' }} type='submit' >Search</button>
                 </form>
                 <ul className="search-results">
+                {error? <span className='login-error'> No matching records found</span>:''}
                     {adolescent_search_results.map(result => (
                         <li key={result.id} className="search-result-item">
                         <span className="name">{result.surname}, {result.other_names}</span>
                         <span className="pid">(PID: {result.pid})</span>
-                        <Link to={`/patient_detail/${result.id}/`} className="view-link">
+                        <Link to={`/section-detail/${result.id}/`} className="view-link">
                             View
                         </Link>
                         </li>

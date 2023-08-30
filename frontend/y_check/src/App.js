@@ -1,5 +1,3 @@
-import React, { useState,useEffect } from 'react';
-
 import './App.css';
 import Home from './components/home/Home';
 import LoginPage from './pages/loginPage/LoginPage';
@@ -15,6 +13,8 @@ import AddSchool from './pages/addSchoolPage/basic/AddSchool';
 import AddShS from './pages/addSchoolPage/shs/AddShS';
 import AddCommunity from './pages/addSchoolPage/community/AddCommunity';
 import Section_1_Search from './questionaire/search/Section_1_Search';
+import SearchDetail from './questionaire/search/SearchDetail';
+import PracticeQuestion from './components/practice_questions/PracticeQuestion';
 function App() {
   return(
     <Router>
@@ -31,7 +31,9 @@ function App() {
         <Route path='/add_school' element={<AddSchool/>}/>
         <Route path='/add_shs'element={<AddShS/>}/>
         <Route path='/add_community'element={<AddCommunity/>}/>
-        <Route path='/Section_1_Search'element={<Section_1_Search/>}/>
+        <Route path='/section_1_Search'element={<Section_1_Search/>}/>
+        <Route path='/section-detail/:id/'element={<SearchDetail/>}/>
+        <Route path='/practice-question'element={<PracticeQuestion/>}/>
       </Routes>
   </Router>
   )
