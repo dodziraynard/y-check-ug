@@ -60,7 +60,7 @@ const adolescentInfoFromStorage = localStorage.getItem('adolescent')?
     JSON.parse(localStorage.getItem('adolescent')):null
 
 const adolescent_search_resultsFromStorage = localStorage.getItem('adolescent_search_results')?
-    JSON.parse(localStorage.getItem('adolescent_search_results')):null
+    JSON.parse(localStorage.getItem('adolescent_search_results')):[]
 
 const initailState = {
     user_login:{userInfo:userInfoFromStorage},

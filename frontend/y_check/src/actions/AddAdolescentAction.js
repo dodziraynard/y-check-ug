@@ -48,6 +48,7 @@ export const delete_adolescent = (id) => async(dispatch) =>{
         }
         await axios.delete(
             `http://127.0.0.1:8000/account/Add-adolescent/${id}`,
+            
             config
         )
         dispatch({
@@ -101,11 +102,19 @@ export const resetAdolescentInfo = () => ({
 });
 
 
-// GET ALL  ADOLESCENT ACTION
-export const get_adolescent_search = () => async (dispatch)=>{
+// GET ALL  ADOLESCENT SERCH ACTION
+export const get_adolescent_search = (adolescent) => async (dispatch)=>{
     try {
         dispatch({type:ADOLESCENT_SERACH_REQUEST})
-        const {data} = await axios.get('http://127.0.0.1:8000/account/adolescent-search/')
+        const config = {
+            headers:{
+                'content-type':'application/json'
+            }
+        }
+        const {data} = await axios.post('http://127.0.0.1:8000/account/adolescent-search/',
+        {'adolescent':adolescent},
+        )
+      
         dispatch({
             type: ADOLESCENT_SERACH_SUCCESS,
             payload: data
