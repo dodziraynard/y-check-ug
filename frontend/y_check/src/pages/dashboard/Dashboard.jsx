@@ -1,22 +1,15 @@
-import React from 'react'
-import Card from '../../components/card/Card'
-import Chart from '../../components/chart/Chart'
-import './dashboard.scss'
-import BasicTable from '../../components/table/Table'
+import Nav from "../../components/nav/Nav"
+import Sidebar from "../../components/sidebar/Sidebar"
+import Main from "./Main"
 function Dashboard() {
   return (
-    <section>
-      <div className='grid'>
-        <div className="row_one">
-          <Card/>
-          <Chart/>
-        </div>
-        <div className="row_two">
-          <BasicTable/>
-        </div>
-        
+    <div>
+      <Nav />
+      <div className='main'>
+          <Sidebar />
+          <Main />
       </div>
-    </section>
+    </div>
   )
 }
 

@@ -1,13 +1,17 @@
 import React from 'react'
-import SHSForm from './SHSForm'
-import SchoolLabel from '../basic/SchoolLabel'
+import Index from './Index'
+import Nav from '../../../components/nav/Nav'
+import Sidebar from '../../../components/sidebar/Sidebar'
 const AddShS = () => {
-    return (
-        <div className='add_school_main'>
-          <SchoolLabel/>
-          <SHSForm/>
-        </div>
-    )
+  return (
+    <div>
+      <Nav />
+      <div className='main'>
+          <Sidebar />
+          <Index />
+      </div>
+    </div>
+  )
 }
 
 export default AddShS
