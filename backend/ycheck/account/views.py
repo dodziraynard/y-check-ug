@@ -13,7 +13,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-
+from django.db.models import Q
 
 
 
@@ -322,4 +322,25 @@ class HomeQuestionView(APIView):
         serializer = HomeQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
+    def post(self, request, format=None):
+        serializer = HomeQuestionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    
+class SearchAdolescentView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        query = data['adolescent']
+        print(query)
+        adolescent = Adolescent.objects.filter(Q(pid=query) | Q(surname__icontains=query))
+        
+        if not adolescent.exists():
+            return Response({"message": "No matching records found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AdolescentSerializer(adolescent, many=True)
+        return Response(serializer.data)
