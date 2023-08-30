@@ -14,7 +14,7 @@ import PatientPage from './pages/PatientPage/PatientPage';
 import AddSchool from './pages/addSchoolPage/basic/AddSchool';
 import AddShS from './pages/addSchoolPage/shs/AddShS';
 import AddCommunity from './pages/addSchoolPage/community/AddCommunity';
-
+import Section_1_Search from './questionaire/search/Section_1_Search';
 function App() {
   return(
     <Router>
@@ -31,6 +31,7 @@ function App() {
         <Route path='/add_school' element={<AddSchool/>}/>
         <Route path='/add_shs'element={<AddShS/>}/>
         <Route path='/add_community'element={<AddCommunity/>}/>
+        <Route path='/Section_1_Search'element={<Section_1_Search/>}/>
       </Routes>
   </Router>
   )

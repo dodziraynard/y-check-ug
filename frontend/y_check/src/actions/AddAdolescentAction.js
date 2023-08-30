@@ -10,10 +10,13 @@ import {
     ADOLESCENT_DELETE_FAILED,
     ADOLESCENT_REQUEST,
     ADOLESCENT_SUCCESS,
-    ADOLESCENT_FAILED
+    ADOLESCENT_FAILED,
+    ADOLESCENT_SERACH_REQUEST,
+    ADOLESCENT_SERACH_SUCCESS,
+    ADOLESCENT_SERACH_FAILED,
 } from "../constants/AddAdolescentConstants";
 
-// GET ALL BASIC SCHOOLS ACTION
+// GET ALL  ADOLESCENT ACTION
 export const get_adolescents = () => async (dispatch)=>{
     try {
         dispatch({type:ADOLESCENT_LIST_REQUEST})
@@ -96,3 +99,26 @@ export const get_single_adolescent = (id) => async(dispatch) =>{
 export const resetAdolescentInfo = () => ({
     type: RESET_ADOLESCENT_INFO,
 });
+
+
+// GET ALL  ADOLESCENT ACTION
+export const get_adolescent_search = () => async (dispatch)=>{
+    try {
+        dispatch({type:ADOLESCENT_SERACH_REQUEST})
+        const {data} = await axios.get('http://127.0.0.1:8000/account/adolescent-search/')
+        dispatch({
+            type: ADOLESCENT_SERACH_SUCCESS,
+            payload: data
+        })
+        localStorage.setItem('adolescent_search_results',JSON.stringify(data))
+
+    } catch (error) {
+        dispatch({
+            type:ADOLESCENT_SERACH_FAILED,
+            payload: error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        })
+        
+    }
+}
