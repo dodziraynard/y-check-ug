@@ -51,7 +51,7 @@ const Question2 = () => {
                 ))}  
                 </div>
             </div>
-           <Link> <button className='circle-next-button'>Proceed</button></Link> 
+           <Link to='/welcome'> <button className='circle-next-button'>Proceed</button></Link> 
     </div>
   )
 }

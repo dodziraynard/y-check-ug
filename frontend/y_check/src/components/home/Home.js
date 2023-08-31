@@ -2,7 +2,16 @@ import React from 'react'
 import './home.scss'
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import { Link } from 'react-router-dom';
+
 function Home() {
+  const array1 = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
+  const array2 = [{ id: 3, name: 'Charlie' }, { id: 4, name: 'David' }];
+
+  const mergedArray = [...array1, ...array2];
+  console.log(mergedArray);
+
+
+
   return (
     <div className='home'>
       <div className='circle'>

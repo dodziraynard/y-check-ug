@@ -119,9 +119,53 @@
     .circle {
         width: 600px; 
         height: 600px; 
-        left: -80px; 
-        bottom: 200px;
+        left: -100px; 
+        bottom: 300px;
 
+    }
+    .image {
+        margin-top: 20px; 
+    }
+    .circle h2 {
+        font-size: 24px; 
+        margin-bottom: 15px; 
+    }
+    .circle p {
+        font-size: 14px; 
+        margin-bottom: 20px; 
+    }
+    .circle button {
+        display: none;
+    }
+    .mobile{
+        display: block; 
+        margin-top: 500px; 
+       
+    }
+    .mobile button {
+        padding:20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 30px;
+        background-color: var(--ug_blue);
+        margin: 5px;
+        width: 120px;
+        color: #fff;
+        cursor: pointer;
+    }
+    .mobile button + button {
+        margin-left: 30px;
+    }
+    
+
+}
+/* Media Query for Mobile */
+@media (max-width: 400px) {
+    .circle {
+        width: 600px; 
+        height: 600px; 
+        left: -100px; 
+        bottom: 200px
     }
     .image {
         margin-top: 20px; 
@@ -164,8 +208,8 @@
     .circle {
         width: 600px; 
         height: 600px; 
-        left: -80px; 
-        bottom: 200px;
+        left: -110px; 
+        bottom: 150px;
 
     }
     .image {
