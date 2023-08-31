@@ -21,7 +21,7 @@ export const login = (staff_id, password) => async(dispatch) =>{
             }
         }
         const {data} = await axios.post(
-            'http://127.0.0.1:8000/account/login-view/',
+            'http://localhost:8000/account/login-view/',
             {'username':staff_id,'password':password},
             config
         )
@@ -67,7 +67,7 @@ export const register = (
             }
         }
         const {data} = await axios.post(
-            'http://127.0.0.1:8000/account/register-view/',
+            'http://localhost:8000/account/register-view/',
             {
                 'username':staff_id,
                 'security_question_1':security_question_1,
