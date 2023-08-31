@@ -7,7 +7,8 @@ import {
     USER_REGISTRATION_SUCCESS,
     USER_REGISTRATION_FAILED,
     USER_LOGOUT
- } from "../constants/UserConstants";
+} from "../constants/UserConstants";
+import { BASE_URL } from '../constants/Host';
 
 // USER LOGIN ACTION
 export const login = (staff_id, password) => async(dispatch) =>{
@@ -21,7 +22,7 @@ export const login = (staff_id, password) => async(dispatch) =>{
             }
         }
         const {data} = await axios.post(
-            'http://127.0.0.1:8000/account/login-view/',
+            `${BASE_URL}/account/login-view/`,
             {'username':staff_id,'password':password},
             config
         )
@@ -67,7 +68,7 @@ export const register = (
             }
         }
         const {data} = await axios.post(
-            'http://127.0.0.1:8000/account/register-view/',
+            `${BASE_URL}/account/register-view/`,
             {
                 'username':staff_id,
                 'security_question_1':security_question_1,

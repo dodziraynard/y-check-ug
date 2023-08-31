@@ -1,4 +1,6 @@
 import axios from "axios";
+import { BASE_URL } from '../constants/Host';
+
 import { 
     HOME_QUESTIONS_REQUEST,
     HOME_QUESTIONS_SUCCESS,
@@ -9,7 +11,7 @@ import {
  export const get_home_questions = () => async (dispatch)=>{
     try {
         dispatch({type:HOME_QUESTIONS_REQUEST})
-        const {data} = await axios.get('http://127.0.0.1:8000/account/home_questions/')
+        const {data} = await axios.get(`${BASE_URL}/account/home_questions/`)
         dispatch({
             type: HOME_QUESTIONS_SUCCESS,
             payload: data
