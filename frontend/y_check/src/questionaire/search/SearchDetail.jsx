@@ -35,7 +35,7 @@ const SearchDetail = () => {
                 </>
                 )}
                 <form className="login-form">
-                <Link> <button className='login-button'> Proceed</button></Link>
+                <Link to='/practice-question-1'> <button className='login-button'> Proceed</button></Link>
                 <Link to="/section_1_Search"> <button className='login-button'> Back to Search</button></Link>
                 </form>
             </div>

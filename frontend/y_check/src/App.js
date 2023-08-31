@@ -16,6 +16,7 @@ import Section_1_Search from './questionaire/search/Section_1_Search';
 import SearchDetail from './questionaire/search/SearchDetail';
 import Question1 from './components/practice_questions/Question1';
 import Question2 from './components/practice_questions/Question2';
+import WelcomePage from './pages/welcomePage/WelcomePage';
 function App() {
   return(
     <Router>
@@ -36,6 +37,7 @@ function App() {
         <Route path='/section-detail/:id/'element={<SearchDetail/>}/>
         <Route path='/practice-question-1'element={<Question1/>}/>
         <Route path='/practice-question-2'element={<Question2/>}/>
+        <Route path='/welcome'element={<WelcomePage/>}/>
       </Routes>
   </Router>
   )
