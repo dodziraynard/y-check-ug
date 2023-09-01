@@ -141,8 +141,8 @@ const AddAdolescent = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
+
 
         formData.append("surname", adolescentFormData.surname);
         formData.append("other_names", adolescentFormData.other_names);

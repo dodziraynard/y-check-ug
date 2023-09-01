@@ -23,7 +23,8 @@ import {
     adoloscent_search_list_reducer
 } from '../reducers/AddAdolescentReducer'
 import { 
-    home_questions_list_reducer
+    home_questions_list_reducer,
+    add_home_question_reducer
 } from '../reducers/HomeQuestionsReducer'
 // COMBINE REDUCERS START
 const reducer = combineReducers({
@@ -50,7 +51,8 @@ const reducer = combineReducers({
     adoloscent_search_list:adoloscent_search_list_reducer,
 
     // HOME QUESTION REDUCER
-    home_questions_list:home_questions_list_reducer
+    home_questions_list:home_questions_list_reducer,
+    add_home_question:add_home_question_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

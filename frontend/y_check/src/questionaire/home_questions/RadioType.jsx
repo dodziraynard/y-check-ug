@@ -7,7 +7,7 @@ const RadioType = ({ currentQuestions }) => {
         {currentQuestions.map((question) => (
           <div key={question.id}>
             <h2> {question.title}</h2>
-            <span>{question.title}</span>
+            <span>{question.subtitle}</span>
             {question.options.map((option, index) => (
               <div className="input-radio" key={index}>
                 <label htmlFor={`radio-${question.id}-${index}`}>{option}</label>

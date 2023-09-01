@@ -3,12 +3,22 @@ import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import './question.scss'
 import Icon from '@mdi/react';
+import axios from 'axios';
+import { BASE_URL } from '../../constants/Host';
 import { mdiPlusBox,mdiMinusBox } from '@mdi/js';
+import { add_question } from '../../actions/HomeQuestionsAction';
+import { 
+    ADD_HOME_QUESTIONS_REQUEST,
+    ADD_HOME_QUESTIONS_SUCCESS,
+    ADD_HOME_QUESTIONS_FAILED
+} from '../../constants/HomeQuestionsConstants';
+import AddQuestion from './AddQuestion';
 const HomeQuestionForm = () => {
 
   const [basic, setBasic] = useState('')
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [additionalOptions, setAdditionalOptions] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [addQuestion,setAddQuestion] = useState({
       question_title:"",
@@ -22,8 +32,8 @@ const HomeQuestionForm = () => {
   const navigate = useNavigate();
 
   // GET THE ADDED SCHOOL
-  const basic_school = useSelector(state => state.basic_school);
-  const { error, school } = basic_school;
+  const add_home_question = useSelector(state => state.add_home_question);
+  const { error, home } = add_home_question;
 
 
   const handleChange = (event) => {
@@ -31,25 +41,24 @@ const HomeQuestionForm = () => {
     let value = event.target.value;
 
     setAddQuestion({ ...addQuestion, [name]: value });
-};
+  };
 
-  const handleSubmit = (e) =>{
+  // HANDLE FILE CASE
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    };
+
+  const handleSubmit = async (e) =>{
     e.preventDefault();
-    const optionsArray = additionalOptions.map((option) => option.value);
-    console.log(optionsArray)
-    setAddQuestion({
-        options: optionsArray, // Set the options array
-    });
-    setAddQuestion({
-        question_title:"",
-        question_type:"",
-        question_subtitle:"",
-    })
-    console.log(addQuestion.question_title)
-    console.log(addQuestion.question_type)
-    console.log(addQuestion.question_subtitle)
-
-   
+    const optionsArray = additionalOptions.map((option) => option.value); 
+    const optionsJSON = JSON.stringify(optionsArray);
+ 
+    dispatch(add_question(
+        addQuestion.question_title,
+        addQuestion.question_type,
+        addQuestion.question_subtitle,
+        optionsJSON,
+        selectedFile))    
   }
 
   const addOption = () => {
@@ -78,17 +87,17 @@ const HomeQuestionForm = () => {
 
   
   useEffect(() => {
-    if (school) {
+    if (home) {
         setShowSuccessMessage(true);
         
         const timer = setTimeout(() => {
             setShowSuccessMessage(false); // Hide the success message after 20 seconds
-            navigate('/add_school');
+            navigate('/add_question');
         }, 1000); 
 
         return () => clearTimeout(timer);
     }
-  }, [school, navigate]);
+  }, [home, navigate]);
   
   
 
@@ -126,6 +135,12 @@ const HomeQuestionForm = () => {
             onChange={handleChange}
             value={addQuestion.question_subtitle}
             required/>
+            <label style={{marginTop:"10px"}}  htmlFor=""> Choose file </label>
+            <input 
+            type="file"
+            name="picture"
+            onChange={handleFileChange}
+            />
 
             {additionalOptions.map((option) => (
             <div key={option.id}>
