@@ -92,7 +92,7 @@ const Register = () => {
             setShowSuccessMessage(true);
 // Delay the redirection to allow the user to see the message
             const timer = setTimeout(() => {
-                navigate('/landing');
+                navigate('/login');
             }, 1000); 
             return () => clearTimeout(timer);
         } 

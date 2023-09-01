@@ -17,6 +17,7 @@ import SearchDetail from './questionaire/search/SearchDetail';
 import Question1 from './components/practice_questions/Question1';
 import Question2 from './components/practice_questions/Question2';
 import WelcomePage from './pages/welcomePage/WelcomePage';
+import AddQuestion from './pages/AddQuestion/AddQuestion';
 function App() {
   return(
     <Router>
@@ -38,6 +39,7 @@ function App() {
         <Route path='/practice-question-1'element={<Question1/>}/>
         <Route path='/practice-question-2'element={<Question2/>}/>
         <Route path='/welcome'element={<WelcomePage/>}/>
+        <Route path='/add_question'element={<AddQuestion/>}/>
       </Routes>
   </Router>
   )

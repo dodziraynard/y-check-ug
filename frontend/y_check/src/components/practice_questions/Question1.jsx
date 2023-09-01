@@ -13,44 +13,44 @@ const Question1 = () => {
             <div className="questionaire-first-circle">
                 <h2 className='question'>What is Your Favorite Color?</h2>
                 <div
-                    className={`circle pink ${activeCircle === 'pink' ? 'active' : ''}`}
+                    className={`circle pink ${activeCircle === 'pink' ? 'active2' : ''}`}
                     onClick={() => handleCircleClick('pink')}
                 >
                     Pink
                 </div>
                 <div
-                    className={`circle green ${activeCircle === 'green' ? 'active' : ''}`}
+                    className={`circle green ${activeCircle === 'green' ? 'active2' : ''}`}
                     onClick={() => handleCircleClick('green')}
                 >
                     Green
                 </div>
                 <div
-                 className={`circle yellow ${activeCircle === 'yellow' ? 'active' : ''}`}
+                 className={`circle yellow ${activeCircle === 'yellow' ? 'active2' : ''}`}
                  onClick={() => handleCircleClick('yellow')}
                 > Yelow
                 </div>
                 <div
-                className={`circle orange ${activeCircle === 'orange' ? 'active' : ''}`}
+                className={`circle orange ${activeCircle === 'orange' ? 'active2' : ''}`}
                 onClick={() => handleCircleClick('orange')}
                 >Orange
                 </div>
                 <div
-                 className={`circle purple ${activeCircle === 'purple' ? 'active' : ''}`}
+                 className={`circle purple ${activeCircle === 'purple' ? 'active2' : ''}`}
                  onClick={() => handleCircleClick('purple')}
                 >Purple
                 </div>
                 <div 
-                className={`circle black ${activeCircle === 'black' ? 'active' : ''}`}
+                className={`circle black ${activeCircle === 'black' ? 'active2' : ''}`}
                 onClick={() => handleCircleClick('black')}
                 >Black
                 </div>
                 <div 
-                className={`circle blue ${activeCircle === 'blue' ? 'active' : ''}`}
+                className={`circle blue ${activeCircle === 'blue' ? 'active2' : ''}`}
                 onClick={() => handleCircleClick('blue')}
                 >Blue
                 </div>
                 <div 
-                className={`circle red ${activeCircle === 'red' ? 'active' : ''}`}
+                className={`circle red ${activeCircle === 'red' ? 'active2' : ''}`}
                 onClick={() => handleCircleClick('red')}
                 >Red
                 </div>
