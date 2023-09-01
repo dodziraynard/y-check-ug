@@ -223,6 +223,8 @@ class Community(models.Model):
 class HomeQuestion(models.Model):
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=100)
+    subtitle = models.CharField(max_length=100,blank=True, null=True)
+    picture = models.ImageField(upload_to='question_pictures/',blank=True, null=True)
     options = models.JSONField(blank=True, null=True)
 
     def __str__(self):
