@@ -75,7 +75,6 @@ const Register = () => {
 // HANDLE FORM SUBMIT
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log(formData.security_answer_1)
         dispatch(register(
             formData.staff_id,
             security_question_1,
@@ -93,7 +92,7 @@ const Register = () => {
             setShowSuccessMessage(true);
 // Delay the redirection to allow the user to see the message
             const timer = setTimeout(() => {
-                navigate('/landing');
+                navigate('/login');
             }, 1000); 
             return () => clearTimeout(timer);
         } 

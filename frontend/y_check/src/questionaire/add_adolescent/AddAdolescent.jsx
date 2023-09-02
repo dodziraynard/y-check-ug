@@ -18,7 +18,7 @@ import {
     ADD_ADOLESCENT_FAILED
  } from '../../constants/AddAdolescentConstants';
 import { resetAdolescentInfo } from '../../actions/AddAdolescentAction';
-
+import { BASE_URL } from '../../constants/Host';
 //MAIN FUNCTION
 const AddAdolescent = () => {
     const [page, setPage] = useState(0)
@@ -141,8 +141,8 @@ const AddAdolescent = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
+
 
         formData.append("surname", adolescentFormData.surname);
         formData.append("other_names", adolescentFormData.other_names);
@@ -174,7 +174,7 @@ const AddAdolescent = () => {
             };
 
             const { data } = await axios.post(
-                'http://127.0.0.1:8000/account/Add-adolescent/',
+                `${BASE_URL}/account/Add-adolescent/`,
                 formData,
                 config
             );
@@ -237,11 +237,11 @@ const AddAdolescent = () => {
     useEffect(() => {
         if (adolescent_info) {
             setShowSuccessMessage(true);
-            setShowSuccessInfo(true); // Show the success info
+            setShowSuccessInfo(true); 
             const timer = setTimeout(() => {
-                setShowSuccessMessage(false); // Hide the success message after 1 minute
-                setShowSuccessInfo(false); // Hide the success info after 1 minute
-                navigate('/landing'); // Redirect the user
+                setShowSuccessMessage(false); 
+                setShowSuccessInfo(false);
+                navigate('/landing'); 
             }, 6000); // 6000 milliseconds = 1 minute
 
             return () => clearTimeout(timer);

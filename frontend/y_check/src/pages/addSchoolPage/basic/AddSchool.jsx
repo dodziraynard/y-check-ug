@@ -1,13 +1,16 @@
 import React from 'react'
-import BasicForm from './BasicForm'
-import SchoolLabel from './SchoolLabel'
 import './add_school.scss'
-
+import Index from './Index'
+import Nav from '../../../components/nav/Nav'
+import Sidebar from '../../../components/sidebar/Sidebar'
 const AddSchool = () => {
   return (
-    <div className='add_school_main'>
-      <SchoolLabel/>
-      <BasicForm/>
+    <div>
+      <Nav />
+      <div className='main'>
+          <Sidebar />
+          <Index />
+      </div>
     </div>
   )
 }

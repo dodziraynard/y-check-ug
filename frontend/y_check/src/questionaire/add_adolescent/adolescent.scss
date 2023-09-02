@@ -60,15 +60,5 @@
 }
 
 /* style for check box */
-.gender-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 10px; 
-    color: var(--ug_blue);
-}
 
-.input-checkbox {
-    display: flex;
-    align-items: center;
-}
 

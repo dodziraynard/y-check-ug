@@ -1,28 +1,30 @@
 import React from 'react'
 
-const RadioType = ({home_questions}) => {
-    console.log(home_questions)
-  return (
-    <>
-       <span>Choose your gender</span>
-        <div className="input-radio">
-            <label htmlFor="primary-radio">Male</label>
-            <input
-                type="radio"
-                name="gender"
-                value="Yes"
-                required/>
-        </div>
-        <div className="input-radio">
-            <label htmlFor="primary-radio">Female</label>
-            <input
-                type="radio"
-                name="gender"
-                value="Yes"
-                required/>
-        </div>         
-    </>
-  )
-}
-
-export default RadioType
+const RadioType = ({ currentQuestions }) => {
+  
+    return (
+      <div className='questionaire-text'>
+        {currentQuestions.map((question) => (
+          <div key={question.id}>
+            <h2> {question.title}</h2>
+            <span>{question.subtitle}</span>
+            {question.options.map((option, index) => (
+              <div className="input-radio" key={index}>
+                <label htmlFor={`radio-${question.id}-${index}`}>{option}</label>
+                <input
+                  type="radio"
+                  id={`radio-${question.id}-${index}`}
+                  name={`question-${question.id}`}
+                  value={option}
+                  required
+                />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  export default RadioType;
+  

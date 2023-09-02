@@ -1,13 +1,17 @@
 import React from 'react'
-import SchoolLabel from '../basic/SchoolLabel'
-import CommunityForm from './CommuunityForm'
+import Index from './Index'
+import Nav from '../../../components/nav/Nav'
+import Sidebar from '../../../components/sidebar/Sidebar'
 const AddCommunity = () => {
-    return (
-        <div className='add_school_main'>
-          <SchoolLabel/>
-          <CommunityForm/>
-        </div>
-      )
+  return (
+    <div>
+      <Nav />
+      <div className='main'>
+          <Sidebar />
+          <Index />
+      </div>
+    </div>
+  )
 }
 
 export default AddCommunity

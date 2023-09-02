@@ -49,7 +49,7 @@ const BasicSchoolTableList = () => {
 
     const timer = setTimeout(() => {
         setShowSuccessMessage(false);
-        navigate('/get_all_basic_all');
+        navigate('/add_school');
     }, 1000); 
     return () => clearTimeout(timer);
   };

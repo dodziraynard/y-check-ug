@@ -1,8 +1,28 @@
 import { 
     HOME_QUESTIONS_REQUEST,
     HOME_QUESTIONS_SUCCESS,
-    HOME_QUESTIONS_FAILED
+    HOME_QUESTIONS_FAILED,
+    ADD_HOME_QUESTIONS_REQUEST,
+    ADD_HOME_QUESTIONS_SUCCESS,
+    ADD_HOME_QUESTIONS_FAILED
  } from "../constants/HomeQuestionsConstants";
+
+ // ADD HOME QUESTION  REDUCER
+ export const add_home_question_reducer = (state = {} ,action)=>{
+     switch(action.type){
+         case ADD_HOME_QUESTIONS_REQUEST:
+             return{loading:true}
+ 
+         case ADD_HOME_QUESTIONS_SUCCESS:
+             return {loading:false, home:action.payload}
+ 
+         case ADD_HOME_QUESTIONS_FAILED:
+             return {loading:false, error:action.payload}
+ 
+         default:
+             return state
+     }
+}
 
 
 // HOME QUESTIONS  LIST   REDUCER

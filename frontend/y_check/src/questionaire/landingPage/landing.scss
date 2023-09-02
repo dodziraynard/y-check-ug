@@ -88,74 +88,187 @@
 }
 
 
+
 /* Media Query for Tablet */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .first-circle {
-        width: 850px;
-        height: 850px;
+        width: 1300px;
+        height: 1300px;
+        bottom: -100px;
+        left: -300px;
     }
     .second-circle{
-        width: 650px;
-        height: 650px;
+        width: 1400px;
+        height: 1400px;
+        left: 250px;
+        top: -250px;
+        
     }
-}
-
-/* Media Query for Mobile */
-@media (max-width: 480px) {
-    .first-circle {
-        top: 20px;
-        width: 710px; 
-        height: 710px; 
-        bottom: 100px;
-        left: -210px;
-
-    }
-    .second-circle {
-        width: 630px; 
-        height: 630px; 
-        bottom: 210px;
-        right: -120px;
-       
-    }
+   
     .circle-image{
-        margin-left: -4rem;
-        margin-top: -15rem;
-    }
-    .circle-text-mobile{
-        margin-top: 3rem;
-        font-size: 30px;
-        display: block;
+        margin-top: 600px;
+        margin-left: -400px;
     }
     .circle-text{
-        display: none;
+        margin-top: 900px;
     }
-    .circle-text-mobile span{
-        margin-top: 1rem;
+    .circle-buttons{
+        margin-top: 1200px;
+        margin-left: -300px;
     }
-    .link{
-        margin-top: -200px;
+    .circle-buttons input {
+        padding: 15px; 
+        width: 150%;
+        border: 2px solid var(--ug_blue);
         outline: none;
-        border: none;
-        border-radius: 20px;
-        color: var(--ug_blue);
-        padding: 15px;
-        font-weight: 700;
-        width: 20%;
-        cursor: pointer;
-    }
-
-}
-/* Media Query for Mobile */
-@media (max-width: 350px) {
-    .first-circle {
-        width: 600px; 
-        height: 600px; 
-        bottom: 200px;
-
-    }
-    .second-circle{
-        width: 400px; 
-        height: 400px; 
+        border-radius: 8px;
+        
     }
     
 }
+
+/* Media Query for Tablet */
+@media (max-width: 768px) {
+    .first-circle {
+        width: 1300px;
+        height: 1300px;
+        bottom: -100px;
+        left: -300px;
+    }
+    .second-circle{
+        width: 1400px;
+        height: 1400px;
+        left: 250px;
+        top: -250px;
+    }
+    .proceed{
+        display: none;
+    }
+    .circle-image{
+        margin-top: 600px;
+        margin-left: -400px;
+    }
+    .circle-text{
+        margin-top: 900px;
+    }
+    .circle-buttons{
+        margin-top: 1200px;
+        margin-left: -300px;
+    }
+}
+/* Media Query for Tablet */
+@media (max-width: 700px) {
+    .first-circle {
+        width: 1300px;
+        height: 1300px;
+        bottom: -100px;
+        left: -300px;
+    }
+    .second-circle{
+        width: 1400px;
+        height: 1400px;
+        left: 250px;
+        top: -250px;
+    }
+    .proceed{
+        display: none;
+    }
+    .circle-image{
+        margin-top: 600px;
+        margin-left: -500px;
+    }
+    .circle-text{
+        margin-top: 900px;
+    }
+    .circle-buttons{
+        margin-top: 1200px;
+        margin-left: -300px;
+    }
+}
+@media (max-width: 520px) {
+    .first-circle {
+        width: 1300px;
+        height: 1300px;
+        bottom: -100px;
+        left: -300px;
+    }
+    .second-circle{
+        width: 1400px;
+        height: 1400px;
+        left: 250px;
+        top: -250px;
+    }
+    .proceed{
+        display: none;
+    }
+    .circle-image{
+        margin-top: 600px;
+        margin-left: -700px;
+    }
+    .circle-text{
+        margin-top: 900px;
+    }
+    .circle-buttons{
+        margin-left: -300px;
+        margin-top: 1200px;
+    }
+}
+@media (max-width: 420px) {
+    .first-circle {
+        width: 1300px;
+        height: 1300px;
+        bottom: -100px;
+        left: -300px;
+    }
+    .second-circle{
+        width: 1400px;
+        height: 1400px;
+        left: 250px;
+        top: -250px;
+    }
+    .proceed{
+        display: none;
+    }
+    .circle-image{
+        margin-left: -850px;
+        margin-top: 600px;
+    }
+    .circle-text{
+        margin-top: -100px;
+        margin-top: 900px;
+    }
+    .circle-buttons{
+        margin-top: 1200px;
+        margin-left: -300px;
+    }
+}
+@media (max-width: 365px) {
+    .first-circle {
+        width: 1300px;
+        height: 1300px;
+        bottom: -100px;
+        left: -300px;
+    }
+    .second-circle{
+        width: 1400px;
+        height: 1400px;
+        left: 250px;
+        top: -250px;
+    }
+    .proceed{
+        display: none;
+    }
+    .circle-image{
+        margin-left: -920px;
+        margin-top: 600px;
+    }
+    .circle-text{
+        margin-top: -100px;
+        margin-top: 900px;
+    }
+    .circle-buttons{
+        margin-top: 1200px;
+        margin-left: -300px;
+    }
+}
+

@@ -2,7 +2,9 @@ import React from 'react'
 import './home.scss'
 import ug_logo from '../../images/UoG_CoA_2017.svg.png' ;
 import { Link } from 'react-router-dom';
+
 function Home() {
+
   return (
     <div className='home'>
       <div className='circle'>

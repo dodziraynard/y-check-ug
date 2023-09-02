@@ -3,14 +3,15 @@ import {
     SECURITY_QUESTION_REQUEST,
     SECURITY_QUESTION_SUCCESS,
     SECURITY_QUESTION_FAILED
- } from "../constants/SecurityQuestionConstants";
+} from "../constants/SecurityQuestionConstants";
+import { BASE_URL } from '../constants/Host';
 
 
 
 export const get_security_questions = () => async (dispatch)=>{
     try {
         dispatch({type:SECURITY_QUESTION_REQUEST})
-        const {data} = await axios.get('http://127.0.0.1:8000/account/all_security_questions/')
+        const {data} = await axios.get(`${BASE_URL}/account/all_security_questions/`)
         dispatch({
             type: SECURITY_QUESTION_SUCCESS,
             payload: data

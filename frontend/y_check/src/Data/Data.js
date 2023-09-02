@@ -27,6 +27,11 @@ export const SidebarData = [
         heading:'Add School',
         url:'/add_school'
     },
+    {
+        icon: mdiAccountCog,
+        heading:'Add Question',
+        url:'/add_question'
+    },
    
     
 ]

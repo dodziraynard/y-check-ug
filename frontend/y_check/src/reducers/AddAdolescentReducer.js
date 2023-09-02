@@ -11,7 +11,10 @@ import {
     ADOLESCENT_DELETE_FAILED,
     ADOLESCENT_REQUEST,
     ADOLESCENT_SUCCESS,
-    ADOLESCENT_FAILED
+    ADOLESCENT_FAILED,
+    ADOLESCENT_SERACH_REQUEST,
+    ADOLESCENT_SERACH_SUCCESS,
+    ADOLESCENT_SERACH_FAILED,
 
 } from "../constants/AddAdolescentConstants";
 
@@ -85,6 +88,24 @@ export const get_adolescent_reducer = (state = {} ,action)=>{
 
         case RESET_ADOLESCENT_INFO:
             return { ...state, adolescent_info: null };
+
+        default:
+            return state
+    }
+}
+
+
+// ADOLESCENT  SEARCH LIST   REDUCER
+export const adoloscent_search_list_reducer = (state = {adolescent_search_results:[]},action)=>{
+    switch(action.type){
+        case ADOLESCENT_SERACH_REQUEST:
+            return{...state,loading:true,adolescent_search_results:[]}
+
+        case ADOLESCENT_SERACH_SUCCESS:
+            return {...state,loading:false,adolescent_search_results:action.payload}
+
+        case ADOLESCENT_SERACH_FAILED:
+            return {...state,loading:false,error:action.payload}
 
         default:
             return state
