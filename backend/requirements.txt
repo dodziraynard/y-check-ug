@@ -12,3 +12,4 @@ PyJWT>=2.*
 pytz>=20*
 requests>=2.*
 django-cors-headers>=4.*
+gunicorn>=20.*
