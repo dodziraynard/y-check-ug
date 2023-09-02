@@ -6,7 +6,7 @@ from .models import Adolescent, ActivityLog, User
 
 def log_created_user(sender, instance, created, **kwargs):
     if created:
-        username = instance.username if isinstance(instance, User) else instance.last_updated_by.username
+        username = instance.username if isinstance(instance, User) else instance.created_by.username
         ActivityLog.objects.create(username=username, action='User created')
 
 
@@ -14,10 +14,10 @@ def log_created_user(sender, instance, created, **kwargs):
 
 def log_adolescent_update(sender, instance, **kwargs):
     if instance.questionnaire_completed:
-        ActivityLog.objects.create(username=instance.last_updated_by.username,
+        ActivityLog.objects.create(username=instance.created_by.username,
         action=f"Completed questionnaire for adolescent with PID {instance.pid}")
     else:
-        ActivityLog.objects.create(username=instance.last_updated_by.username,
+        ActivityLog.objects.create(username=instance.created_by.username,
         action=f"Updated questionnaire for adolescent with PID {instance.pid}")
 
 
