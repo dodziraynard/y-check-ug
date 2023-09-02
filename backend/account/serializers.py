@@ -4,11 +4,6 @@ from .models import *
 from django.contrib.auth.password_validation import validate_password
 
 
-
-
-
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -16,14 +11,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['username']
 
 
-
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name',
-        'is_active', 'is_staff', 'is_superuser']
-
-
+                  'is_active', 'is_staff', 'is_superuser']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -45,10 +37,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-
-
 class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
-    security_question = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
+    security_question = serializers.PrimaryKeyRelatedField(
+        queryset=SecurityQuestion.objects.all())
     answer = serializers.CharField(max_length=200)
 
     class Meta:
@@ -68,25 +59,17 @@ class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
         return validated_data
 
 
-
-
-
-
 class UserOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'phone',
-        'is_active', 'is_staff', 'is_superuser']
-
-
-
+                  'is_active', 'is_staff', 'is_superuser']
 
 
 class SecurityQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SecurityQuestion
         fields = ['id', 'question']
-
 
 
 # class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
@@ -98,22 +81,24 @@ class SecurityQuestionSerializer(serializers.ModelSerializer):
 #         fields = ['security_question', 'answer']
 
 
-
 class BasicSchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = BasicSchool
         fields = '__all__'
-        
+
+
 class SNRSchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = SNRSchool
         fields = '__all__'
-        
+
+
 class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
         fields = '__all__'
-        
+
+
 class AdolescentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adolescent
