@@ -1,0 +1,81 @@
+:root {
+    --ug_gold: #B5965C;
+    --ug_blue: #173D70;
+    --active:#E0E3FD;
+}
+.section-table{
+    margin-left: 7rem;
+    width: 103%;
+}
+.MuiTableRow-root>*{
+    padding: 10px;
+
+}
+.type{
+    width: 20%;
+}
+
+Table td, th{
+    border: none !important;
+
+
+}
+Table:first-child{
+    border-radius: 0.7rem !important;
+
+}
+.list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 2rem;
+    margin-left: 2rem;
+    color: var(--ug_blue);
+}
+
+@media screen  and (min-width:280px) and (max-width:924px){
+    .section-table{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 40rem;
+    }
+}
+@media screen  and (min-width:280px) and (max-width:830px){
+    .section-table{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 27rem;
+    }
+}
+@media screen  and (min-width:280px) and (max-width:622px){
+    .section-table{
+        margin-left: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 26rem;
+    }
+}
+@media screen  and (min-width:280px) and (max-width:412px){
+    .section-table{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 20rem;
+        margin-left: 1rem;
+
+        
+    }
+}
+@media screen  and (min-width:200px) and (max-width:380px){
+    .section-table{
+        
+        
+    }
+}
