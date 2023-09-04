@@ -376,3 +376,36 @@ class SearchAdolescentView(APIView):
         
         serializer = AdolescentSerializer(adolescent, many=True)
         return Response(serializer.data)
+
+ 
+class save_responses(APIView):
+    permission_classes = [AllowAny]
+        
+    def post(self, request, format=None):
+        data = request.data
+        print(data)
+        serializer = UserResponseSerializer(data=data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResponsesView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        adolescent_id = data['adolescent_id']
+        responses = UserResponse.objects.filter(adolescent=adolescent_id)
+
+        if not responses.exists():
+            return Response({"message": "No matching records found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = UserResponseSerializer(responses, many=True)
+        return Response(serializer.data)
+ 

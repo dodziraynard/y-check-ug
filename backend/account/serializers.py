@@ -114,3 +114,11 @@ class HomeQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeQuestion
         fields = '__all__'
+
+      
+        
+class UserResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserResponse
+        fields = '__all__'
+  

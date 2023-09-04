@@ -244,3 +244,13 @@ class HomeQuestion(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+
+class UserResponse(models.Model):
+    adolescent= models.ForeignKey(Adolescent, on_delete=models.CASCADE)
+    response = models.CharField(max_length=255, blank=True, null=True)
+    question_title = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"Adolescent: {self.adolescent}, Question Title: {self.question_title}"

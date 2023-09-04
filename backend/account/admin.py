@@ -9,6 +9,8 @@ admin.site.register(SecurityQuestion)
 admin.site.register(SecurityQuestionAnswer)
 admin.site.register(BasicSchool)
 admin.site.register(HomeQuestion)
+admin.site.register(UserResponse)
+
 
 
 
