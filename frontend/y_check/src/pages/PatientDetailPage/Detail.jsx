@@ -1,12 +1,12 @@
 import React, { useState,useEffect } from 'react';
 import Icon from '@mdi/react';
-import { mdiTrashCanOutline,mdiPencilOutline,mdiChevronLeft,mdiChevronRight} from '@mdi/js';
+import { mdiTrashCanOutline,mdiFileDocumentMultiple,mdiChevronLeft,mdiChevronRight} from '@mdi/js';
 import Modal from '@mui/material/Modal'; 
 import Fade from '@mui/material/Fade';
 import { useParams } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 import { get_single_adolescent } from '../../actions/AddAdolescentAction';
-
+import { Link } from 'react-router-dom';
 // MAIN FUNCTION 
 const Detail = () => {
     const propertiesPerPage = 8; // Number of items per page
@@ -87,14 +87,19 @@ const Detail = () => {
                     <div className="picture">
                         <img src={adolescent?.picture} alt="Logo" />
                         <div className='type'>
-                            <span>Louis Seyram</span>
-                            <button>Primary</button>
+                            <span>{adolescent?.surname} {adolescent?.other_names}</span>
+                            <button>{adolescent?.adolescent_type === 'PR'
+                                ? 'Primary'
+                                : adolescent?.adolescent_type === 'SC'
+                                ? 'Secondary'
+                                : 'Community'}
+                            </button>
                         </div>
                     </div>
                     <div className='last-two-icons'>
                         <div className="edit-pen">
-                            <Icon path={mdiPencilOutline} size={0.8} />
-                            <span>Edit</span>
+                        <Icon path={mdiFileDocumentMultiple} size={1} />
+                          <Link to={`/patient_detail/${id}/`} style={{textDecoration:"none",color:"white"}}> <span>Record</span></Link> 
                         </div>
                         <div className="edit-pen">
                             <Icon path={mdiTrashCanOutline} 
