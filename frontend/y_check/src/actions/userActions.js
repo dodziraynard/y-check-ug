@@ -86,20 +86,12 @@ export const register = (
         localStorage.setItem('userInfo',JSON.stringify(data))
 
     } catch (error) {
-        if (error.response && error.response.data && error.response.data.username) {
-            // Handle "username already exists" error
-            const errorMessage = 'user with this Staff ID already exists.';
-            dispatch({
-                type: USER_REGISTRATION_FAILED,
-                payload: errorMessage
-            });
-        } else {
-            // Handle other errors
-            dispatch({
-                type: USER_REGISTRATION_FAILED,
-                payload: 'An error occurred during registration.'
-            });
-        }
+        dispatch({
+            type: USER_REGISTRATION_FAILED,
+            payload: error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+        });
     }
 };
 

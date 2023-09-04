@@ -128,7 +128,11 @@ const Register = () => {
                     <div className="login-title">
                         <h2>{pageTitles[page]}</h2>
                     </div>
-                    {error? <span className='login-error'>{error}</span>:''}
+                    {error && Object.keys(error).map((field) => (
+                    <span key={field} className='login-error'>
+                        {`${field}: ${error[field]}`}
+                    </span>
+                    ))}
                     {showSuccessMessage ? <span className='login-success'> Registration Successful</span> : ''}
                     <form className="login-form" onSubmit={handleSubmit}>
                         {displayPage()}
