@@ -6,14 +6,19 @@ import CheckBoxType from './CheckBoxType';
 import RadioType from './RadioType';
 import { get_home_questions } from '../../actions/HomeQuestionsAction';
 import {useDispatch, useSelector } from 'react-redux';
-
+import { add_adolescent_responses } from '../../actions/AdolescentResponseAction';
 // MAIN FUNCTION
 const Questionaire = () => {
+    const [userResponses, setUserResponses] = useState({});
+
     const dispatch = useDispatch()
     // GET ALL HOME QUESTION 
     const home_questions_list = useSelector(state => state.home_questions_list);
     const { home_questions } = home_questions_list;
 
+    const get_adolescent = useSelector(state => state.get_adolescent)
+    const {adolescent} = get_adolescent
+    const adolescentID = adolescent.id
     useEffect(() => {
         dispatch(get_home_questions());
     }, [dispatch]);
@@ -41,27 +46,44 @@ const Questionaire = () => {
     const handlePreviousPage = () => {
         handlePageChange(currentPage - 1);
     };
+
+    const submitResponses = (e) => {
+        e.preventDefault(); // Prevent the default form submission behavior
+      
+        // Create an array of response objects from userResponses
+        const responses = [];
+        for (const [question_title, response] of Object.entries(userResponses)) {
+          responses.push({ adolescent:adolescentID,question_title, response });
+        }
+        for (const response of responses) {
+          console.log(response);
+        }
+        dispatch(add_adolescent_responses(responses));
+
+        // Optionally, you can add code to send the responses to your server here
+    };
+      
     return (
         <div className='home'>
             <div className="questionaire-first-circle">
-                <form className='questionaire-form'>
+                <form className='questionaire-form' onSubmit={submitResponses}>
                     {currentQuestions.map((question, index) => (
                     question.type === "multiple_choice" ? (
-                        <RadioType key={index} currentQuestions={currentQuestions} />
+                        <RadioType key={index} currentQuestions={currentQuestions} setUserResponses={setUserResponses}/>
                     ) : (
                         question.type === "checkbox" ? (
-                            <CheckBoxType key={index} currentQuestions={currentQuestions} />
+                            <CheckBoxType key={index} currentQuestions={currentQuestions} setUserResponses={setUserResponses} />
                         ) : (
-                            <InputType key={index} currentQuestions={currentQuestions} />
+                            <InputType key={index} currentQuestions={currentQuestions}setUserResponses={setUserResponses} />
                             
                         )
                     )
                     ))}  
+                    <div className='questionaire-buttons'>
+                        <button className=''onClick={handlePreviousPage} style={{ cursor: 'pointer' }} type="button">Back</button>
+                        <button className=''onClick={handleNextPage} style={{ cursor: 'pointer' }} type="submit">Next</button>
+                    </div>
                 </form>
-                <div className='questionaire-buttons'>
-                    <button className=''onClick={handlePreviousPage} style={{ cursor: 'pointer' }} type="button">Back</button>
-                    <button className=''onClick={handleNextPage} style={{ cursor: 'pointer' }} type="button">Next</button>
-                </div>
 
             </div>
         </div>

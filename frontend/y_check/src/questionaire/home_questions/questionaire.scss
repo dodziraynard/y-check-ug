@@ -94,7 +94,6 @@
         display: flex;
         gap: 6rem;
         margin-top: 1rem;
-        margin-left: -350px;
         width: 20%;
     }
     .questionaire-buttons button{
@@ -177,7 +176,6 @@
         display: flex;
         gap: 6rem;
         margin-top: 1rem;
-        margin-left: -650px;
         width: 20%;
     }
     .questionaire-buttons button{
@@ -244,7 +242,6 @@
         display: flex;
         gap: 4rem;
         margin-top: 1rem;
-        margin-left: -650px;
         width: 20%;
     }
     .questionaire-buttons button{
@@ -299,7 +296,7 @@
     }
 }
 
-@media (max-width: 465px) {
+@media (max-width: 500px) {
     .questionaire-first-circle {
         width: 1500px;
         height: 1500px;
@@ -310,7 +307,6 @@
         display: flex;
         gap: 4rem;
         margin-top: 1rem;
-        margin-left: -750px;
         width: 20%;
     }
     .questionaire-buttons button{
@@ -369,6 +365,105 @@
         padding: 0;
         margin-left: -750px;
     }
+    .questionaire-text h2{
+        margin-left: -30px;
+    }
+    .questionaire-input{
+        margin-left: -20px;
+    }
+    .questionaire-input input {
+        padding: 15px; 
+        width: 80%;
+        border: 2px solid var(--ug_blue);
+        outline: none;
+        border-radius: 8px;
+        
+    }
+      
+}
+@media (max-width: 465px) {
+    .questionaire-first-circle {
+        width: 1500px;
+        height: 1500px;
+        left:-150px;
+        bottom: -100px;
+    }
+    .questionaire-buttons{
+        display: flex;
+        gap: 4rem;
+        margin-top: 1rem;
+        width: 20%;
+    }
+    .questionaire-buttons button{
+        background: var(--ug_blue);
+        color: white;
+        outline: none;
+        border: none;
+        padding: 20px;
+        width: 200%;
+        font-weight: 700;
+        border-radius: 30px;
+    }
+    .questionaire-form{
+        margin-left: -700px;
+        margin-top: -180px;
+    }
+    .questionaire-form span{
+        color: var(--ug_blue);
+        margin-left: 6rem;
+        font-weight: 500;
+    }
+    .gender-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px; 
+        margin-top: 2rem;
+        color: var(--ug_blue);
+    }
+    
+    .input-checkbox {
+        display: flex;
+        align-items: center;
+    }
+    .text-image{
+        overflow: hidden;
+        margin-bottom: -1rem;
+        margin-top: 30rem;
+    }
+    .text-image img{
+        margin-top: -2rem;
+        width: 300px;
+        height: 300px;
+    }
+
+    .text-image h2{
+        color: var(--ug_blue);
+        font-weight: 700;
+        margin-left: 6rem;
+    }
+
+    .questionaire-text{
+        margin-top: 600px;
+    }
+    .search-results {
+        list-style: none;
+        padding: 0;
+        margin-left: -750px;
+    }
+    .questionaire-text h2{
+        margin-left: -30px;
+    }
+    .questionaire-input{
+        margin-left: -20px;
+    }
+    .questionaire-input input {
+        padding: 15px; 
+        width: 80%;
+        border: 2px solid var(--ug_blue);
+        outline: none;
+        border-radius: 8px;
+        
+    }
       
 }
 
@@ -384,7 +479,6 @@
         display: flex;
         gap: 4rem;
         margin-top: 1rem;
-        margin-left: -850px;
         width: 20%;
     }
     .questionaire-buttons button{
@@ -434,13 +528,10 @@
         margin-left: 3rem;
     }
     .questionaire-input {
-        margin-left: -4rem;
-        margin-top: 8rem;
+        margin-left: -2rem;
    
     } 
-    .questionaire-text{
-        margin-top: 20px;
-    }
+    
     .questionaire-text{
         margin-top: 600px;
     }
@@ -449,7 +540,17 @@
         padding: 0;
         margin-left: -850px;
     }
-      
+    .questionaire-input input {
+        padding: 15px; 
+        width: 80%;
+        border: 2px solid var(--ug_blue);
+        outline: none;
+        border-radius: 8px;
+        
+    }
+    .radio-text{
+        font-size: 14px;
+    }
 }
 
 
@@ -465,8 +566,8 @@
         display: flex;
         gap: 2rem;
         margin-top: 1rem;
-        margin-left: -900px;
         width: 15%;
+        margin-left: 2rem;
     }
     .questionaire-buttons button{
         background: var(--ug_blue);
@@ -518,9 +619,16 @@
         margin-top: 600px;
     }
     .questionaire-input {
-        margin-left: -2rem;
+        margin-left: 1rem;
         margin-top: 1rem;
    
+    }
+    .questionaire-input input::placeholder{
+        font-size: 8px;
+    }
+    .questionaire-text h2{
+        font-size: 12px;
+        margin-left: 2rem;
     }
     .search-results {
         list-style: none;
