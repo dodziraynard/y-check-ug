@@ -14,6 +14,8 @@ from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from django.db.models import Q
+from django.http import QueryDict
+from rest_framework.exceptions import ValidationError
 
 
 
@@ -69,7 +71,11 @@ class UserRegistrationView(APIView):
             data = output_serializer.data
             data['token'] = token.key
             return JsonResponse(data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -199,7 +205,11 @@ class BasicSchoolView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
 
 class BasicSchoolDeleteView(APIView):
     permission_classes = [AllowAny]
@@ -230,7 +240,12 @@ class SNRSchoolView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response,status=status.HTTP_400_BAD_REQUEST)
+
     
    
     
@@ -261,7 +276,12 @@ class CommunityView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class CommunityDeleteView(APIView):
@@ -288,11 +308,17 @@ class AddAdolescentView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = AdolescentSerializer(data=request.data)
+        data = request.data
+        serializer = AdolescentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
+
     
     
 class AdolescentDeleteView(APIView):
@@ -323,12 +349,19 @@ class HomeQuestionView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = HomeQuestionSerializer(data=request.data)
+        data = request.data
+        print(data)
+        serializer = HomeQuestionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
+
+
     
 class SearchAdolescentView(APIView):
     permission_classes = [AllowAny]
@@ -336,7 +369,6 @@ class SearchAdolescentView(APIView):
     def post(self, request, format=None):
         data = request.data
         query = data['adolescent']
-        print(query)
         adolescent = Adolescent.objects.filter(Q(pid=query) | Q(surname__icontains=query))
         
         if not adolescent.exists():

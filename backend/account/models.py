@@ -218,11 +218,26 @@ class Community(models.Model):
     def __str__(self):
         return self.community_name
     
+
+QUESTION_CATEGORY = [
+    ('Home','Home'),
+    ('Education and employment','Education and employment'),
+    ('Eating','Eating'),
+    ('Activities and Peers','Activities and Peers'),
+    ('Drugs and alcohol','Drugs and alcohol'),
+    ('Sexuality','Sexuality'),
+    ('Emotions','Emotions'),
+    ('Safety/Security','Safety/Security'),
+    ('Oral Hygiene','Oral Hygiene'),
+    ('Physical health 1','Physical health 1'),
+    ('Physical health 2','Physical health 2'),
+]
     
 # HOME QUESTION MODEL
 class HomeQuestion(models.Model):
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=100)
+    category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
     subtitle = models.CharField(max_length=100,blank=True, null=True)
     picture = models.ImageField(upload_to='question_pictures/',blank=True, null=True)
     options = models.JSONField(blank=True, null=True)
