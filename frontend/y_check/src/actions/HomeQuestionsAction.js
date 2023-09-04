@@ -11,7 +11,7 @@ import {
  } from "../constants/HomeQuestionsConstants";
 
 
- export const add_question = (title, type,subtitle,options,picture)=> async(dispatch)=>{
+ export const add_question = (title, type,subtitle,category,options,picture)=> async(dispatch)=>{
     try {
         dispatch({
             type: ADD_HOME_QUESTIONS_REQUEST,
@@ -25,7 +25,7 @@ import {
 
         const { data } = await axios.post(
             `${BASE_URL}/account/home_questions/`,
-            {"title":title,"type":type,"subtitle":subtitle,"options":options,"picture":picture},
+            {"title":title,"type":type,"subtitle":subtitle, "category":category ,"options":options,"picture":picture},
             config
         );
 
@@ -42,6 +42,9 @@ import {
         });
     }
  }
+
+
+ 
 
  export const get_home_questions = () => async (dispatch)=>{
     try {

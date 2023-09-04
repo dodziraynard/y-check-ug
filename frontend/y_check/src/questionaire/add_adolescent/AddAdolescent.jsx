@@ -249,7 +249,6 @@ const AddAdolescent = () => {
         dispatch(resetAdolescentInfo());
     }, [adolescent_info, navigate])
 
-    console.log(adolescent_info)
    
     return (
         <div className='page-progress'>
@@ -263,7 +262,11 @@ const AddAdolescent = () => {
                         <h2>{pageTitles[page]}</h2>
                     </div>
                     <form className="login-form" onSubmit={handleSubmit}>
-                        {error ? <span className='login-error'>{error}</span> : ''}
+                        {error && Object.keys(error).map((field) => (
+                        <span key={field} className='login-error'>
+                            {`${field}: ${error[field]}`}
+                        </span>
+                        ))}
                         {showSuccessMessage ? (
                         <div>
                             <span className='login-success'> School Added Successfully</span>

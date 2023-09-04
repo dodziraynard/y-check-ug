@@ -3,19 +3,11 @@ import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import './question.scss'
 import Icon from '@mdi/react';
-import axios from 'axios';
-import { BASE_URL } from '../../constants/Host';
 import { mdiPlusBox,mdiMinusBox } from '@mdi/js';
 import { add_question } from '../../actions/HomeQuestionsAction';
-import { 
-    ADD_HOME_QUESTIONS_REQUEST,
-    ADD_HOME_QUESTIONS_SUCCESS,
-    ADD_HOME_QUESTIONS_FAILED
-} from '../../constants/HomeQuestionsConstants';
-import AddQuestion from './AddQuestion';
+
 const HomeQuestionForm = () => {
 
-  const [basic, setBasic] = useState('')
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [additionalOptions, setAdditionalOptions] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -24,6 +16,7 @@ const HomeQuestionForm = () => {
       question_title:"",
       question_type:"",
       question_subtitle:"",
+      question_category:"",
     })
     
     
@@ -34,8 +27,7 @@ const HomeQuestionForm = () => {
   // GET THE ADDED SCHOOL
   const add_home_question = useSelector(state => state.add_home_question);
   const { error, home } = add_home_question;
-
-
+  
   const handleChange = (event) => {
     let name = event.target.name;
     let value = event.target.value;
@@ -52,13 +44,22 @@ const HomeQuestionForm = () => {
     e.preventDefault();
     const optionsArray = additionalOptions.map((option) => option.value); 
     const optionsJSON = JSON.stringify(optionsArray);
- 
     dispatch(add_question(
         addQuestion.question_title,
         addQuestion.question_type,
         addQuestion.question_subtitle,
+        addQuestion.question_category,
         optionsJSON,
-        selectedFile))    
+        selectedFile)) 
+        
+    setAddQuestion({
+      question_title:"",
+      question_type:"",
+      question_subtitle:"",
+      question_category:"",
+    })
+    setSelectedFile(null)
+    setAdditionalOptions([])
   }
 
   const addOption = () => {
@@ -104,7 +105,11 @@ const HomeQuestionForm = () => {
   return (
     <div>
         <div className='basic_form home-question-form'>
-            {error? <span className='login-error'>{error}</span>:''}
+                {error && Object.keys(error).map((field) => (
+                <span key={field} className='login-error'>
+                    {`${field}: ${error[field]}`}
+                </span>
+            ))}
             {showSuccessMessage ? <span className='login-success'> School Added Successfully</span> : ''}
             <h1>Add Home Question Form </h1>
         <form className='form-input' onSubmit={handleSubmit}>
@@ -126,6 +131,25 @@ const HomeQuestionForm = () => {
                     <option value="multiple_choice"> Multiple Choice</option>
                     <option value="checkbox">CheckBox</option>
                     <option value="text"> Input Text</option>
+            </select>
+            <label style={{marginTop:"10px"}} htmlFor=""> Select Question Category</label>
+            <select 
+                name="question_category" 
+                onChange={handleChange}
+                value={addQuestion.question_category}
+                required>
+                    <option value=""> None</option>
+                    <option value="Home"> Home</option>
+                    <option value="Education and employment"> Education and employment</option>
+                    <option value="Eating"> Eating</option>
+                    <option value="Activities and Peers"> Activities and Peers</option>
+                    <option value="Drugs and alcohol"> Drugs and alcohol</option>
+                    <option value="Sexuality"> Sexuality</option>
+                    <option value="Emotions"> Emotions</option>
+                    <option value="Safety/Security"> Safety/Security</option>
+                    <option value="Oral Hygiene"> Oral Hygiene</option>
+                    <option value="Physical health 1"> Physical health 1</option>
+                    <option value="Physical health 2"> Physical health 2</option>
             </select>
             <label style={{marginTop:"10px"}}  htmlFor=""> Question Subtitle </label>
             <input 

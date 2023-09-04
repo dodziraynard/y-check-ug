@@ -49,8 +49,12 @@ const BasicForm = () => {
   return (
     <div>
         <div className='basic_form'>
-            {error? <span className='login-error'>{error}</span>:''}
-            {showSuccessMessage ? <span className='login-success'> School Added Successfully</span> : ''}
+        {error && Object.keys(error).map((field) => (
+          <span key={field} className='login-error'>
+              {`${field}: ${error[field]}`}
+          </span>
+          ))}            
+        {showSuccessMessage ? <span className='login-success'> School Added Successfully</span> : ''}
             <h1>Add Basic School Form </h1>
         <form className='form-input' onSubmit={handleSubmit}>
             <label htmlFor=""> School Name</label>

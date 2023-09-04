@@ -44,7 +44,11 @@ const CommunityForm = () => {
   return (
     <div>
         <div className='basic_form' style={{width:'82%'}}>
-          {error? <span className='login-error'>{error}</span>:''}
+        {error && Object.keys(error).map((field) => (
+          <span key={field} className='login-error'>
+              {`${field}: ${error[field]}`}
+          </span>
+          ))}
           {showSuccessMessage ? <span className='login-success'> Community Added Successfully</span> : ''}
           <h1>Add Community Form </h1>
         <form className='form-input' onSubmit={handleSubmit}>
