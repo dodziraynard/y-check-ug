@@ -21,5 +21,7 @@ urlpatterns = [
     path('shs-school/<int:pk>/', views.SNRSchoolDeleteView.as_view()),
     path('basic-school/<int:pk>/', views.BasicSchoolDeleteView.as_view()),
     path('community/<int:pk>/', views.CommunityDeleteView.as_view()),
-    path('Add-adolescent/<int:pk>/', views.AdolescentDeleteView.as_view())
+    path('Add-adolescent/<int:pk>/', views.AdolescentDeleteView.as_view()),
+    path('save_responses/', views.save_responses.as_view(), name='save_responses'),
+    path('responses/', views.ResponsesView.as_view(), ),
 ]
