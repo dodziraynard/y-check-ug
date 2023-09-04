@@ -22,26 +22,7 @@ const Detail = () => {
         dispatch(get_single_adolescent(id))
     },[id])
 
-    const initialData = {
-        PIP: 'yc100w',
-        Name: 'louis',
-        Sex: 'male',
-        Age: '17',
-        Type: 'primary',
-        Town: 'madina',
-        School: 'ug-basic',
-        Visit: 'initial',
-        Mother: 'happy',
-        Father: 'Samuel',
-        Dob: '25/08/2005',
-        I_live_with: 'parents',
-        Height: '4',
-        Weight: '120',
-        Bmi: '60',
-        Hvi: 'positive',
-        Cell: 'no',
-    };
-      
+    
     const propertyKeys = adolescent ? Object.keys(adolescent) : [];
     const totalPages = Math.ceil(propertyKeys.length / propertiesPerPage);
 
@@ -99,7 +80,7 @@ const Detail = () => {
                     <div className='last-two-icons'>
                         <div className="edit-pen">
                         <Icon path={mdiFileDocumentMultiple} size={1} />
-                          <Link to={`/patient_detail/${id}/`} style={{textDecoration:"none",color:"white"}}> <span>Record</span></Link> 
+                          <Link to={`/adolescent-record/${adolescent?.id}/`} style={{textDecoration:"none",color:"white"}}> <span>Record</span></Link> 
                         </div>
                         <div className="edit-pen">
                             <Icon path={mdiTrashCanOutline} 
