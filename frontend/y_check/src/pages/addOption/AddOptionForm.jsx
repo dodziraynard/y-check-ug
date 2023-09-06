@@ -3,7 +3,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiPlusBox,mdiMinusBox } from '@mdi/js';
-import { add_question } from '../../actions/HomeQuestionsAction';
+import { add_question_option } from '../../actions/AddOptionAction';
 import { get_home_questions } from '../../actions/HomeQuestionsAction';
 
 const AddOptionForm = () => {
@@ -18,8 +18,8 @@ const AddOptionForm = () => {
   const navigate = useNavigate();
 
   // GET THE ADDED SCHOOL
-  const add_home_question = useSelector(state => state.add_home_question);
-  const { error, home } = add_home_question;
+  const add_option = useSelector(state => state.add_option);
+  const { error, options } = add_option;
 
   const home_questions_list = useSelector(state => state.home_questions_list);
   const { home_questions } = home_questions_list;
@@ -45,7 +45,7 @@ const AddOptionForm = () => {
     
       // Dispatch the formatted options to your Redux action
       console.log(formattedOptions); 
-        
+    dispatch(add_question_option(formattedOptions)) 
   
     setAdditionalOptions([])
   }
@@ -79,17 +79,17 @@ const AddOptionForm = () => {
 
   
   useEffect(() => {
-    if (home) {
+    if (options) {
         setShowSuccessMessage(true);
         
         const timer = setTimeout(() => {
             setShowSuccessMessage(false); // Hide the success message after 20 seconds
-            navigate('/add_question');
+            navigate('/add_option');
         }, 1000); 
 
         return () => clearTimeout(timer);
     }
-  }, [home, navigate]);
+  }, [options, navigate]);
   
   
 
@@ -101,7 +101,7 @@ const AddOptionForm = () => {
                     {`${field}: ${error[field]}`}
                 </span>
             ))}
-            {showSuccessMessage ? <span className='login-success'> School Added Successfully</span> : ''}
+            {showSuccessMessage ? <span className='login-success'> Options Added Successfully</span> : ''}
             <h1>Add Option Form </h1>
         <form className='form-input' onSubmit={handleSubmit}>
         <label style={{marginTop:"10px"}} htmlFor=""> Select Question</label>

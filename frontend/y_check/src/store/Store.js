@@ -30,6 +30,7 @@ import {
     adolescent_response_reducer,
     adoloscent_response_list_reducer
 } from '../reducers/AdolescentResponseReducer'
+import { add_option_reducer } from '../reducers/AddOptionReducer'
 // COMBINE REDUCERS START
 const reducer = combineReducers({
     // USER REDUCER
@@ -58,7 +59,9 @@ const reducer = combineReducers({
     home_questions_list:home_questions_list_reducer,
     add_home_question:add_home_question_reducer,
     adolescent_response:adolescent_response_reducer,
-    adoloscent_responses_list:adoloscent_response_list_reducer
+    adoloscent_responses_list:adoloscent_response_list_reducer,
+    // OPTION REDUCER
+    add_option:add_option_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?

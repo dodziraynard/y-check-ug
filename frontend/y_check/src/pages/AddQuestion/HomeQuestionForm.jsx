@@ -86,7 +86,7 @@ const HomeQuestionForm = () => {
                     {`${field}: ${error[field]}`}
                 </span>
             ))}
-            {showSuccessMessage ? <span className='login-success'> School Added Successfully</span> : ''}
+            {showSuccessMessage ? <span className='login-success'> Question Added Successfully</span> : ''}
             <h1>Add  Question Form </h1>
         <form className='form-input' onSubmit={handleSubmit}>
             <label htmlFor=""> Question Cation</label>
@@ -96,7 +96,7 @@ const HomeQuestionForm = () => {
             name="question_cation" 
             onChange={handleChange}
             value={addQuestion.question_cation}
-            required/>
+            />
             <label htmlFor=""> Question Title</label>
             <input 
             type="text"
