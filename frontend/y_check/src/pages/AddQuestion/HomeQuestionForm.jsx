@@ -13,6 +13,7 @@ const HomeQuestionForm = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [addQuestion,setAddQuestion] = useState({
+      question_cation:"",
       question_title:"",
       question_type:"",
       question_subtitle:"",
@@ -42,14 +43,12 @@ const HomeQuestionForm = () => {
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    const optionsArray = additionalOptions.map((option) => option.value); 
-    const optionsJSON = JSON.stringify(optionsArray);
     dispatch(add_question(
+        addQuestion.question_cation,
         addQuestion.question_title,
         addQuestion.question_type,
         addQuestion.question_subtitle,
         addQuestion.question_category,
-        optionsJSON,
         selectedFile)) 
         
     setAddQuestion({
@@ -57,35 +56,12 @@ const HomeQuestionForm = () => {
       question_type:"",
       question_subtitle:"",
       question_category:"",
+      question_cation:"",
     })
     setSelectedFile(null)
-    setAdditionalOptions([])
   }
 
-  const addOption = () => {
-    // Create a new input field and add it to the additionalOptions array
-    setAdditionalOptions([
-      ...additionalOptions,
-      {
-        id: additionalOptions.length, // Unique ID for each option
-        value: '',
-      },
-    ]);
-  };
-
-  const removeOption = (id) => {
-    // Remove the option with the specified ID from the additionalOptions array
-    setAdditionalOptions((options) => options.filter((option) => option.id !== id));
-  };
-
-  const handleOptionChange = (id, e) => {
-    // Handle changes in the additional option input fields
-    const updatedOptions = additionalOptions.map((option) =>
-      option.id === id ? { ...option, value: e.target.value } : option
-    );
-    setAdditionalOptions(updatedOptions);
-  };
-
+  
   
   useEffect(() => {
     if (home) {
@@ -111,8 +87,16 @@ const HomeQuestionForm = () => {
                 </span>
             ))}
             {showSuccessMessage ? <span className='login-success'> School Added Successfully</span> : ''}
-            <h1>Add Home Question Form </h1>
+            <h1>Add  Question Form </h1>
         <form className='form-input' onSubmit={handleSubmit}>
+            <label htmlFor=""> Question Cation</label>
+            <input 
+            type="text"
+            placeholder='Enter Question Cation'
+            name="question_cation" 
+            onChange={handleChange}
+            value={addQuestion.question_cation}
+            required/>
             <label htmlFor=""> Question Title</label>
             <input 
             type="text"
@@ -165,28 +149,7 @@ const HomeQuestionForm = () => {
             name="picture"
             onChange={handleFileChange}
             />
-
-            {additionalOptions.map((option) => (
-            <div key={option.id}>
-              <label style={{ marginTop: "20px" }} htmlFor={`option-${option.id}`}>
-                Option {option.id + 1}
-              </label>
-              <input
-                type="text"
-                placeholder={`Enter Option ${option.id + 1}`}
-                name={`option-${option.id}`}
-                value={option.value}
-                onChange={(e) => handleOptionChange(option.id, e)}
-                required
-              />
-              <Icon style={{ marginTop: "10px" }}  className='option-plus' path={mdiMinusBox} size={1} onClick={() => removeOption(option.id)} />
-            </div>
-          ))}
-          <label style={{ marginTop: "10px" }} htmlFor="add-more-options">
-            Add More Options
-          </label>
-          <Icon className='option-plus' path={mdiPlusBox} size={1} onClick={addOption} />
-          <button>Add Question</button>
+            <button>Add Question</button>
 
         </form>
         </div>

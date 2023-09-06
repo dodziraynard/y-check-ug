@@ -3,17 +3,14 @@ import { Link } from 'react-router-dom'
 
 const AddQuestionLabel = () => {
     return (
-        <div className='patient'>
+        <div className='patient question-filter option-filter'>
             <div className="filter">
                 <div className="filter-items">
                     <div className="filter-item">
-                      <Link to='/add_school' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Basic School</span></Link>  
+                      <Link to='/add_question' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Add Question</span></Link>  
                     </div>
                     <div className="filter-item">
-                       <Link to='/add_shs' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Snr High School</span></Link> 
-                    </div>
-                    <div className="filter-item">
-                    <Link to='/add_community'style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Community</span></Link> 
+                       <Link to='/add_option' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Add Option</span></Link> 
                     </div>
                    
                 </div>

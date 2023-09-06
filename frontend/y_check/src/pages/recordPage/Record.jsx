@@ -71,7 +71,43 @@ const Record = () => {
         handlePageChange(currentPage - 1);
     };
 
+    const getResponseClass = (currentResponse, nextResponse) => {
+        if (currentResponse === 'well😀' && nextResponse === 'Yes, about most things') {
+          return (
+            <div className='green_circle'></div>
+          );
+        }else if (currentResponse === 'somehow🥰' || nextResponse === 'Somewhat') {
+            return (
+                <div className='orange_circle'></div>
+            );
+        }else if(currentResponse === 'We don’t get along' || currentResponse === 'No one') {
 
+            return (
+                <div className='red_circle'></div>
+            );
+        }else if(currentResponse === 'Often' || currentResponse === 'Always') {
+
+            return (
+                <div className='green_circle'></div>
+            );
+        }else if(currentResponse === 'Sometimes') {
+
+            return (
+                <div className='orange_circle'></div>
+            );
+        }else if(currentResponse === 'Never' || nextResponse === 'No') {
+
+            return (
+                <div className='red_circle'></div>
+            );
+        }else if(currentResponse === 'Bad') {
+
+            return (
+                <div className='red_circle'></div>
+            );
+        }
+    }
+      
     return (
         <>
             <div className='back-button'>
@@ -83,17 +119,23 @@ const Record = () => {
                   <TableRow>
                     <StyledTableCell style={{background:"#6564F0"}}>Question</StyledTableCell>
                     <StyledTableCell style={{background:"#6564F0"}} align="left">Reposonse</StyledTableCell>
+                    <StyledTableCell style={{background:"#6564F0"}} align="left">Flag</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {currentProperties.map((answer) => (
-                    <StyledTableRow key={answer.id}>
-                      <StyledTableCell component="th" scope="row">
-                        {answer.question_title}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">{answer.response}</StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                {currentProperties.map((answer,index) => (
+              <StyledTableRow key={answer.id}>
+                <StyledTableCell component="th" scope="row">
+                  {answer.question_title}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {answer.response}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                {getResponseClass(answer.response, currentProperties[index+ 1]?.response)}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
                 </TableBody>
               </Table>
             </TableContainer>
