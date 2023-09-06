@@ -1,32 +1,27 @@
 import React from 'react'
 
-const RadioType = ({ currentQuestions,setUserResponses }) => {
-  const handleRadioChange = (questionId, selectedOption) => {
-    setUserResponses((prevResponses) => ({
-      ...prevResponses,
-      [questionId]: selectedOption,
-    }));
-  };
+const RadioType = ({ currentQuestions ,question_options }) => {
+  
     return (
       <div className='questionaire-text'>
         {currentQuestions.map((question) => (
           <div key={question.id}>
             <h2> {question.title}</h2>
             <span>{question.subtitle}</span>
-            {question.options.map((option, index) => (
+            {question_options.map((option, index)=>(
               <div className="input-radio" key={index}>
-                <label htmlFor={`radio-${question.id}-${index}`}>{option}</label>
+                <label htmlFor={`option-${option.id}`}>{option.option}</label>
                 <input
-                  type="radio"
-                  id={`radio-${question.id}-${index}`}
-                  name={`question-${question.id}`}
-                  value={option}
+                  type='radio'
+                  name={`question-${question.id}-options`}
+                  id={`option-${option.id}`}
+                  value={option.option}
                   required
-                  onChange={() => handleRadioChange(question.id, option)}
-
                 />
               </div>
+
             ))}
+         
           </div>
         ))}
       </div>

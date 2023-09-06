@@ -1,12 +1,7 @@
 import React from 'react'
 
-const InputType = ({ currentQuestions,setUserResponses }) => {
-  const handleInputChange = (questionId, value) => {
-    setUserResponses((prevResponses) => ({
-      ...prevResponses,
-      [questionId]: value,
-    }));
-  };
+const InputType = ({ currentQuestions, }) => {
+  
     return (
       <>
         {currentQuestions.map((question, index) => (
@@ -15,9 +10,8 @@ const InputType = ({ currentQuestions,setUserResponses }) => {
             <div className="questionaire-input">
               <input
                 type="text"
-                placeholder={`Enter ${question.title}:`}
+                placeholder={`${question.subtitle}:`}
                 name={question.title.toLowerCase()} 
-                onChange={(e) => handleInputChange(question.title, e.target.value)}
                 required
               />
             </div>
