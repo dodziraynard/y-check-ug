@@ -17,31 +17,6 @@ from django.db.models import Q
 from django.http import QueryDict
 from rest_framework.exceptions import ValidationError
 
-
-
-class ProfileView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        serializer = UserProfileSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request):
-        if request.user.is_authenticated:
-            serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-
-
-
-
 class LoginView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -55,9 +30,6 @@ class LoginView(APIView):
             data['token'] = token.key
             return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-
 
 
 class UserRegistrationView(APIView):
@@ -479,3 +451,16 @@ class getAdolescentType(APIView):
             "secondary":secondary_count,
             "community":community_count
         })
+        
+
+class UserView(APIView):
+    #authentication_classes = [TokenAuthentication]
+    #permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserOutputSerializer(users,many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+   

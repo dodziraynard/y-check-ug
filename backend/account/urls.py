@@ -3,7 +3,7 @@ from account import views
 
 
 urlpatterns = [
-    path('profile/', views.ProfileView.as_view(), name='profile_view'),
+    path('UserView/', views.UserView.as_view(), name='profile_view'),
     path('login-view/', views.LoginView.as_view(), name='login'),
     path('register-view/', views.UserRegistrationView.as_view(), name='register'),
     path('security-question/<int:pk>/', views.GetSecurityQuestionView.as_view(), name='get_security_question'),
