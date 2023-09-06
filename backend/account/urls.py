@@ -25,4 +25,8 @@ urlpatterns = [
     path('save_responses/', views.save_responses.as_view(), name='save_responses'),
     path('responses/', views.ResponsesView.as_view(), ),
     path('save_options/', views.save_options.as_view(), ),
+    path('get_options/', views.OptionsView.as_view(), ),
+    path('getAllAdolescent/', views.getAllAdolescent.as_view(), ),
+    path('getAllUsers/', views.getAllUsers.as_view(), ),
+    path('getAdolescentType/', views.getAdolescentType.as_view(), ),
 ]

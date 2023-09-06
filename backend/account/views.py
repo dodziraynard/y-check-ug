@@ -424,3 +424,58 @@ class save_options(APIView):
                 "message": serializer.errors  
             }
             return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OptionsView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        question_id = data['question_id']
+        options = Option.objects.filter(question=question_id)
+
+        if not options.exists():
+            return Response({"message": "No matching records found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = OptionSerializer(options, many=True)
+        return Response(serializer.data)
+ 
+class getAllAdolescent(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, format=None):
+        data = request.data
+        adolescents = Adolescent.objects.all()
+        serializer = AdolescentSerializer(adolescents,many=True)
+        total_count = len(serializer.data) 
+        return Response({"total_adolescent": total_count})
+ 
+class getAllUsers(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, format=None):
+        data = request.data
+        users = User.objects.all()
+        serializer = UserOutputSerializer(users,many=True)
+        total_count = len(serializer.data) 
+        return Response({"total_users": total_count})
+
+
+class getAdolescentType(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, format=None):
+        #PRIMARY
+        primary = Adolescent.objects.filter(adolescent_type="PR")
+        primary_serializer = AdolescentSerializer(primary,many=True)
+        primary_count = len(primary_serializer.data) 
+        # SECONDARY
+        secondary = Adolescent.objects.filter(adolescent_type="SC")
+        secondary_serializer = AdolescentSerializer(secondary,many=True)
+        secondary_count = len(secondary_serializer.data) 
+        # COMMUNITY
+        community = Adolescent.objects.filter(adolescent_type="CM")
+        community_serializer = AdolescentSerializer(community,many=True)
+        community_count = len(community_serializer.data) 
+        return Response({
+            "primary": primary_count,
+            "secondary":secondary_count,
+            "community":community_count
+        })

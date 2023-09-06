@@ -235,7 +235,7 @@ QUESTION_CATEGORY = [
     
 # HOME QUESTION MODEL
 class Question(models.Model):
-    cation = models.CharField(max_length=200)
+    cation = models.CharField(max_length=200,blank=True, null=True)
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=100)
     category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
@@ -257,3 +257,6 @@ class Option(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     option_id = models.CharField(max_length=255)
     option = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question.title

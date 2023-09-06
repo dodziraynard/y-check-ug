@@ -10,6 +10,7 @@ admin.site.register(SecurityQuestionAnswer)
 admin.site.register(BasicSchool)
 admin.site.register(Question)
 admin.site.register(UserResponse)
+admin.site.register(Option)
 
 
 
