@@ -234,18 +234,16 @@ QUESTION_CATEGORY = [
 ]
     
 # HOME QUESTION MODEL
-class HomeQuestion(models.Model):
+class Question(models.Model):
+    cation = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=100)
     category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
     subtitle = models.CharField(max_length=100,blank=True, null=True)
     picture = models.ImageField(upload_to='question_pictures/',blank=True, null=True)
-    options = models.JSONField(blank=True, null=True)
-
+    
     def __str__(self):
         return self.title
-    
-    
 
 class UserResponse(models.Model):
     adolescent= models.ForeignKey(Adolescent, on_delete=models.CASCADE)
@@ -254,3 +252,8 @@ class UserResponse(models.Model):
 
     def __str__(self):
         return f"Adolescent: {self.adolescent}, Question Title: {self.question_title}"
+    
+class Option(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    option_id = models.CharField(max_length=255)
+    option = models.CharField(max_length=255)

@@ -112,7 +112,7 @@ class AdolescentSerializer(serializers.ModelSerializer):
 
 class HomeQuestionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HomeQuestion
+        model = Question
         fields = '__all__'
 
       
@@ -120,5 +120,11 @@ class HomeQuestionSerializer(serializers.ModelSerializer):
 class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserResponse
+        fields = '__all__'
+  
+        
+class OptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Option
         fields = '__all__'
   

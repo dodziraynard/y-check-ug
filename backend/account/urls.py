@@ -24,4 +24,5 @@ urlpatterns = [
     path('Add-adolescent/<int:pk>/', views.AdolescentDeleteView.as_view()),
     path('save_responses/', views.save_responses.as_view(), name='save_responses'),
     path('responses/', views.ResponsesView.as_view(), ),
+    path('save_options/', views.save_options.as_view(), ),
 ]

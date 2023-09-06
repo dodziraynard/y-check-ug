@@ -344,7 +344,7 @@ class HomeQuestionView(APIView):
     permission_classes = [AllowAny]
         
     def get(self, request, format=None):
-        questions = HomeQuestion.objects.all()
+        questions = Question.objects.all()
         serializer = HomeQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
@@ -409,3 +409,18 @@ class ResponsesView(APIView):
         serializer = UserResponseSerializer(responses, many=True)
         return Response(serializer.data)
  
+class save_options(APIView):
+    permission_classes = [AllowAny]
+        
+    def post(self, request, format=None):
+        data = request.data
+        print(data)
+        serializer = OptionSerializer(data=data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            error_response = {
+                "message": serializer.errors  
+            }
+            return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
