@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { user_login_reducer,
     user_registrstion_reducer,
     get_all_users_reducer, 
+    user_list_reducer,
 } from '../reducers/AuthReducer'
 import { security_question_list_reducer } from '../reducers/SecurityQuestionReducer'
 import { 
@@ -42,6 +43,7 @@ const reducer = combineReducers({
     user_login: user_login_reducer,
     user_registration:user_registrstion_reducer,
     get_all_users:get_all_users_reducer,
+    user_list:user_list_reducer,
     // SECURITY QUESTION REDUCER
     all_security_question:security_question_list_reducer,
     // SCHOOLS AND COMMUNITIES 

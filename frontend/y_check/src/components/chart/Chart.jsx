@@ -12,8 +12,6 @@ function Chart() {
   const get_all_adolescent_type = useSelector(state => state.get_all_adolescent_type);
   const { adolescent_type } = get_all_adolescent_type;
 
-  console.log(adolescent_type)
-
   useEffect(() => {
     dispatch(get_total_adolescent_type());
   }, [dispatch]);
