@@ -22,7 +22,7 @@ const RadioType = ({ currentQuestions,setUserResponses }) => {
                   name={`question-${question.id}`}
                   value={option}
                   required
-                  onChange={() => handleRadioChange(question.title, option)}
+                  onChange={() => handleRadioChange(question.id, option)}
 
                 />
               </div>

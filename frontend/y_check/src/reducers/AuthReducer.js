@@ -5,8 +5,10 @@ import {
     USER_REGISTRATION_REQUEST,
     USER_REGISTRATION_SUCCESS,
     USER_REGISTRATION_FAILED,
-
-    USER_LOGOUT
+    GET_ALL_USERS_REQUEST,
+    GET_ALL_USERS_SUCCESS,
+    GET_ALL_USERS_FAILED,
+    USER_LOGOUT,
  } from "../constants/UserConstants";
 
  // USER LOGIN REDUCER
@@ -43,6 +45,23 @@ import {
 
         case USER_LOGOUT:
             return {}
+
+        default:
+            return state
+    }
+}
+
+// USER LOGIN REDUCER
+export const get_all_users_reducer = (state = {} ,action)=>{
+    switch(action.type){
+        case GET_ALL_USERS_REQUEST:
+            return{loading:true}
+
+        case GET_ALL_USERS_SUCCESS:
+            return {loading:false, users:action.payload}
+
+        case GET_ALL_USERS_FAILED:
+            return {loading:false, error:action.payload}
 
         default:
             return state

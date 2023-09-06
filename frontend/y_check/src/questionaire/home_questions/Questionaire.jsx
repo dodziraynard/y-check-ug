@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react';
 import './questionaire.scss'
-import family from '../../images/family.png'
 import InputType from './InputType';
 import CheckBoxType from './CheckBoxType';
 import RadioType from './RadioType';

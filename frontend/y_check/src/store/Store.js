@@ -1,7 +1,10 @@
 import {legacy_createStore as createStore,combineReducers,applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { user_login_reducer,user_registrstion_reducer } from '../reducers/AuthReducer'
+import { user_login_reducer,
+    user_registrstion_reducer,
+    get_all_users_reducer, 
+} from '../reducers/AuthReducer'
 import { security_question_list_reducer } from '../reducers/SecurityQuestionReducer'
 import { 
     basic_school_reducer,
@@ -36,6 +39,7 @@ const reducer = combineReducers({
     // USER REDUCER
     user_login: user_login_reducer,
     user_registration:user_registrstion_reducer,
+    get_all_users:get_all_users_reducer,
     // SECURITY QUESTION REDUCER
     all_security_question:security_question_list_reducer,
     // SCHOOLS AND COMMUNITIES 
