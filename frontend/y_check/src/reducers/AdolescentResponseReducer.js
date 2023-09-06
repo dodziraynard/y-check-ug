@@ -4,7 +4,7 @@ import {
     ADD_ADOLESCENT_RESPONSE_FAILED,
     ADOLESCENT_RESPONSE_LIST_REQUEST,
     ADOLESCENT_RESPONSE_LIST_SUCCESS,
-    ADOLESCENT_RESPONSE_LIST_FAILED
+    ADOLESCENT_RESPONSE_LIST_FAILED,
  } from "../constants/AdolescentResponseConstant";
 
 
@@ -42,3 +42,4 @@ export const adoloscent_response_list_reducer = (state = {adolescent_responses:[
             return state
     }
 }
+

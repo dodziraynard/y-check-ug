@@ -23,7 +23,8 @@ import {
     adoloscent_list_reducer,
     adolescent_delete_reducer,
     get_adolescent_reducer,
-    adoloscent_search_list_reducer
+    adoloscent_search_list_reducer,
+    get_all_adolescent_reducer
 } from '../reducers/AddAdolescentReducer'
 import { 
     home_questions_list_reducer,
@@ -58,6 +59,7 @@ const reducer = combineReducers({
     adolescent_delete:adolescent_delete_reducer,
     get_adolescent:get_adolescent_reducer,
     adoloscent_search_list:adoloscent_search_list_reducer,
+    get_all_adolescent:get_all_adolescent_reducer,
 
     // HOME QUESTION REDUCER
     home_questions_list:home_questions_list_reducer,

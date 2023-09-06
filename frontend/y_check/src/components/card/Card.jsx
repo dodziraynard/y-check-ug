@@ -4,16 +4,20 @@ import Icon from '@mdi/react';
 import { mdiAccountInjuryOutline,mdiDoctor,mdiAccountSupervisor,mdiCalendarAlertOutline } from '@mdi/js';
 import { get_total_users } from '../../actions/userActions';
 import { useSelector,useDispatch } from 'react-redux'
-
+import { get_total_adolescent } from '../../actions/AddAdolescentAction';
 function Card() {
     const dispatch = useDispatch()
     const get_all_users = useSelector(state => state.get_all_users);
     const { users } = get_all_users;
 
-    console.log(users)
+    const get_all_adolescent = useSelector(state => state.get_all_adolescent);
+    const { adolescents } = get_all_adolescent;
+
+    console.log(adolescents)
 
     useEffect(() => {
     dispatch(get_total_users());
+    dispatch(get_total_adolescent());
     }, [dispatch]);
 
   return (
@@ -23,8 +27,8 @@ function Card() {
             <Icon path={mdiAccountInjuryOutline} size={3} />
             </div>
             <div className="content">
-                <h2>{users?.total_users}</h2>
-                <h5>Total Patients</h5>
+                <h2>{adolescents?.total_adolescent}</h2>
+                <h5>Total Adolescents</h5>
             </div>
         </div>
         <div className='card'>
