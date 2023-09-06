@@ -13,7 +13,6 @@ function Card() {
     const get_all_adolescent = useSelector(state => state.get_all_adolescent);
     const { adolescents } = get_all_adolescent;
 
-    console.log(adolescents)
 
     useEffect(() => {
     dispatch(get_total_users());

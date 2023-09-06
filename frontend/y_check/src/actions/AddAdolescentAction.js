@@ -16,7 +16,10 @@ import {
     ADOLESCENT_SERACH_FAILED,
     GET_ALL_ADOLESCENT_REQUEST,
     GET_ALL_ADOLESCENT_SUCCESS,
-    GET_ALL_ADOLESCENT_FAILED
+    GET_ALL_ADOLESCENT_FAILED,
+    GET_ALL_ADOLESCENT_TYPE_REQUEST,
+    GET_ALL_ADOLESCENT_TYPE_SUCCESS,
+    GET_ALL_ADOLESCENT_TYPE_FAILED
 } from "../constants/AddAdolescentConstants";
 
 // GET ALL  ADOLESCENT ACTION
@@ -152,6 +155,29 @@ export const get_total_adolescent= () => async(dispatch) =>{
     } catch (error) {
         dispatch({
             type:GET_ALL_ADOLESCENT_FAILED,
+            payload: error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        })
+    }
+}
+// GET ALL ADOLESCENT TYPE  ACTION
+export const get_total_adolescent_type = () => async(dispatch) =>{
+    try {
+        dispatch({
+            type: GET_ALL_ADOLESCENT_TYPE_REQUEST,
+        })
+        
+        const {data} = await axios.get(
+            `${BASE_URL}/account/getAdolescentType/`)
+        dispatch({
+            type: GET_ALL_ADOLESCENT_TYPE_SUCCESS,
+            payload:data
+        })
+
+    } catch (error) {
+        dispatch({
+            type:GET_ALL_ADOLESCENT_TYPE_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message

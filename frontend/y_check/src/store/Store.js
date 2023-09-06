@@ -24,7 +24,8 @@ import {
     adolescent_delete_reducer,
     get_adolescent_reducer,
     adoloscent_search_list_reducer,
-    get_all_adolescent_reducer
+    get_all_adolescent_reducer,
+    get_all_adolescent_type_reducer,
 } from '../reducers/AddAdolescentReducer'
 import { 
     home_questions_list_reducer,
@@ -60,7 +61,7 @@ const reducer = combineReducers({
     get_adolescent:get_adolescent_reducer,
     adoloscent_search_list:adoloscent_search_list_reducer,
     get_all_adolescent:get_all_adolescent_reducer,
-
+    get_all_adolescent_type:get_all_adolescent_type_reducer,
     // HOME QUESTION REDUCER
     home_questions_list:home_questions_list_reducer,
     add_home_question:add_home_question_reducer,

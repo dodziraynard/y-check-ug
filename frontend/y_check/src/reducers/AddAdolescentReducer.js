@@ -17,8 +17,10 @@ import {
     ADOLESCENT_SERACH_FAILED,
     GET_ALL_ADOLESCENT_REQUEST,
     GET_ALL_ADOLESCENT_SUCCESS,
-    GET_ALL_ADOLESCENT_FAILED
-
+    GET_ALL_ADOLESCENT_FAILED,
+    GET_ALL_ADOLESCENT_TYPE_REQUEST,
+    GET_ALL_ADOLESCENT_TYPE_SUCCESS,
+    GET_ALL_ADOLESCENT_TYPE_FAILED
 } from "../constants/AddAdolescentConstants";
 
 
@@ -126,6 +128,24 @@ export const adoloscent_search_list_reducer = (state = {adolescent_search_result
             return {loading:false, adolescents:action.payload}
 
         case GET_ALL_ADOLESCENT_FAILED:
+            return {loading:false, error:action.payload}
+
+
+        default:
+            return state
+    }
+}
+
+ // GET ALL ADOLESCENT TYPE  REDUCER
+ export const get_all_adolescent_type_reducer = (state = {} ,action)=>{
+    switch(action.type){
+        case GET_ALL_ADOLESCENT_TYPE_REQUEST:
+            return{loading:true}
+
+        case GET_ALL_ADOLESCENT_TYPE_SUCCESS:
+            return {loading:false, adolescent_type:action.payload}
+
+        case GET_ALL_ADOLESCENT_TYPE_FAILED:
             return {loading:false, error:action.payload}
 
 
