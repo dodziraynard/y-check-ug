@@ -19,6 +19,7 @@ import Question2 from './components/practice_questions/Question2';
 import WelcomePage from './pages/welcomePage/WelcomePage';
 import AddQuestion from './pages/AddQuestion/AddQuestion';
 import RecordPage from './pages/recordPage/RecordPage';
+import AddOption from './pages/addOption/AddOption';
 function App() {
   return(
     <Router>
@@ -41,6 +42,7 @@ function App() {
         <Route path='/practice-question-2'element={<Question2/>}/>
         <Route path='/welcome'element={<WelcomePage/>}/>
         <Route path='/add_question'element={<AddQuestion/>}/>
+        <Route path='/add_option'element={<AddOption/>}/>
         <Route path='/adolescent-record/:id/'element={<RecordPage/>}/>
       </Routes>
   </Router>

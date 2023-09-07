@@ -84,7 +84,7 @@ export const get_basic_schools = () => async (dispatch)=>{
     }
 }
 
-// DELETE BASIC SCHOOL ACTION
+// BASIC DELETE  SCHOOL ACTION
 export const delete_basic_school = (id) => async(dispatch) =>{
     try {
         dispatch({
@@ -96,7 +96,7 @@ export const delete_basic_school = (id) => async(dispatch) =>{
             }
         }
         await axios.delete(
-            `${BASE_URL}/basic-school/${id}`,
+            `${BASE_URL}/account/basic-school/${id}`,
             config
         )
         dispatch({
@@ -113,6 +113,7 @@ export const delete_basic_school = (id) => async(dispatch) =>{
         })
     }
 }
+
 
 // SHS SCHOOL  ACTION
 export const add_shs_school = (school_name) => async(dispatch) =>{

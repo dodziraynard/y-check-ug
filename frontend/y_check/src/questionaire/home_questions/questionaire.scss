@@ -76,6 +76,11 @@
 .view-link:hover {
     text-decoration: underline;
 }
+.text-image img{
+    margin-top: -2rem;
+    width: 400px;
+    height: 400px;
+}
   
 /* Media Query for Tablet */
 @media (max-width: 900px) {
@@ -129,11 +134,13 @@
     }
     .text-image{
         overflow: hidden;
-        margin-bottom: 1rem;
+        margin-bottom: -1rem;
         margin-top: 30rem;
     }
     .text-image img{
-        margin-top: 1rem;
+        margin-top: -2rem;
+        width: 400px;
+        height: 400px;
     }
 
     .text-image h2{
@@ -214,10 +221,7 @@
         margin-bottom: 1rem;
         margin-top: 30rem;
     }
-    .text-image img{
-        margin-top: 1rem;
-        object-fit: contain;
-    }
+    
 
     .text-image h2{
         color: var(--ug_blue);

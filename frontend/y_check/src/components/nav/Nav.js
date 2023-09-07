@@ -17,7 +17,7 @@ function Nav() {
           {/* Search Bar */}
           <div className="search-bar">
             <Icon path={mdiMagnify} size={1} className="search-icon" />
-            <input type="text" placeholder="Search patients..." className="search-input" />
+            <input type="text" placeholder="Search users..." className="search-input" />
           </div>
     
           {/* Person Picture with Dropdown */}

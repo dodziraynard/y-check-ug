@@ -5,8 +5,13 @@ import {
     USER_REGISTRATION_REQUEST,
     USER_REGISTRATION_SUCCESS,
     USER_REGISTRATION_FAILED,
-
-    USER_LOGOUT
+    GET_ALL_USERS_REQUEST,
+    GET_ALL_USERS_SUCCESS,
+    GET_ALL_USERS_FAILED,
+    GET_TOTAL_USERS_REQUEST,
+    GET_TOTAL_USERS_SUCCESS,
+    GET_TOTAL_USERS_FAILED,
+    USER_LOGOUT,
  } from "../constants/UserConstants";
 
  // USER LOGIN REDUCER
@@ -43,6 +48,40 @@ import {
 
         case USER_LOGOUT:
             return {}
+
+        default:
+            return state
+    }
+}
+
+// GET ALL USERS COUNT REDUCER
+export const get_all_users_reducer = (state = {} ,action)=>{
+    switch(action.type){
+        case GET_ALL_USERS_REQUEST:
+            return{loading:true}
+
+        case GET_ALL_USERS_SUCCESS:
+            return {loading:false, users:action.payload}
+
+        case GET_ALL_USERS_FAILED:
+            return {loading:false, error:action.payload}
+
+        default:
+            return state
+    }
+}
+
+// ADOLESCENT  LIST   REDUCER
+export const user_list_reducer = (state = {users_list:[]},action)=>{
+    switch(action.type){
+        case GET_TOTAL_USERS_REQUEST:
+            return{...state,loading:true,users_list:[]}
+
+        case GET_TOTAL_USERS_SUCCESS:
+            return {...state,loading:false,users_list:action.payload}
+
+        case GET_TOTAL_USERS_FAILED:
+            return {...state,loading:false,error:action.payload}
 
         default:
             return state
