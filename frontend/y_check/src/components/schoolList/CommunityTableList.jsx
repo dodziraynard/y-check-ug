@@ -59,10 +59,7 @@ const CommunityTableList = () => {
     setSelectedSchool(null);
     setDeleteModalOpen(false);
   };
-   // GET THE ALL  SCHOOLS
-   
-
-  
+     
   return (
     <div className='mac'>
       <div className='patient-table basic_table'>

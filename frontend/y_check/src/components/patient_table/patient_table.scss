@@ -65,7 +65,7 @@
 
     .patient-table{
         margin-top: 5rem;
-        margin-left: 18rem;
+        margin-left: 7rem;
         width: 70%;
     }
     
@@ -75,17 +75,28 @@
 
     .patient-table{
         margin-top: 5rem;
-        margin-left: 18rem;
-        width: 50%;
+        margin-left: 7rem;
+        width: 70%;
     }
     
+}
+@media screen  and (min-width:200px) and (max-width:930px){
+
+    .patient-table{
+        margin-top: 5rem;
+        margin-left: 7rem;
+        width: 50%;
+    }
+    .search-bar-patient{
+        width: 50%;
+    }
 }
 @media screen  and (min-width:200px) and (max-width:900px){
 
     .patient-table{
         margin-top: 5rem;
-        margin-left: 18rem;
-        width: 40%;
+        margin-left: 7rem;
+        width: 50%;
     }
     
 }
@@ -98,7 +109,7 @@
         width: 68%;
     }
     .search-bar-patient{
-        width: 60%;
+        width: 50%;
     }
     
   }
@@ -141,7 +152,7 @@
 @media screen  and (min-width:200px) and (max-width:622px){
 
     .patient-table{
-        width: 80%;
+        width: 77%;
         margin-left: 2rem;
 
     }

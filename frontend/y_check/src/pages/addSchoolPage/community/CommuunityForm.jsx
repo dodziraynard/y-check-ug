@@ -43,7 +43,7 @@ const CommunityForm = () => {
 
   return (
     <div>
-        <div className='basic_form' style={{width:'82%'}}>
+        <div className='basic_form community-form'>
         {error && Object.keys(error).map((field) => (
           <span key={field} className='login-error'>
               {`${field}: ${error[field]}`}

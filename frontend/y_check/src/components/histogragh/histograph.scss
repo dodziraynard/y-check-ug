@@ -8,10 +8,10 @@
 @media screen  and (min-width:200px) and (max-width:1180px){
 
     .histograph{
-        margin-left: 18rem;
+        margin-left: 7rem;
         margin-top: 2rem;
         background-color: #ffffff;
-        width: 44%;
+        width: 62%;
         padding: 2rem;
     }
     
@@ -20,10 +20,10 @@
 @media screen  and (min-width:200px) and (max-width:930px){
 
     .histograph{
-        margin-left: 18rem;
+        margin-left: 7rem;
         margin-top: 2rem;
         background-color: #ffffff;
-        width: 38%;
+        width: 42%;
         padding: 2rem;
     }
     
@@ -35,6 +35,28 @@
         margin-top: 2rem;
         background-color: #ffffff;
         width: 64%;
+        padding: 2rem;
+    }
+    
+}
+@media screen  and (min-width:200px) and (max-width:750px){
+
+    .histograph{
+        margin-left: 15rem;
+        margin-top: 2rem;
+        background-color: #ffffff;
+        width: 44%;
+        padding: 2rem;
+    }
+    
+}
+@media screen  and (min-width:200px) and (max-width:660px){
+
+    .histograph{
+        margin-left: 15rem;
+        margin-top: 2rem;
+        background-color: #ffffff;
+        width: 33%;
         padding: 2rem;
     }
     
