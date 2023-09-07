@@ -93,7 +93,7 @@ class GetSecurityQuestionView(APIView):
         try:
             question = SecurityQuestion.objects.get(pk=pk)
         except SecurityQuestion.DoesNotExist:
-            return Response({'error': 'Security question not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Security question not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = SecurityQuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -106,7 +106,13 @@ class GetAllSecurityQuestionsView(APIView):
         questions = SecurityQuestion.objects.all()
         serializer = SecurityQuestionSerializer(questions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+        if serializer.errors:
+             error_response = {
+                "message": serializer.errors  
+            }
+        return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
 
+           
 class PasswordResetView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -463,4 +469,21 @@ class UserView(APIView):
         serializer = UserOutputSerializer(users,many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-   
+class UserDeleteView(APIView):
+    permission_classes = [AllowAny]
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+        
+        
+    def get(self, request, pk, format=None):
+        user = self.get_object(pk)
+        serializer = UserOutputSerializer(user)
+        return Response(serializer.data)
+        
+    def delete(self, request, pk, format=None):
+        user = self.get_object(pk)
+        user.delete()
+        return Response({"message":"User Deleted successfully"},status=status.HTTP_204_NO_CONTENT)

@@ -22,6 +22,7 @@ urlpatterns = [
     path('basic-school/<int:pk>/', views.BasicSchoolDeleteView.as_view()),
     path('community/<int:pk>/', views.CommunityDeleteView.as_view()),
     path('Add-adolescent/<int:pk>/', views.AdolescentDeleteView.as_view()),
+    path('UserView/<int:pk>/', views.UserDeleteView.as_view()),
     path('save_responses/', views.save_responses.as_view(), name='save_responses'),
     path('responses/', views.ResponsesView.as_view(), ),
     path('save_options/', views.save_options.as_view(), ),
