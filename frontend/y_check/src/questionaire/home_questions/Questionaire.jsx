@@ -9,6 +9,7 @@ import { get_question_options } from '../../actions/AddOptionAction';
 //import { add_adolescent_responses } from '../../actions/AdolescentResponseAction';
 // MAIN FUNCTION
 const Questionaire = () => {
+    const [userResponses, setUserResponses] = useState({});
 
     const dispatch = useDispatch()
     // GET ALL HOME QUESTION 
@@ -82,7 +83,14 @@ const Questionaire = () => {
 
     const submitResponses = (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
-      
+        const responses = [];
+        for (const [question, option_responses,text_response,option] of Object.entries(userResponses)) {
+          responses.push({ question, option_responses,text_response,option });
+        }
+        
+        for (const response of responses) {
+          console.log(response);
+        }
     };
       
     return (
@@ -91,10 +99,16 @@ const Questionaire = () => {
                 <form className='questionaire-form' onSubmit={submitResponses}>
                     {currentQuestions.map((question, index) => (
                     question.type === "multiple_choice" ? (
-                        <RadioType key={index} currentQuestions={currentQuestions} question_options={question_options} />
+                        <RadioType key={index} 
+                        currentQuestions={currentQuestions} 
+                        question_options={question_options}
+                        setUserResponses={setUserResponses}  />
                     ) : (
                         question.type === "checkbox" ? (
-                            <CheckBoxType key={index} currentQuestions={currentQuestions} question_options={question_options}  />
+                            <CheckBoxType key={index} 
+                            currentQuestions={currentQuestions}
+                            question_options={question_options}
+                            setUserResponses={setUserResponses}   />
                         ) : (
                             <InputType key={index} currentQuestions={currentQuestions} />
                             

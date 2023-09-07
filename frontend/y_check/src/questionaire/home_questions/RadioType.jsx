@@ -2,6 +2,12 @@ import React from 'react'
 
 const RadioType = ({ currentQuestions ,question_options }) => {
   
+  const handleRadioChange = (questionId, selectedOption) => {
+    setUserResponses((prevResponses) => ({
+      ...prevResponses,
+      [questionId]: selectedOption,
+    }));
+  };
     return (
       <div className='questionaire-text'>
         {currentQuestions.map((question) => (
