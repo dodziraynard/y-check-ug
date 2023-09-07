@@ -11,7 +11,7 @@ export const SidebarData = [
     },
     {
         icon: mdiAccountMultiplePlus,
-        heading:'Patients',
+        heading:'Adolescent',
         url:'/patients'
     },
     {

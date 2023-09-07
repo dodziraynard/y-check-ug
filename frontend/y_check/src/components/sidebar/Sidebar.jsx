@@ -5,7 +5,7 @@ import { mdiLogout,mdiCog,mdiViewHeadline } from '@mdi/js';
 import { Link } from 'react-router-dom';
 
 import './sidebar.scss'
-function Sidebar() {
+function Sidebar({ active, onMenuItemClick }) {
     const [seleted,setSeleted] = useState(0)
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const toggleSidebar = () => {
@@ -19,17 +19,21 @@ function Sidebar() {
       </div>
       <div className={`sidebar ${isSidebarVisible ? 'visible' : ''}`} >
         <div className='menu'>
-          {SidebarData.map((item,index)=>{
-              return (
-                  <div className={seleted===index?'menu-item active':'menu-item'}
-                  key={index}
-                  onClick={()=>setSeleted(index)}>
-                      <div className='items'>
-                        <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><Icon className='icon' path={item.icon} size={1} /></Link>
-                      <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><span>{item.heading}</span></Link> 
-                      </div>
-                  </div>
-              )
+        {SidebarData.map((item, index) => {
+      return (
+        <div
+          className={active === index ? 'menu-item active' : 'menu-item'}
+          key={index}
+          onClick={() => {
+            onMenuItemClick(index); // Notify the parent component of the click
+          }}
+        >
+          <div className='items'>
+          <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><Icon className='icon' path={item.icon} size={1} /></Link>
+          <Link to={item.url} style={{ textDecoration: 'none', color: 'black' }}><span>{item.heading}</span></Link> 
+          </div>
+       </div>
+            )
           })}
         
           <div className='menu-item-down'>
