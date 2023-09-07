@@ -87,7 +87,7 @@ export default function PatientTable() {
     <div className='patient-table'>
     <TableContainer component={Paper} 
     style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)'}}>
-        {showSuccessMessage ? <span className='login-success'> School Deleted Successfully</span> : ''}
+        {showSuccessMessage ? <span className='login-success'> Adolescent Deleted Successfully</span> : ''}
         <div className="search-bar-patient">
             <Icon path={mdiMagnify} size={1} className="search-icon" />
             <input type="text" placeholder="Search for Adolescent..." className="search-input" />

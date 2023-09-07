@@ -12,6 +12,9 @@ import {
     GET_TOTAL_USERS_REQUEST,
     GET_TOTAL_USERS_SUCCESS,
     GET_TOTAL_USERS_FAILED,
+    DELETE_USER_REQUEST,
+    DELETE_USER_SUCCESS,
+    DELETE_USER_FAILED,
     USER_LOGOUT
 } from "../constants/UserConstants";
 import { BASE_URL } from '../constants/Host';
@@ -141,6 +144,37 @@ export const get_user_list = () => async(dispatch) =>{
     } catch (error) {
         dispatch({
             type:GET_TOTAL_USERS_FAILED,
+            payload: error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        })
+    }
+}
+
+// DELETE USER  ACTION
+export const delete_user = (id) => async(dispatch) =>{
+    try {
+        dispatch({
+            type: DELETE_USER_REQUEST,
+        })
+        const config = {
+            headers:{
+                'content-type':'application/json'
+            }
+        }
+        await axios.delete(
+            `${BASE_URL}/account/UserView/${id}/`,
+            
+            config
+        )
+        dispatch({
+            type: DELETE_USER_SUCCESS,
+            payload:id
+        })
+
+    } catch (error) {
+        dispatch({
+            type:DELETE_USER_FAILED,
             payload: error.response && error.response.data.message
             ? error.response.data.message
             : error.message

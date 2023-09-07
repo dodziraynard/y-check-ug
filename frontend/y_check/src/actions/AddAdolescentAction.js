@@ -53,7 +53,7 @@ export const delete_adolescent = (id) => async(dispatch) =>{
             }
         }
         await axios.delete(
-            `${BASE_URL}/Add-adolescent/${id}`,
+            `${BASE_URL}/account/Add-adolescent/${id}`,
             
             config
         )
