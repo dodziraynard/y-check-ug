@@ -18,7 +18,7 @@ const Questionaire = () => {
     // GET THE ADOLESCENT IN QUESTION
     const get_adolescent = useSelector(state => state.get_adolescent)
     const {adolescent} = get_adolescent
-    //const adolescentID = adolescent.id
+    const adolescentID = 1
     // GET THE CURRENT QUESTION OPTIONS
     const question_options_list = useSelector(state => state.question_options_list)
     const {question_options} = question_options_list
@@ -84,14 +84,38 @@ const Questionaire = () => {
     const submitResponses = (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
         const responses = [];
-        for (const [question, option_responses,text_response,option] of Object.entries(userResponses)) {
-          responses.push({ question, option_responses,text_response,option });
+        console.log("currentQuestions:", currentQuestions);
+        console.log("userResponses:", userResponses);
+
+      
+        for (const [questionId, response] of Object.entries(userResponses)) {
+            console.log("Parsed questionId:", parseInt(questionId));
+
+          const question = currentQuestions.find((q) => q.id === parseInt(questionId));
+          console.log(question)
+          
+          if (question) {
+            if (question.type === "multiple_choice") {
+              responses.push({
+                adolescent: adolescentID,
+                question: questionId,
+                option_responses: response,
+              });
+            } else {
+              responses.push({
+                adolescent: adolescentID,
+                question: questionId,
+                text_response: response,
+              });
+            }
+          }
         }
-        
+      
         for (const response of responses) {
           console.log(response);
         }
     };
+      
       
     return (
         <div className='home'>
@@ -110,7 +134,9 @@ const Questionaire = () => {
                             question_options={question_options}
                             setUserResponses={setUserResponses}   />
                         ) : (
-                            <InputType key={index} currentQuestions={currentQuestions} />
+                            <InputType key={index} 
+                            currentQuestions={currentQuestions}
+                            setUserResponses={setUserResponses}  />
                             
                         )
                     )

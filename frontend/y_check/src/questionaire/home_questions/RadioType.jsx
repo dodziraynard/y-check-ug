@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RadioType = ({ currentQuestions ,question_options }) => {
+const RadioType = ({ currentQuestions ,question_options,setUserResponses }) => {
   
   const handleRadioChange = (questionId, selectedOption) => {
     setUserResponses((prevResponses) => ({
@@ -23,6 +23,7 @@ const RadioType = ({ currentQuestions ,question_options }) => {
                   id={`option-${option.id}`}
                   value={option.option}
                   required
+                  onChange={() => handleRadioChange(question.id, option.id)}
                 />
               </div>
 

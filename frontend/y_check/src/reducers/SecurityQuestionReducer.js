@@ -15,7 +15,7 @@ export const security_question_list_reducer = (state = {security_questions:[]},a
             return {loading:false,security_questions:action.payload}
 
         case SECURITY_QUESTION_FAILED:
-            return {loading:false,error:action.payload}
+            return {loading:false,security_error:action.payload}
 
         default:
             return state

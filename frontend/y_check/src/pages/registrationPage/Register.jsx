@@ -18,7 +18,7 @@ const Register = () => {
     // GETTING THE SECURITY QUESTIONS FROM THE SERVER
 
     const all_security_question = useSelector(state => state.all_security_question);
-    const { security_questions } = all_security_question;
+    const { security_error, security_questions } = all_security_question;
 
     useEffect(() => {
         dispatch(get_security_questions());
@@ -129,6 +129,11 @@ const Register = () => {
                         <h2>{pageTitles[page]}</h2>
                     </div>
                     {error && Object.keys(error).map((field) => (
+                    <span key={field} className='login-error'>
+                        {`${field}: ${error[field]}`}
+                    </span>
+                    ))}
+                    {security_error && Object.keys(error).map((field) => (
                     <span key={field} className='login-error'>
                         {`${field}: ${error[field]}`}
                     </span>
