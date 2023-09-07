@@ -11,6 +11,7 @@ const School = ({ adolescentFormData, handleInputChange,schools,shs_schools }) =
             value={adolescentFormData.school}
             onChange={handleInputChange}
             required>
+                <option value=""> None</option>
                 {schools.map((school) => (
                 <option key={school.id} value={school.school_name}>
                   {school.school_name}
@@ -29,6 +30,7 @@ const School = ({ adolescentFormData, handleInputChange,schools,shs_schools }) =
                 value={adolescentFormData.school}
                 onChange={handleInputChange}
                 required>
+                    <option value=""> None</option>
                     {shs_schools.map((shs) => (
                     <option key={shs.id} value={shs.school_name}>
                       {shs.school_name}
