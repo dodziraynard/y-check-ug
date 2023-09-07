@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
-    image = models.ImageField(upload_to='users', blank=True)
+    image = models.ImageField(upload_to='users', blank=True,null=True)
 
     activated = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
@@ -234,23 +234,31 @@ QUESTION_CATEGORY = [
 ]
     
 # HOME QUESTION MODEL
-class HomeQuestion(models.Model):
+class Question(models.Model):
+    cation = models.CharField(max_length=200,blank=True, null=True)
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=100)
     category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
     subtitle = models.CharField(max_length=100,blank=True, null=True)
     picture = models.ImageField(upload_to='question_pictures/',blank=True, null=True)
-    options = models.JSONField(blank=True, null=True)
-
+    
     def __str__(self):
         return self.title
+
     
-    
+class Option(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    option_id = models.CharField(max_length=255)
+    option = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question.title
 
 class UserResponse(models.Model):
     adolescent= models.ForeignKey(Adolescent, on_delete=models.CASCADE)
-    response = models.CharField(max_length=255, blank=True, null=True)
-    question_title = models.CharField(max_length=255, blank=True, null=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    option_responses = models.ManyToManyField(Option, blank=True,null=True)
+    text_response = models.CharField(max_length=255,blank=True, null=True)
 
     def __str__(self):
-        return f"Adolescent: {self.adolescent}, Question Title: {self.question_title}"
+        return f"Adolescent: {self.adolescent}, Question Title: {self.question}"

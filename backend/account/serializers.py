@@ -4,13 +4,6 @@ from .models import *
 from django.contrib.auth.password_validation import validate_password
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'phone']
-        read_only_fields = ['username']
-
-
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -62,8 +55,8 @@ class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
 class UserOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'phone',
-                  'is_active', 'is_staff', 'is_superuser']
+        fields = ['id','username', 'first_name', 'last_name', 'phone',
+                  'is_active', 'is_staff', 'is_superuser','image']
 
 
 class SecurityQuestionSerializer(serializers.ModelSerializer):
@@ -71,14 +64,6 @@ class SecurityQuestionSerializer(serializers.ModelSerializer):
         model = SecurityQuestion
         fields = ['id', 'question']
 
-
-# class SecurityQuestionAnswerSerializer(serializers.ModelSerializer):
-#     security_question = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
-#     answer = serializers.CharField(max_length=200)
-
-#     class Meta:
-#         model = SecurityQuestionAnswer
-#         fields = ['security_question', 'answer']
 
 
 class BasicSchoolSerializer(serializers.ModelSerializer):
@@ -112,7 +97,7 @@ class AdolescentSerializer(serializers.ModelSerializer):
 
 class HomeQuestionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HomeQuestion
+        model = Question
         fields = '__all__'
 
       
@@ -120,5 +105,11 @@ class HomeQuestionSerializer(serializers.ModelSerializer):
 class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserResponse
+        fields = '__all__'
+  
+        
+class OptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Option
         fields = '__all__'
   
