@@ -279,11 +279,20 @@ class CommunityDeleteView(APIView):
     
 class AddAdolescentView(APIView):
     permission_classes = [AllowAny]
-        
-    def get(self, request, format=None):
-        adolescents = Adolescent.objects.all()
+    
+    def get(self, request):
+        adolescent_query = request.query_params.get("adolescent")
+        if adolescent_query:
+            adolescents = Adolescent.objects.filter(
+                Q(pid__icontains=adolescent_query) | 
+                Q(surname__icontains=adolescent_query) | 
+                Q(other_names__icontains=adolescent_query)
+            )
+        else:
+            adolescents = Adolescent.objects.all()
+
         serializer = AdolescentSerializer(adolescents, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         data = request.data
