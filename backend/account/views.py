@@ -279,7 +279,8 @@ class CommunityDeleteView(APIView):
     
 class AddAdolescentView(APIView):
     permission_classes = [AllowAny]
-    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         adolescent_query = request.query_params.get("adolescent")
         if adolescent_query:
@@ -397,11 +398,10 @@ class ResponsesView(APIView):
         return Response(serializer.data)
  
 class save_options(APIView):
-    permission_classes = [AllowAny]
-        
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request, format=None):
         data = request.data
-        print(data)
         serializer = OptionSerializer(data=data, many=True)
         if serializer.is_valid():
             serializer.save()
@@ -428,7 +428,8 @@ class OptionsView(APIView):
         return Response(serializer.data)
  
 class getAllAdolescent(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         data = request.data
         adolescents = Adolescent.objects.all()
@@ -437,7 +438,8 @@ class getAllAdolescent(APIView):
         return Response({"total_adolescent": total_count})
  
 class getAllUsers(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         data = request.data
         users = User.objects.all()
@@ -447,7 +449,8 @@ class getAllUsers(APIView):
 
 
 class getAdolescentType(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         #PRIMARY
         primary = Adolescent.objects.filter(adolescent_type="PR")
@@ -469,9 +472,8 @@ class getAdolescentType(APIView):
         
 
 class UserView(APIView):
-    #authentication_classes = [TokenAuthentication]
-    #permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user_query = request.query_params.get("user")
@@ -490,7 +492,9 @@ class UserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserDeleteView(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
