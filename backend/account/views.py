@@ -465,8 +465,19 @@ class UserView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserOutputSerializer(users,many=True)
+        user_query = request.query_params.get("user")
+        if user_query:
+            # If the 'user' query parameter is provided, perform a search
+            users = User.objects.filter(
+                Q(username__icontains=user_query) | 
+                Q(first_name__icontains=user_query) | 
+                Q(last_name__icontains=user_query)
+            )
+        else:
+            # If 'user' query parameter is not provided, retrieve all users
+            users = User.objects.all()
+
+        serializer = UserOutputSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserDeleteView(APIView):
@@ -487,3 +498,18 @@ class UserDeleteView(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response({"message":"User Deleted successfully"},status=status.HTTP_204_NO_CONTENT)
+    
+    
+class SearchUserView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        query = data['user']
+        user = User.objects.filter(Q(username=query) | Q(first_name__icontains=query)| Q(last_name__icontains=query))
+        
+        if not user.exists():
+            return Response({"message": "No matching records found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = UserOutputSerializer(user, many=True)
+        return Response(serializer.data)
