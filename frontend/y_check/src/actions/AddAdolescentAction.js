@@ -23,10 +23,10 @@ import {
 } from "../constants/AddAdolescentConstants";
 
 // GET ALL  ADOLESCENT ACTION
-export const get_adolescents = () => async (dispatch)=>{
+export const get_adolescents = (adolescent) => async (dispatch)=>{
     try {
         dispatch({type:ADOLESCENT_LIST_REQUEST})
-        const {data} = await axios.get(`${BASE_URL}/account/Add-adolescent/`)
+        const {data} = await axios.get(`${BASE_URL}/account/Add-adolescent?adolescent=${adolescent}`)
         dispatch({
             type: ADOLESCENT_LIST_SUCCESS,
             payload: data

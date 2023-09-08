@@ -21,6 +21,7 @@ export default function PatientTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [search, setSearch] = useState("");
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
@@ -28,12 +29,9 @@ export default function PatientTable() {
   const adoloscent_list = useSelector(state => state.adoloscent_list);
   const { adolescents } = adoloscent_list;
 
-  const adolescent_delete = useSelector(state => state.adolescent_delete);
-  const { adolescent } = adolescent_delete;
-
   useEffect(() => {
-    dispatch(get_adolescents());
-  }, [dispatch]);
+    dispatch(get_adolescents(search));
+  }, [dispatch,search]);
 
   const propertiesPerPage = 5; 
 
@@ -81,7 +79,9 @@ export default function PatientTable() {
     setSelectedRow(null);
     setDeleteModalOpen(false);
   };
-
+  const handleInputChange = event => {
+    setSearch(event.target.value);
+  };
   return (
     <div className='mac'>
     <div className='patient-table'>
@@ -90,7 +90,12 @@ export default function PatientTable() {
         {showSuccessMessage ? <span className='login-success'> Adolescent Deleted Successfully</span> : ''}
         <div className="search-bar-patient">
             <Icon path={mdiMagnify} size={1} className="search-icon" />
-            <input type="text" placeholder="Search for Adolescent..." className="search-input" />
+            <input 
+            type="text" 
+            placeholder="Search for Adolescent..." 
+            className="search-input"
+            value={search}
+            onChange={handleInputChange} />
           </div>
       <Table sx={{ minWidth: 650 }} aria-label="simple table" style={{marginLeft:'1rem'}}>
         <TableHead>
