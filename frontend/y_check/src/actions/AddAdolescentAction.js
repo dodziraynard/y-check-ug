@@ -23,10 +23,21 @@ import {
 } from "../constants/AddAdolescentConstants";
 
 // GET ALL  ADOLESCENT ACTION
-export const get_adolescents = (adolescent) => async (dispatch)=>{
+export const get_adolescents = (adolescent) => async (dispatch,getState)=>{
     try {
         dispatch({type:ADOLESCENT_LIST_REQUEST})
-        const {data} = await axios.get(`${BASE_URL}/account/Add-adolescent?adolescent=${adolescent}`)
+        const {
+            user_login: { userInfo },
+        } = getState()
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
+            }
+        }
+        const {data} = await axios.get(`${BASE_URL}/account/Add-adolescent?adolescent=${adolescent}`,
+        config
+        )
         dispatch({
             type: ADOLESCENT_LIST_SUCCESS,
             payload: data
@@ -42,19 +53,22 @@ export const get_adolescents = (adolescent) => async (dispatch)=>{
     }
 }
 // DELETE ADOLESCENT  ACTION
-export const delete_adolescent = (id) => async(dispatch) =>{
+export const delete_adolescent = (id) => async(dispatch,getState) =>{
     try {
         dispatch({
             type: ADOLESCENT_DELETE_REQUEST,
         })
+        const {
+            user_login: { userInfo },
+        } = getState()
         const config = {
-            headers:{
-                'content-type':'application/json'
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
             }
         }
         await axios.delete(
             `${BASE_URL}/account/Add-adolescent/${id}`,
-            
             config
         )
         dispatch({
@@ -139,14 +153,24 @@ export const get_adolescent_search = (adolescent) => async (dispatch)=>{
 }
 
 // GET ALL ADOLESCENT  ACTION
-export const get_total_adolescent= () => async(dispatch) =>{
+export const get_total_adolescent= () => async(dispatch,getState) =>{
     try {
         dispatch({
             type: GET_ALL_ADOLESCENT_REQUEST,
         })
-        
+        const {
+            user_login: { userInfo },
+        } = getState()
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
+            }
+        }
         const {data} = await axios.get(
-            `${BASE_URL}/account/getAllAdolescent/`)
+            `${BASE_URL}/account/getAllAdolescent/`,
+            config
+            )
         dispatch({
             type: GET_ALL_ADOLESCENT_SUCCESS,
             payload:data
@@ -162,14 +186,25 @@ export const get_total_adolescent= () => async(dispatch) =>{
     }
 }
 // GET ALL ADOLESCENT TYPE  ACTION
-export const get_total_adolescent_type = () => async(dispatch) =>{
+export const get_total_adolescent_type = () => async(dispatch,getState) =>{
     try {
         dispatch({
             type: GET_ALL_ADOLESCENT_TYPE_REQUEST,
         })
+        const {
+            user_login: { userInfo },
+        } = getState()
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
+            }
+        }
         
         const {data} = await axios.get(
-            `${BASE_URL}/account/getAdolescentType/`)
+            `${BASE_URL}/account/getAdolescentType/`,
+            config
+            )
         dispatch({
             type: GET_ALL_ADOLESCENT_TYPE_SUCCESS,
             payload:data

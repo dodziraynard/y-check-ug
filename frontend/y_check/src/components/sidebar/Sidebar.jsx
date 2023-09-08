@@ -3,15 +3,24 @@ import Icon from '@mdi/react';
 import { SidebarData } from '../../Data/Data';
 import { mdiLogout,mdiCog,mdiViewHeadline } from '@mdi/js';
 import { Link } from 'react-router-dom';
+import { logout } from '../../actions/userActions';
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 import './sidebar.scss'
 function Sidebar({ active, onMenuItemClick }) {
-    const [seleted,setSeleted] = useState(0)
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+
     const toggleSidebar = () => {
       setIsSidebarVisible(!isSidebarVisible);
     };
-  
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+
+    const logoutHandler = () => {
+      dispatch(logout())
+      navigate('/')
+    }
   return (
     <>
       <div className='bars'>
@@ -43,7 +52,7 @@ function Sidebar({ active, onMenuItemClick }) {
               </div>
               <div className='down-items'>
                   <Icon  path={mdiLogout} size={1} />
-                  <span>Logout</span>
+                  <span onClick={logoutHandler}>Logout</span>
               </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getState } from 'redux'
 import { 
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -107,14 +108,24 @@ export const register = (
 };
 
 // GET ALL USER  ACTION
-export const get_total_users = () => async(dispatch) =>{
+export const get_total_users = () => async(dispatch,getState) =>{
     try {
         dispatch({
             type: GET_ALL_USERS_REQUEST,
         })
-        
+        const {
+            user_login: { userInfo },
+        } = getState()
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
+            }
+        }
         const {data} = await axios.get(
-            `${BASE_URL}/account/getAllUsers/`)
+            `${BASE_URL}/account/getAllUsers/`,
+            config
+            )
         dispatch({
             type: GET_ALL_USERS_SUCCESS,
             payload:data
@@ -130,14 +141,25 @@ export const get_total_users = () => async(dispatch) =>{
     }
 }
 // GET ALL USER LIST ACTION
-export const get_user_list = (user) => async(dispatch) =>{
+export const get_user_list = (user) => async(dispatch,getState) =>{
     try {
         dispatch({
             type: GET_TOTAL_USERS_REQUEST,
         })
-        
+        const {
+            user_login: { userInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
+            }
+        }
         const {data} = await axios.get(
-            `${BASE_URL}/account/UserView?user=${user}`)
+            `${BASE_URL}/account/UserView?user=${user}`,
+            config
+            )
         dispatch({
             type: GET_TOTAL_USERS_SUCCESS,
             payload:data
@@ -154,19 +176,22 @@ export const get_user_list = (user) => async(dispatch) =>{
 }
 
 // DELETE USER  ACTION
-export const delete_user = (id) => async(dispatch) =>{
+export const delete_user = (id) => async(dispatch,getState) =>{
     try {
         dispatch({
             type: DELETE_USER_REQUEST,
         })
+        const {
+            user_login: { userInfo },
+        } = getState()
         const config = {
-            headers:{
-                'content-type':'application/json'
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
             }
         }
         await axios.delete(
             `${BASE_URL}/account/UserView/${id}/`,
-            
             config
         )
         dispatch({
@@ -184,38 +209,3 @@ export const delete_user = (id) => async(dispatch) =>{
     }
 }
 
-// GET ALL  USER SERCH ACTION
-export const get_user_search = (user) => async (dispatch)=>{
-    try {
-        dispatch({type:USER_SERACH_REQUEST})
-        const config = {
-            headers:{
-                'content-type':'application/json'
-            }
-        }
-        const {data} = await axios.post(`${BASE_URL}/account/UserView/search/ `,
-        {'user':user},
-        config
-        )
-      
-        dispatch({
-            type: USER_SERACH_SUCCESS,
-            payload: data
-        })
-        localStorage.setItem('users_search_results',JSON.stringify(data))
-
-    } catch (error) {
-        dispatch({
-            type:USER_SERACH_FAILED,
-            payload: error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message
-        })
-        
-    }
-}
-
-export const resetSearchResults = ()=>(dispatch) =>{
-    localStorage.removeItem('users_search_results')
-    dispatch({type:RESET_USER_SEARCH})
-}
