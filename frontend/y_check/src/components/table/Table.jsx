@@ -19,6 +19,8 @@ export default function BasicTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [search, setSearch] = useState("");
+
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
@@ -26,8 +28,8 @@ export default function BasicTable() {
   const { users_list } = user_list;
 
   useEffect(() => {
-  dispatch(get_user_list());
-  }, [dispatch]);
+  dispatch(get_user_list(search));
+  }, [dispatch,search]);
 
   const propertiesPerPage = 5; 
 
@@ -76,11 +78,23 @@ export default function BasicTable() {
     setSelectedRow(null);
     setDeleteModalOpen(false);
   };
+  const handleInputChange = event => {
+    setSearch(event.target.value);
+  };
   return (
     <div className='section-table'>
     <TableContainer component={Paper} 
     style={{boxShadow:'0px 4px 6px rgba(0, 0, 0, 0.1)'}}>
       {showSuccessMessage ? <span className='login-success'> User Deleted Successfully</span> : ''}
+      <div className="search-bar-patient">
+            <Icon path={mdiMagnify} size={1} className="search-icon" />
+            <input 
+            type="text" 
+            placeholder="Search for user..." 
+            className="search-input"
+            value={search}
+            onChange={handleInputChange} />
+      </div>
       <Table sx={{ minWidth: 650 }} aria-label="simple table" style={{marginLeft:'1rem'}}>
         <TableHead>
           <TableRow>
@@ -92,7 +106,7 @@ export default function BasicTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users_list.map((user) => (
+          {currentProperties.map((user) => (
             <TableRow
               key={user.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

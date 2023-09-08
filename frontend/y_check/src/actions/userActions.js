@@ -15,6 +15,10 @@ import {
     DELETE_USER_REQUEST,
     DELETE_USER_SUCCESS,
     DELETE_USER_FAILED,
+    USER_SERACH_REQUEST,
+    USER_SERACH_SUCCESS,
+    USER_SERACH_FAILED,
+    RESET_USER_SEARCH,
     USER_LOGOUT
 } from "../constants/UserConstants";
 import { BASE_URL } from '../constants/Host';
@@ -92,8 +96,6 @@ export const register = (
             type: USER_REGISTRATION_SUCCESS,
             payload:data
         })
-        localStorage.setItem('userInfo',JSON.stringify(data))
-
     } catch (error) {
         dispatch({
             type: USER_REGISTRATION_FAILED,
@@ -128,14 +130,14 @@ export const get_total_users = () => async(dispatch) =>{
     }
 }
 // GET ALL USER LIST ACTION
-export const get_user_list = () => async(dispatch) =>{
+export const get_user_list = (user) => async(dispatch) =>{
     try {
         dispatch({
             type: GET_TOTAL_USERS_REQUEST,
         })
         
         const {data} = await axios.get(
-            `${BASE_URL}/account/UserView/`)
+            `${BASE_URL}/account/UserView?user=${user}`)
         dispatch({
             type: GET_TOTAL_USERS_SUCCESS,
             payload:data
@@ -180,4 +182,40 @@ export const delete_user = (id) => async(dispatch) =>{
             : error.message
         })
     }
+}
+
+// GET ALL  USER SERCH ACTION
+export const get_user_search = (user) => async (dispatch)=>{
+    try {
+        dispatch({type:USER_SERACH_REQUEST})
+        const config = {
+            headers:{
+                'content-type':'application/json'
+            }
+        }
+        const {data} = await axios.post(`${BASE_URL}/account/UserView/search/ `,
+        {'user':user},
+        config
+        )
+      
+        dispatch({
+            type: USER_SERACH_SUCCESS,
+            payload: data
+        })
+        localStorage.setItem('users_search_results',JSON.stringify(data))
+
+    } catch (error) {
+        dispatch({
+            type:USER_SERACH_FAILED,
+            payload: error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        })
+        
+    }
+}
+
+export const resetSearchResults = ()=>(dispatch) =>{
+    localStorage.removeItem('users_search_results')
+    dispatch({type:RESET_USER_SEARCH})
 }
