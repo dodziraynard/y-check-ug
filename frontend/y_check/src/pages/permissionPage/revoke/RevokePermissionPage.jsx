@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import Nav from '../../components/nav/Nav'
-import Sidebar from '../../components/sidebar/Sidebar'
+import Sidebar from '../../../components/sidebar/Sidebar';
+import Nav from '../../../components/nav/Nav';
+
 import Index from './Index'
 
-const PermissionPage = () => {
+const RevokePermissionPage = () => {
   const [active, setActive] = useState(3);
 
   const handleMenuItemClick = (index) => {
@@ -20,4 +21,4 @@ const PermissionPage = () => {
   )
 }
 
-export default PermissionPage
+export default RevokePermissionPage

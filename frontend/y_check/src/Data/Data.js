@@ -1,8 +1,9 @@
 import { mdiViewDashboardOutline,
     mdiAccountMultiplePlus,
     mdiCalendarAlertOutline,
-    mdiAccountCog } from '@mdi/js';
-    
+    mdiAccountCog,
+    mdiShieldAccount } from '@mdi/js';
+
 export const SidebarData = [
     {
         icon: mdiViewDashboardOutline,
@@ -19,8 +20,8 @@ export const SidebarData = [
         heading:'Appointment'
     },
     {
-        icon: mdiAccountCog,
-        heading:'User Setting',
+        icon: mdiShieldAccount,
+        heading:'Permissions',
         url:'/permission-page'
     },
     {

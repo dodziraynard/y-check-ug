@@ -7,10 +7,10 @@ const Label = () => {
             <div className="filter">
                 <div className="filter-items">
                     <div className="filter-item">
-                      <Link to='/permission-page' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>give Question</span></Link>  
+                      <Link to='/permission-page' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Assign Permission</span></Link>  
                     </div>
                     <div className="filter-item">
-                       <Link to='' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Add Option</span></Link> 
+                       <Link to='/revoke-page' style={{textDecoration:"none", color:"#173D70"}}><span style={{cursor:"pointer"}}>Revoke Permission</span></Link> 
                     </div>
                    
                 </div>

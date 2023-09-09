@@ -7,7 +7,13 @@ import {
     GET_USERS_FOR_PERMISSION_LIST_FAILED,
     ASSIGN_PERMISSION_REQUEST,
     ASSIGN_PERMISSION_SUCCESS,
-    ASSIGN_PERMISSION_FAILED
+    ASSIGN_PERMISSION_FAILED,
+    GET_USER_PERMISSION_REQUEST,
+    GET_USER_PERMISSION_SUCCESS,
+    GET_USER_PERMISSION_FAILED,
+    REVOKE_PERMISSION_REQUEST,
+    REVOKE_PERMISSION_SUCCESS,
+    REVOKE_PERMISSION_FAILED
  } from "../constants/PermissionConstant";
 
 
@@ -55,6 +61,43 @@ export const assign_permission_reducer = (state = {} ,action)=>{
             return {loading:false, permisson:action.payload}
 
         case ASSIGN_PERMISSION_FAILED:
+            return {loading:false, error:action.payload}
+
+
+        default:
+            return state
+    }
+}
+
+// GET ALL THE PERMISSIONS A USER HAS REDUCER
+export const user_permission_list_reducer = (state = {user_perms:[]},action)=>{
+    switch(action.type){
+        case GET_USER_PERMISSION_REQUEST:
+            return{...state,loading:true,user_perms:[]}
+
+        case GET_USER_PERMISSION_SUCCESS:
+            return {...state,loading:false,user_perms:action.payload}
+
+        case GET_USER_PERMISSION_FAILED:
+            return {...state,loading:false,error:action.payload}
+
+        default:
+            return state
+    }
+}
+
+
+
+// REVOKE PERMISSION  REDUCER
+export const revoke_permission_reducer = (state = {} ,action)=>{
+    switch(action.type){
+        case REVOKE_PERMISSION_REQUEST:
+            return{loading:true}
+
+        case REVOKE_PERMISSION_SUCCESS:
+            return {loading:false, permisson:action.payload}
+
+        case REVOKE_PERMISSION_FAILED:
             return {loading:false, error:action.payload}
 
 

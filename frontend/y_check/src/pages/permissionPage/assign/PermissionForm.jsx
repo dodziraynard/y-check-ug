@@ -2,10 +2,10 @@ import React, {useState,useEffect} from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { 
-    get_permissions_list,
-    get_users_for_permissions_list,
-    add_permission
-} from '../../actions/PermissionAction';
+  get_permissions_list,
+  get_users_for_permissions_list,
+  add_permission
+} from '../../../actions/PermissionAction';
 
 const PermissionForm = () => {
 
@@ -29,7 +29,6 @@ const PermissionForm = () => {
   // GET ALL PERMISSIONS
   const assign_permission = useSelector(state => state.assign_permission);
   const { error, permisson } = assign_permission;
-  console.log(permisson)
 
   useEffect(() => {
     dispatch(get_users_for_permissions_list());
@@ -46,27 +45,45 @@ const PermissionForm = () => {
 
   // HANDLE PERMISSIONS SELECT
   const handlePermissionsSelect = (event) => {
-    const selectedPermissionValues = Array.from(
-      event.target.selectedOptions,
-      (option) => option.value
-    );
-    setSelectedPermissions(selectedPermissionValues);
+    const selectedPermission = event.target.value;
+
+    if (selectedPermissions.includes(selectedPermission)) {
+      // Permission is already selected, so remove it
+      setSelectedPermissions(selectedPermissions.filter((perm) => perm !== selectedPermission));
+    } else {
+      // Permission is not selected, so add it
+      setSelectedPermissions([...selectedPermissions, selectedPermission]);
+    }
   };
 
   // HANDLE FORM SUBMISSION
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Selected Permissions:', selectedPermissions);
-    console.log('Selected User:', user.user_id);
     dispatch(add_permission(user.user_id,selectedPermissions))
+    setSelectedPermissions([])
+    setUser({
+        user_id:""
+    })
   };
+  
+  useEffect(() => {
+    if (permisson) {
+        setShowSuccessMessage(true);
+        
+        const timer = setTimeout(() => {
+            setShowSuccessMessage(false); // Hide the success message after 20 seconds
+        }, 1000); 
+        window.location.reload()
+        return () => clearTimeout(timer);
+    }
+  }, [permisson, navigate]);
   
 
   return (
     <div>
         <div className='basic_form home-question-form'>
             {error? <span className='login-error'>{error}</span>:''}
-            {showSuccessMessage ? <span className='login-success'> Options Added Successfully</span> : ''}
+            {showSuccessMessage ? <span className='login-success'> Permissions assigned successfully</span> : ''}
             <h1>Add Permission Form </h1>
             <form className='form-input'onSubmit={handleSubmit} >
                 <label style={{marginTop:"10px"}} htmlFor=""> Select User</label>
@@ -82,21 +99,23 @@ const PermissionForm = () => {
                     </option>
                     ))}
                 </select>
-                <div style={{marginTop:"10px"}} >
+                <div style={{marginTop:"20px", cursor:"pointer"}} >
                     <label >Select Permissions:</label>
-                    <select multiple
-                    onChange={handlePermissionsSelect} 
-                    value={selectedPermissions} 
-                    >
                     {permissions_results.map((permission, index) => (
-                    <option key={index} value={permission.codename}>
-                        {permission.name}
-                    </option>
+                    <div key={index}>
+                        <input
+                        type='checkbox'
+                        id={permission.codename}
+                        name={permission.codename}
+                        value={permission.codename}
+                        onChange={handlePermissionsSelect}
+                        />
+                        <label htmlFor={permission.codename}>{permission.name}</label>
+                    </div>
                     ))}
-                    </select>
                 </div>
             
-                <button>Add Option</button>
+                <button>Assign Permission(s)</button>
 
             </form>
         </div>

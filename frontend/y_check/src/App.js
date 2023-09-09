@@ -21,7 +21,8 @@ import AddQuestion from './pages/AddQuestion/AddQuestion';
 import RecordPage from './pages/recordPage/RecordPage';
 import AddOption from './pages/addOption/AddOption';
 import { useSelector} from 'react-redux'
-import PermissionPage from './pages/permissionPage/PermissionPage';
+import PermissionPage from './pages/permissionPage/assign/PermissionPage';
+import RevokePermissionPage from './pages/permissionPage/revoke/RevokePermissionPage';
 function App() {
 
   const user_login = useSelector(state => state.user_login);
@@ -51,6 +52,7 @@ function App() {
         <Route path='/add_question'element={<AddQuestion/>}/>
         <Route path='/add_option'element={<AddOption/>}/>
         <Route path='/permission-page'element={<PermissionPage/>}/>
+        <Route path='/revoke-page'element={<RevokePermissionPage/>}/>
         <Route path='/adolescent-record/:id/'element={<RecordPage/>}/>
       </Routes>
   </Router>

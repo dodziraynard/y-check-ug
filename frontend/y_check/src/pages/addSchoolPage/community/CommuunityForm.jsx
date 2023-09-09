@@ -34,9 +34,9 @@ const CommunityForm = () => {
           
           const timer = setTimeout(() => {
               setShowSuccessMessage(false); // Hide the success message after 20 seconds
-              navigate('/add_community');
           }, 1000); 
-  
+          window.location.reload()
+
           return () => clearTimeout(timer);
       }
     }, [community_name, navigate]);
