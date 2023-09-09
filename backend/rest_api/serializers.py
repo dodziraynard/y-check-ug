@@ -52,37 +52,6 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 
-class LimitedUserSerializer(serializers.ModelSerializer):
-    photo_url = serializers.SerializerMethodField()
-    short_name = serializers.SerializerMethodField()
-    lead_username = serializers.SerializerMethodField()
-
-    def get_lead_username(self, user):
-        return user.lead.username if user.lead else ""
-
-    def get_photo_url(self, obj):
-        request = self.context.get("request")
-        if obj.photo and request:
-            return request.build_absolute_uri(obj.photo.url)
-        return "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-
-    def get_short_name(self, obj):
-        return obj.username.split("@")[0]
-
-    class Meta:
-        model = User
-        exclude = [
-            "password",
-            "is_staff",
-            "is_superuser",
-            "wallet",
-            "groups",
-            "user_permissions",
-            "created_at",
-            "updated_at",
-        ]
-
-
 class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -90,9 +59,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "username",
-            "locale",
             "phone",
             "surname",
+            "security_answer_1",
+            "security_answer_2",
             "other_names",
             "password",
         ]

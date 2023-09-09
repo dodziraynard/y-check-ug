@@ -27,6 +27,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     changed_password = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
+    security_answer_1 = models.CharField(max_length=100, null=True, blank=True)
+    security_answer_2 = models.CharField(max_length=100, null=True, blank=True)
+
     created_by = models.ForeignKey(
         "User", related_name="created_users", on_delete=models.SET_NULL, null=True, blank=True)
     updated_by = models.ForeignKey(
