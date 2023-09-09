@@ -93,7 +93,7 @@ class GetSecurityQuestionView(APIView):
         try:
             question = SecurityQuestion.objects.get(pk=pk)
         except SecurityQuestion.DoesNotExist:
-            return Response({'error': 'Security question not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Security question not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = SecurityQuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -106,7 +106,13 @@ class GetAllSecurityQuestionsView(APIView):
         questions = SecurityQuestion.objects.all()
         serializer = SecurityQuestionSerializer(questions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+        if serializer.errors:
+             error_response = {
+                "message": serializer.errors  
+            }
+        return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
 
+           
 class PasswordResetView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -273,11 +279,21 @@ class CommunityDeleteView(APIView):
     
 class AddAdolescentView(APIView):
     permission_classes = [AllowAny]
-        
-    def get(self, request, format=None):
-        adolescents = Adolescent.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        adolescent_query = request.query_params.get("adolescent")
+        if adolescent_query:
+            adolescents = Adolescent.objects.filter(
+                Q(pid__icontains=adolescent_query) | 
+                Q(surname__icontains=adolescent_query) | 
+                Q(other_names__icontains=adolescent_query)
+            )
+        else:
+            adolescents = Adolescent.objects.all()
+
         serializer = AdolescentSerializer(adolescents, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         data = request.data
@@ -382,11 +398,10 @@ class ResponsesView(APIView):
         return Response(serializer.data)
  
 class save_options(APIView):
-    permission_classes = [AllowAny]
-        
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request, format=None):
         data = request.data
-        print(data)
         serializer = OptionSerializer(data=data, many=True)
         if serializer.is_valid():
             serializer.save()
@@ -413,7 +428,8 @@ class OptionsView(APIView):
         return Response(serializer.data)
  
 class getAllAdolescent(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         data = request.data
         adolescents = Adolescent.objects.all()
@@ -422,7 +438,8 @@ class getAllAdolescent(APIView):
         return Response({"total_adolescent": total_count})
  
 class getAllUsers(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         data = request.data
         users = User.objects.all()
@@ -432,7 +449,8 @@ class getAllUsers(APIView):
 
 
 class getAdolescentType(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         #PRIMARY
         primary = Adolescent.objects.filter(adolescent_type="PR")
@@ -454,13 +472,57 @@ class getAdolescentType(APIView):
         
 
 class UserView(APIView):
-    #authentication_classes = [TokenAuthentication]
-    #permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserOutputSerializer(users,many=True)
+        user_query = request.query_params.get("user")
+        if user_query:
+            # If the 'user' query parameter is provided, perform a search
+            users = User.objects.filter(
+                Q(username__icontains=user_query) | 
+                Q(first_name__icontains=user_query) | 
+                Q(last_name__icontains=user_query)
+            )
+        else:
+            # If 'user' query parameter is not provided, retrieve all users
+            users = User.objects.all()
+
+        serializer = UserOutputSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-   
+class UserDeleteView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+        
+        
+    def get(self, request, pk, format=None):
+        user = self.get_object(pk)
+        serializer = UserOutputSerializer(user)
+        return Response(serializer.data)
+        
+    def delete(self, request, pk, format=None):
+        user = self.get_object(pk)
+        user.delete()
+        return Response({"message":"User Deleted successfully"},status=status.HTTP_204_NO_CONTENT)
+    
+    
+class SearchUserView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        query = data['user']
+        user = User.objects.filter(Q(username=query) | Q(first_name__icontains=query)| Q(last_name__icontains=query))
+        
+        if not user.exists():
+            return Response({"message": "No matching records found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = UserOutputSerializer(user, many=True)
+        return Response(serializer.data)
