@@ -20,7 +20,8 @@ export const SidebarData = [
     },
     {
         icon: mdiAccountCog,
-        heading:'User Setting'
+        heading:'User Setting',
+        url:'/permission-page'
     },
     {
         icon: mdiAccountCog,
