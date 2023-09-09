@@ -31,4 +31,10 @@ urlpatterns = [
     path('getAllAdolescent/', views.getAllAdolescent.as_view(), ),
     path('getAllUsers/', views.getAllUsers.as_view(), ),
     path('getAdolescentType/', views.getAdolescentType.as_view(), ),
+    path('permissions/', views.PermissionList.as_view(), name='permission-list'),
+    path('user-for-permissions/', views.GetUsersForPermission.as_view(), name='permission-list'),
+    path('assign-permissions/', views.AssignPermissions.as_view(), name='permission-list'),
+    path('assign/<int:user_id>/permissions/', views.UserPermissionsView.as_view()),
+    path('revoke-permissions/', views.RevokePermissions.as_view()),
+
 ]

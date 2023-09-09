@@ -16,6 +16,9 @@ from rest_framework.permissions import AllowAny
 from django.db.models import Q
 from django.http import QueryDict
 from rest_framework.exceptions import ValidationError
+from setup.models import SetupPerm  
+from .permissions import *
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -526,3 +529,81 @@ class SearchUserView(APIView):
         
         serializer = UserOutputSerializer(user, many=True)
         return Response(serializer.data)
+    
+class PermissionList(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated,CanManageSetupPermission]
+    def get(self, request, format=None):
+        permissions = SetupPerm._meta.permissions
+        permission_data = [{'codename': codename, 'name': name} for codename, name in permissions]
+        serializer = PermissionSerializer(permission_data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+class GetUsersForPermission(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated,CanManageSetupPermission]
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserOutputSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+class AssignPermissions(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated,CanManageSetupPermission]
+    def post(self, request, format=None):
+        user_id = request.data.get('user_id')
+        permissions = request.data.get('permissions', [])
+
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        for permission_codename in permissions:
+            try:
+                permission = Permission.objects.get(codename=permission_codename)
+                user.user_permissions.add(permission)
+            except Permission.DoesNotExist:
+                return Response({"message": f"Permission '{permission_codename}' not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({"message": "Permissions assigned successfully"}, status=status.HTTP_200_OK)
+
+class UserPermissionsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated,CanManageSetupPermission]
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        user_permissions = user.user_permissions.all()
+        serialized_permissions = [{'codename': p.codename, 'name': p.name} for p in user_permissions]
+
+        return Response(serialized_permissions, status=status.HTTP_200_OK)
+    
+    
+class RevokePermissions(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, CanManageSetupPermission]
+
+    def post(self, request, format=None):
+        user_id = request.data.get('user_id')
+        permissions = request.data.get('permissions', [])
+
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        for permission_codename in permissions:
+            try:
+                permission = Permission.objects.get(codename=permission_codename)
+                user.user_permissions.remove(permission)  
+            except Permission.DoesNotExist:
+                return Response({"message": f"Permission '{permission_codename}' not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({"message": "Permissions revoked successfully"}, status=status.HTTP_200_OK)

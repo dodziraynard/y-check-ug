@@ -112,4 +112,7 @@ class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
         fields = '__all__'
-  
+        
+class PermissionSerializer(serializers.Serializer):
+    codename = serializers.CharField()
+    name = serializers.CharField()

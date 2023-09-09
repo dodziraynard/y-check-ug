@@ -13,8 +13,6 @@ class SetupPerm(models.Model):
             ('view_main_dashboard', 'Can view main dashboard'),
             ('view_dashboard', 'Can view dashboard'),
             ('view_system_configuration', 'Can view system configuration'),
-            ("manage_tasks", "Can manage tasks"),
-            ("manage_other_report", "Can manage other reports"),
             ("manage_roles", "Can manage roles"),
 
 
@@ -32,12 +30,6 @@ class SetupPerm(models.Model):
             ("delete_patient", "Can delete patient records"),
             
 
-            # Appointment Management
-            ("schedule_appointment", "Can schedule new appointments"),
-            ("view_appointment", "Can view appointments"),
-            ("reschedule_appointment", "Can reschedule appointments"),
-            ("cancel_appointment", "Can cancel appointments"),
-
 
             # Medical Records Management
             ("add_medical_record", "Can add new medical records"),
@@ -48,21 +40,5 @@ class SetupPerm(models.Model):
 
             # Recommended Actions
             ("recommend_adolescent", "Can recommend adolescent"),
-
-
-            # Report Management
-            ("view_reports", "Can view various system reports"),
-            ("generate_reports", "Can generate specific reports"),
-
-
-            # System Configuration
-            ("access_system_config", "Can access system configurations"),
-            ("edit_system_config", "Can edit and update system configurations"),
-
-
-
-
-
-
 
         ]
