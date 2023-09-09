@@ -39,6 +39,11 @@ import {
     adoloscent_response_list_reducer
 } from '../reducers/AdolescentResponseReducer'
 import { add_option_reducer,question_options_list_reducer } from '../reducers/AddOptionReducer'
+import { 
+    permission_list_reducer,
+    user_for_permission_list_reducer,
+    assign_permission_reducer,
+ } from '../reducers/PermissionReducer'
 // COMBINE REDUCERS START
 const reducer = combineReducers({
     // USER REDUCER
@@ -76,6 +81,9 @@ const reducer = combineReducers({
     // OPTION REDUCER
     add_option:add_option_reducer,
     question_options_list:question_options_list_reducer,
+    permission_list:permission_list_reducer,
+    user_for_permission_list:user_for_permission_list_reducer,
+    assign_permission:assign_permission_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?
