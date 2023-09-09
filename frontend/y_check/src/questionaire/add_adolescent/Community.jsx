@@ -33,6 +33,7 @@ const Community = ({ adolescentFormData, handleInputChange,communities }) => {
             value={adolescentFormData.community}
             onChange={handleInputChange}
             required>
+                <option value=""> None</option>
                 {communities.map((community) => (
                 <option key={community.id} value={community.community_name}>
                     {community.community_name}

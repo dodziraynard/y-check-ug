@@ -33,7 +33,7 @@ const WelcomePage = () => {
         setActiveIndex((activeIndex + 1) % carouselData.length);
     };
     useEffect(() => {
-        const interval = setInterval(changeSlide, 6000); // Change slide every 1 minute
+        const interval = setInterval(changeSlide, 2000); // Change slide every 1 minute
         return () => clearInterval(interval);
     }, [activeIndex]);
     return (

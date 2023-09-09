@@ -10,14 +10,18 @@ import axios from "axios";
 import { BASE_URL } from "../constants/Host";
 
 // ADD QUESTION OPTION ACTION
-export const add_question_option = (options) => async(dispatch) =>{
+export const add_question_option = (options,getState) => async(dispatch) =>{
     try {
         dispatch({
             type: ADD_OPTIONS_REQUEST,
         })
+        const {
+            user_login: { userInfo },
+        } = getState()
         const config = {
-            headers:{
-                'content-type':'application/json'
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Token ${userInfo.token}`
             }
         }
         const {data} = await axios.post(

@@ -5,6 +5,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 const Section_1_Search = () => {
     const [search, setSearch] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const dispatch = useDispatch()
     // GET THE ALL  SCHOOLS
@@ -22,6 +23,18 @@ const Section_1_Search = () => {
 // Clear input fields after form submission
         setSearch("");
     }
+
+    useEffect(() => {
+        if (error) {
+            setShowSuccessMessage(true);
+            
+            const timer = setTimeout(() => {
+                setShowSuccessMessage(false); // Hide the success message after 20 seconds
+            }, 1000); 
+    
+            return () => clearTimeout(timer);
+        } 
+      }, [error]);
     return (
         <div className='home'>
             <div className="questionaire-first-circle">
@@ -39,7 +52,7 @@ const Section_1_Search = () => {
                     <button  className='search-button' style={{ cursor: 'pointer' }} type='submit' >Search</button>
                 </form>
                 <ul className="search-results">
-                {error? <span className='login-error'> No matching records found</span>:''}
+                {showSuccessMessage? <span className='login-error'>{error}</span>:''}
                     {adolescent_search_results.map(result => (
                         <li key={result.id} className="search-result-item">
                         <span className="name">{result.surname}, {result.other_names}</span>

@@ -11,7 +11,14 @@ import {
     GET_TOTAL_USERS_REQUEST,
     GET_TOTAL_USERS_SUCCESS,
     GET_TOTAL_USERS_FAILED,
+    DELETE_USER_REQUEST,
+    DELETE_USER_SUCCESS,
+    DELETE_USER_FAILED,
+    USER_SERACH_REQUEST,
+    USER_SERACH_SUCCESS,
+    USER_SERACH_FAILED,
     USER_LOGOUT,
+    RESET_USER_SEARCH,
  } from "../constants/UserConstants";
 
  // USER LOGIN REDUCER
@@ -71,7 +78,7 @@ export const get_all_users_reducer = (state = {} ,action)=>{
     }
 }
 
-// ADOLESCENT  LIST   REDUCER
+// USERS  LIST   REDUCER
 export const user_list_reducer = (state = {users_list:[]},action)=>{
     switch(action.type){
         case GET_TOTAL_USERS_REQUEST:
@@ -82,6 +89,45 @@ export const user_list_reducer = (state = {users_list:[]},action)=>{
 
         case GET_TOTAL_USERS_FAILED:
             return {...state,loading:false,error:action.payload}
+
+        case DELETE_USER_SUCCESS:
+            return {
+                ...state,
+                users_list: state.users_list.filter(user => user.id !== action.payload),
+            };
+        default:
+            return state
+    }
+}
+
+// DELETE  USER   REDUCER
+export const user_delete_reducer = (state = {} ,action)=>{
+    switch(action.type){
+        case DELETE_USER_REQUEST:
+            return{loading:true}
+
+        case  DELETE_USER_FAILED:
+            return {loading:false, error:action.payload}
+
+        default:
+            return state
+    }
+}
+
+// USER  SEARCH LIST   REDUCER
+export const user_search_list_reducer = (state = {users_search_results:[]},action)=>{
+    switch(action.type){
+        case USER_SERACH_REQUEST:
+            return{...state,loading:true,users_search_results:[]}
+
+        case USER_SERACH_SUCCESS:
+            return {...state,loading:false,users_search_results:action.payload}
+
+        case USER_SERACH_FAILED:
+            return {...state,loading:false,error:action.payload}
+
+        case RESET_USER_SEARCH: // Handle the reset action
+        return { ...state, users_search_results: [] };
 
         default:
             return state

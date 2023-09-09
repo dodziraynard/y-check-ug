@@ -45,11 +45,142 @@
     margin-top: 2rem;
     cursor: pointer;
 }
+@media screen  and (min-width:200px) and (max-width:1180px){
+
+    .basic_form{
+        width: 65%;
+    }
+    .basic_table{
+        width: 75%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:1050px){
+
+    .basic_form{
+        width: 50%;
+    }
+    .basic_table{
+        width: 60%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:1050px){
+
+    .basic_form{
+        width: 38%;
+    }
+    .basic_table{
+        width: 48%;
+    }
+}
 @media screen  and (min-width:200px) and (max-width:850px){
   
     .add_school_main{
       grid-template-columns:auto;
   
     }
-    
+    .basic_form{
+        margin-left: 15rem;
+        width: 55%;
+    }
+    .basic_table{
+        width: 62%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:780px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 15rem;
+        width: 45%;
+    }
+    .basic_table{
+        width: 52%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:690px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 15rem;
+        width: 38%;
+    }
+    .basic_table{
+        width: 45%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:622px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 2rem;
+        width: 72%;
+    }
+    .basic_table{
+        width: 80%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:570px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 2rem;
+        width: 60%;
+    }
+    .basic_table{
+        width: 69%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:490px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 2rem;
+        width: 50%;
+    }
+    .basic_table{
+        width: 59%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:420px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 2rem;
+        width: 40%;
+    }
+    .basic_table{
+        width: 49%;
+    }
+}
+@media screen  and (min-width:200px) and (max-width:360px){
+  
+    .add_school_main{
+      grid-template-columns:auto;
+  
+    }
+    .basic_form{
+        margin-left: 2rem;
+        width: 32%;
+    }
+    .basic_table{
+        width: 41%;
+    }
 }

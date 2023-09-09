@@ -3,7 +3,7 @@ import Home from './components/home/Home';
 import LoginPage from './pages/loginPage/LoginPage';
 import Register from './pages/registrationPage/Register'
 import LandingPage from './questionaire/landingPage/LandingPage';
-import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes,Route, Navigate} from 'react-router-dom';
 import AddAdolescent from './questionaire/add_adolescent/AddAdolescent';
 import Questionaire from './questionaire/home_questions/Questionaire';
 import PatientDetailPage from './pages/PatientDetailPage/PatientDetailPage';
@@ -20,7 +20,12 @@ import WelcomePage from './pages/welcomePage/WelcomePage';
 import AddQuestion from './pages/AddQuestion/AddQuestion';
 import RecordPage from './pages/recordPage/RecordPage';
 import AddOption from './pages/addOption/AddOption';
+import { useSelector} from 'react-redux'
 function App() {
+
+  const user_login = useSelector(state => state.user_login);
+  const { userInfo } = user_login;
+
   return(
     <Router>
       <Routes>
@@ -31,7 +36,8 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/questionaire' element={<Questionaire/>}/>
         <Route path='/patient_detail/:id/' element={<PatientDetailPage/>}/>
-        <Route path='/dashboard'element={<Dashboard/>}/>
+        <Route path='/dashboard'
+        element={userInfo && userInfo.is_superuser ? <Dashboard/> : <Navigate to="/" />}/>
         <Route path='/patients' element={<PatientPage/>}/>
         <Route path='/add_school' element={<AddSchool/>}/>
         <Route path='/add_shs'element={<AddShS/>}/>

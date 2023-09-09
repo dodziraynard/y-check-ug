@@ -26,21 +26,37 @@
  }
 @media screen  and (min-width:280px) and (max-width:930px){
     .section{
-     width: 65%;
+     width: 78%;
     } 
      
- }
+}
+
+@media screen  and (min-width:280px) and (max-width:830px){
+    .section{
+        width: 68%;
+    } 
+}
 @media screen  and (min-width:280px) and (max-width:730px){
     .section{
-     width: 90%;
+     width: 56%;
     } 
      
 }
 @media screen  and (min-width:280px) and (max-width:622px){
     .section{
-     width: 90%;
+     width: 68%;
     } 
      
+}
+@media screen  and (min-width:200px) and (max-width:412px){
+    
+    .section{
+        width: 82%;
+    } 
+    .chart-container{
+        margin-left: 0;
+
+    }
 }
 @media screen  and (min-width:200px) and (max-width:380px){
     

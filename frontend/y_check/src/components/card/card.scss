@@ -49,6 +49,7 @@ margin-right: 4rem;
     }
     .card{
         height: 65%;
+        width: 110%;
     }
     
 }
@@ -63,9 +64,15 @@ margin-right: 4rem;
     }
     .card{
         height: 65%;
-        width: 70%;
+        width: 90%;
     }
     
+}
+@media screen  and (min-width:280px) and (max-width:830px){
+    .card{
+        height: 65%;
+        width: 80%;
+    }
 }
 
 
@@ -79,7 +86,7 @@ margin-right: 4rem;
     }
     .card{
         height: 65%;
-        width: 100%;
+        width: 65%;
     }
     
 }
@@ -93,7 +100,7 @@ margin-right: 4rem;
     }
     .card{
         height: 65%;
-        width: 80%;
+        width: 70%;
     }
     
 }
@@ -107,7 +114,21 @@ margin-right: 4rem;
     }
     .card{
         height: 60%;
-        width: 60%;
+        width: 85%;
+    }
+    
+}
+@media screen  and (min-width:200px) and (max-width:412px){
+    section{
+        grid-template-columns: 1fr;
+    }
+    .move{
+        margin-top: 0rem;
+        height: 100%;
+    }
+    .card{
+        height: 60%;
+        width: 85%;
     }
     
 }

@@ -5,6 +5,8 @@ import { user_login_reducer,
     user_registrstion_reducer,
     get_all_users_reducer, 
     user_list_reducer,
+    user_delete_reducer,
+    user_search_list_reducer,
 } from '../reducers/AuthReducer'
 import { security_question_list_reducer } from '../reducers/SecurityQuestionReducer'
 import { 
@@ -44,6 +46,8 @@ const reducer = combineReducers({
     user_registration:user_registrstion_reducer,
     get_all_users:get_all_users_reducer,
     user_list:user_list_reducer,
+    user_delete:user_delete_reducer,
+    user_search_list:user_search_list_reducer,
     // SECURITY QUESTION REDUCER
     all_security_question:security_question_list_reducer,
     // SCHOOLS AND COMMUNITIES 
@@ -83,10 +87,14 @@ const adolescentInfoFromStorage = localStorage.getItem('adolescent')?
 const adolescent_search_resultsFromStorage = localStorage.getItem('adolescent_search_results')?
     JSON.parse(localStorage.getItem('adolescent_search_results')):[]
 
+const user_search_resultsFromStorage = localStorage.getItem('users_search_results')?
+    JSON.parse(localStorage.getItem('users_search_results')):[]
+
 const initailState = {
     user_login:{userInfo:userInfoFromStorage},
     get_adolescent:{adolescent:adolescentInfoFromStorage},
-    adoloscent_search_list:{adolescent_search_results:adolescent_search_resultsFromStorage}
+    adoloscent_search_list:{adolescent_search_results:adolescent_search_resultsFromStorage},
+    user_search_list:{users_search_results:user_search_resultsFromStorage},
 }
 
 const midlleWare = [thunk]
