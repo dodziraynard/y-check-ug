@@ -3,11 +3,11 @@ from django.db.utils import OperationalError
 
 
 
-class AccountConfig(AppConfig):
-    name = 'account'
+class AccountsConfig(AppConfig):
+    name = 'accounts'
 
     def ready(self):
-        import account.signals
+        import accounts.signals
         try:
             from .models import SecurityQuestion
             questions = [

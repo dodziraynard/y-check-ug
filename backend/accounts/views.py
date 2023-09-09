@@ -29,7 +29,7 @@ class LoginView(APIView):
             data = serializer.data
             data['token'] = token.key
             return Response(data, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_200_OK)
 
 
 class UserRegistrationView(APIView):

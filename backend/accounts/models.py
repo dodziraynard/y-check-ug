@@ -1,46 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import (
+    AbstractBaseUser, PermissionsMixin)
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.hashers import check_password
 from django.utils.crypto import get_random_string
 from django.utils import timezone
-
+from accounts.managers import UserManager
 
 
 import geocoder
 
 
-
-class UserManager(BaseUserManager):
-    def _create_user(self, username, password=None, **extra_fields):
-        if not username:
-            raise ValueError('The given ID must be set')
-        user = self.model(username=username, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_user(self, username, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(username, password, **extra_fields)
-
-    def create_superuser(self, username, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self._create_user(username, password, **extra_fields)
-
-
-
-
 class User(AbstractBaseUser, PermissionsMixin):
-
     username = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=50, null=True, blank=True)
-    last_name = models.CharField(max_length=50, null=True, blank=True)
+    surname = models.CharField(max_length=50, null=True, blank=True)
+    other_names = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
-    image = models.ImageField(upload_to='users', blank=True,null=True)
+    photo = models.ImageField(upload_to='users', blank=True, null=True)
 
     activated = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
@@ -51,6 +26,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     changed_password = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+
+    created_by = models.ForeignKey(
+        "User", related_name="created_users", on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(
+        "User", related_name="updated_users", on_delete=models.SET_NULL, null=True, blank=True)
 
     objects = UserManager()
 
@@ -70,61 +50,48 @@ class User(AbstractBaseUser, PermissionsMixin):
         return "/static/images/user-default.svg"
 
     def get_name(self):
-        if self.first_name and self.last_name:
-            return f"{self.first_name.title()} {self.last_name.title()}"
+        if self.surname and self.other_names:
+            return f"{self.surname.title()} {self.other_names.title()}"
         return self.username
 
 
-
-
-
 class Adolescent(models.Model):
-
-    PRIMARY = 'PR'
-    SECONDARY = 'SC'
-    COMMUNITY = 'CM'
-
     ADOLESCENT_TYPE_CHOICES = [
-        (PRIMARY, 'Primary'),
-        (SECONDARY, 'Secondary'),
-        (COMMUNITY, 'Community'),
+        ("PRIMARY", 'PRIMARY'),
+        ("SECONDARY", 'SECONDARY'),
+        ("COMMUNITY", 'COMMUNITY'),
     ]
-
-    MALE = 'ML'
-    FEMALE = 'FM'
-
     ADOLESCENT_SEX_TYPE = [
-        (MALE, 'Male'),
-        (FEMALE, 'Female'),
+        ("MALE", 'MALE'),
+        ("FEMALE", 'FEMALE'),
     ]
-
     pid = models.CharField(unique=True, blank=True, max_length=10)
     surname = models.CharField(max_length=50)
     other_names = models.CharField(max_length=50)
-    visit_type = models.CharField(max_length=50,blank=True, null=True)
-    year = models.CharField(max_length=50,blank=True, null=True)
-    consent = models.CharField(max_length=50,blank=True, null=True)
-    community = models.CharField(max_length=50,blank=True, null=True)
-    picture = models.ImageField(upload_to='images/',blank=True, null=True)
+    visit_type = models.CharField(max_length=50, blank=True, null=True)
+    year = models.CharField(max_length=50, blank=True, null=True)
+    consent = models.CharField(max_length=50, blank=True, null=True)
+    community = models.CharField(max_length=50, blank=True, null=True)
+    picture = models.ImageField(upload_to='images/', blank=True, null=True)
     dob = models.DateField(null=True, blank=True)
-    school = models.CharField(max_length=50,blank=True, null=True)
+    school = models.CharField(max_length=50, blank=True, null=True)
     check_up_location = models.CharField(max_length=50)
-    adolescent_type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
-    gender = models.CharField(max_length=50,blank=True, null=True)
-    resident_status = models.CharField(max_length=50,blank=True, null=True)
+    adolescent_type = models.CharField(
+        max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
+    gender = models.CharField(max_length=50, blank=True, null=True)
+    resident_status = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
-    age_confirmation = models.CharField(max_length=50,blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+    age_confirmation = models.CharField(max_length=50, blank=True, null=True)
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
     date = models.DateTimeField(auto_now_add=True)
-
-
-
 
     def save(self, *args, **kwargs):
         if not self.pid:
             prefix = self.adolescent_type
 
-            max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(max_pid=models.Max('pid'))['max_pid']
+            max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(
+                max_pid=models.Max('pid'))['max_pid']
             if max_pid:
                 next_pid_number = int(max_pid[2:]) + 1
             else:
@@ -134,11 +101,8 @@ class Adolescent(models.Model):
 
         super().save(*args, **kwargs)
 
-
     def __str__(self):
         return f'{self.surname} {self.other_names}'
-
-
 
 
 class SecurityQuestion(models.Model):
@@ -150,7 +114,8 @@ class SecurityQuestion(models.Model):
 
 class SecurityQuestionAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    security_question = models.ForeignKey(SecurityQuestion, on_delete=models.CASCADE)
+    security_question = models.ForeignKey(
+        SecurityQuestion, on_delete=models.CASCADE)
     answer = models.CharField(max_length=64)
 
     class Meta:
@@ -159,9 +124,6 @@ class SecurityQuestionAnswer(models.Model):
     def save(self, *args, **kwargs):
         self.answer = make_password(self.answer)
         super().save(*args, **kwargs)
-
-
-
 
 
 class PasswordResetToken(models.Model):
@@ -179,10 +141,6 @@ class PasswordResetToken(models.Model):
         return timezone.now() < expiration_date
 
 
-
-
-
-
 class ActivityLog(models.Model):
     username = models.CharField(max_length=100)
     action = models.TextField()
@@ -196,56 +154,62 @@ class ActivityLog(models.Model):
         return geocoder.ip(self.registration_ip).latlng
 
 
-
 # BASIC SCHOOL MODEL
 class BasicSchool(models.Model):
     school_name = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return self.school_name
-    
-# SENIOR HIGH MODEL  
+
+# SENIOR HIGH MODEL
+
+
 class SNRSchool(models.Model):
     school_name = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return self.school_name
-    
-# COMMUNITY MODEL   
+
+# COMMUNITY MODEL
+
+
 class Community(models.Model):
     community_name = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return self.community_name
-    
+
 
 QUESTION_CATEGORY = [
-    ('Home','Home'),
-    ('Education and employment','Education and employment'),
-    ('Eating','Eating'),
-    ('Activities and Peers','Activities and Peers'),
-    ('Drugs and alcohol','Drugs and alcohol'),
-    ('Sexuality','Sexuality'),
-    ('Emotions','Emotions'),
-    ('Safety/Security','Safety/Security'),
-    ('Oral Hygiene','Oral Hygiene'),
-    ('Physical health 1','Physical health 1'),
-    ('Physical health 2','Physical health 2'),
+    ('Home', 'Home'),
+    ('Education and employment', 'Education and employment'),
+    ('Eating', 'Eating'),
+    ('Activities and Peers', 'Activities and Peers'),
+    ('Drugs and alcohol', 'Drugs and alcohol'),
+    ('Sexuality', 'Sexuality'),
+    ('Emotions', 'Emotions'),
+    ('Safety/Security', 'Safety/Security'),
+    ('Oral Hygiene', 'Oral Hygiene'),
+    ('Physical health 1', 'Physical health 1'),
+    ('Physical health 2', 'Physical health 2'),
 ]
-    
+
 # HOME QUESTION MODEL
+
+
 class Question(models.Model):
-    cation = models.CharField(max_length=200,blank=True, null=True)
+    cation = models.CharField(max_length=200, blank=True, null=True)
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=100)
     category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
-    subtitle = models.CharField(max_length=100,blank=True, null=True)
-    picture = models.ImageField(upload_to='question_pictures/',blank=True, null=True)
-    
+    subtitle = models.CharField(max_length=100, blank=True, null=True)
+    picture = models.ImageField(
+        upload_to='question_pictures/', blank=True, null=True)
+
     def __str__(self):
         return self.title
 
-    
+
 class Option(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     option_id = models.CharField(max_length=255)
@@ -254,11 +218,12 @@ class Option(models.Model):
     def __str__(self):
         return self.question.title
 
+
 class UserResponse(models.Model):
-    adolescent= models.ForeignKey(Adolescent, on_delete=models.CASCADE)
+    adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    option_responses = models.ManyToManyField(Option, blank=True,null=True)
-    text_response = models.CharField(max_length=255,blank=True, null=True)
+    option_responses = models.ManyToManyField(Option, blank=True, null=True)
+    text_response = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Adolescent: {self.adolescent}, Question Title: {self.question}"

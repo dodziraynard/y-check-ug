@@ -41,26 +41,33 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'knox',
     'corsheaders',
-    'account.apps.AccountConfig',
+    'accounts.apps.AccountsConfig',
     'setup',
     'rest_framework.authtoken',
     'dashboard',
-
+    'rest_api.apps.RestApiConfig',
 ]
 
 
-AUTH_USER_MODEL = 'account.User'
-
-
+AUTH_USER_MODEL = 'accounts.User'
+REST_KNOX = {
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    'TOKEN_TTL': None,
+    'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+    'TOKEN_LIMIT_PER_USER': 1,
+    'AUTO_REFRESH': True,
+    'AUTH_HEADER_PREFIX': 'Token',
+}
 REST_FRAMEWORK = {
-
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_PERMISSION_CLASSES':
+    ('rest_framework.permissions.IsAuthenticatedOrReadOnly', ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'knox.auth.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ]
 }
 
 MIDDLEWARE = [
