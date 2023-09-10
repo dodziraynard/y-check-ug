@@ -24,6 +24,7 @@ import PermissionPage from './pages/permissionPage/assign/PermissionPage';
 import RevokePermissionPage from './pages/permissionPage/revoke/RevokePermissionPage';
 import ProtectedRoute from './ProtectedRoute';
 import Permissions from './permissions/Permissions';
+import Page401 from './pages/404Page/Page401';
 function App() {
 
 
@@ -55,6 +56,7 @@ function App() {
         <Route path='/add_option'element={<AddOption/>}/>
         <Route path='/permission-page'element={<PermissionPage/>}/>
         <Route path='/revoke-page'element={<RevokePermissionPage/>}/>
+        <Route path='/401-page'element={<Page401/>}/>
         <Route path='/adolescent-record/:id/'element={<RecordPage/>}/>
       </Routes>
   </Router>

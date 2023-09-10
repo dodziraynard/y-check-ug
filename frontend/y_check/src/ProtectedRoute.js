@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { get_user_permissions } from './actions/PermissionAction';
-import PatientPage from './pages/PatientPage/PatientPage';
+import Page401 from './pages/404Page/Page401';
 const ProtectedRoute = ({ children, permissions }) => {
   const user_login = useSelector((state) => state.user_login);
   const { userInfo } = user_login;
@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children, permissions }) => {
       return false;
     }
 
-    if (!permissions || permissions.length === 0 || user_permissions.length === 0) {
+    if (!permissions || user_permissions.length === 0) {
       // If permissions are not required, or user_permissions are not available, do not grant access
       return false;
     }
@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children, permissions }) => {
     );
   };
 
-  return hasPermissions() ? children : userInfo ? <PatientPage /> : <Navigate to="/login" />;
+  return hasPermissions() ? children : userInfo ? <Page401 /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
