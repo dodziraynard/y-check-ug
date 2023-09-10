@@ -27,8 +27,6 @@ export default function BasicTable() {
   const user_list = useSelector(state => state.user_list);
   const { users_list } = user_list;
 
-  console.log(users_list)
-
   useEffect(() => {
   dispatch(get_user_list(search));
   }, [dispatch,search]);

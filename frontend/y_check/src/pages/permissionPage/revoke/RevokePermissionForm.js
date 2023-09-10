@@ -34,7 +34,7 @@ const RevokePermissionForm = () => {
   // GET A USER PERMISSIONS
   const user_permission_list = useSelector(state => state.user_permission_list);
   const { user_perms } = user_permission_list;
-
+  
   useEffect(() => {
     dispatch(get_users_for_permissions_list());
     dispatch(get_permissions_list())

@@ -20,13 +20,12 @@ import WelcomePage from './pages/welcomePage/WelcomePage';
 import AddQuestion from './pages/AddQuestion/AddQuestion';
 import RecordPage from './pages/recordPage/RecordPage';
 import AddOption from './pages/addOption/AddOption';
-import { useSelector} from 'react-redux'
 import PermissionPage from './pages/permissionPage/assign/PermissionPage';
 import RevokePermissionPage from './pages/permissionPage/revoke/RevokePermissionPage';
+import ProtectedRoute from './ProtectedRoute';
+import Permissions from './permissions/Permissions';
 function App() {
 
-  const user_login = useSelector(state => state.user_login);
-  const { userInfo } = user_login;
 
   return(
     <Router>
@@ -38,8 +37,11 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/questionaire' element={<Questionaire/>}/>
         <Route path='/patient_detail/:id/' element={<PatientDetailPage/>}/>
-        <Route path='/dashboard'
-        element={userInfo && userInfo.is_superuser ? <Dashboard/> : <Navigate to="/" />}/>
+        <Route path='/dashboard' element={ 
+          <ProtectedRoute permissions={[Permissions.VIEW_DASHBOARD]}>
+            <Dashboard/> 
+          </ProtectedRoute>
+        }/>
         <Route path='/patients' element={<PatientPage/>}/>
         <Route path='/add_school' element={<AddSchool/>}/>
         <Route path='/add_shs'element={<AddShS/>}/>
