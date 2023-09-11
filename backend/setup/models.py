@@ -10,7 +10,6 @@ class SetupPerm(models.Model):
 
             ('manage_setup', 'Can manage setup'),
             ('manage_users', 'Can manage users'),
-            ('view_main_dashboard', 'Can view main dashboard'),
             ('view_dashboard', 'Can view dashboard'),
             ('view_system_configuration', 'Can view system configuration'),
             ("manage_roles", "Can manage roles"),

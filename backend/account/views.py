@@ -32,7 +32,7 @@ class LoginView(APIView):
             data = serializer.data
             data['token'] = token.key
             return Response(data, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class UserRegistrationView(APIView):
@@ -281,9 +281,8 @@ class CommunityDeleteView(APIView):
 
     
 class AddAdolescentView(APIView):
-    permission_classes = [AllowAny]
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,CanManageAdolescentPermission]
     def get(self, request):
         adolescent_query = request.query_params.get("adolescent")
         if adolescent_query:
@@ -313,7 +312,8 @@ class AddAdolescentView(APIView):
     
     
 class AdolescentDeleteView(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated,CanManageAdolescentPermission]
     def get_object(self, pk):
         try:
             return Adolescent.objects.get(pk=pk)
@@ -432,7 +432,7 @@ class OptionsView(APIView):
  
 class getAllAdolescent(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,CanManageDashboardPermission]
     def get(self, request, format=None):
         data = request.data
         adolescents = Adolescent.objects.all()
@@ -442,7 +442,7 @@ class getAllAdolescent(APIView):
  
 class getAllUsers(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,CanManageDashboardPermission]
     def get(self, request, format=None):
         data = request.data
         users = User.objects.all()
@@ -453,7 +453,7 @@ class getAllUsers(APIView):
 
 class getAdolescentType(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,CanManageDashboardPermission]
     def get(self, request, format=None):
         #PRIMARY
         primary = Adolescent.objects.filter(adolescent_type="PR")
@@ -476,7 +476,7 @@ class getAdolescentType(APIView):
 
 class UserView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,CanManageUsersPermission]
 
     def get(self, request):
         user_query = request.query_params.get("user")
@@ -496,7 +496,7 @@ class UserView(APIView):
 
 class UserDeleteView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,CanManageUsersPermission]
     
     def get_object(self, pk):
         try:
@@ -573,7 +573,7 @@ class AssignPermissions(APIView):
 
 class UserPermissionsView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated,CanManageSetupPermission]
+    permission_classes = [IsAuthenticated]
     def get(self, request, user_id):
         try:
             user = User.objects.get(pk=user_id)
