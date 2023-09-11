@@ -2,11 +2,12 @@ import logging
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
-from django.db.models import Q
 from django.utils.timezone import make_aware
 from rest_framework import serializers
 
 from accounts.models import User
+from accounts.models import Adolescent
+from dashboard.models.models import CheckupLocation
 
 
 logger = logging.getLogger("app")
@@ -86,3 +87,28 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
+
+
+class CheckupLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CheckupLocation
+        fields = "__all__"
+
+
+class AdolescentSerializer(serializers.ModelSerializer):
+    dob = serializers.SerializerMethodField()
+    photo_url = serializers.SerializerMethodField()
+
+    def get_dob(self, obj):
+        return obj.dob.timestamp() * 1000
+
+    def get_photo_url(self, obj):
+        request = self.context.get("request")
+        if obj.picture and request:
+            return request.build_absolute_uri(obj.picture.url)
+        return ""
+
+    class Meta:
+        model = Adolescent
+        fields = "__all__"

@@ -11,6 +11,7 @@ import geocoder
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    uuid = models.UUIDField(null=True, blank=True)
     username = models.CharField(max_length=30, unique=True)
     surname = models.CharField(max_length=50, null=True, blank=True)
     other_names = models.CharField(max_length=50, null=True, blank=True)
@@ -60,49 +61,44 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Adolescent(models.Model):
     ADOLESCENT_TYPE_CHOICES = [
-        ("PRIMARY", 'PRIMARY'),
-        ("SECONDARY", 'SECONDARY'),
-        ("COMMUNITY", 'COMMUNITY'),
+        ("primary", 'primary'),
+        ("secondary", 'secondary'),
+        ("community", 'community'),
     ]
     ADOLESCENT_SEX_TYPE = [
-        ("MALE", 'MALE'),
-        ("FEMALE", 'FEMALE'),
+        ("male", 'male'),
+        ("female", 'female'),
     ]
-    pid = models.CharField(unique=True, blank=True, max_length=10)
+    uuid = models.UUIDField(null=True, blank=True)
+    pid = models.CharField(unique=True, blank=True, null=True, max_length=10)
     surname = models.CharField(max_length=50)
     other_names = models.CharField(max_length=50)
     visit_type = models.CharField(max_length=50, blank=True, null=True)
-    year = models.CharField(max_length=50, blank=True, null=True)
     consent = models.CharField(max_length=50, blank=True, null=True)
-    community = models.CharField(max_length=50, blank=True, null=True)
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
-    dob = models.DateField(null=True, blank=True)
-    school = models.CharField(max_length=50, blank=True, null=True)
-    check_up_location = models.CharField(max_length=50)
-    adolescent_type = models.CharField(
-        max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
+    dob = models.DateTimeField(null=True, blank=True)
+    check_up_location = models.CharField(max_length=200)
+    type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
     gender = models.CharField(max_length=50, blank=True, null=True)
-    resident_status = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
-    age_confirmation = models.CharField(max_length=50, blank=True, null=True)
-    created_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
-    date = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if not self.pid:
-            prefix = self.adolescent_type
+    # def save(self, *args, **kwargs):
+    #     if not self.pid:
+    #         prefix = self.adolescent_type
 
-            max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(
-                max_pid=models.Max('pid'))['max_pid']
-            if max_pid:
-                next_pid_number = int(max_pid[2:]) + 1
-            else:
-                next_pid_number = 1
+    #         max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(
+    #             max_pid=models.Max('pid'))['max_pid']
+    #         if max_pid:
+    #             next_pid_number = int(max_pid[2:]) + 1
+    #         else:
+    #             next_pid_number = 1
 
-            self.pid = f'{prefix}{next_pid_number:05}'
+    #         self.pid = f'{prefix}{next_pid_number:05}'
 
-        super().save(*args, **kwargs)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.surname} {self.other_names}'
@@ -196,8 +192,6 @@ QUESTION_CATEGORY = [
     ('Physical health 1', 'Physical health 1'),
     ('Physical health 2', 'Physical health 2'),
 ]
-
-# HOME QUESTION MODEL
 
 
 class Question(models.Model):
