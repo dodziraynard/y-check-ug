@@ -52,7 +52,7 @@ const LoginPage = () => {
     }
 // FUNCTION REDIRECT THE USER
     useEffect(() => {
-        if (userInfo && userInfo.is_superuser)  {
+        if (userInfo)  {
             setShowSuccessMessage(true);
 // Delay the redirection to allow the user to see the message
             const timer = setTimeout(() => {

@@ -34,9 +34,8 @@ const SHSForm = () => {
             
             const timer = setTimeout(() => {
                 setShowSuccessMessage(false); // Hide the success message after 20 seconds
-                navigate('/add_shs');
             }, 1000); 
-    
+            window.location.reload()
             return () => clearTimeout(timer);
         }
     }, [school, navigate]);

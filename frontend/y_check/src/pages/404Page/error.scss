@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;500;600;700&display=swap');
+
+.unauthorized{
+    align-items:center;
+    justify-content: center;
+    height:95vh;
+    overflow:hidden;
+    width:100%;
+    font-family: "poppins", sans-serif;
+}
+.fof-images{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.fof-images .fof-image1{
+    width:475px;
+}
+.fof-image2{
+    width:175px;
+}
+h1{
+    position:relative;
+    font-size:1.5rem;
+    text-align: center;
+    font-weight:600;
+}
+p{
+    text-align: center;
+    color:#b3b3b3;
+}
+.home-btn{
+    margin-top:10px !important;
+    display:flex;
+    padding:15px 55px;
+    text-align: center;
+    cursor:pointer;
+    margin:auto;
+    border:none;
+    width:fit-content;
+    outline:none;
+    border-radius:10px;
+    color:#fff;
+    font-weight:500;
+    font-size:18px;
+    opacity:1;
+    background: linear-gradient(to top, #2c3fd1, #779cdc);
+    box-shadow: 0px 17px 33px -7px rgba(171, 198, 231, 0.64);
+}
+.home-btn:focus{
+    outline:none;
+    opacity:0.8;
+}
+i{
+    padding:3px;
+}
+.swing{
+    animation:swing ease-in-out 1s infinite alternate;
+    transform-origin: center -20px;
+    float:left;
+}
+.swing img{
+    display:block;
+}
+@keyframes swing{
+    0%{
+        transform:rotate(3deg);
+    }
+    100%{
+        transform:rotate(-3deg);
+    }
+}
+@media (orientation: landscape){
+    body{
+        grid-auto-flow: column;
+    }
+}
