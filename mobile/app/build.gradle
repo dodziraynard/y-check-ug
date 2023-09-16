@@ -1,0 +1,109 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+}
+
+android {
+    namespace 'com.hrd.ycheck'
+    compileSdk 34
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+    defaultConfig {
+        applicationId "com.hrd.ycheck"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        archivesBaseName = "ycheck-v$versionName"
+
+        resValue "string", "test_base_api_url", properties.getProperty("test.base.api.url", "https://0.0.0.0/api/")
+        resValue "string", "live_base_api_url", properties.getProperty("live.base.api.url", "https://0.0.0.0/api/")
+        resValue "string", "app_version", "v$versionName"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding = true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.1"
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Compose
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation "androidx.compose.ui:ui:1.5.1"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.5.1"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    debugImplementation "androidx.compose.ui:ui-tooling:1.5.1"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.1"
+    implementation 'androidx.compose.material:material:1.5.1'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.5.1"
+
+    // Room components
+    implementation "androidx.room:room-runtime:2.5.2"
+    implementation "androidx.room:room-ktx:2.5.2"
+    kapt "androidx.room:room-compiler:2.5.2"
+    androidTestImplementation "androidx.room:room-testing:2.5.2"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime:3.2.1"
+
+    //Circular image view
+    implementation 'com.mikhaellopez:circularimageview:4.3.1'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation "com.github.bumptech.glide:compose:1.0.0-alpha.5"
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    // Bug collection
+    implementation 'com.bugfender.sdk:android:3.+'
+}

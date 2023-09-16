@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_200">#ffd501</color>
+    <color name="color_500">#fea300</color>
+    <color name="color_700">#fc7600</color>
+
+    <color name="secondary_200">#00d400</color>
+    <color name="secondary_700">#009900</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="text_color">#dd1D1D1D</color>
+    <color name="color_success">#009900</color>
+    <color name="color_warning">#ff1100</color>
+    <color name="border_color">#dd1D1D1D</color>
+</resources>
