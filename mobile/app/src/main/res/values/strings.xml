@@ -78,4 +78,5 @@
     <string name="invalid_username">Invalid username</string>
     <string name="adolescent_not_found">Adolescent not found.</string>
     <string name="no_more_questions">There are no more questions available for this survey. \nThank you for your time.</string>
+    <string name="play_game_confirmation">Would you like to take a break by playing a game?</string>
 </resources>

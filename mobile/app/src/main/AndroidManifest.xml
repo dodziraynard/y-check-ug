@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.game.GameActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.adolescent_enrollment.SurveyFeedbackActivity"
             android:exported="false" />
         <activity

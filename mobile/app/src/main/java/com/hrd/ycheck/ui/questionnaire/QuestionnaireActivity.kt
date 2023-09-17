@@ -17,6 +17,7 @@ import com.hrd.ycheck.databinding.ActivityQuestionnaireBinding
 import com.hrd.ycheck.databinding.SectionInstructionBottomSheetLayoutBinding
 import com.hrd.ycheck.models.*
 import com.hrd.ycheck.ui.adolescent_enrollment.SurveyFeedbackActivity
+import com.hrd.ycheck.ui.game.GameActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 
 class QuestionnaireActivity : AppCompatActivity() {
@@ -89,14 +90,25 @@ class QuestionnaireActivity : AppCompatActivity() {
                 val totalSessions = response.totalSessions
 
                 if (section != null && question != null && adolescent != null) {
-                    renderNewSectionInstructionAndQuestion(
-                        adolescent!!,
-                        question,
-                        submittedResponse,
-                        currentSessionNumber,
-                        totalSessions,
-                        section
-                    )
+                    if (section.requiresGame) {
+                        confirmGamePlay(
+                            adolescent!!,
+                            question,
+                            submittedResponse,
+                            currentSessionNumber,
+                            totalSessions,
+                            section
+                        )
+                    } else {
+                        renderNewSectionInstructionAndQuestion(
+                            adolescent!!,
+                            question,
+                            submittedResponse,
+                            currentSessionNumber,
+                            totalSessions,
+                            section
+                        )
+                    }
                 } else if (question != null && adolescent != null) {
                     renderQuestion(
                         adolescent!!,
@@ -110,7 +122,36 @@ class QuestionnaireActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun confirmGamePlay(
+        adolescent: Adolescent,
+        question: Question,
+        submittedResponse: SubmittedAdolescentResponse?,
+        currentSessionNumber: Int,
+        totalSessions: Int,
+        section: Section
+    ) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Game Available")
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.no)) { _, _ ->
+                renderNewSectionInstructionAndQuestion(
+                    adolescent,
+                    question,
+                    submittedResponse,
+                    currentSessionNumber,
+                    totalSessions,
+                    section
+                )
+            }
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                val intent = Intent(this@QuestionnaireActivity, GameActivity::class.java)
+                intent.putExtra("adolescent", this.adolescent)
+                startActivity(intent)
+            }.setMessage(getString(R.string.play_game_confirmation))
+        dialog.create()
+        dialog.show()
     }
 
     private fun renderQuestion(

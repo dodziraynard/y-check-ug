@@ -30,6 +30,7 @@ class Section(models.Model):
         max_length=100, default="survey",
         choices=QUESTION_TYPE)
     number = models.IntegerField(unique=True)
+    requires_game = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.name
