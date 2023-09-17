@@ -41,18 +41,21 @@ class PreviousResponseRequirement(models.Model):
     min_integer_value = models.IntegerField(null=True, blank=True)
 
     # Can be used to establish 'skip' dependencies.
-    is_inverted = models.IntegerField(default=False)
+    is_inverted = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f"'{self.question.text}' must be '{self.response_is}'"
 
     def is_previous_response_condition_met(self, adolescent):
         response = AdolescentResponse.objects.filter(
             question=self.question, adolescent=adolescent).first()
-
+        
         if self.min_integer_value == None and self.response_is:
-            matched = self.response_is.lower() in list(
-                map(str, response.get_response_as_list()))
-        elif self.response_is.isdigit() and self.min_integer_value and all([str(res).isdigit() for res in response.get_response_as_list()]):
+            matched = self.response_is.lower() in response.get_values_as_list()
+            
+        elif self.response_is.isdigit() and self.min_integer_value:
             matched = all([int(self.min_integer_value) > int(res)
-                          for res in response.get_response_as_list()])
+                          for res in response.get_values_as_list(numeric=True)])
         return matched if not self.is_inverted else not matched
 
 
@@ -105,7 +108,7 @@ class Question(models.Model):
     def are_previous_response_conditions_met(self, adolescent):
         conditions_met = []
         for response in self.previous_response_requirements.all():
-            conditions_met.appen(
+            conditions_met.append(
                 response.is_previous_response_condition_met(adolescent))
         return all(conditions_met)
 
@@ -133,12 +136,12 @@ class AdolescentResponse(models.Model):
     def __str__(self) -> str:
         return str(self.question)
 
-    def get_response_as_list(self):
+    def get_values_as_list(self, numeric=False):
         responses = []
         if self.question.input_type in [ResponseInputType.NUMBER_FIELD.value,
                                         ResponseInputType.TEXT_FIELD.value,
                                         ResponseInputType.RANGER_SLIDER.value]:
-            if self.text.isdigit():
+            if numeric and self.text.isdigit():
                 responses.append(int(self.text))
             else:
                 responses.append(self.text.lower())
@@ -146,7 +149,10 @@ class AdolescentResponse(models.Model):
         elif self.question.input_type in [ResponseInputType.RADIO_BUTTON.value,
                                           ResponseInputType.CHECKBOXES.value]:
             for option in self.chosen_options.all():
-                value = option.numeric_value if option.numeric_value else self.value
+                if numeric and (option.numeric_value != None or self.text.isdigit()):
+                    value = option.numeric_value if option.numeric_value != None else int(self.text)
+                else:
+                    value = option.value.lower() if option.value != None else ""
                 responses.append(value)
         return responses
 
@@ -179,9 +185,9 @@ class FlagCondition(models.Model):
         matched = False
         if self.text_value:
             matched = self.text_value.lower() in list(
-                map(str, response.get_response_as_list()))
+                map(str, response.get_values_as_list()))
         elif self.min_integer_value:
             matched = all([int(self.min_integer_value) > int(res)
-                          for res in response.get_response_as_list()])
+                          for res in response.get_values_as_list()])
 
         return matched if not self.is_inverted else not matched

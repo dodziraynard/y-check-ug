@@ -65,7 +65,7 @@
     <string name="no">No</string>
     <string name="profile_complete">Profile complete</string>
     <string name="questionnaire">Questionnaire</string>
-    <string name="enter_records_e_g_height_and_bmi">Enter records e.g., height and BMI</string>
+    <string name="enter_assessment_values">Enter assessment values</string>
     <string name="welcome">Welcome!</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>

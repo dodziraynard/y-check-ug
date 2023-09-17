@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/enter_records_e_g_height_and_bmi"
+                android:text="@string/enter_assessment_values"
                 android:textSize="19sp"
                 android:textStyle="bold" />
         </LinearLayout>

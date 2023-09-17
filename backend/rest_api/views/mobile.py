@@ -276,7 +276,16 @@ class GetSurveyQuestions(generics.GenericAPIView):
         else:
             target_questions = target_questions.order_by("number")
 
-        question = target_questions.first()
+        # Filter out questions not meeting
+        # depenpency requirements.
+        invalid_questions_ids = []
+        for question in target_questions:
+            if not question.are_previous_response_conditions_met(
+                    adolescent):
+                invalid_questions_ids.append(question.id)
+
+        question = target_questions.exclude(
+            id__in=invalid_questions_ids).first()
         new_section = None
         if question and question.section != current_section:
             new_section = question.section
