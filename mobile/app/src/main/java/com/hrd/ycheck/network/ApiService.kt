@@ -64,6 +64,7 @@ interface ApiService {
         @Query("adolescent_id") adolescentId: Long,
         @Query("current_question_id") currentQuestionId: Long,
         @Query("action") action: String? = "next",
+        @Query("question_type") questionType: String? = "survey",
     ): Call<GetSurveyQuestionResponse?>?
 
     @FormUrlEncoded

@@ -20,6 +20,12 @@ object AdolescentTypes {
     const val COMMUNITY = "community"
 }
 
+object QuestionnaireType {
+    const val SURVEY = "survey"
+    const val ASSESSMENT = "assessment"
+    const val SURVEY_FEEDBACK = "survey_feedback"
+}
+
 object Genders {
     const val MALE = "male"
     const val FEMALE = "female"

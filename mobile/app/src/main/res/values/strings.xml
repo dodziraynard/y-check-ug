@@ -71,4 +71,11 @@
     <string name="next">Next</string>
     <string name="next_question">Next Question</string>
     <string name="done">Done</string>
+    <string name="survey_completion_info">Please handover the tablet to the health personal now.</string>
+    <string name="feedback_form_access_info">If you\'re the health personal, kindly tap the button below provide feedback on this survey.</string>
+    <string name="feedback">Feedback</string>
+    <string name="survey_completed_successfully">Survey completed successfully.</string>
+    <string name="invalid_username">Invalid username</string>
+    <string name="adolescent_not_found">Adolescent not found.</string>
+    <string name="no_more_questions">There are no more questions available for this survey. \nThank you for your time.</string>
 </resources>

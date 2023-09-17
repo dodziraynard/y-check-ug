@@ -320,6 +320,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 val intent = Intent(this@NewAdolescentActivity, QuestionnaireActivity::class.java)
                 intent.putExtra("adolescent", adolescent)
                 startActivity(intent)
+                finish()
             }
             android.R.id.home -> finish()
         }

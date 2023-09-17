@@ -1,8 +1,6 @@
 package com.hrd.ycheck.utils
 
-import com.hrd.ycheck.models.Option
 import com.hrd.ycheck.models.Question
-import com.hrd.ycheck.models.QuestionType
 
 object DataUtils {
     fun getDummyQuestions(): List<Question> {

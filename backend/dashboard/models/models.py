@@ -2,6 +2,12 @@ from django.db import models
 from accounts.models import Adolescent
 from ycheck.utils.constants import ResponseInputType
 
+QUESTION_TYPE = [
+    ('survey', 'survey'),
+    ('assessment', 'assessment'),
+    ('survey_feedback', 'survey_feedback'),
+]
+
 
 class CheckupLocation(models.Model):
     TYPE_CHOICES = [
@@ -20,6 +26,9 @@ class CheckupLocation(models.Model):
 class Section(models.Model):
     name = models.CharField(max_length=100)
     instruction = models.TextField()
+    question_type = models.CharField(
+        max_length=100, default="survey",
+        choices=QUESTION_TYPE)
     number = models.IntegerField(unique=True)
 
     def __str__(self) -> str:
@@ -59,10 +68,6 @@ class Question(models.Model):
         ('radio_button', 'radio_button'),
         ('checkboxes', 'checkboxes'),
         ('range_slider', 'range_slider'),
-    ]
-    QUESTION_TYPE = [
-        ('survey', 'survey'),
-        ('assessment', 'assessment'),
     ]
     admins_comment = models.TextField(null=True, blank=True)
     caption = models.CharField(max_length=100, default="", blank=True)
@@ -109,7 +114,8 @@ class Question(models.Model):
 
 
 class Option(models.Model):
-    question = models.ForeignKey(Question, related_name="options", on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question, related_name="options", on_delete=models.CASCADE)
     value = models.CharField(max_length=200)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     numeric_value = models.IntegerField(null=True, blank=True)

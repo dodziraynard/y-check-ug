@@ -101,23 +101,23 @@ fun QuestionnaireUI(
                 )
             }
             when (currentQuestion.inputType) {
-                QuestionType.TEXT_INPUT -> SimpleInputResponse(
+                InputType.TEXT_INPUT -> SimpleInputResponse(
                     submittedResponse, newResponse
                 )
-                QuestionType.NUMBER_FIELD -> SimpleInputResponse(
+                InputType.NUMBER_FIELD -> SimpleInputResponse(
                     submittedResponse, newResponse, isNumber = true
                 )
-                QuestionType.CHECKBOXES -> currentQuestion.options?.let {
+                InputType.CHECKBOXES -> currentQuestion.options?.let {
                     MultiSelectionResponse(
                         submittedResponse, it, newResponse
                     )
                 }
-                QuestionType.RADIO_BUTTON -> currentQuestion.options?.let {
+                InputType.RADIO_BUTTON -> currentQuestion.options?.let {
                     SingleSelectionResponse(
                         submittedResponse, it, newResponse
                     )
                 }
-                QuestionType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
+                InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
                     currentQuestion.maxNumericValue?.let { it1 ->
                         RangeSliderSelectionResponse(
                             submittedResponse, newResponse, it, it1

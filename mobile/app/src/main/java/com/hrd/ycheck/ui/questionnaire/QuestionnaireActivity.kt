@@ -1,5 +1,6 @@
 package com.hrd.ycheck.ui.questionnaire
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,12 +16,15 @@ import com.hrd.ycheck.components.compose.YCheckTheme
 import com.hrd.ycheck.databinding.ActivityQuestionnaireBinding
 import com.hrd.ycheck.databinding.SectionInstructionBottomSheetLayoutBinding
 import com.hrd.ycheck.models.*
+import com.hrd.ycheck.ui.adolescent_enrollment.SurveyFeedbackActivity
+import com.hrd.ycheck.utils.QuestionnaireType
 
 class QuestionnaireActivity : AppCompatActivity() {
     private lateinit var viewModel: QuestionnaireActivityViewModel
     private lateinit var binding: ActivityQuestionnaireBinding
     private var newAdolescentResponse: NewAdolescentResponse? = null
-    private val TAG = "Someradome"
+    private var adolescent: Adolescent? = null
+    private var questionnaireType: String = QuestionnaireType.SURVEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +32,18 @@ class QuestionnaireActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[QuestionnaireActivityViewModel::class.java]
 
-        val adolescent: Adolescent? = intent.getParcelableExtra("adolescent")
-        val adolescentId = 1L
-        // Auto load first questions.
-        viewModel.getQuestion(adolescentId, 0, "next")
+        adolescent = intent.getParcelableExtra("adolescent")
 
+        if (adolescent == null) {
+            Toast.makeText(this, getString(R.string.adolescent_not_found), Toast.LENGTH_LONG).show()
+            finish()
+        }
+
+        questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
+
+        val adolescentId = adolescent!!.id
+        // Auto load first questions.
+        viewModel.getQuestion(adolescentId, 0, "next", questionnaireType)
 
         binding.nextButton.setOnClickListener {
             var questionId = 0L
@@ -43,7 +54,7 @@ class QuestionnaireActivity : AppCompatActivity() {
                     newAdolescentResponse!!.chosenOptions.map { option -> option?.id ?: -1 }
                 viewModel.postSurveyResponse(adolescentId, questionId, value, options)
             }
-            viewModel.getQuestion(adolescentId, questionId, "next")
+            viewModel.getQuestion(adolescentId, questionId, "next", questionnaireType)
         }
 
         viewModel.isLoading.observe(this) { value ->
@@ -58,18 +69,9 @@ class QuestionnaireActivity : AppCompatActivity() {
             }
         }
 
-//        viewModel.errorMessage.observe(this) { value ->
-//            if (value != null && value.isNotEmpty()) {
-//                binding.errorMessageLabel.visibility = View.VISIBLE
-//                binding.errorMessageLabel.text = value
-//            } else {
-//                binding.errorMessageLabel.visibility = View.GONE
-//            }
-//        }
-
         binding.previousButton.setOnClickListener {
             val questionId = newAdolescentResponse?.questionId ?: 0
-            viewModel.getQuestion(adolescentId, questionId, "previous")
+            viewModel.getQuestion(adolescentId, questionId, "previous", questionnaireType)
         }
 
         viewModel.errorMessage.observe(this) { message ->
@@ -86,21 +88,9 @@ class QuestionnaireActivity : AppCompatActivity() {
                 val currentSessionNumber = response.currentSessionNumber
                 val totalSessions = response.totalSessions
 
-                // Dummy
-                val adolescent: Adolescent? = Adolescent(
-                    id = 1,
-                    otherNames = "r",
-                    surname = "df",
-                    checkupLocation = "hi",
-                    dob = 22,
-                    visitType = "dfad",
-                    type = "primary",
-                    gender = "male"
-                )
-
                 if (section != null && question != null && adolescent != null) {
                     renderNewSectionInstructionAndQuestion(
-                        adolescent,
+                        adolescent!!,
                         question,
                         submittedResponse,
                         currentSessionNumber,
@@ -109,7 +99,11 @@ class QuestionnaireActivity : AppCompatActivity() {
                     )
                 } else if (question != null && adolescent != null) {
                     renderQuestion(
-                        adolescent, question, submittedResponse, currentSessionNumber, totalSessions
+                        adolescent!!,
+                        question,
+                        submittedResponse,
+                        currentSessionNumber,
+                        totalSessions
                     )
                 } else {
                     showCompletionDialog()
@@ -170,13 +164,19 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showCompletionDialog() {
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("No more questions")
-            .setCancelable(false)
+        val dialog = AlertDialog.Builder(this).setTitle("No more questions").setCancelable(false)
             .setPositiveButton(getString(R.string.done)) { _, _ ->
+                when (questionnaireType) {
+                    QuestionnaireType.SURVEY -> {
+                        val intent =
+                            Intent(this@QuestionnaireActivity, SurveyFeedbackActivity::class.java)
+                        intent.putExtra("adolescent", adolescent)
+                        startActivity(intent)
+                    }
+                }
                 finish()
             }.setMessage(
-                "There are no more questions available for this survey. \nThank you for your time."
+                getString(R.string.no_more_questions)
             )
         dialog.create()
         dialog.show()

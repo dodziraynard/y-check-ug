@@ -24,12 +24,18 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
     val nextQuestionResponse: MutableLiveData<GetSurveyQuestionResponse?> = MutableLiveData(null)
     val surveyResponseResult: MutableLiveData<PostSurveyResponseResponse?> = MutableLiveData(null)
 
-    fun getQuestion(adolescentId: Long, currentQuestionId: Long, action: String?) {
+    fun getQuestion(
+        adolescentId: Long,
+        currentQuestionId: Long,
+        action: String?,
+        questionType: String
+    ) {
         isLoading.value = true
         apiService?.getQuestion(
             adolescentId,
             currentQuestionId,
             action,
+            questionType,
         )?.enqueue(object : Callback<GetSurveyQuestionResponse?> {
             override fun onResponse(
                 call: Call<GetSurveyQuestionResponse?>,
@@ -56,7 +62,10 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
     }
 
     fun postSurveyResponse(
-        adolescentId: Long, questionId: Long, value: String?, chosenOptions: List<Long>?
+        adolescentId: Long,
+        questionId: Long,
+        value: String?,
+        chosenOptions: List<Long>?
     ) {
         isLoading.value = true
         apiService?.postSurveyResponse(

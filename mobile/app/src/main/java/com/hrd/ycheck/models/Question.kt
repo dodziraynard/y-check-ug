@@ -18,7 +18,7 @@ data class Question(
     @SerializedName("image_url") val imageUrl: String? = null
 )
 
-object QuestionType {
+object InputType {
     const val TEXT_INPUT = "text_input"
     const val NUMBER_FIELD = "number_field"
     const val CHECKBOXES = "checkboxes"

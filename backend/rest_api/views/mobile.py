@@ -253,44 +253,48 @@ class GetSurveyQuestions(generics.GenericAPIView):
         current_question_id = request.GET.get("current_question_id")
         adolescent_id = request.GET.get("adolescent_id")
         action = request.GET.get("action", "next")
+        question_type = request.GET.get("question_type", "survey")
 
         adolescent = Adolescent.objects.filter(id=adolescent_id).first()
         if not adolescent:
             return Response({"error_message": "Adolescent not found."})
 
-        current_question = Question.objects.filter(
+        # All available questions for this questionnaire type
+        target_questions = Question.objects.filter(question_type=question_type)
+
+        current_question = target_questions.filter(
             id=current_question_id).first()
-        questions = Question.objects.exclude(id=current_question_id)
 
         current_section = current_question.section if current_question else None
         if current_question:
             if action == "next":
-                questions = questions.filter(number__gt=current_question.number).order_by("number")
+                target_questions = target_questions.filter(
+                    number__gt=current_question.number).order_by("number")
             else:
-                questions = questions.filter(number__lt=current_question.number).order_by("-number")
+                target_questions = target_questions.filter(
+                    number__lt=current_question.number).order_by("-number")
         else:
-            questions = questions.order_by("number")
-        
-        question = questions.first()
+            target_questions = target_questions.order_by("number")
+
+        question = target_questions.first()
         new_section = None
         if question and question.section != current_section:
-            if current_section:
-                new_section = Section.objects.filter(
-                    number__gt=current_section.number).exclude(id=current_section.id).order_by("number").first()
-            else:
-                new_section = Section.objects.order_by("number").first()
+            new_section = question.section
 
         response = AdolescentResponse.objects.filter(
             question=question, adolescent=adolescent).first()
-                
-        current_session_number = Section.objects.filter(number__lte=question.section.number).count() if question else 0
-        total_sessions = Section.objects.all().count()
+
+        current_session_number = Section.objects.filter(
+            question_type=question_type,
+            number__lte=question.section.number).count() if question else 0
+        total_sessions = Section.objects.filter(
+            question_type=question_type,).count()
 
         response_data = {
             "question": QuestionSerialiser(question, context={"request": request}).data if question else None,
             "new_section": SectionSerialiser(new_section).data if new_section and action == "next" else None,
-            "current_session_number":current_session_number,
-            "total_sessions":total_sessions,
+            "current_session_number": current_session_number,
+            "total_sessions": total_sessions,
             "current_response": AdolescentResponseSerialiser(response).data if response else None,
         }
         return Response(response_data)
@@ -340,7 +344,7 @@ class RespondToSurveyQuestion(generics.GenericAPIView):
 
         response_data = {
             "message": "Saved successfully",
-            "success":True,
+            "success": True,
             "current_response": AdolescentResponseSerialiser(response).data,
         }
         return Response(response_data)
