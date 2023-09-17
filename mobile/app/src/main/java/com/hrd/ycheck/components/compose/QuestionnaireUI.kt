@@ -2,6 +2,7 @@ package com.hrd.ycheck.components.compose
 
 
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -135,7 +136,10 @@ fun SimpleInputResponse(
     newResponse: NewAdolescentResponse,
     isNumber: Boolean = false
 ) {
-    val currentValue: String = currentResponse?.value ?: ""
+    val currentValue: String = currentResponse?.text ?: ""
+
+    Log.d("Randome", "currentValue: $currentValue")
+
     val textState = remember { mutableStateOf(TextFieldValue(currentValue)) }
 
     // Update response
@@ -224,7 +228,7 @@ fun RangeSliderSelectionResponse(
     minValue: Int = 0,
     maxValue: Int = 10
 ) {
-    val currentValue: Float = (currentResponse?.value?.toInt() ?: minValue).toFloat()
+    val currentValue: Float = (currentResponse?.text?.toInt() ?: minValue).toFloat()
 
     var sliderPosition by remember { mutableFloatStateOf(currentValue) }
 

@@ -14,6 +14,8 @@ import com.hrd.ycheck.adapters.AdolescentAdapter
 import com.hrd.ycheck.databinding.ActivitySearchAdolescentBinding
 import com.hrd.ycheck.databinding.AdolescentSearchResultOptionLayoutBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
+import com.hrd.ycheck.utils.QuestionnaireType
 
 class SearchAdolescentActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchAdolescentBinding
@@ -79,6 +81,13 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     val intent =
                         Intent(this@SearchAdolescentActivity, NewAdolescentActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
+                    startActivity(intent)
+                }
+                dialogBinding.enterOptionContainer.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("question_type", QuestionnaireType.ASSESSMENT)
                     startActivity(intent)
                 }
                 bottomSheetDialog.show()
