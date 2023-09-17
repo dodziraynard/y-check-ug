@@ -163,13 +163,14 @@ MEDIA_ROOT = BASE_DIR / "assets"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(",")
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "http://*").split(",")
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", "redis://localhost:6379")
+SITE_CODE = os.environ.get("SITE_CODE", "LC")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_IMPORTS = [

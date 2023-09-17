@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 from accounts.managers import UserManager
+from django.conf import settings
 
 
 import geocoder
@@ -82,24 +83,17 @@ class Adolescent(models.Model):
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
-    # def save(self, *args, **kwargs):
-    #     if not self.pid:
-    #         prefix = self.adolescent_type
+    def save(self, *args, **kwargs):
+        if not self.pid:
+            prefix = settings.SITE_CODE
+            self.pid = f'{prefix}{str(self.id).zfill(3)}'
 
-    #         max_pid = Adolescent.objects.filter(pid__startswith=prefix).aggregate(
-    #             max_pid=models.Max('pid'))['max_pid']
-    #         if max_pid:
-    #             next_pid_number = int(max_pid[2:]) + 1
-    #         else:
-    #             next_pid_number = 1
-
-    #         self.pid = f'{prefix}{next_pid_number:05}'
-
-    #     super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.surname} {self.other_names}'
@@ -201,7 +195,8 @@ class Question(models.Model):
     type = models.CharField(max_length=100)
     category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
     subtitle = models.CharField(max_length=100, blank=True, null=True)
-    picture = models.ImageField(upload_to='question_pictures/', blank=True, null=True)
+    picture = models.ImageField(
+        upload_to='question_pictures/', blank=True, null=True)
 
     def __str__(self):
         return self.title

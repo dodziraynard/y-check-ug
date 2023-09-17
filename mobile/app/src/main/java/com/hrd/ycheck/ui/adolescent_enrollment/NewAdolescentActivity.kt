@@ -210,6 +210,7 @@ class NewAdolescentActivity : AppCompatActivity() {
     }
 
     private fun populateFields(adolescent: Adolescent) {
+        binding.pidLabel.text = adolescent.pid
         binding.surnameInput.setText(adolescent.surname)
         binding.otherNamesInput.setText(adolescent.otherNames)
         viewModel.getCheckupLocations("type:${adolescent.type}")

@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityPhotoBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import java.io.File
 
 
@@ -77,7 +78,10 @@ class PhotoActivity : AppCompatActivity() {
                         .setNegativeButton(getString(R.string.no)) { _, _ ->
                             finish()
                         }.setPositiveButton(getString(R.string.yes)) { _, _ ->
-
+                            val intent = Intent(this, QuestionnaireActivity::class.java)
+                            intent.putExtra("adolescent", adolescent)
+                            startActivity(intent)
+                            finish()
                         }
                         .setMessage(
                             "Adolescent's profile setup is complete. Would you like to continue to the questionaire?"

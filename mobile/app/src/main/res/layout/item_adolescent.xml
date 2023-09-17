@@ -50,6 +50,8 @@
                 android:id="@+id/pid_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/color_success"
+                android:textStyle="bold"
                 tools:text="YC3423" />
         </LinearLayout>
     </LinearLayout>
