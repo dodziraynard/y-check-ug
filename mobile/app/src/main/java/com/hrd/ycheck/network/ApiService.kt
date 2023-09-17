@@ -59,4 +59,20 @@ interface ApiService {
         @Part uuid: MultipartBody.Part?,
     ): Call<AdolescentResponse?>?
 
+    @GET("get-survey-questions/")
+    fun getQuestion(
+        @Query("adolescent_id") adolescentId: Long,
+        @Query("current_question_id") currentQuestionId: Long,
+        @Query("action") action: String? = "next",
+    ): Call<GetSurveyQuestionResponse?>?
+
+    @FormUrlEncoded
+    @POST("post-survey-response/")
+    fun postSurveyResponse(
+        @Field("adolescent_id") adolescentId: Long,
+        @Field("question_id") questionId: Long,
+        @Field("value") value: String? = null,
+        @Field("option_ids") optionIds: List<Long>? = null,
+    ): Call<PostSurveyResponseResponse?>?
+
 }

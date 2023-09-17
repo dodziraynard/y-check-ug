@@ -4,7 +4,9 @@ package com.hrd.ycheck.components.compose
 import android.graphics.drawable.ColorDrawable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -13,37 +15,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.hrd.ycheck.R
-import com.hrd.ycheck.models.NewAdolescentResponse
-import com.hrd.ycheck.models.Question
-import com.hrd.ycheck.models.QuestionType
+import com.hrd.ycheck.models.*
 
 @OptIn(ExperimentalGlideComposeApi::class)
-@Preview(showBackground = true)
 @Composable
 fun QuestionnaireUI(
-    questions: List<Question> = listOf(),
-    responses: HashMap<Question, NewAdolescentResponse>? = null,
-    onSubmit: () -> Unit = {},
+    currentQuestion: Question,
+    newResponse: NewAdolescentResponse,
+    submittedResponse: SubmittedAdolescentResponse? = null,
+    currentSectionNumber: Int = 1,
+    totalSectionCount: Int = 8,
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
     val screenHeight = configuration.screenHeightDp
-    val currentQuestionIndex = remember { mutableStateOf(0) }
-
-    val answeredAllQuestions = questions.size - 1 <= responses?.size!!
-
-    val currentQuestion: Question = questions[currentQuestionIndex.value]
 
     Column(
         modifier = Modifier
@@ -51,33 +46,21 @@ fun QuestionnaireUI(
             .padding(10.dp)
     ) {
         Text(
-            text = "Session ${currentQuestionIndex.value + 1}/${questions.size}",
+            text = "Session $currentSectionNumber/$totalSectionCount",
             fontSize = 20.sp,
             color = colorResource(R.color.text_color),
             modifier = Modifier.fillMaxWidth(),
         )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            LinearProgressIndicator(
-                progress = (currentQuestionIndex.value + 1).toFloat() / questions.size.toFloat(),
-                color = accentAmber,
-                modifier = Modifier
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                backgroundColor = lightGrey
-            )
-            if (answeredAllQuestions)
-                Button(modifier = Modifier.padding(horizontal = 5.dp), onClick = onSubmit) {
-                    Text(
-                        text = stringResource(R.string.submit),
-                        color = colorResource(R.color.text_color),
-                        style = MaterialTheme.typography.body1.merge(),
-                    )
-                }
-        }
+
+        LinearProgressIndicator(
+            progress = (currentSectionNumber).toFloat() / totalSectionCount.toFloat(),
+            color = accentAmber,
+            modifier = Modifier
+                .height(8.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp)),
+            backgroundColor = lightGrey
+        )
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -118,36 +101,29 @@ fun QuestionnaireUI(
                 )
             }
             when (currentQuestion.inputType) {
-                QuestionType.TEXT_INPUT -> SimpleInputResponse(currentQuestion, responses)
-                QuestionType.NUMBER_FIELD -> SingleSelectionResponse(currentQuestion, responses)
-                QuestionType.CHECKBOXES -> MultiSelectionResponse(currentQuestion, responses)
-            }
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .padding(vertical = 20.dp)
-        ) {
-            Button(enabled = currentQuestionIndex.value > 0, onClick = {
-                currentQuestionIndex.value =
-                    (currentQuestionIndex.value - 1).coerceIn(questions.indices)
-            }) {
-                Text(
-                    text = stringResource(R.string.previous),
-                    color = colorResource(R.color.text_color),
-                    style = MaterialTheme.typography.body1.merge(),
+                QuestionType.TEXT_INPUT -> SimpleInputResponse(
+                    submittedResponse, newResponse
                 )
-            }
-            Button(enabled = currentQuestionIndex.value < questions.size - 1, onClick = {
-                currentQuestionIndex.value =
-                    (currentQuestionIndex.value + 1).coerceIn(questions.indices)
-            }) {
-                Text(
-                    text = stringResource(R.string.next),
-                    color = colorResource(R.color.text_color),
-                    style = MaterialTheme.typography.body1.merge(),
+                QuestionType.NUMBER_FIELD -> SimpleInputResponse(
+                    submittedResponse, newResponse, isNumber = true
                 )
+                QuestionType.CHECKBOXES -> currentQuestion.options?.let {
+                    MultiSelectionResponse(
+                        submittedResponse, it, newResponse
+                    )
+                }
+                QuestionType.RADIO_BUTTON -> currentQuestion.options?.let {
+                    SingleSelectionResponse(
+                        submittedResponse, it, newResponse
+                    )
+                }
+                QuestionType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
+                    currentQuestion.maxNumericValue?.let { it1 ->
+                        RangeSliderSelectionResponse(
+                            submittedResponse, newResponse, it, it1
+                        )
+                    }
+                }
             }
         }
     }
@@ -155,93 +131,112 @@ fun QuestionnaireUI(
 
 @Composable
 fun SimpleInputResponse(
-    currentQuestion: Question, responses: HashMap<Question, NewAdolescentResponse>?
+    currentResponse: SubmittedAdolescentResponse?,
+    newResponse: NewAdolescentResponse,
+    isNumber: Boolean = false
 ) {
-    val currentResponse = responses?.let { it[currentQuestion] }
     val currentValue: String = currentResponse?.value ?: ""
-
     val textState = remember { mutableStateOf(TextFieldValue(currentValue)) }
 
-    // Update responses
-//    responses?.let {
-//        it[currentQuestion] = NewAdolescentResponse(currentQuestion, textState.value.text)
-//    }
+    // Update response
+    newResponse.value = textState.value.text
 
     TextField(value = textState.value,
         modifier = Modifier.fillMaxWidth(),
+        keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Number else KeyboardType.Text),
         onValueChange = { textState.value = it })
 }
 
 
 @Composable
 fun SingleSelectionResponse(
-    currentQuestion: Question, responses: HashMap<Question, NewAdolescentResponse>?
+    currentResponse: SubmittedAdolescentResponse?,
+    options: List<Option>,
+    newResponse: NewAdolescentResponse
 ) {
-//    val currentResponse = responses?.let { it[currentQuestion] }
-//    val currentValue = currentResponse?.options?.get(0)
-//    val (selectedOption, onOptionSelected) = remember {
-//        if (currentValue != null) mutableStateOf(currentValue) else mutableStateOf(
-//            currentQuestion.options!![0]
-//        )
-//    }
-//
-//    // Update responses
-//    responses?.let {
-//        it[currentQuestion] = NewAdolescentResponse(
-//            currentQuestion, options = mutableStateListOf(selectedOption)
-//        )
-//    }
+    val chosenOptions = currentResponse?.chosenOptions
+    val currentValue = if ((chosenOptions?.size ?: 0) > 0) chosenOptions?.get(0) else null
+
+    val (selectedOption, onOptionSelected) = remember(currentValue) {
+        mutableStateOf(currentValue)
+    }
+    // Update response
+    newResponse.chosenOptions = listOf(selectedOption)
 
     Column {
-        currentQuestion.options?.forEach { option ->
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .selectable(selected = (option == selectedOption), onClick = {
-//                        onOptionSelected(option)
-//                    })
-//            ) {
-//                RadioButton(
-//                    selected = (option == selectedOption),
-//                    onClick = { onOptionSelected(option) })
-//                Text(
-//                    text = option.value,
-//                    color = colorResource(R.color.text_color),
-//                    style = MaterialTheme.typography.body1.merge(),
-//                )
-//            }
+        options.forEach { option ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .selectable(selected = (option.value == selectedOption?.value), onClick = {
+                        onOptionSelected(option)
+                    })
+            ) {
+                RadioButton(selected = (option.value == selectedOption?.value),
+                    onClick = {
+                        onOptionSelected(option)
+                    })
+                Text(
+                    text = option.value,
+                    color = colorResource(R.color.text_color),
+                    style = MaterialTheme.typography.body1.merge(),
+                )
+            }
         }
     }
 }
 
 @Composable
 fun MultiSelectionResponse(
-    currentQuestion: Question, responses: HashMap<Question, NewAdolescentResponse>?
+    currentResponse: SubmittedAdolescentResponse?,
+    options: List<Option>,
+    newResponse: NewAdolescentResponse
 ) {
-//    val currentResponse = responses?.let { it[currentQuestion] }
-//    val currentValue = currentResponse?.options ?: mutableListOf()
-//    val selectedOptions = remember { currentValue.toMutableStateList() }
+    val currentValue = currentResponse?.chosenOptions ?: mutableListOf()
+    val selectedOptions = remember(currentValue) { currentValue.toMutableStateList() }
 
     // Update responses
-//    responses?.let {
-//        it[currentQuestion] = NewAdolescentResponse(
-//            currentQuestion, options = selectedOptions
-//        )
-//    }
+    newResponse.chosenOptions = selectedOptions.toList()
 
     Column {
-        currentQuestion.options?.forEach { option ->
+        options.forEach { option ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-//                Checkbox(checked = option in selectedOptions, onCheckedChange = { isChecked ->
-//                    if (isChecked) selectedOptions.add(option) else selectedOptions.remove(
-//                        option
-//                    )
-//                })
+                Checkbox(checked = option.value in selectedOptions.map { opt -> opt.value },
+                    onCheckedChange = { isChecked ->
+                        if (isChecked) selectedOptions.add(option) else selectedOptions.remove(
+                            option
+                        )
+                    })
                 Text(option.value, color = colorResource(R.color.text_color))
             }
         }
     }
+}
+
+
+@Composable
+fun RangeSliderSelectionResponse(
+    currentResponse: SubmittedAdolescentResponse?,
+    newResponse: NewAdolescentResponse,
+    minValue: Int = 0,
+    maxValue: Int = 10
+) {
+    val currentValue: Float = (currentResponse?.value?.toInt() ?: minValue).toFloat()
+
+    var sliderPosition by remember { mutableFloatStateOf(currentValue) }
+
+    // Update response
+    newResponse.value = sliderPosition.toInt().toString()
+
+    Column {
+        Slider(value = sliderPosition,
+            steps = 1,
+            valueRange = (minValue.toFloat())..(maxValue.toFloat()),
+            onValueChange = { sliderPosition = it })
+        Text(text = sliderPosition.toString())
+    }
+
 }

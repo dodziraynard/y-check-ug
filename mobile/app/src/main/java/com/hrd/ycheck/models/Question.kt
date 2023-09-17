@@ -12,8 +12,8 @@ data class Question(
     @SerializedName("input_type") val inputType: String,
     @SerializedName("answer_preamble") val answerPreamble: String? = "",
     @SerializedName("adolescent_type") val adolescentType: String? = "",
-    @SerializedName("min_numeric_value") val minNumericValue: String? = "",
-    @SerializedName("max_numeric_value") val maxNumericValue: String? = "",
+    @SerializedName("min_numeric_value") val minNumericValue: Int? = 0,
+    @SerializedName("max_numeric_value") val maxNumericValue: Int? = 10,
     val options: List<Option>? = null,
     @SerializedName("image_url") val imageUrl: String? = null
 )

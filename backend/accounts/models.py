@@ -81,6 +81,7 @@ class Adolescent(models.Model):
     type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
+    completed_question = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -200,8 +201,7 @@ class Question(models.Model):
     type = models.CharField(max_length=100)
     category = models.CharField(max_length=200, choices=QUESTION_CATEGORY)
     subtitle = models.CharField(max_length=100, blank=True, null=True)
-    picture = models.ImageField(
-        upload_to='question_pictures/', blank=True, null=True)
+    picture = models.ImageField(upload_to='question_pictures/', blank=True, null=True)
 
     def __str__(self):
         return self.title

@@ -1,8 +1,8 @@
 package com.hrd.ycheck.network.response_models
 
 import com.google.gson.annotations.SerializedName
-import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.models.Question
+import com.hrd.ycheck.models.Section
 import com.hrd.ycheck.models.SubmittedAdolescentResponse
 
 
@@ -14,9 +14,14 @@ class GetSurveyQuestionResponse {
     val currentResponse: SubmittedAdolescentResponse? = null
 
     @SerializedName("new_section")
-    val newSection: List<Adolescent>? = null
+    val newSection: Section? = null
 
     @SerializedName("error_message")
     val errorMessage: String? = null
 
+    @SerializedName("current_session_number")
+    val currentSessionNumber: Int = 0
+
+    @SerializedName("total_sessions")
+    val totalSessions: Int = 10
 }

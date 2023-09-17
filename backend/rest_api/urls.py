@@ -11,5 +11,6 @@ urlpatterns = [
     path("checkup-location/", views.GetCheckupLocation.as_view()),
     path("adolescents/", views.Adolescents.as_view()),
     path("upload-adolescent-photo/", views.UploadAdolescentPhoto.as_view()),
-
+    path("get-survey-questions/", views.GetSurveyQuestions.as_view()),
+    path("post-survey-response/", views.RespondToSurveyQuestion.as_view()),
 ]

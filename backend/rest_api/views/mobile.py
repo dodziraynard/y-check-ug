@@ -10,13 +10,19 @@ from rest_framework import generics, permissions, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from accounts.models import Adolescent
+from ycheck.utils.constants import ResponseInputType
+from dashboard.models import Question, Section
 from ycheck.utils.functions import apply_filters
-from dashboard.models.models import CheckupLocation
+from dashboard.models.models import CheckupLocation, AdolescentResponse, Option
 
 from ycheck.utils.functions import get_all_user_permissions
 from rest_api.serializers import (LoginSerializer,
                                   CheckupLocationSerializer,
                                   AdolescentSerializer,
+                                  QuestionSerialiser,
+                                  SectionSerialiser,
+                                  ResponseSerialiser,
+                                  AdolescentResponseSerialiser,
                                   RegisterSerializer, UserSerializer)
 
 logger = logging.getLogger("app")
@@ -232,5 +238,135 @@ class UploadAdolescentPhoto(generics.GenericAPIView):
             "adolescent": AdolescentSerializer(adolescent, context={"request": request}).data,
             "error_message": "",
             "message": "Photo uploaded successfully.",
+        }
+        return Response(response_data)
+
+
+class GetSurveyQuestions(generics.GenericAPIView):
+    """
+    Retrieve a list of checkup locations.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = QuestionSerialiser
+
+    def get(self, request, *args, **kwargs):
+        current_question_id = request.GET.get("current_question_id")
+        adolescent_id = request.GET.get("adolescent_id")
+        action = request.GET.get("action", "next")
+
+        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+        if not adolescent:
+            return Response({"error_message": "Adolescent not found."})
+
+        current_question = Question.objects.filter(
+            id=current_question_id).first()
+        questions = Question.objects.exclude(id=current_question_id)
+
+        current_section = current_question.section if current_question else None
+        if current_question:
+            if action == "next":
+                questions = questions.filter(number__gt=current_question.number).order_by("number")
+            else:
+                questions = questions.filter(number__lt=current_question.number).order_by("-number")
+        else:
+            questions = questions.order_by("number")
+        
+        question = questions.first()
+        new_section = None
+        if question and question.section != current_section:
+            if current_section:
+                new_section = Section.objects.filter(
+                    number__gt=current_section.number).exclude(id=current_section.id).order_by("number").first()
+            else:
+                new_section = Section.objects.order_by("number").first()
+
+        response = AdolescentResponse.objects.filter(
+            question=question, adolescent=adolescent).first()
+                
+        current_session_number = Section.objects.filter(number__lte=question.section.number).count() if question else 0
+        total_sessions = Section.objects.all().count()
+
+        response_data = {
+            "question": QuestionSerialiser(question, context={"request": request}).data if question else None,
+            "new_section": SectionSerialiser(new_section).data if new_section and action == "next" else None,
+            "current_session_number":current_session_number,
+            "total_sessions":total_sessions,
+            "current_response": AdolescentResponseSerialiser(response).data if response else None,
+        }
+        return Response(response_data)
+
+
+class RespondToSurveyQuestion(generics.GenericAPIView):
+    """
+    Retrieve a list of checkup locations.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ResponseSerialiser
+
+    def post(self, request, *args, **kwargs):
+        current_question_id = request.data.get("question_id")
+        adolescent_id = request.data.get("adolescent_id")
+        value = request.data.get("value")
+        option_ids = list(map(int, request.data.getlist("option_ids")))
+
+        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+        if not adolescent:
+            return Response({"error_message": "Adolescent not found."})
+
+        current_question = Question.objects.filter(
+            id=current_question_id).first()
+        if not current_question:
+            return Response({"error_message": "Question not found."})
+
+        response, _ = AdolescentResponse.objects.get_or_create(
+            question=current_question, adolescent=adolescent)
+
+        if current_question.input_type in [ResponseInputType.TEXT_FIELD.value,
+                                           ResponseInputType.NUMBER_FIELD.value,
+                                           ResponseInputType.RANGER_SLIDER.value]:
+            if not value:
+                return Response({"error_message": "Simple value field is required."})
+            response.text = value
+
+        elif current_question.input_type in [ResponseInputType.CHECKBOXES.value,
+                                             ResponseInputType.RADIO_BUTTON.value]:
+            if not option_ids:
+                return Response({"error_message": "Valid option ids are required."})
+
+            options = Option.objects.filter(
+                question=current_question, id__in=option_ids)
+            response.chosen_options.set(options, clear=True)
+        response.save()
+
+        response_data = {
+            "message": "Saved successfully",
+            "success":True,
+            "current_response": AdolescentResponseSerialiser(response).data,
+        }
+        return Response(response_data)
+
+
+class GetAssessmentQuestions(generics.GenericAPIView):
+    """
+    Retrieve a list of checkup locations.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AdolescentSerializer
+
+    def get(self, request, *args, **kwargs):
+        current_question_id = ""
+        adolescent = ""
+
+        # Seearch next question (i.e, question with order greater than the curent_question)
+        # based on current adolescent.
+
+        # If the next question not within, the current section, return next section object and question object.
+
+        # Else, return only the next question.
+
+        response_data = {
+            "question": None,
+            "next_sectioin": None,
+            "survey_completed": False,
         }
         return Response(response_data)
