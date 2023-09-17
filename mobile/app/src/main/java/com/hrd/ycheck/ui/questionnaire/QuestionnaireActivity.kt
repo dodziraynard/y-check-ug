@@ -26,6 +26,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     private var newAdolescentResponse: NewAdolescentResponse? = null
     private var adolescent: Adolescent? = null
     private var questionnaireType: String = QuestionnaireType.SURVEY
+    private var currentQuestionId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,15 +48,14 @@ class QuestionnaireActivity : AppCompatActivity() {
         viewModel.getQuestion(adolescentId, 0, "next", questionnaireType)
 
         binding.nextButton.setOnClickListener {
-            var questionId = 0L
             if (newAdolescentResponse != null) {
-                questionId = newAdolescentResponse!!.questionId
+                currentQuestionId = newAdolescentResponse!!.questionId
                 val value = newAdolescentResponse!!.value
                 val options =
                     newAdolescentResponse!!.chosenOptions.map { option -> option?.id ?: -1 }
-                viewModel.postSurveyResponse(adolescentId, questionId, value, options)
+                viewModel.postSurveyResponse(adolescentId, currentQuestionId, value, options)
             }
-            viewModel.getQuestion(adolescentId, questionId, "next", questionnaireType)
+            viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
         }
 
         viewModel.isLoading.observe(this) { value ->

@@ -76,7 +76,7 @@ class Question(models.Model):
     admins_comment = models.TextField(null=True, blank=True)
     caption = models.CharField(max_length=100, default="", blank=True)
     question_type = models.TextField(choices=QUESTION_TYPE)
-    question_id = models.CharField(max_length=50)
+    question_id = models.CharField(max_length=50, unique=True)
     section = models.ForeignKey(
         Section, related_name="questions", on_delete=models.PROTECT)
     number = models.IntegerField(unique=True)
