@@ -39,6 +39,13 @@ import {
     adoloscent_response_list_reducer
 } from '../reducers/AdolescentResponseReducer'
 import { add_option_reducer,question_options_list_reducer } from '../reducers/AddOptionReducer'
+import { 
+    permission_list_reducer,
+    user_for_permission_list_reducer,
+    assign_permission_reducer,
+    user_permission_list_reducer,
+    revoke_permission_reducer,
+ } from '../reducers/PermissionReducer'
 // COMBINE REDUCERS START
 const reducer = combineReducers({
     // USER REDUCER
@@ -76,6 +83,12 @@ const reducer = combineReducers({
     // OPTION REDUCER
     add_option:add_option_reducer,
     question_options_list:question_options_list_reducer,
+    // PERMISSIONS
+    permission_list:permission_list_reducer,
+    user_for_permission_list:user_for_permission_list_reducer,
+    assign_permission:assign_permission_reducer,
+    user_permission_list:user_permission_list_reducer,
+    revoke_permission:revoke_permission_reducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')?
@@ -87,14 +100,11 @@ const adolescentInfoFromStorage = localStorage.getItem('adolescent')?
 const adolescent_search_resultsFromStorage = localStorage.getItem('adolescent_search_results')?
     JSON.parse(localStorage.getItem('adolescent_search_results')):[]
 
-const user_search_resultsFromStorage = localStorage.getItem('users_search_results')?
-    JSON.parse(localStorage.getItem('users_search_results')):[]
 
 const initailState = {
     user_login:{userInfo:userInfoFromStorage},
     get_adolescent:{adolescent:adolescentInfoFromStorage},
     adoloscent_search_list:{adolescent_search_results:adolescent_search_resultsFromStorage},
-    user_search_list:{users_search_results:user_search_resultsFromStorage},
 }
 
 const midlleWare = [thunk]
