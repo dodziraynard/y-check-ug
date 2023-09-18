@@ -37,6 +37,7 @@ class Section(models.Model):
 
 
 class PreviousResponseRequirement(models.Model):
+    requirement_for = models.ForeignKey("Question", related_name="previous_response_requirements", on_delete=models.CASCADE)
     question = models.ForeignKey("Question", on_delete=models.CASCADE)
     response_is = models.CharField(max_length=100, null=True, blank=True)
     min_integer_value = models.IntegerField(null=True, blank=True)
@@ -103,8 +104,8 @@ class Question(models.Model):
         default=False, null=True, blank=True)
 
     # Required for conditional rendering
-    previous_response_requirements = models.ManyToManyField(
-        PreviousResponseRequirement, related_name="required_question", blank=True)
+    # previous_response_requirements = models.ManyToManyField(
+    #     PreviousResponseRequirement, related_name="required_question", blank=True)
 
     def are_previous_response_conditions_met(self, adolescent):
         conditions_met = []
