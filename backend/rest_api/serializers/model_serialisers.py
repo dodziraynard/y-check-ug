@@ -3,8 +3,7 @@ import logging
 from rest_framework import serializers
 
 from accounts.models import User
-from accounts.models import Adolescent
-from dashboard.models.models import CheckupLocation, Question, Section, AdolescentResponse, Option
+from dashboard.models.models import Adolescent, CheckupLocation, Question, Section, AdolescentResponse, Option
 
 
 logger = logging.getLogger("app")
@@ -111,7 +110,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     options = serializers.SerializerMethodField()
 
-    def get_options(self,question):
+    def get_options(self, question):
         if hasattr(question, "options"):
             options = question.options.all()
             return OptionSerlialiser(options, many=True).data
@@ -152,11 +151,12 @@ class SectionSerialiser(serializers.ModelSerializer):
 class AdolescentResponseSerialiser(serializers.ModelSerializer):
     chosen_options = serializers.SerializerMethodField()
 
-    def get_chosen_options(self,response):
+    def get_chosen_options(self, response):
         if hasattr(response, "chosen_options"):
             options = response.chosen_options.all()
             return OptionSerlialiser(options, many=True).data
         return None
+
     class Meta:
         model = AdolescentResponse
         fields = "__all__"

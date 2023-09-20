@@ -1,5 +1,6 @@
 from django.db import models
-from accounts.models import Adolescent
+from accounts.models import User
+from django.conf import settings
 from ycheck.utils.constants import ResponseInputType
 
 QUESTION_TYPE = [
@@ -7,6 +8,45 @@ QUESTION_TYPE = [
     ('assessment', 'assessment'),
     ('survey_feedback', 'survey_feedback'),
 ]
+
+
+class Adolescent(models.Model):
+    ADOLESCENT_TYPE_CHOICES = [
+        ("primary", 'primary'),
+        ("secondary", 'secondary'),
+        ("community", 'community'),
+    ]
+    ADOLESCENT_SEX_TYPE = [
+        ("male", 'male'),
+        ("female", 'female'),
+    ]
+    uuid = models.UUIDField(null=True, blank=True)
+    pid = models.CharField(unique=True, blank=True, null=True, max_length=10)
+    surname = models.CharField(max_length=50)
+    other_names = models.CharField(max_length=50)
+    visit_type = models.CharField(max_length=50, blank=True, null=True)
+    consent = models.CharField(max_length=50, blank=True, null=True)
+    picture = models.ImageField(upload_to='images/', blank=True, null=True)
+    dob = models.DateTimeField(null=True, blank=True)
+    check_up_location = models.CharField(max_length=200)
+    type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
+    gender = models.CharField(max_length=50, blank=True, null=True)
+    questionnaire_completed = models.BooleanField(default=False)
+    completed_question = models.BooleanField(default=False)
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pid:
+            prefix = settings.SITE_CODE
+            self.pid = f'{prefix}{str(self.id).zfill(3)}'
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.surname} {self.other_names}'
 
 
 class CheckupLocation(models.Model):
@@ -37,7 +77,8 @@ class Section(models.Model):
 
 
 class PreviousResponseRequirement(models.Model):
-    requirement_for = models.ForeignKey("Question", related_name="previous_response_requirements", on_delete=models.CASCADE)
+    requirement_for = models.ForeignKey(
+        "Question", related_name="previous_response_requirements", on_delete=models.CASCADE)
     question = models.ForeignKey("Question", on_delete=models.CASCADE)
     response_is = models.CharField(max_length=100, null=True, blank=True)
     min_integer_value = models.IntegerField(null=True, blank=True)
@@ -51,10 +92,10 @@ class PreviousResponseRequirement(models.Model):
     def is_previous_response_condition_met(self, adolescent):
         response = AdolescentResponse.objects.filter(
             question=self.question, adolescent=adolescent).first()
-        
+
         if self.min_integer_value == None and self.response_is:
             matched = self.response_is.lower() in response.get_values_as_list()
-            
+
         elif self.response_is.isdigit() and self.min_integer_value:
             matched = all([int(self.min_integer_value) > int(res)
                           for res in response.get_values_as_list(numeric=True)])
@@ -152,7 +193,8 @@ class AdolescentResponse(models.Model):
                                           ResponseInputType.CHECKBOXES.value]:
             for option in self.chosen_options.all():
                 if numeric and (option.numeric_value != None or self.text.isdigit()):
-                    value = option.numeric_value if option.numeric_value != None else int(self.text)
+                    value = option.numeric_value if option.numeric_value != None else int(
+                        self.text)
                 else:
                     value = option.value.lower() if option.value != None else ""
                 responses.append(value)

@@ -9,11 +9,10 @@ from django.db.models import Q
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from accounts.models import Adolescent
 from ycheck.utils.constants import ResponseInputType
 from dashboard.models import Question, Section
 from ycheck.utils.functions import apply_filters
-from dashboard.models.models import CheckupLocation, AdolescentResponse, Option
+from dashboard.models.models import Adolescent, CheckupLocation, AdolescentResponse, Option
 
 from ycheck.utils.functions import get_all_user_permissions
 from rest_api.serializers import (LoginSerializer,

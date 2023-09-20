@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from dashboard.models.models import CheckupLocation, Section, PreviousResponseRequirement, Question, Option, AdolescentResponse, SummaryFlag, FlagCondition
+from dashboard.models.models import *
 
 admin.site.register(CheckupLocation)
 admin.site.register(Section)
@@ -9,4 +9,5 @@ admin.site.register(Question)
 admin.site.register(Option)
 admin.site.register(AdolescentResponse)
 admin.site.register(SummaryFlag)
+admin.site.register(Adolescent)
 admin.site.register(FlagCondition)
