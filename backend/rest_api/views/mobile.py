@@ -175,7 +175,7 @@ class GetCheckupLocation(generics.GenericAPIView):
         return Response(response_data)
 
 
-class Adolescents(generics.GenericAPIView):
+class MobileAdolescentsAPI(generics.GenericAPIView):
     """
     Retrieve a list of checkup locations.
     """

@@ -19,6 +19,7 @@ function DashboardPage() {
     const dispatch = useDispatch()
     const [logoutUserServerSide, { isLoading, error }] = useLogOutUserMutation()
     const user = useSelector((state) => state.authentication.user);
+    const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
 
     async function logoutUser() {
         await logoutUserServerSide().unwrap()
@@ -39,8 +40,6 @@ function DashboardPage() {
             })
         }
     }, [error, isLoading])
-
-
 
     // Activate the sidebar active element
     const sidebar = document.querySelector('.sidebar');
@@ -83,86 +82,86 @@ function DashboardPage() {
         <PageMeta title="Dashboard | Y-Check" />
 
         <div className='dashboard-page'>
-            <div class="overlay"></div>
-            <section class="sidebar menu-container overlay-toggle"
+            <div className="overlay"></div>
+            <section className="sidebar menu-container overlay-toggle"
                 data-active-item="">
 
-                <span class="close-sidebar" data-target=".sidebar"><i class="bi bi-x-lg"></i></span>
-                <section class="d-flex justify-content-center align-items-center sidebar-header">
-                    <div class="logo">
+                <span className="close-sidebar" data-target=".sidebar"><i className="bi bi-x-lg"></i></span>
+                <section className="d-flex justify-content-center align-items-center sidebar-header">
+                    <div className="logo">
                         <img src={logo} alt="Y-CHECK Logo" height="50" />
                     </div>
                 </section>
 
-                <h6 class="header mt-4">HOME</h6>
+                <h6 className="header mt-4">HOME</h6>
 
                 <NavLink to="">
-                    <div class="menu-item" id="dashboard">
-                        <i class='icon bi bi-app'></i>
-                        <span class="label">Dashboard</span>
+                    <div className="menu-item" id="dashboard">
+                        <i className='icon bi bi-app'></i>
+                        <span className="label">Dashboard</span>
                     </div>
                 </NavLink>
 
                 <NavLink to="/patients">
-                    <div class="menu-item" id="action_center">
-                        <i class='icon bi bi-file-medical'></i>
-                        <span class="label">Patients</span>
+                    <div className="menu-item" id="action_center">
+                        <i className='icon bi bi-file-medical'></i>
+                        <span className="label">Patients</span>
                     </div>
                 </NavLink>
 
                 <NavLink to="">
-                    <div class="menu-item" id="action_center">
-                        <i class='icon bi bi-h-circle'></i>
-                        <span class="label">Referrals</span>
+                    <div className="menu-item" id="action_center">
+                        <i className='icon bi bi-h-circle'></i>
+                        <span className="label">Referrals</span>
                     </div>
                 </NavLink>
 
                 <hr />
-                <h6 class="header mt-4">SYSTEM</h6>
+                <h6 className="header mt-4">SYSTEM</h6>
                 <NavLink to="">
-                    <div class="menu-item" id="users">
-                        <i class='icon bi bi-user'></i>
-                        <span class="label">Users</span>
+                    <div className="menu-item" id="users">
+                        <i className='icon bi bi-user'></i>
+                        <span className="label">Users</span>
                     </div>
                 </NavLink>
 
                 <NavLink to="">
-                    <div class="menu-item" id="setup">
-                        <i class='icon bi bi-cog'></i>
-                        <span class="label">Setup</span>
+                    <div className="menu-item" id="setup">
+                        <i className='icon bi bi-cog'></i>
+                        <span className="label">Setup</span>
                     </div>
                 </NavLink>
 
                 <hr />
 
                 <span to="/logout" onClick={logoutUser}>
-                    <div class="menu-item">
-                        <i class='icon bi bi-lock'></i>
-                        <span class="label">Log out</span>
+                    <div className="menu-item">
+                        <i className='icon bi bi-lock'></i>
+                        <span className="label">Log out</span>
                     </div>
                 </span>
             </section>
-            <section class="main-content">
-                <nav class="nav">
-                    <div class="">
-                        <span class="open-sidebar" data-target=".sidebar">
-                            <i class='bi bi-list' id="btn"></i>
+            <section className="main-content">
+                <nav className="nav">
+                    <div className="">
+                        <span className="open-sidebar" data-target=".sidebar">
+                            <i className='bi bi-list' id="btn"></i>
                         </span>
                     </div>
-                    <div class=""></div>
-                    <div class="nav-right d-flex align-items-center">
-                        <a href="" class="me-3">
-                            <p class="m-0 p-0 text-end">{user?.username}</p>
-                            <p class="m-0 p-0 text-end text text-muted"><small
-                                class="m-0 p-0">{user?.title}</small></p>
+                    <div className=""></div>
+                    <div className="nav-right d-flex align-items-center">
+                        <a href="" className="me-3">
+                            <p className="m-0 p-0 text-end">{user?.username}</p>
+                            <p className="m-0 p-0 text-end text text-muted"><small
+                                className="m-0 p-0">{user?.title}</small></p>
                         </a>
-                        <a href="" class="avatar">
+                        <a href="" className="avatar">
                             <img src={user?.photo_url} alt="User's picture" />
                         </a>
                     </div>
                 </nav>
 
-                <section class="main">
+                <section className="main">
                     <Outlet />
                     <Footer />
                 </section>

@@ -39,7 +39,7 @@ class Adolescent(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if not self.pid:
+        if not self.pid or "None" in self.pid:
             prefix = settings.SITE_CODE
             self.pid = f'{prefix}{str(self.id).zfill(3)}'
 
