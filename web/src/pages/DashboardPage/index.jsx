@@ -1,4 +1,5 @@
 import './styles.scss'
+import './styles-m.scss'
 import { Fragment, useEffect } from "react";
 import logo from "../../assets/images/logo.png";
 import PageMeta from "../../components/PageMeta";
@@ -38,6 +39,45 @@ function DashboardPage() {
             })
         }
     }, [error, isLoading])
+
+
+
+    // Activate the sidebar active element
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+    const closeSidebar = document.querySelector('.close-sidebar');
+    const openSidebar = document.querySelector('.open-sidebar');
+    const overlayToggles = document.querySelectorAll('.overlay-toggle');
+
+    const menuContainers = document.querySelectorAll('.menu-container');
+    menuContainers?.forEach(menuContainer => {
+        document.getElementById(menuContainer.dataset.activeItem)?.classList.add("active")
+    })
+
+    overlay?.addEventListener('click', () => {
+        closeSidebarOnMobile()
+    })
+
+    sidebar?.addEventListener('click', () => {
+        closeSidebarOnMobile()
+    })
+
+    closeSidebar?.addEventListener("click", () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    })
+
+    openSidebar?.addEventListener("click", () => {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+    })
+
+    function closeSidebarOnMobile() {
+        overlayToggles?.forEach(toggle => {
+            toggle.classList.remove('active');
+        })
+        overlay?.classList.remove('active');
+    }
 
     return <Fragment>
         <PageMeta title="Dashboard | Y-Check" />
@@ -106,7 +146,7 @@ function DashboardPage() {
                 <nav class="nav">
                     <div class="">
                         <span class="open-sidebar" data-target=".sidebar">
-                            <i class='bi bi-menu-alt-right' id="btn"></i>
+                            <i class='bi bi-list' id="btn"></i>
                         </span>
                     </div>
                     <div class=""></div>
