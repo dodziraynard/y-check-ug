@@ -27,6 +27,12 @@ from rest_api.serializers import (LoginSerializer,
 logger = logging.getLogger("app")
 
 
+class UserLogoutAPI(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        AuthToken.objects.filter(user=request.user).delete()
+        return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+
+
 class UserLoginAPI(generics.GenericAPIView):
     """
     Login a user and return a token for the user.
@@ -57,6 +63,7 @@ class UserLoginAPI(generics.GenericAPIView):
             "error_message": None,
             "user": UserSerializer(user).data,
             "token": AuthToken.objects.create(user)[1],
+            "user_permissions": get_all_user_permissions(user)
         }
         return Response(response_data, status=status.HTTP_200_OK)
 

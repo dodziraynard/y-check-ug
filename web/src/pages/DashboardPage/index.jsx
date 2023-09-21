@@ -1,10 +1,44 @@
 import './styles.scss'
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import logo from "../../assets/images/logo.png";
 import PageMeta from "../../components/PageMeta";
-
+import { NavLink, Outlet } from "react-router-dom";
+import Footer from '../../components/Footer';
+import {
+    logOutLocally
+} from '../../features/authentication/authentication-api-slice';
+import {
+    useLogOutUserMutation
+} from '../../features/resources/resources-api-slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { useToast } from '@chakra-ui/react';
 
 function DashboardPage() {
+    const toast = useToast()
+    const dispatch = useDispatch()
+    const [logoutUserServerSide, { isLoading, error }] = useLogOutUserMutation()
+    const user = useSelector((state) => state.authentication.user);
+
+    async function logoutUser() {
+        await logoutUserServerSide().unwrap()
+        dispatch(logOutLocally())
+    }
+    // Logout error
+    useEffect(() => {
+        if (Boolean(error) && !isLoading) {
+            toast.close("logout")
+            toast({
+                id: "logout",
+                position: 'top-center',
+                title: `An error occurred`,
+                description: `${error?.originalStatus}: ${error?.status}`,
+                status: 'error',
+                duration: 2000,
+                isClosable: true,
+            })
+        }
+    }, [error, isLoading])
+
     return <Fragment>
         <PageMeta title="Dashboard | Y-Check" />
 
@@ -20,182 +54,53 @@ function DashboardPage() {
                     </div>
                 </section>
 
+                <h6 class="header mt-4">HOME</h6>
 
-                <h6 class="header text-muted mt-4">HOME</h6>
-
-                <a href="">
+                <NavLink to="">
                     <div class="menu-item" id="dashboard">
-                        <i class='icon bi bis-dashboard'></i>
+                        <i class='icon bi bi-app'></i>
                         <span class="label">Dashboard</span>
                     </div>
-                </a>
+                </NavLink>
 
-
-                <a href="">
+                <NavLink to="/patients">
                     <div class="menu-item" id="action_center">
-                        <i class='icon bi bis-hand-up'></i>
-                        <span class="label">Action Center</span>
+                        <i class='icon bi bi-file-medical'></i>
+                        <span class="label">Patients</span>
                     </div>
-                </a>
+                </NavLink>
 
-
-                <a href="">
-                    <div class="menu-item" id="tasks">
-                        <i class='icon bi bi-list-task'></i>
-                        <span class="label">Tasks</span>
+                <NavLink to="">
+                    <div class="menu-item" id="action_center">
+                        <i class='icon bi bi-h-circle'></i>
+                        <span class="label">Referrals</span>
                     </div>
-                </a>
+                </NavLink>
 
                 <hr />
-
-                <h6 class="header text-muted mt-4">ENTITIES</h6>
-
-                <a href="">
-                    <div class="menu-item" id="students">
-                        <i class='icon bi bi-group'></i>
-                        <span class="label">Students</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="staff">
-                        <i class='icon bi bi-group'></i>
-                        <span class="label">Staff</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="classes">
-                        <i class='icon bi bi-file'></i>
-                        <span class="label">Classes</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="subjects">
-                        <i class='icon bi bi-file'></i>
-                        <span class="label">Subjects</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="departments">
-                        <i class='icon bi bi-bank'></i>
-                        <span class="label">Departments</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="courses">
-                        <i class='icon bi bi-group'></i>
-                        <span class="label">Courses</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="houses">
-                        <i class='icon bi bi-group'></i>
-                        <span class="label">Houses</span>
-                    </div>
-                </a>
-
-                <hr />
-
-                <h6 class="header text-muted mt-4">APPLICATIONS</h6>
-                <a href="">
-                    <div class="menu-item" id="inventory">
-                        <i class='icon bi bi-file'></i>
-                        <span class="label">Inventory</span>
-                    </div>
-                </a>
-
-                <a href="">
-                    <div class="menu-item" id="accounting">
-                        <i class='icon bi bi-spreadsheet'></i>
-                        <span class="label">Accounting</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="notifications">
-                        <i class='icon bi bi-envelope'></i>
-                        <span class="label">Alerts</span>
-                    </div>
-                </a>
-
-
-                <a href="">
-                    <div class="menu-item" id="reporting">
-                        <i class='icon bi bi-user'></i>
-                        <span class="label">Reporting</span>
-                    </div>
-                </a>
-
-                <hr />
-
-
-
-                <h6 class="header text-muted mt-4">PERSONAL</h6>
-
-                <a href="">
-                    <div class="menu-item" id="personal_academic_record">
-                        <i class='icon bi bi-database'></i>
-                        <span class="label">Academic Record</span>
-                    </div>
-                </a>
-
-
-
-                <a href="">
-                    <div class="menu-item" id="personal_invoice">
-                        <i class='icon bi bi-receipt'></i>
-                        <span class="label">My Invoices</span>
-                    </div>
-                </a>
-
-
-
-                <a href="">
-                    <div class="menu-item" id="payment_history">
-                        <i class='icon bi bi-wallet'></i>
-                        <span class="label">Payment History</span>
-                    </div>
-                </a>
-
-                <hr />
-
-
-                <h6 class="header text-muted mt-4">SYSTEM</h6>
-
-                <a href="">
+                <h6 class="header mt-4">SYSTEM</h6>
+                <NavLink to="">
                     <div class="menu-item" id="users">
                         <i class='icon bi bi-user'></i>
                         <span class="label">Users</span>
                     </div>
-                </a>
+                </NavLink>
 
-                <a href="">
+                <NavLink to="">
                     <div class="menu-item" id="setup">
                         <i class='icon bi bi-cog'></i>
                         <span class="label">Setup</span>
                     </div>
-                </a>
+                </NavLink>
 
                 <hr />
 
-                <a href="">
+                <span to="/logout" onClick={logoutUser}>
                     <div class="menu-item">
                         <i class='icon bi bi-lock'></i>
                         <span class="label">Log out</span>
                     </div>
-                </a>
+                </span>
             </section>
             <section class="main-content">
                 <nav class="nav">
@@ -206,43 +111,20 @@ function DashboardPage() {
                     </div>
                     <div class=""></div>
                     <div class="nav-right d-flex align-items-center">
-                        <div class="me-4">
-                            <div class="">
-                                <span class="notification" data-count="{{request.user_notifications.count}}"><i class="bi bi-bell"></i></span>
-                            </div>
-                            <div class="nav-drop-down">
-                                <a href="/" class="drop-down-item">
-                                    <p class="m-0 p-0">33</p>
-                                    <small class="m-0 p-0 text-muted">hi</small>
-                                </a>
-                            </div>
-                        </div>
-
                         <a href="" class="me-3">
-                            <p class="m-0 p-0 text-end">Raynard</p>
+                            <p class="m-0 p-0 text-end">{user?.username}</p>
                             <p class="m-0 p-0 text-end text text-muted"><small
-                                class="m-0 p-0">Mr</small></p>
+                                class="m-0 p-0">{user?.title}</small></p>
                         </a>
                         <a href="" class="avatar">
-                            <img src="" alt="User's picture" />
+                            <img src={user?.photo_url} alt="User's picture" />
                         </a>
                     </div>
                 </nav>
 
-                {/* Breadcrumb goes here */}
-
-
                 <section class="main">
-                    {/* Breadcrumb goes here */}
-                    <footer>
-                        <p class="text-center text-muted">
-                            Copyright ©
-                            <span class="mx-1">
-                                <script>document.write(new Date().getFullYear()) </script>
-                            </span>
-                            Y-Check. All rights reserved.
-                        </p>
-                    </footer>
+                    <Outlet />
+                    <Footer />
                 </section>
             </section>
 

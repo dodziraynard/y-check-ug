@@ -5,8 +5,7 @@ function Footer() {
     return (
         <section className='footer mt-5'>
             <div className="col-md-6 mx-auto">
-                <p className="text-center m-0">© 2023 - All Rights Reserved</p>
-                <p className='text-center m-0'>Y-Check</p>
+                <p className="text-center m-0">© 2023 Y-Check - All Rights Reserved</p>
             </div>
         </section>
     );

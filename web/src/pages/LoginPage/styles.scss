@@ -1,0 +1,22 @@
+@import "../../theme-variables.scss";
+
+.login-page {
+    background-color: $primary-color;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+
+    .app-logo{
+        height: 5em;
+    }
+
+    .login-card {
+        background-color: white;
+        padding: 2em 1em;
+        border-radius: 5px;
+    }
+
+    input {
+        padding: 1em;
+    }
+}

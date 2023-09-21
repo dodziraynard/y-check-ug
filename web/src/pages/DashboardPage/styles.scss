@@ -1,6 +1,5 @@
 @import "../../theme-variables.scss";
 
-
 .dashboard-page {
     background-color: red;
 }
@@ -77,6 +76,7 @@
 
     .header {
         padding: 0.2em 0.5em;
+        color: gray;
     }
 
     .menu-item {
@@ -97,6 +97,17 @@
         .icon {
             margin-right: 0.5em;
             font-size: 1.3em;
+        }
+    }
+
+    a.active,
+    a:hover {
+        .menu-item {
+            background-color: rgba($white, 0.1);
+            box-shadow: 0px 0px 10px rgba($primary-color, 0.1);
+            color: $white;
+            cursor: pointer;
+            border-radius: 0.4em;
         }
     }
 }

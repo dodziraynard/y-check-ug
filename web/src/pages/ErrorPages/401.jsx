@@ -24,9 +24,8 @@ function Error401Screen() {
                         <h2 className='text-center'>Unauthorized</h2>
                         <p className='text-center'>Sorry, you are not authorized to access this page.</p>
 
-
                         <div className="d-flex justify-content-center my-5">
-                            <Link to="/" className="mx-2 btn btn-primary">Home</Link>
+                            <Link to="/" className="mx-2 btn btn-primary">Dashboard</Link>
                             <Link to="/login" className="mx-2 btn btn-primary">Login</Link>
                         </div>
                     </div>
