@@ -21,7 +21,7 @@ class Adolescent(models.Model):
         ("female", 'female'),
     ]
     uuid = models.UUIDField(null=True, blank=True)
-    pid = models.CharField(unique=True, blank=True, null=True, max_length=10)
+    pid = models.CharField(unique=True, max_length=20)
     surname = models.CharField(max_length=50)
     other_names = models.CharField(max_length=50)
     visit_type = models.CharField(max_length=50, blank=True, null=True)
@@ -37,13 +37,6 @@ class Adolescent(models.Model):
         User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        if not self.pid or "None" in self.pid:
-            prefix = settings.SITE_CODE
-            self.pid = f'{prefix}{str(self.id).zfill(3)}'
-
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.surname} {self.other_names}'
@@ -199,16 +192,6 @@ class AdolescentResponse(models.Model):
                     value = option.value.lower() if option.value != None else ""
                 responses.append(value)
         return responses
-
-
-
-
-
-
-
-
-
-
 
 
 # class SummaryFlag(models.Model):

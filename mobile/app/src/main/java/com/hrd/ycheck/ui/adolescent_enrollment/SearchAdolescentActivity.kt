@@ -83,6 +83,13 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     intent.putExtra("adolescent", adolescent)
                     startActivity(intent)
                 }
+                dialogBinding.questionnaireOptionContainer.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                    intent.putExtra("question_type", QuestionnaireType.SURVEY)
+                    intent.putExtra("adolescent", adolescent)
+                    startActivity(intent)
+                }
                 dialogBinding.enterOptionContainer.setOnClickListener {
                     val intent =
                         Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)

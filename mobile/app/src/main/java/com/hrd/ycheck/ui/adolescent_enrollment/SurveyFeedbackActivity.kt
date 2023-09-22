@@ -2,6 +2,7 @@ package com.hrd.ycheck.ui.adolescent_enrollment
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +25,9 @@ class SurveyFeedbackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySurveyFeedbackBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Show back button
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val adolescent: Adolescent? = intent.getParcelableExtra("adolescent")
 
@@ -55,6 +59,13 @@ class SurveyFeedbackActivity : AppCompatActivity() {
             }
             bottomSheetDialog.show()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

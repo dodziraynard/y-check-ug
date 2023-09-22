@@ -207,7 +207,6 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
         adolescent_data["dob"] = make_aware(dob)
         uuid = adolescent_data.pop("uuid")
         adolescent_data.pop("id")
-        adolescent_data.pop("pid", None)
 
         adolescent, _ = Adolescent.objects.get_or_create(uuid=uuid)
         for key, value in adolescent_data.items():
