@@ -38,8 +38,8 @@ class GetSummaryFlags(generics.GenericAPIView):
             return Response({"error_message": f"{pid} not found."})
 
         dummary_flags = [
-            {"name": "Home", "color": "#275c69"},
-            {"name": "Eating", "color": "red"},
-            {"name": "Education", "color": "orange"},
+            {"name": "Home", "color": "#00ff55"},
+            {"name": "Eating", "color": "#ff0000"},
+            {"name": "Education", "color": "#FFA500"},
         ]
         return Response({"flags": dummary_flags})

@@ -11,6 +11,8 @@ import ProtectedRoute from "./components/Common/ProtectedRoute";
 import DashboardWidget from "./widgets/DashboardWidget";
 import PatientsWidget from "./widgets/PatientsWidget";
 import SummaryFlagWidget from "./widgets/SummaryFlagWidget";
+import AdolescentReferralsWidget from "./widgets/AdolescentReferralsWidget";
+import ReferralsWidget from "./widgets/ReferralsWidget";
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
           <Route path="" element={<DashboardWidget />} />
           <Route path="/patients" element={<PatientsWidget />} />
           <Route path="/patients/:pid/summary" element={<SummaryFlagWidget />} />
+          <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
+          <Route path="/referrals" element={<ReferralsWidget />} />
         </Route>
         <Route path="*" element={<Error404Screen />} />
       </Routes>

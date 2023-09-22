@@ -125,6 +125,15 @@ class NewAdolescentActivity : AppCompatActivity() {
             }
         }
 
+
+        binding.pidInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                adolescent.pid = s.toString()
+            }
+        })
+
         binding.surnameInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -187,7 +196,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
             val age = ((System.currentTimeMillis() - calendar.timeInMillis) / 31556952000).toInt()
-            if (age > 20 || age < 0) {
+            if (age > 20 || age < 10) {
                 binding.dobError.setTextColor(getColor(R.color.color_warning))
                 binding.dobError.text = "$age-year-olds are not eligible for this exercise."
                 binding.dobError.visibility = View.VISIBLE
@@ -212,6 +221,7 @@ class NewAdolescentActivity : AppCompatActivity() {
     private fun populateFields(adolescent: Adolescent) {
         binding.pidLabel.text = adolescent.pid
         binding.surnameInput.setText(adolescent.surname)
+        binding.pidInput.setText(adolescent.pid)
         binding.otherNamesInput.setText(adolescent.otherNames)
         viewModel.getCheckupLocations("type:${adolescent.type}")
 
@@ -254,6 +264,14 @@ class NewAdolescentActivity : AppCompatActivity() {
     }
 
     private fun validateForm(adolescent: Adolescent): Boolean {
+        // Surname
+        if (adolescent.pid.isEmpty()) {
+            binding.pidErrorMessage.visibility = View.VISIBLE
+            return false
+        } else {
+            binding.pidErrorMessage.visibility = View.GONE
+        }
+
         // Surname
         if (adolescent.surname.isEmpty()) {
             binding.surnameErrorMessage.visibility = View.VISIBLE
@@ -304,7 +322,7 @@ class NewAdolescentActivity : AppCompatActivity() {
 
         // Age
         val age = ((System.currentTimeMillis() - adolescent.dob) / 31556952000).toInt()
-        return age in 1..19
+        return age in 10..19
     }
 
 

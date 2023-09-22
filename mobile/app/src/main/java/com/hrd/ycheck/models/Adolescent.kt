@@ -24,5 +24,5 @@ data class Adolescent(
     @PrimaryKey val id: Long = 0,
 
     val uuid: String? = "",
-    val pid: String? = "",
+    var pid: String = "",
 ) : Parcelable

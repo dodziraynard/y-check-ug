@@ -201,37 +201,57 @@ class AdolescentResponse(models.Model):
         return responses
 
 
-class SummaryFlag(models.Model):
-    label = models.CharField(max_length=100)
-
-    def get_flag_color(self, adolescent):
-        conditions = self.conditions.all()
-        for condition in conditions:
-            if condition.check_condition():
-                return condition.color
 
 
-class FlagCondition(models.Model):
-    flag = models.ForeignKey(
-        SummaryFlag, related_name="conditions", on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    text_value = models.CharField(max_length=100, null=True, blank=True)
-    min_integer_value = models.IntegerField(null=True, blank=True)
 
-    is_inverted = models.IntegerField(default=False)
 
-    color = models.CharField(max_length=10)
 
-    def check_condition(self, adolescent):
-        response = AdolescentResponse.objects.filter(
-            question=self.question, adolescent=adolescent).first()
 
-        matched = False
-        if self.text_value:
-            matched = self.text_value.lower() in list(
-                map(str, response.get_values_as_list()))
-        elif self.min_integer_value:
-            matched = all([int(self.min_integer_value) > int(res)
-                          for res in response.get_values_as_list()])
 
-        return matched if not self.is_inverted else not matched
+
+
+
+# class SummaryFlag(models.Model):
+#     label = models.CharField(max_length=100)
+
+#     def get_flag_color(self, adolescent):
+#         conditions = self.conditions.all()
+#         for condition in conditions:
+#             if condition.check_condition():
+#                 return condition.color
+
+# class FlagColor(models.Model):
+#     is_fallback = models.BooleanField(default=False)
+#     color_code = models.CharField(max_length=10)
+
+# class FlagCondition(models.Model):
+
+#     OPERATORS = [
+#         ("equal", "equal"),
+#         ("difference", "difference"),
+#         ("equal", "equal"),
+#     ]
+
+#     flag_color = models.ForeignKey(FlagColor, related_name="conditions", on_delete=models.CASCADE)
+#     question1 = models.ForeignKey(Question, on_delete=models.CASCADE)
+#     question2 = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True) # For only difference.
+
+#     expected_value = models.CharField(max_length=100, null=True, blank=True)
+#     expected_integer_value = models.IntegerField(null=True, blank=True)
+
+
+#     operator = models.CharField(max_length=100, choices=OPERATORS)
+
+#     def check_condition(self, adolescent):
+#         response = AdolescentResponse.objects.filter(
+#             question=self.question, adolescent=adolescent).first()
+
+#         matched = False
+#         if self.text_value:
+#             matched = self.text_value.lower() in list(
+#                 map(str, response.get_values_as_list()))
+#         elif self.min_integer_value:
+#             matched = all([int(self.min_integer_value) > int(res)
+#                           for res in response.get_values_as_list()])
+
+#         return matched if not self.is_inverted else not matched

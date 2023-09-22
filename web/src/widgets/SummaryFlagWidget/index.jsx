@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Flag from '../../components/Flag';
 import { useParams } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
-import { Spinner } from '@chakra-ui/react';
+import { Button, Spinner } from '@chakra-ui/react';
 
 function SummaryFlagWidget() {
     const { pid } = useParams()
@@ -30,7 +30,7 @@ function SummaryFlagWidget() {
             <h4>Summary</h4>
             {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
-            {Boolean(flags?.length) ?
+            <section>
                 <div className="col-md-10 mx-auto">
                     <table className='table'>
                         <thead>
@@ -40,20 +40,36 @@ function SummaryFlagWidget() {
                             </tr>
                         </thead>
                         <tbody>
-                            {flags?.map((flag, index) => {
-                                return <tr key={index}>
-                                    <td>{flag.name}</td>
-                                    <td>
-                                        <Flag color={flag.color} />
-                                    </td>
+                            {Boolean(flags?.length) ?
+                                flags?.map((flag, index) => {
+                                    return <tr key={index}>
+                                        <td>{flag.name}</td>
+                                        <td>
+                                            <Flag color={flag.color} />
+                                        </td>
+                                    </tr>
+                                })
+                                :
+                                <tr>
+                                    <td colSpan={2}><p className="d-block text-center text-warning">No data found.</p></td>
                                 </tr>
-                            })}
+                            }
                         </tbody>
                     </table>
+                    <button className="btn btn-sm btn-primary">Save</button>
                 </div>
-                :
-                <i className="d-block text-center text-warning">No data found.</i>
-            }
+
+                <hr />
+                <div className='d-flex justify-content-end'>
+                    <Link to={"referrals"}>
+                        <Button className="d-flex">
+                            <i className="bi bi-h-circle me-2"></i>
+                            View/create referrals
+                        </Button>
+                    </Link>
+                </div>
+
+            </section>
         </div >
     );
 }

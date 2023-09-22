@@ -109,7 +109,7 @@ function DashboardPage() {
                     </div>
                 </NavLink>
 
-                <NavLink to="">
+                <NavLink to="/referrals">
                     <div className="menu-item" id="action_center">
                         <i className='icon bi bi-h-circle'></i>
                         <span className="label">Referrals</span>

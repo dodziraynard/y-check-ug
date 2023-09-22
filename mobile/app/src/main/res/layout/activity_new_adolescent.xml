@@ -87,6 +87,40 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="PID"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/pid_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_rect_shape"
+                        android:drawableStart="@drawable/baseline_person_24"
+                        android:drawableLeft="@drawable/baseline_person_24"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="@color/text_color"
+                        android:inputType="textPersonName"
+                        android:padding="10dp" />
+
+                    <TextView
+                        android:id="@+id/pid_error_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PID is required."
+                        android:textColor="@color/color_warning"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Surname"
                         android:textStyle="bold" />
 
