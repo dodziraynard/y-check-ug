@@ -94,34 +94,34 @@ function SummaryFlagWidget() {
                                     <img src={adolescent?.photo_url} alt={adolescent?.fullname} />
                                 </section>
                                 <section className="col-md-9">
-                                    <div className="col-md-6 d-flex align-items-center">
+                                    <div className="d-flex align-items-center">
                                         <h3>{adolescent?.fullname}</h3>
                                         <p className='m-0 text-muted mx-4'> <i className="bi bi-geo-alt"></i> {adolescent?.check_up_location}</p>
                                     </div>
                                     <h5 className='text-muted mt-4'>About</h5>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-3 text-muted">PID</h6>
-                                        <strong className="col-md-9 text">{adolescent?.pid}</strong>
+                                        <h6 className="col-md-4 text-muted">PID</h6>
+                                        <strong className="col-md-8 text">{adolescent?.pid}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-3 text-muted">SURNAME</h6>
-                                        <strong className="col-md-9 text">{adolescent?.surname}</strong>
+                                        <h6 className="col-md-4 text-muted">SURNAME</h6>
+                                        <strong className="col-md-8 text">{adolescent?.surname}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-3 text-muted">OTHER NAMES</h6>
-                                        <strong className="col-md-9 text">{adolescent?.other_names}</strong>
+                                        <h6 className="col-md-4 text-muted">OTHER NAMES</h6>
+                                        <strong className="col-md-8 text">{adolescent?.other_names}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-3 text-muted">VISIT TYPE</h6>
-                                        <strong className="col-md-9 text">{adolescent?.visit_type}</strong>
+                                        <h6 className="col-md-4 text-muted">VISIT TYPE</h6>
+                                        <strong className="col-md-8 text">{adolescent?.visit_type}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-3 text-muted">GENDER</h6>
-                                        <strong className="col-md-9 text">{adolescent?.gender}</strong>
+                                        <h6 className="col-md-4 text-muted">GENDER</h6>
+                                        <strong className="col-md-8 text">{adolescent?.gender}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-3 text-muted">DoB</h6>
-                                        <strong className="col-md-9 text">{getDateFromMills(adolescent?.dob)}</strong>
+                                        <h6 className="col-md-4 text-muted">DoB</h6>
+                                        <strong className="col-md-8 text">{getDateFromMills(adolescent?.dob)}</strong>
                                     </div>
                                 </section>
                             </div>
