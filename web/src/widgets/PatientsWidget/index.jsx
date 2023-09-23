@@ -4,18 +4,18 @@ import './style.scss';
 import { BASE_API_URI } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 
-function PatientsWidget({ value, setValue, ...rest }) {
+function PatientsWidget() {
 
     return (
         <div className="patients-widget">
-            <BreadCrumb items={[{ "name": "Patients"}]} />
+            <BreadCrumb items={[{ "name": "Patients" }]} />
 
             <TableView
                 // reloadTrigger={triggerReload}
                 responseDataAttribute="adolescents"
                 dataSourceUrl={`${BASE_API_URI}/web-adolescents/`}
                 filters={[
-                  
+
                 ]}
                 headers={[
                     {
@@ -47,7 +47,7 @@ function PatientsWidget({ value, setValue, ...rest }) {
                                 <div className="d-flex justify-content-end">
                                     <Link to={`${item.pid}/summary`} className="btn btn-sm btn-primary me-1 d-flex">
                                         <i className="bi bi-list me-1"></i>
-                                        View
+                                        Summary
                                     </Link>
                                     <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteAudioModal(item)}>
                                         <i className="bi bi-trash me-1"></i>

@@ -47,7 +47,7 @@ fun QuestionnaireUI(
             .padding(10.dp)
     ) {
         Text(
-            text = "Session $currentSectionNumber/$totalSectionCount",
+            text = "Section $currentSectionNumber/$totalSectionCount",
             fontSize = 20.sp,
             color = colorResource(R.color.text_color),
             modifier = Modifier.fillMaxWidth(),
@@ -86,6 +86,7 @@ fun QuestionnaireUI(
                         .height((screenHeight / 2).dp)
                         .padding(10.dp),
                     alignment = Alignment.Center,
+
                     failure = placeholder(ColorDrawable(R.drawable.placeholder)),
                     loading = placeholder(ColorDrawable(R.drawable.placeholder))
                 )

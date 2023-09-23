@@ -79,4 +79,7 @@
     <string name="adolescent_not_found">Adolescent not found.</string>
     <string name="no_more_questions">There are no more questions available for this survey. \nThank you for your time.</string>
     <string name="play_game_confirmation">Would you like to take a break by playing a game?</string>
+    <string name="yes_adolescent_consent_assent">Yes adolescent consent/assent</string>
+    <string name="yes_parental_consent">Yes parental consent</string>
+    <string name="confirmation_of_consent_form_received">Confirmation of consent form received</string>
 </resources>

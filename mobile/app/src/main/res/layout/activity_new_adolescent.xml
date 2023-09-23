@@ -301,7 +301,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/follow_up" />
-
                     </RadioGroup>
 
                     <TextView
@@ -314,7 +313,6 @@
                         android:visibility="gone"
                         tools:text="Visit type is required."
                         tools:visibility="visible" />
-
                 </LinearLayout>
 
                 <View
@@ -432,6 +430,60 @@
                     android:layout_marginVertical="20dp"
                     android:background="@color/border_color" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/confirmation_of_consent_form_received"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/icf_conf_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/icf_conf_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/yes_parental_consent" />
+
+                        <RadioButton
+                            android:id="@+id/icf_conf_adolescent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/yes_adolescent_consent_assent" />
+
+
+                        <RadioButton
+                            android:id="@+id/icf_conf_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/icf_conf_error_message_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/color_warning"
+                        android:visibility="gone"
+                        tools:text="Please confirm consent"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:layout_marginVertical="20dp"
+                    android:background="@color/border_color" />
+
                 <TextView
                     android:id="@+id/error_message_label"
                     android:layout_width="match_parent"
@@ -453,7 +505,7 @@
         android:id="@+id/button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.button.MaterialButton

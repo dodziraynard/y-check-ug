@@ -3,7 +3,7 @@ import logging
 from rest_framework import serializers
 
 from accounts.models import User
-from dashboard.models.models import Adolescent, CheckupLocation, Question, Section, AdolescentResponse, Option
+from dashboard.models.models import *
 
 
 logger = logging.getLogger("app")
@@ -83,10 +83,14 @@ class CheckupLocationSerializer(serializers.ModelSerializer):
 
 class AdolescentSerializer(serializers.ModelSerializer):
     dob = serializers.SerializerMethodField()
+    fullname = serializers.SerializerMethodField()
     photo_url = serializers.SerializerMethodField()
 
     def get_dob(self, obj):
         return obj.dob.timestamp() * 1000
+
+    def get_fullname(self, obj):
+        return f"{obj.surname} {obj.other_names}"
 
     def get_photo_url(self, obj):
         request = self.context.get("request")
@@ -159,4 +163,39 @@ class AdolescentResponseSerialiser(serializers.ModelSerializer):
 
     class Meta:
         model = AdolescentResponse
+        fields = "__all__"
+
+
+class SummaryFlagSerializer(serializers.ModelSerializer):
+    responses = serializers.SerializerMethodField()
+
+    def get_responses(self, obj):
+        result = []
+        flag_name = obj.name  # e.g., Home
+        adolescent = obj.adolescent
+        flag_label = FlagLabel.objects.filter(name=flag_name).first()
+        if not flag_label:
+            return None
+        colors = flag_label.colors.all()
+        flag_conditions = FlagCondition.objects.filter(flag_color__in=colors)
+        question_ids = []
+
+        for condition in flag_conditions:
+            if condition.question1:
+                question_ids.append(condition.question1.question_id)
+            if condition.question2:
+                question_ids.append(condition.question2.question_id)
+
+        for question in Question.objects.filter(question_id__in=question_ids).distinct():
+            response = question.get_response(adolescent)
+            data = {
+                "question": question.text,
+                "question_id": question.question_id,
+                "answers": response
+            }
+            result.append(data)
+        return result
+
+    class Meta:
+        model = SummaryFlag
         fields = "__all__"

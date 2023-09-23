@@ -4,18 +4,18 @@ from rest_api.views.mixins import SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
 
-from dashboard.models import Adolescent
+from dashboard.models import Adolescent, FlagLabel, SummaryFlag
 from rest_framework.response import Response
 
 from rest_api.serializers import (AdolescentSerializer,
-                                  UserSerializer)
+                                  SummaryFlagSerializer)
 
 logger = logging.getLogger("app")
 
 
 class AdolescentsAPI(SimpleCrudMixin):
     """
-    Perm CRUD on adolescent.
+    Permform CRUD on adolescent.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
     required_permissions = ["setup.view_adolescent"]
@@ -26,20 +26,62 @@ class AdolescentsAPI(SimpleCrudMixin):
     response_data_label_plural = "adolescents"
 
 
-class GetSummaryFlags(generics.GenericAPIView):
+class GetAdolescentProfile(generics.GenericAPIView):
     """
-    Get the summary flags for an adolescent/patient.
+    Get the profile info of an adolescent.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    serializer_class = AdolescentSerializer
 
     def get(self, request, pid, *args, **kwargs):
         adolescent = Adolescent.objects.filter(pid=pid).first()
         if not adolescent:
             return Response({"error_message": f"{pid} not found."})
 
-        dummary_flags = [
-            {"name": "Home", "color": "#00ff55"},
-            {"name": "Eating", "color": "#ff0000"},
-            {"name": "Education", "color": "#FFA500"},
-        ]
-        return Response({"flags": dummary_flags})
+        response_data = {
+            "adolescent": self.serializer_class(adolescent, context={"request": request}).data
+        }
+        return Response(response_data)
+
+
+class GetSummaryFlags(generics.GenericAPIView):
+    """
+    Get the summary flags for an adolescent/patient.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    serializer_class = SummaryFlagSerializer
+
+    def get(self, request, pid, *args, **kwargs):
+        adolescent = Adolescent.objects.filter(pid=pid).first()
+        if not adolescent:
+            return Response({"error_message": f"{pid} not found."})
+
+        # Compute flags
+        flag_lables = FlagLabel.objects.all()
+        for label in flag_lables:
+            color = label.get_flag_color(adolescent)
+            if not color:
+                continue
+
+            flag = SummaryFlag.objects.filter(
+                adolescent=adolescent, name=label.name).first()
+            if not flag:
+                flag = SummaryFlag.objects.create(
+                    adolescent=adolescent, name=label.name, computed_color_code=color)
+            else:
+                flag.computed_color_code = color
+                flag.save()
+
+        # Retrieve all flags
+        flags = SummaryFlag.objects.filter(adolescent=adolescent)
+        data = SummaryFlagSerializer(flags, many=True).data
+        repsonse_data = {
+            "summary_flags": data,
+        }
+        return Response(repsonse_data, status=status.HTTP_200_OK)
+
+    def post(self, request, pid, *args, **kwargs):
+        summary_flag_data = request.data.get("")
+        adolescent = Adolescent.objects.filter(pid=pid).first()
+        if not adolescent:
+            return Response({"error_message": f"{pid} not found."})

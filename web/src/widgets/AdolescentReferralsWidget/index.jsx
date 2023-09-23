@@ -77,6 +77,13 @@ function AdolescentReferralsWidget() {
                                     </div>
                                 </div>
                                 ....
+
+                                <div className="form-group">
+                                    <Button className="d-flex">
+                                        <i className="bi bi-h-circle me-2"></i>
+                                        Submit
+                                    </Button>
+                                </div>
                             </form>
                         </div>
                         <div className="modal-footer">
