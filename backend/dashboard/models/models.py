@@ -250,7 +250,7 @@ class FlagLabel(models.Model):
             else:  # All required conditions are satisfied.
                 # At lest one optional condition must be met
                 if not optional_conditions:
-                    return condition.color_code
+                    return matched.color_code
                 for condition in optional_conditions:
                     matched = condition.check_condition(adolescent)
                     if matched:
