@@ -9,8 +9,9 @@ import {
 } from '../../features/global/global-slice';
 import { Fragment, useState, useEffect, useRef } from 'react';
 import { Modal } from 'bootstrap';
-import { useToast, Spinner } from '@chakra-ui/react';
+import { Button, Spinner, useToast } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
+import PermissionComponent from '../../components/Permission/PermissionComponent';
 
 function RolesWidget() {
     const [getGroups, { data: response = [], isFetching, error }] = useLazyGetGroupsQuery()
@@ -162,6 +163,7 @@ function RolesWidget() {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
+                            <PermissionComponent group={selectedGroup} />
                         </div>
                     </div>
                 </div>
@@ -200,11 +202,11 @@ function RolesWidget() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">
-                                {selectedGroup ? "Edit Group" : "New Group"}
+                                {selectedGroup ? "Edit Role" : "New Role"}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body d-flex justify-content-center overflow-scroll">
+                        <div className="modal-body overflow-scroll">
                             <form onSubmit={handleFormSubmit}>
                                 <input type="hidden" name="id"
                                     value={selectedGroup ? selectedGroup.id : ""} />
@@ -240,8 +242,9 @@ function RolesWidget() {
             <div className="card">
                 <div className="card-header d-flex justify-content-between" style={{ "position": "sticky", "top": "-1em", "zIndex": "1", "background": "white" }}>
                     <p>ROLES</p>
-                    <div className="d-flex card-options justify-content-end">
-                        <button className="btn btn-primary btn-sm" onClick={showNewFormGroupModal} >Add</button>
+                    <div className="d-flex  justify-content-end">
+                        <Button onClick={showNewFormGroupModal}><i className="bi bi-plus"></i> Add</Button>
+
                     </div>
                 </div>
                 <div className="card-body overflow-scroll">
