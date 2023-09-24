@@ -5,6 +5,7 @@ from rest_api.serializers import (GroupSerializer,GroupPermissionSerializer)
 from dashboard.forms import GroupForm
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
+from ycheck.utils.functions import relevant_permission_objects
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -49,7 +50,7 @@ class PermissionsAPI(SimpleCrudMixin):
         group = Group.objects.filter(id=group_id).first()
         if not group:
             return Response({"error_message": "Group not found"}, status=404)
-        permissions = Permission.objects.all()
+        permissions = relevant_permission_objects()
 
         data = self.serializer_class(permissions,
                                      context={
