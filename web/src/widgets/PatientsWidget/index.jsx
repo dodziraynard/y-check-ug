@@ -9,6 +9,9 @@ function PatientsWidget() {
     return (
         <div className="patients-widget">
             <BreadCrumb items={[{ "name": "Patients" }]} />
+            <p className="text-muted">Below are the adolescent registered via the mobile app.
+                Click on the <strong>more</strong> button to view the geneted flags and more.
+            </p>
 
             <TableView
                 // reloadTrigger={triggerReload}
@@ -47,7 +50,7 @@ function PatientsWidget() {
                                 <div className="d-flex justify-content-end">
                                     <Link to={`${item.pid}/summary`} className="btn btn-sm btn-primary me-1 d-flex">
                                         <i className="bi bi-list me-1"></i>
-                                        Summary
+                                        More
                                     </Link>
                                     <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteAudioModal(item)}>
                                         <i className="bi bi-trash me-1"></i>

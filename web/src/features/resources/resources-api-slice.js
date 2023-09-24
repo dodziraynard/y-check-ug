@@ -115,6 +115,33 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+
+            // Facilities
+            getFacilities: builder.query({
+                query() {
+                    return `/facilities?page_size=100`;
+                },
+            }),
+
+            putFacilities: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/facilities/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+
+            deleteFacilities: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/facilities/`,
+                        method: 'DELETE',
+                        body,
+                    }
+                },
+            }),
         };
     },
 });
@@ -140,5 +167,10 @@ export const {
     // Configurations
     useLazyGetConfigurationsQuery,
     usePutConfigurationsMutation,
+
+    // Facilities
+    useLazyGetFacilitiesQuery,
+    usePutFacilitiesMutation,
+    useDeleteFacilitiesMutation,
 
 } = resourceApiSlice;

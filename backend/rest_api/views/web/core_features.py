@@ -1,5 +1,6 @@
 import logging
 from rest_framework import permissions
+from dashboard.forms import FacilityForm
 from dashboard.models import Facility
 from rest_api.views.mixins import SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
@@ -96,7 +97,6 @@ class GetSummaryFlags(generics.GenericAPIView):
         flag.save()
 
         return Response({"error": f"Updated successfully."})
-    
 
 
 class FacilitiesAPI(SimpleCrudMixin):
@@ -108,5 +108,6 @@ class FacilitiesAPI(SimpleCrudMixin):
 
     serializer_class = FacilitySerializer
     model_class = Facility
+    form_class = FacilityForm
     response_data_label = "facility"
     response_data_label_plural = "facilities"
