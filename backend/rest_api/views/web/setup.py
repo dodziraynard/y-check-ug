@@ -49,7 +49,8 @@ class PermissionsAPI(SimpleCrudMixin):
         group = Group.objects.filter(id=group_id).first()
         if not group:
             return Response({"error_message": "Group not found"}, status=404)
-        permissions = relevant_permission_objects()
+        permissions = Permission.objects.all()
+
         data = self.serializer_class(permissions,
                                      context={
                                          "group": group
