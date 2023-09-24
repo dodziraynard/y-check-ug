@@ -9,7 +9,7 @@ function PatientsWidget() {
     return (
         <div className="patients-widget">
             <BreadCrumb items={[{ "name": "Patients" }]} />
-            <p className="text-muted">Below are the adolescent registered via the mobile app.
+            <p className="text-muted">Below are the adolescents registered via the mobile app.
                 Click on the <strong>more</strong> button to view the geneted flags and more.
             </p>
 

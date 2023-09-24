@@ -71,7 +71,7 @@ class GetSummaryFlags(generics.GenericAPIView):
             if not flag:
                 flag = SummaryFlag.objects.create(
                     adolescent=adolescent, name=label.name, computed_color_code=color)
-            else:
+            elif flag.computed_color_code != color:
                 flag.computed_color_code = color
                 flag.save()
 
