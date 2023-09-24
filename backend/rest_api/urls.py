@@ -23,4 +23,10 @@ urlpatterns = [
 
     # Facilities
     path("facilities/", views.FacilitiesAPI.as_view()),
+    
+    
+    
+    # Groups
+    path("groups/", views.GroupsAPI.as_view()),
+
 ]
