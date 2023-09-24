@@ -28,5 +28,8 @@ urlpatterns = [
     
     # Groups
     path("groups/", views.GroupsAPI.as_view()),
+    # Permissions
+    path("permissions/group/<int:group_id>/", views.PermissionsAPI.as_view()),
+
 
 ]
