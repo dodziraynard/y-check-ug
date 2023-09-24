@@ -1,7 +1,7 @@
 @import "../../theme-variables.scss";
 
 .setup-widget {
-    .menu{
+    .menu {
         min-height: 70vh;
         background: rgba($color: $primary-color, $alpha: 0.1);
         border-radius: 4px;
@@ -17,6 +17,14 @@
         &:hover,
         &.active {
             background: rgba($color: $primary-color, $alpha: 0.5);
+        }
+    }
+
+    @media (max-width: $breakpoint-tablet) {
+        .menu {
+            min-height: unset;
+            margin-bottom: 2em;
+            padding: 1em;
         }
     }
 }

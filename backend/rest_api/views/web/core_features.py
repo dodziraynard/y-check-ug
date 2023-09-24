@@ -1,5 +1,6 @@
 import logging
 from rest_framework import permissions
+from dashboard.models import Facility
 from rest_api.views.mixins import SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
@@ -8,6 +9,7 @@ from dashboard.models import Adolescent, FlagLabel, SummaryFlag
 from rest_framework.response import Response
 
 from rest_api.serializers import (AdolescentSerializer,
+                                  FacilitySerializer,
                                   SummaryFlagSerializer)
 
 logger = logging.getLogger("app")
@@ -95,3 +97,16 @@ class GetSummaryFlags(generics.GenericAPIView):
 
         return Response({"error": f"Updated successfully."})
     
+
+
+class FacilitiesAPI(SimpleCrudMixin):
+    """
+    Permform CRUD on facility.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    required_permissions = ["setup.view_adolescent"]
+
+    serializer_class = FacilitySerializer
+    model_class = Facility
+    response_data_label = "facility"
+    response_data_label_plural = "facilities"

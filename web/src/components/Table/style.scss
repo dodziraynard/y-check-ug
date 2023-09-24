@@ -1,3 +1,19 @@
-thead {
-  user-select: none;
+.table-component {
+  thead {
+    user-select: none;
+  }
+  .table-controls-container {
+    position: "sticky";
+    top: 0;
+    background: white;
+    box-shadow: 0 0 0.1em 0.01em rgba(0, 0, 0, 0.1);
+  }
+
+  .table-container {
+    overflow-x: scroll;
+  }
+
+  .table-footer-controls {
+    overflow-x: scroll;
+  }
 }

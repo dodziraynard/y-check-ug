@@ -4,7 +4,7 @@ from rest_framework import serializers
 import timeago
 from datetime import datetime
 from accounts.models import User
-from dashboard.models.models import *
+from dashboard.models import *
 from django.utils.timezone import make_aware
 
 
@@ -173,8 +173,9 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
     comment = serializers.SerializerMethodField()
 
     def get_comment(self, obj):
-        now = make_aware(datetime.now())
-        return f"{obj.comment} ({obj.updated_by.get_name()}, {timeago.format(obj.updated_at, now)})"
+        if obj.comment and obj.updated_by:
+            now = make_aware(datetime.now())
+            return f"{obj.comment} ({obj.updated_by.get_name()}, {timeago.format(obj.updated_at, now)})"
 
     def get_responses(self, obj):
         result = []
@@ -205,4 +206,11 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SummaryFlag
+        fields = "__all__"
+
+
+class FacilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Facility
         fields = "__all__"

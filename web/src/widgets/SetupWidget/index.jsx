@@ -13,7 +13,7 @@ function SetupWidget() {
                     <NavLink className="setup-menu-item" to="facilities"><i className="bi bi-h-circle"></i> Facilities</NavLink>
                     <NavLink className="setup-menu-item" to="roles"><i className="bi bi-lock"></i> Roles</NavLink>
                 </section>
-                <section className="col-md-9">
+                <section className="col-md-10">
                     <Outlet />
                 </section>
             </div>

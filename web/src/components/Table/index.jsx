@@ -149,9 +149,9 @@ function TableView({ headers,
         }
     }
     return (
-        <Fragment>
+        <section className="table-component">
             <div className="card-body" style={{ maxHeight: "70vh", overflowY: "auto" }}>
-                <div className="d-flex justify-content-between mb-3 p-2 mx-auto" style={{ position: "sticky", top: "0", background: "white", boxShadow: "0 0 1em 0.01em rgba(0,0,0,0.1)" }}>
+                <div className="d-flex justify-content-between mb-3 p-2 mx-auto table-controls-container">
                     <div className="d-flex">
                         <div className="d-flex align-items-center">
                             <input type="search" className="form-control" id="search" aria-describedby="search"
@@ -228,84 +228,86 @@ function TableView({ headers,
                     </div>
                 </div>
 
-                <table className="table mb-2" id="data_table">
-                    <thead>
-                        <tr>
-                            {bulkActions?.length > 0 && <th>
-                                <input type="checkbox" className="form-check-input" id="bulk_select"
-                                    onChange={(e) => {
-                                        if (e.target.checked) {
-                                            setBulkSelectedIds(displayedData.map(c => c.id))
-                                            setSelectedItems([...displayedData])
-                                        } else {
-                                            setBulkSelectedIds([])
-                                            setSelectedItems([])
+                <div className="table-container">
+                    <table className="table mb-2" id="data_table">
+                        <thead>
+                            <tr>
+                                {bulkActions?.length > 0 && <th>
+                                    <input type="checkbox" className="form-check-input" id="bulk_select"
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setBulkSelectedIds(displayedData.map(c => c.id))
+                                                setSelectedItems([...displayedData])
+                                            } else {
+                                                setBulkSelectedIds([])
+                                                setSelectedItems([])
+                                            }
+                                        }}
+                                        checked={bulkSelectedIds.length === displayedData.length && bulkSelectedIds.length > 0}
+                                    /> </th>}
+
+                                <th>
+                                    <div className="d-flex">
+                                        S/N
+                                    </div>
+                                </th>
+
+                                {headers?.map(({ key, value, render = null, textAlign = "left" }, index) => {
+                                    return (
+                                        <th key={index} onClick={(e) => { if (key === sort) { setSortAscending(!sortAscending) }; triggerSort(key) }
                                         }
-                                    }}
-                                    checked={bulkSelectedIds.length === displayedData.length && bulkSelectedIds.length > 0}
-                                /> </th>}
+                                            style={{ cursor: "pointer", textAlign: textAlign }}
+                                        >
+                                            {value}
+                                            {sort === key && (sortAscending ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-up-fill"></i>)}
+                                        </th>
+                                    )
+                                })}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {isLoading && <tr><td colSpan={(headers?.length || 7) + 2}>
+                                <span className="text-center d-flex justify-content-center align-items-center">
+                                    <Spinner size={"sm"} />
+                                    <span className="mx-2">Loading...</span>
+                                </span>
+                            </td></tr>}
+                            {(!isLoading && displayedData?.length === 0) && <tr><td colSpan={(headers?.length || 7) + 2}>
+                                <p className="text-center">No data to display</p>
+                            </td></tr>}
+                            {!isLoading && error && <tr><td colSpan={(headers?.length || 7) + 2}><p className="text-center text-warning">Error: {error}</p> </td></tr>}
 
-                            <th>
-                                <div className="d-flex">
-                                    S/N
-                                </div>
-                            </th>
-
-                            {headers?.map(({ key, value, render = null, textAlign = "left" }, index) => {
+                            {displayedData?.map((item, index) => {
                                 return (
-                                    <th key={index} onClick={(e) => { if (key === sort) { setSortAscending(!sortAscending) }; triggerSort(key) }
-                                    }
-                                        style={{ cursor: "pointer", textAlign: textAlign }}
-                                    >
-                                        {value}
-                                        {sort === key && (sortAscending ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-up-fill"></i>)}
-                                    </th>
+                                    <tr key={index} style={{ minHeight: "3em", verticalAlign: "middle" }}>
+                                        {bulkActions?.length > 0 && <td>
+                                            <input type="checkbox" className="form-check-input" id="bulk_select"
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setBulkSelectedIds([...bulkSelectedIds, item.id])
+                                                        setSelectedItems([...selectedItems, item])
+                                                    } else {
+                                                        setBulkSelectedIds(bulkSelectedIds.filter(c => c != item.id))
+                                                        setSelectedItems(selectedItems.filter(c => c != item))
+                                                    }
+                                                }}
+                                                checked={bulkSelectedIds.includes(item.id)}
+                                            />
+                                        </td>}
+                                        <td>{index + 1}</td>
+                                        {headers?.map(({ key, render, textAlign = "left" }, headerIndex) => {
+                                            return (
+                                                <td className=" align-items-center" key={headerIndex} style={{ textAlign: textAlign }}>
+                                                    {render ? render(item) : typeof item[key] != 'object' ? <span>{item[key]}</span> : "N/A"}
+                                                </td>
+                                            )
+                                        })}
+                                    </tr>
                                 )
                             })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isLoading && <tr><td colSpan={(headers?.length || 7) + 2}>
-                            <span className="text-center d-flex justify-content-center align-items-center">
-                                <Spinner size={"sm"} />
-                                <span className="mx-2">Loading...</span>
-                            </span>
-                        </td></tr>}
-                        {(!isLoading && displayedData?.length === 0) && <tr><td colSpan={(headers?.length || 7) + 2}>
-                            <p className="text-center">No data to display</p>
-                        </td></tr>}
-                        {!isLoading && error && <tr><td colSpan={(headers?.length || 7) + 2}><p className="text-center text-warning">Error: {error}</p> </td></tr>}
-
-                        {displayedData?.map((item, index) => {
-                            return (
-                                <tr key={index} style={{ minHeight: "3em", verticalAlign: "middle" }}>
-                                    {bulkActions?.length > 0 && <td>
-                                        <input type="checkbox" className="form-check-input" id="bulk_select"
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setBulkSelectedIds([...bulkSelectedIds, item.id])
-                                                    setSelectedItems([...selectedItems, item])
-                                                } else {
-                                                    setBulkSelectedIds(bulkSelectedIds.filter(c => c != item.id))
-                                                    setSelectedItems(selectedItems.filter(c => c != item))
-                                                }
-                                            }}
-                                            checked={bulkSelectedIds.includes(item.id)}
-                                        />
-                                    </td>}
-                                    <td>{index + 1}</td>
-                                    {headers?.map(({ key, render, textAlign = "left" }, headerIndex) => {
-                                        return (
-                                            <td className=" align-items-center" key={headerIndex} style={{ textAlign: textAlign }}>
-                                                {render ? render(item) : typeof item[key] != 'object' ? <span>{item[key]}</span> : "N/A"}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {Boolean(bulkSelectedIds?.length) ?
@@ -314,7 +316,7 @@ function TableView({ headers,
                 </div> : ""
             }
 
-            <div className="d-flex align-items-center mx-3 my-3">
+            <div className="d-flex align-items-center my-3 table-footer-controls">
                 <div className="d-flex align-items-center me-2">
                     <select className="form-select" name="page_size" id="page_size" onChange={(e) => setPageSize(e.target.value)} defaultValue={page}>
                         <option value="100">100</option>
@@ -354,7 +356,7 @@ function TableView({ headers,
                     {exportable ? <button className="btn btn-sm btn-outline-primary d-flex" onClick={() => exportTableToExcel('data_table', exportFileName)}> <i className="bi bi-file-spreadsheet-fill"></i>  Export</button> : ""}
                 </div>
             </div>
-        </Fragment >
+        </section >
     );
 }
 

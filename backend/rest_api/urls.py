@@ -20,4 +20,7 @@ urlpatterns = [
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
     path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view()),
+
+    # Facilities
+    path("facilities/", views.FacilitiesAPI.as_view()),
 ]

@@ -39,6 +39,7 @@ function App() {
               <SetupWidget />
             </ProtectedRoute>
           }>
+            <Route path="" element={<FacilitiesWidget />} />
             <Route path="facilities" element={<FacilitiesWidget />} />
             <Route path="roles" element={<RolesWidget />} />
           </Route>

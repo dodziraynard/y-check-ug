@@ -1,6 +1,5 @@
 @import "../../theme-variables.scss";
 
-$breakpoint-tablet: 820px;
 @media (max-width: $breakpoint-tablet) {
     .sidebar {
         position: fixed;
@@ -88,8 +87,8 @@ $breakpoint-tablet: 820px;
         }
 
         .breadcrumb {
-            background-color: $white;
             margin: 1em auto;
+            overflow-x: scroll;
             border-radius: 4px;
             padding: 0.5em;
         }

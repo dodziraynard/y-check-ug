@@ -14,6 +14,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     other_names = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     photo = models.ImageField(upload_to='users', blank=True, null=True)
+    facility = models.ForeignKey("dashboard.Facility", on_delete=models.SET_NULL, blank=True, null=True)
 
     activated = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)

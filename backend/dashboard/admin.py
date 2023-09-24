@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from dashboard.models.models import *
+from dashboard.models import *
 
 admin.site.register(CheckupLocation)
 admin.site.register(Section)
