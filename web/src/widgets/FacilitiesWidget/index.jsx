@@ -112,8 +112,7 @@ function FacilitiesWidget() {
                             </p>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-outline-danger" onClick={() => handleDeleteFacility(selectedFacility)} >Yes, continue</button>
-                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteFacility(selectedFacility)} >Yes, continue</button>
                         </div>
                     </div>
                 </div>
