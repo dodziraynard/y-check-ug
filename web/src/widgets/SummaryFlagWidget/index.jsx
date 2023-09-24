@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Flag from '../../components/Flag';
 import { useParams } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
-import { Button, Spinner, Text, useToast } from '@chakra-ui/react';
+import { Button, Spinner, Text, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 
 function SummaryFlagWidget() {
@@ -74,7 +74,7 @@ function SummaryFlagWidget() {
                 duration: 1000,
                 isClosable: true,
             })
-        } 
+        }
     }, [error, isLoading])
 
     useEffect(() => {
@@ -134,7 +134,7 @@ function SummaryFlagWidget() {
         const response = postFlagColorOverride(
             `${BASE_API_URI}/${pid}/summary-flags/`,
             body)
-        if (response){
+        if (response) {
             getFlags()
             flagOverrideModal?.hide()
             event.target.reset()
@@ -291,9 +291,12 @@ function SummaryFlagWidget() {
                                             <td>{flag.name}</td>
                                             <td>
                                                 <div className="d-flex">
-
-                                                    <Flag title={flag.comment} color={flag.computed_color_code} mutable={!Boolean(flag.updated_color_code)} onColorChange={(color) => onColorChange(color, flag.id)} />
-                                                    {Boolean(flag.updated_color_code) ? <Flag title={flag.comment} color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
+                                                    <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
+                                                        <Flag color={flag.computed_color_code} mutable={!Boolean(flag.updated_color_code)} onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                    </Tooltip>
+                                                    <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
+                                                        {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
+                                                    </Tooltip>
                                                 </div>
                                             </td>
                                             <td>

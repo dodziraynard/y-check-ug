@@ -1,11 +1,9 @@
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import './style.scss';
 import { Button } from '@chakra-ui/react';
 
-const Flag = ({ color, onColorChange, mutable = true, ...props }) => {
+const Flag = React.forwardRef(({ color, onColorChange, mutable = true, ...props }, ref) => {
     const [newColor, setNewColor] = useState(`${color}`)
-
-    console.log(color, newColor)
 
     const _onColorChange = (value) => {
         setNewColor(value)
@@ -13,12 +11,12 @@ const Flag = ({ color, onColorChange, mutable = true, ...props }) => {
     }
 
     return (
-        <div className='summary-flag-input d-flex align-items-center'>
+        <div className='summary-flag-input d-flex align-items-center' ref={ref}>
             {mutable ?
                 <Fragment>
                     <input className='mutable-flag-input' type="color"
                         list="presetColors"
-                        value={newColor} onChange={event => { _onColorChange(event.target.value); }} {...props}/>
+                        value={newColor} onChange={event => { _onColorChange(event.target.value); }} {...props} />
                     {color !== newColor ? <Button size={"sm"} onClick={() => onColorChange(newColor)}>Save</Button> : ""}
                     <datalist id="presetColors">
                         <option>#00ff00</option>
@@ -31,6 +29,6 @@ const Flag = ({ color, onColorChange, mutable = true, ...props }) => {
             }
         </div>
     );
-}
+})
 
 export default Flag;

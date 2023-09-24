@@ -1,9 +1,11 @@
 import logging
 
 from rest_framework import serializers
-
+import timeago
+from datetime import datetime
 from accounts.models import User
 from dashboard.models.models import *
+from django.utils.timezone import make_aware
 
 
 logger = logging.getLogger("app")
@@ -168,6 +170,11 @@ class AdolescentResponseSerialiser(serializers.ModelSerializer):
 
 class SummaryFlagSerializer(serializers.ModelSerializer):
     responses = serializers.SerializerMethodField()
+    comment = serializers.SerializerMethodField()
+
+    def get_comment(self, obj):
+        now = make_aware(datetime.now())
+        return f"{obj.comment} ({obj.updated_by.get_name()}, {timeago.format(obj.updated_at, now)})"
 
     def get_responses(self, obj):
         result = []

@@ -990,7 +990,7 @@
     "@chakra-ui/styled-system" "2.9.1"
     "@chakra-ui/theme" "3.3.0"
 
-"@chakra-ui/tooltip@2.3.0":
+"@chakra-ui/tooltip@2.3.0", "@chakra-ui/tooltip@^2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@chakra-ui/tooltip/-/tooltip-2.3.0.tgz#88e61a2c5a4d99af805840377dc940d3b17c806e"
   integrity sha512-2s23f93YIij1qEDwIK//KtEu4LLYOslhR1cUhDBk/WUzyFR3Ez0Ee+HlqlGEGfGe9x77E6/UXPnSAKKdF/cpsg==
