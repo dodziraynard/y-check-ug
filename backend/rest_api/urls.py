@@ -19,5 +19,5 @@ urlpatterns = [
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
-    path("<str:pid>/get-summary-flags/", views.GetSummaryFlags.as_view()),
+    path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view()),
 ]

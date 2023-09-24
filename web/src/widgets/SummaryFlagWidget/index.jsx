@@ -12,17 +12,24 @@ import { Modal } from 'bootstrap';
 function SummaryFlagWidget() {
     const profileModalRef = useRef(null);
     const responseModalRef = useRef(null);
+    const flagOverrideModalRef = useRef(null);
 
     const { pid } = useParams()
     const toast = useToast()
-    const { trigger: getFlags, data: responseData, error, isLoading } = useAxios({ mainUrl: `${BASE_API_URI}/${pid}/get-summary-flags` });
+    const { trigger: getFlags, data: responseData, error, isLoading } = useAxios({ mainUrl: `${BASE_API_URI}/${pid}/summary-flags` });
     const { trigger: getAdolescentProfile, data: adolescentResponseData, adolescentError, isLoadingAdolescent } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-profile/${pid}/` });
+    const { trigger: postFlagColorOverride, data: overrideResponse, error: overrideError, isLoading: isLoadinOverride } = useAxios({ method: "POST" });
 
     const [profileModal, setProfileModal] = useState(null);
     const [responseModal, setResponseModal] = useState(null);
+    const [flagOverrideModal, setFlagOverrideModal] = useState(null);
     const [flags, setFlags] = useState([])
     const [adolescent, setAdolescent] = useState(null)
     const [selectedResponse, setSelectedResponse] = useState(null)
+
+    const [flagOverrideId, setFlagOverrideId] = useState(null)
+    const [flagOverrideComment, setFlagOverrideComment] = useState(null)
+    const [flagOverrideColor, setFlagOverrideColor] = useState(null)
 
     useEffect(() => {
         getFlags()
@@ -36,6 +43,10 @@ function SummaryFlagWidget() {
         if (responseModalRef.current !== null && responseModal === null) {
             const modal = new Modal(responseModalRef.current, { keyboard: false })
             setResponseModal(modal)
+        }
+        if (flagOverrideModalRef.current !== null && flagOverrideModal === null) {
+            const modal = new Modal(flagOverrideModalRef.current, { keyboard: false })
+            setFlagOverrideModal(modal)
         }
     }, [])
 
@@ -52,19 +63,49 @@ function SummaryFlagWidget() {
     }, [adolescentResponseData])
 
     useEffect(() => {
+        if (error && isLoading !== true) {
+            toast.close("adolescent_error")
+            toast({
+                id: "adolescent_error",
+                position: 'top-center',
+                title: `An error occurred while trying to get flags.`,
+                description: error,
+                status: 'error',
+                duration: 1000,
+                isClosable: true,
+            })
+        } 
+    }, [error, isLoading])
+
+    useEffect(() => {
         if (adolescentError && isLoadingAdolescent !== true) {
             toast.close("adolescent_error")
             toast({
                 id: "adolescent_error",
                 position: 'top-center',
                 title: `An error occurred while trying to get adolescent profile.`,
-                description: isLoadingAdolescent,
+                description: adolescentError,
                 status: 'error',
                 duration: 1000,
                 isClosable: true,
             })
         }
     }, [adolescentError, isLoadingAdolescent])
+
+    useEffect(() => {
+        if (overrideError && isLoadinOverride !== true) {
+            toast.close("override_error")
+            toast({
+                id: "override_error",
+                position: 'top-center',
+                title: `An error occurred while trying to override flag color.`,
+                description: overrideError,
+                status: 'error',
+                duration: 1000,
+                isClosable: true,
+            })
+        }
+    }, [overrideError, isLoadinOverride])
 
     function getDateFromMills(timeInMills) {
         var date = new Date(timeInMills);
@@ -74,6 +115,31 @@ function SummaryFlagWidget() {
     function showResponses(flagIndex) {
         setSelectedResponse(flags[flagIndex].responses)
         responseModal?.show()
+    }
+
+    const onColorChange = (color, flagId) => {
+        setFlagOverrideColor(color)
+        setFlagOverrideId(flagId)
+        setFlagOverrideComment("")
+        flagOverrideModal?.show()
+    }
+
+    const handleOverrideFormSubmit = (event) => {
+        event.preventDefault()
+        const body = {
+            "summary_flag_id": flagOverrideId,
+            "comment": flagOverrideComment,
+            "new_color": flagOverrideColor,
+        }
+        const response = postFlagColorOverride(
+            `${BASE_API_URI}/${pid}/summary-flags/`,
+            body)
+        if (response){
+            getFlags()
+            flagOverrideModal?.hide()
+            event.target.reset()
+        }
+
     }
 
     return (
@@ -129,7 +195,6 @@ function SummaryFlagWidget() {
                     </div>
                 </div>
             </div>
-
             {/* Adolescent response modal */}
             <div ref={responseModalRef} className="modal fade" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
@@ -158,6 +223,39 @@ function SummaryFlagWidget() {
                                     </div>
                                 })}
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Override form modal*/}
+            <div ref={flagOverrideModalRef} className="modal fade" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog modal-md">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">
+                                Override
+                            </h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body overflow-scroll">
+                            <form method="post" onSubmit={handleOverrideFormSubmit}>
+                                <div className="form-group">
+                                    <label htmlFor="comment">Please enter your comment for the override below.</label>
+                                    <textarea className='form-control'
+                                        name="comment"
+                                        id="comment"
+                                        cols="30"
+                                        rows="3"
+                                        onChange={(event) => setFlagOverrideComment(event.target.value)}
+                                        required></textarea>
+                                </div>
+                                <div className="form-group my-4">
+                                    <Button type='submit' isLoading={isLoadinOverride}>
+                                        Submit
+                                    </Button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -193,8 +291,9 @@ function SummaryFlagWidget() {
                                             <td>{flag.name}</td>
                                             <td>
                                                 <div className="d-flex">
-                                                    <Flag color={flag.computed_color_code} mutable={!Boolean(flag.updated_color_code)}/>
-                                                    {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} /> : ""}
+
+                                                    <Flag title={flag.comment} color={flag.computed_color_code} mutable={!Boolean(flag.updated_color_code)} onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                    {Boolean(flag.updated_color_code) ? <Flag title={flag.comment} color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
                                                 </div>
                                             </td>
                                             <td>
@@ -204,12 +303,11 @@ function SummaryFlagWidget() {
                                     })
                                     :
                                     <tr>
-                                        <td colSpan={2}><p className="d-block text-center text-warning">No data found.</p></td>
+                                        <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                        <button className="btn btn-sm btn-primary">Save</button>
                     </div>
 
                     <hr />

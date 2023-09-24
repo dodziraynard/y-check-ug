@@ -81,7 +81,17 @@ class GetSummaryFlags(generics.GenericAPIView):
         return Response(repsonse_data, status=status.HTTP_200_OK)
 
     def post(self, request, pid, *args, **kwargs):
-        summary_flag_data = request.data.get("")
+        summary_flag_id = request.data.get("summary_flag_id")
+        comment = request.data.get("comment")
+        new_color = request.data.get("new_color")
         adolescent = Adolescent.objects.filter(pid=pid).first()
         if not adolescent:
             return Response({"error_message": f"{pid} not found."})
+        flag = SummaryFlag.objects.filter(id=summary_flag_id).first()
+        flag.comment = comment
+        flag.updated_color_code = new_color
+        flag.updated_by = request.user
+        flag.save()
+
+        return Response({"error": f"Updated successfully."})
+    

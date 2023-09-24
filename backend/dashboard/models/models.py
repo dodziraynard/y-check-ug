@@ -209,6 +209,7 @@ class SummaryFlag(models.Model):
     adolescent = models.ForeignKey(
         Adolescent, on_delete=models.CASCADE, db_index=True)
     name = models.CharField(max_length=50, db_index=True)
+    comment = models.CharField(max_length=200, default="This value was inffered.")
     computed_color_code = models.CharField(max_length=10)
     updated_color_code = models.CharField(max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
