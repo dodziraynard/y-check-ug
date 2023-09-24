@@ -5,6 +5,7 @@ import logging
 from django.contrib.auth.models import Permission
 from django.db.models import Count, Q
 from django.utils.html import strip_tags
+from setup.models import SetupPerm  
 
 
 logger = logging.getLogger("app")
@@ -68,3 +69,15 @@ def available_application_permissions():
     ]
     all_permissions.sort()
     return all_permissions
+
+def relevant_permission_objects():
+    setup_perm_permissions = [
+        permission[0]
+        for permission in SetupPerm._meta.permissions
+    ]
+
+    permissions = Permission.objects.filter(
+        codename__in=setup_perm_permissions
+    ).order_by("name")
+
+    return permissions
