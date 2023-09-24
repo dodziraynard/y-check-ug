@@ -13,6 +13,9 @@ import PatientsWidget from "./widgets/PatientsWidget";
 import SummaryFlagWidget from "./widgets/SummaryFlagWidget";
 import AdolescentReferralsWidget from "./widgets/AdolescentReferralsWidget";
 import ReferralsWidget from "./widgets/ReferralsWidget";
+import SetupWidget from "./widgets/SetupWidget";
+import FacilitiesWidget from "./widgets/FacilitiesWidget";
+import RolesWidget from "./widgets/RolesWidget";
 
 
 function App() {
@@ -30,6 +33,15 @@ function App() {
           <Route path="/patients/:pid/summary" element={<SummaryFlagWidget />} />
           <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
           <Route path="/referrals" element={<ReferralsWidget />} />
+
+          <Route path="/setup" element={
+            <ProtectedRoute permissions={[Permissions.MANAGE_SETUP]}>
+              <SetupWidget />
+            </ProtectedRoute>
+          }>
+            <Route path="facilities" element={<FacilitiesWidget />} />
+            <Route path="roles" element={<RolesWidget />} />
+          </Route>
         </Route>
         <Route path="*" element={<Error404Screen />} />
       </Routes>

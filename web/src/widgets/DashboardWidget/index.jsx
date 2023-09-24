@@ -1,7 +1,7 @@
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 
-function DashboardWidget({ value, setValue, ...rest }) {
+function DashboardWidget() {
 
     return (
         <div className="dashboard-widget">

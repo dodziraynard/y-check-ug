@@ -1,0 +1,22 @@
+@import "../../theme-variables.scss";
+
+.setup-widget {
+    .menu{
+        min-height: 70vh;
+        background: rgba($color: $primary-color, $alpha: 0.1);
+        border-radius: 4px;
+    }
+    .setup-menu-item {
+        background: rgba($color: $primary-color, $alpha: 0.3);
+        padding: 1em;
+        margin: 0.3em 0;
+        display: block;
+        border-radius: 4px;
+        font-size: 16px;
+
+        &:hover,
+        &.active {
+            background: rgba($color: $primary-color, $alpha: 0.5);
+        }
+    }
+}

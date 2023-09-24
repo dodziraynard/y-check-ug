@@ -2,6 +2,7 @@ import './styles.scss'
 import './styles-m.scss'
 import { Fragment, useEffect } from "react";
 import logo from "../../assets/images/logo.png";
+import Permissions from "../../utils/permissions";
 import PageMeta from "../../components/PageMeta";
 import { NavLink, Outlet } from "react-router-dom";
 import Footer from '../../components/Footer';
@@ -125,12 +126,13 @@ function DashboardPage() {
                     </div>
                 </NavLink>
 
-                <NavLink to="">
+                {userPermissions.has(Permissions.MANAGE_SETUP) ? <NavLink to="/setup">
                     <div className="menu-item" id="setup">
                         <i className='icon bi bi-cog'></i>
                         <span className="label">Setup</span>
                     </div>
                 </NavLink>
+                    : ""}
 
                 <hr />
 
