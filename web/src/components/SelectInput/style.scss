@@ -1,0 +1,21 @@
+@import '../../theme-variables.scss';
+
+.tabs {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+
+  .tab-item {
+    cursor: pointer;
+    border-bottom: 2.5px solid transparent;
+    text-align: center;
+
+    &.active,
+    &:hover {
+      border-bottom: 3px solid $primary-color;
+    }
+  }
+}
+
+.tab-content {
+  min-height: 60vh;
+}

@@ -56,6 +56,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             return f"{self.surname.title()} {self.other_names.title()}"
         return self.username
 
+    @property
+    def fullname(self):
+        return f"{self.surname} {self.other_names}"
 
 class ActivityLog(models.Model):
     username = models.CharField(max_length=100)

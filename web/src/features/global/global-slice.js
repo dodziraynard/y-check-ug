@@ -7,6 +7,7 @@ export const globalSlice = createSlice({
         groups: [],
         configurations: null,
         balance: null,
+        facilities:[],
     },
     reducers: {
         setActiveNavMenu: (state, action) => {
@@ -18,8 +19,11 @@ export const globalSlice = createSlice({
         setConfigurations: (state, action) => {
             state.configurations = action.payload
         },
+        setFacilities: (state, action) => {
+            state.facilities = action.payload
+        },
     },
 });
 
-export const { setActiveNavMenu, setGroups, setConfigurations } = globalSlice.actions;
+export const { setActiveNavMenu, setGroups, setConfigurations, setFacilities} = globalSlice.actions;
 export default globalSlice.reducer;

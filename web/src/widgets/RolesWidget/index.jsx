@@ -42,6 +42,7 @@ function RolesWidget() {
         getGroups()
     }, [])
 
+    console.log(groups)
     useEffect(() => {
         if (modalRef.current !== null && modal === null) {
             const modal = new Modal(modalRef.current, { keyboard: false })
