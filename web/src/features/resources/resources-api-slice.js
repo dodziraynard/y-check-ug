@@ -117,6 +117,11 @@ export const resourceApiSlice = createApi({
             }),
 
             // Facilities
+            getAllFacilities: builder.query({
+                query() {
+                    return `/all/facilities/`;
+                },
+            }),
             getFacilities: builder.query({
                 query() {
                     return `/facilities?page_size=100`;
@@ -169,6 +174,7 @@ export const {
     usePutConfigurationsMutation,
 
     // Facilities
+    useLazyGetAllFacilitiesQuery,
     useLazyGetFacilitiesQuery,
     usePutFacilitiesMutation,
     useDeleteFacilitiesMutation,

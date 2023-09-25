@@ -2,19 +2,22 @@ import {
     useLazyGetGroupsQuery,
     usePutUsersMutation,
     useDeleteUsersMutation,
+    useLazyGetAllFacilitiesQuery,
 } from '../../features/resources/resources-api-slice';
 import { Fragment, useState, useEffect, useRef } from 'react';
 import {
     setGroups as setStoreGroups,
+    setFacilities as setStoreFacilities
 } from '../../features/global/global-slice';
 import { Modal } from 'bootstrap';
-import { useToast, Spinner } from '@chakra-ui/react';
+import { Button, Spinner, useToast } from '@chakra-ui/react';
 import TagInput from '../../components/TagInput';
 import PasswordInput from '../../components/PasswordInput';
 import SelectInput from '../../components/SelectInput';
 import TableView from '../../components/Table';
 import { BASE_API_URI } from '../../utils/constants';
 import { useDispatch } from 'react-redux';
+import BreadCrumb from '../../components/BreadCrumb';
 
 function UsersWidget() {
     const dispatch = useDispatch()
@@ -32,22 +35,21 @@ function UsersWidget() {
     const [putUser, { isLoading: isPuttingUser, error: errorPuttingUser }] = usePutUsersMutation()
     const [deleteUser, { isLoading: isDeletingUser, error: errorDeletingUser }] = useDeleteUsersMutation()
     const [getGroups, { data: response = [], isFetching, error }] = useLazyGetGroupsQuery()
+    const [getFacilities, { data: res = [], isFetching1,  }] = useLazyGetAllFacilitiesQuery()
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [allUsers] = useState([])
     const [groups, setGroups] = useState([])
+    const [facilities, setFacilities] = useState([])
 
     // Form input
+    const [username, setUsername] = useState('');
     const [surname, setSurname] = useState('');
     const [otherNames, setOtherNames] = useState('');
     const [phone, setPhone] = useState('');
-    const [phoneNetwork, setPhoneNetwork] = useState('');
-    const [emailAddress, setEmailAddress] = useState('');
+    const [facility, setFacility] = useState('');
     const [password, setPassword] = useState('');
     const [isActive, setIsActive] = useState(true);
-    const [locale, setLocale] = useState('');
-    const [assignedImageBatch, setAssignedImageBatch] = useState('');
-    const [assignedAudioBatch, setAssignedAudioBatch] = useState('');
-    const [leadEmailAddress, setLeadEmailAddress] = useState('');
+    
 
     // Filter inputs
     const [search, setSearch] = useState('');
@@ -61,11 +63,16 @@ function UsersWidget() {
     useEffect(() => {
         setGroups(response["groups"])
         dispatch(setStoreGroups(response["groups"]))
-    }, [isFetching])
+        setFacilities(res["facilities"])
+        dispatch(setStoreFacilities(res["facilities"]))
+    }, [isFetching,isFetching1])
 
     useEffect(() => {
         getGroups()
+        getFacilities()
     }, [])
+
+    console.log(facilities)
 
     useEffect(() => {
         if (modalRef.current !== null && modal === null) {
@@ -81,15 +88,11 @@ function UsersWidget() {
 
     const showEditUserModal = (user) => {
         setSelectedUser(user)
+        setUsername(user.username)
         setSurname(user.surname || "")
         setOtherNames(user.other_names || "")
         setPhone(user.phone || "")
-        setPhoneNetwork(user.phone_network || "")
-        setEmailAddress(user.email_address || "")
-        setLocale(user.locale || "")
-        setAssignedImageBatch(user.assigned_image_batch || "")
-        setAssignedAudioBatch(user.assigned_audio_batch || "")
-        setLeadEmailAddress(user.lead_email_address || "")
+        setFacility(user.facility || "")        
         setIsActive(user.is_active)
         setPassword("")
         modal?.show()
@@ -97,16 +100,12 @@ function UsersWidget() {
 
     const showNewFormUserModal = () => {
         setSelectedUser(null)
+        setUsername("")
         setSurname("")
         setOtherNames("")
         setPhone("")
-        setPhoneNetwork("")
-        setEmailAddress("")
-        setLocale("")
-        setAssignedImageBatch("")
-        setAssignedAudioBatch("")
+        setFacility("")
         setPassword("")
-        setLeadEmailAddress("")
         modal?.show()
     }
 
@@ -143,23 +142,19 @@ function UsersWidget() {
     }
 
     const handleFormSubmit = async (e) => {
-        if (!(surname && otherNames, phone, phoneNetwork, emailAddress, locale)) {
+        if (!(username && surname && otherNames, phone, facility)) {
             alert("Choose complete all fields.")
         }
 
         e.preventDefault()
         const body = {
+            username,
             surname,
             other_names: otherNames,
             phone,
-            phone_network: phoneNetwork,
-            email_address: emailAddress,
+            facility,
             groups: selectedGroups,
-            locale: locale,
             is_active: isActive,
-            assigned_image_batch: assignedImageBatch,
-            assigned_audio_batch: assignedAudioBatch,
-            lead_email_address: leadEmailAddress,
             password: password,
         }
         if (selectedUser) {
@@ -215,8 +210,7 @@ function UsersWidget() {
             return c.surname?.toLowerCase()?.includes(search.toLowerCase())
                 || c.other_names?.toLowerCase()?.includes(search?.toLowerCase())
                 || c.phone?.toLowerCase()?.includes(search?.toLowerCase())
-                || c.phone_network?.toLowerCase()?.includes(search?.toLowerCase())
-                || c.email_address?.toLowerCase()?.includes(search.toLowerCase())
+                || c.username?.toLowerCase()?.includes(search?.toLowerCase())
         })
         setUsers(users)
     }, [search])
@@ -233,7 +227,8 @@ function UsersWidget() {
     }, [sort])
 
     return (
-        <Fragment>
+        <div>
+             <BreadCrumb items={[{ "name": "Users" }]} />
             <div ref={deletionModalRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-md">
                     <div className="modal-content">
@@ -278,6 +273,14 @@ function UsersWidget() {
 
                                 <p><b>BIO</b></p>
                                 <div className="mb-3">
+                                    <label htmlFor="surname" className="form-label">UserName/Staff ID</label>
+                                    <input type="text" className="form-control" id="username" aria-describedby="username"
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder="Enter username or staff id"
+                                        required
+                                        value={username} />
+                                </div>
+                                <div className="mb-3">
                                     <label htmlFor="surname" className="form-label">Surname</label>
                                     <input type="text" className="form-control" id="surname" aria-describedby="surname"
                                         onChange={(e) => setSurname(e.target.value)}
@@ -296,78 +299,28 @@ function UsersWidget() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="phone" className="form-label">Momo Number</label>
+                                    <label htmlFor="phone" className="form-label">Phone Number</label>
                                     <input type="text" className="form-control" id="phone" aria-describedby="phone"
                                         onChange={(e) => setPhone(e.target.value)}
-                                        placeholder="Enter momo number"
+                                        placeholder="Enter phone number"
                                         required
                                         value={phone} />
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="phone_network" className="form-label">Phone Network</label>
+                                    <label htmlFor="facility" className="form-label">Facility</label>
                                     <SelectInput
-                                        onChange={(e) => setPhoneNetwork(e.target.value)}
+                                        onChange={(e) => setFacility(e.target.value)}
                                         required={true}
-                                        value={phoneNetwork}
+                                        value={facility}
                                         options={[
-                                            { value: "", label: 'Choose network' },
-                                            { value: 'MTN', label: 'MTN' },
-                                            { value: 'VODAFONE', label: 'VODAFONE' },
-                                            { value: 'AIRTELTIGO', label: 'AIRTELTIGO' },
+                                            { value: "", label: 'Choose Facility' },
+                                            ...(facilities ? facilities.map(item => ({
+                                                value: item.id,
+                                                label: `${item.name}, ${item.location}`
+                                            })) : [])
                                         ]}
                                     />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="email_address" className="form-label">Email Address</label>
-                                    <input type="email" className="form-control" id="email_address" aria-describedby="email_address"
-                                        onChange={(e) => setEmailAddress(e.target.value)}
-                                        placeholder="Enter email address"
-                                        required
-                                        value={emailAddress} />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="locale" className="form-label">Locale</label>
-                                    <SelectInput
-                                        onChange={(e) => setLocale(e.target.value)}
-                                        value={locale}
-                                        required={true}
-                                        options={[
-                                            { value: '', label: 'Choose locale' },
-                                            { value: 'dga_gh', label: 'Dagbani' },
-                                            { value: 'dag_gh', label: 'Dagaare' },
-                                            { value: 'ee_gh', label: 'Ewe' },
-                                            { value: 'kpo_gh', label: 'Ikposo' },
-                                            { value: 'ak_gh', label: 'Akan' },
-                                        ]}
-                                    />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="assigned_image_batch" className="form-label">Assigned Image Batch</label>
-                                    <input type="number" className="form-control" id="assigned_image_batch" aria-describedby="assigned_image_batch"
-                                        onChange={(e) => setAssignedImageBatch(e.target.value)}
-                                        placeholder="Assigned Image Batch"
-                                        value={assignedImageBatch} />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="assigned_audio_batch" className="form-label">Assigned Audio Batch</label>
-                                    <p className='m-0 p-0'><small>This user will validate all audio description of images belong to this batch.</small></p>
-                                    <input type="number" className="form-control" id="assigned_audio_batch" aria-describedby="assigned_audio_batch"
-                                        onChange={(e) => setAssignedAudioBatch(e.target.value)}
-                                        placeholder="Assigned Audio Batch"
-                                        value={assignedAudioBatch} />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="lead_email_address" className="form-label">Language Lead's Email</label>
-                                    <input type="email" className="form-control" id="lead_email_address" aria-describedby="lead_email_address"
-                                        onChange={(e) => setLeadEmailAddress(e.target.value)}
-                                        placeholder="Email Language Lead"
-                                        value={leadEmailAddress} />
                                 </div>
 
                                 <div className="mt-5">
@@ -435,7 +388,8 @@ function UsersWidget() {
                 <div className="card-header d-flex justify-content-between" style={{ "position": "sticky", "top": "0em", "zIndex": "1", "background": "white" }}>
                     <p>USERS</p>
                     <div className="d-flex justify-content-end">
-                        <button className="btn btn-primary btn-sm" onClick={showNewFormUserModal} >Add</button>
+                        <Button onClick={showNewFormUserModal}><i className="bi bi-plus"></i> Add</Button>
+
                     </div>
                 </div>
                 <div className="overflow-scroll">
@@ -454,17 +408,14 @@ function UsersWidget() {
                         headers={[{
                             key: "photo", value: "Photo"
                         }, {
+                            key: "username", value: "Username/Staff ID"
+                        }, {
+                        }, {
                             key: "surname", value: "Surname"
                         }, {
                             key: "other_names", value: "Other Names"
                         },
                         {
-                            key: "email_address", value: "Email Address", render: (item) => {
-                                return (
-                                    <p className={item.is_active ? "" : "text-danger"}>{item.email_address}</p>
-                                )
-                            }
-                        },{
                             key: "groups", value: "Group", render: (item) => {
                                 return (
                                     <div>
@@ -493,7 +444,7 @@ function UsersWidget() {
                     />
                 </div>
             </div>
-        </Fragment >
+        </div >
     );
 }
 
