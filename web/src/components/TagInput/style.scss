@@ -1,0 +1,53 @@
+@import '../../theme-variables.scss';
+
+.tag-input {
+  user-select: none;
+  
+  .selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+
+    span {
+      background-color: $primary-color;
+      color: $white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin: 5px;
+      display: inline-block;
+      font-size: 12px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $primary-color-light;
+      }
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      background-color: $primary-color;
+      color: $white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin: 5px;
+      display: inline-block;
+      font-size: 12px;
+      cursor: pointer;
+
+      &.disabled {
+        background-color: $primary-color-light;
+        cursor: not-allowed;
+      }
+
+      &:hover {
+        background-color: $primary-color-light;
+      }
+    }
+  }
+}

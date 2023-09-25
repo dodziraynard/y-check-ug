@@ -119,7 +119,7 @@ function DashboardPage() {
 
                 <hr />
                 <h6 className="header mt-4">SYSTEM</h6>
-                <NavLink to="">
+                <NavLink to="/users">
                     <div className="menu-item" id="users">
                         <i className='icon bi bi-user'></i>
                         <span className="label">Users</span>
