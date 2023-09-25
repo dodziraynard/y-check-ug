@@ -23,6 +23,7 @@ urlpatterns = [
 
     # Facilities
     path("facilities/", views.FacilitiesAPI.as_view()),
+    path("all/facilities/", views.AllFacilitiesAPI.as_view()),
     
     
     

@@ -32,4 +32,5 @@ class UserForm(forms.ModelForm):
             'surname',
             'other_names',
             "phone",
+            'facility'
         ]

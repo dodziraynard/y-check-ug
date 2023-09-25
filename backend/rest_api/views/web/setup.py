@@ -1,12 +1,13 @@
 from rest_framework import generics, permissions, status
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework.response import Response
-from rest_api.serializers import (GroupSerializer,GroupPermissionSerializer,UserSerializer)
-from dashboard.forms import GroupForm,UserForm
+from rest_api.serializers import (GroupSerializer,GroupPermissionSerializer,UserSerializer,FacilitySerializer)
+from dashboard.forms import GroupForm,UserForm,FacilityForm
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects,get_errors_from_form
 from accounts.models import User
+from dashboard.models import Facility
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -120,3 +121,29 @@ class UsersAPI(SimpleCrudMixin):
             "error_message": get_errors_from_form(form),
         })
 
+
+
+class AllFacilitiesAPI(SimpleCrudMixin):
+    """
+    Permform CRUD on facility.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    required_permissions = ["setup.view_adolescent"]
+
+    serializer_class = FacilitySerializer
+    model_class = Facility
+    form_class = FacilityForm
+    response_data_label = "facility"
+    response_data_label_plural = "facilities"
+
+    def get(self, request):
+        facilities = Facility.objects.all()
+        response_data = {
+            self.response_data_label_plural:
+            self.serializer_class(facilities,
+                                  context={
+                                      "request": request
+                                  },
+                                  many=True).data,
+        }
+        return Response(response_data)

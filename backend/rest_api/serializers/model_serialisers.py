@@ -16,6 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
     photo_url = serializers.SerializerMethodField()
     user_permissions = serializers.SerializerMethodField()
     created_by = serializers.SerializerMethodField()
+    groups = serializers.SerializerMethodField()
     updated_by = serializers.SerializerMethodField()
 
     def get_updated_by(self, user):
@@ -36,6 +37,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_short_name(self, obj):
         return obj.username.split("@")[0]
+    
+    def get_groups(self, obj):
+        return obj.groups.values_list("name", flat=True)
+
 
     def get_user_permissions(self, user):
         permissions = []
