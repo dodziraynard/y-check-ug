@@ -5,13 +5,10 @@ from rest_api.serializers import (GroupSerializer,GroupPermissionSerializer,User
 from dashboard.forms import GroupForm,UserForm,FacilityForm
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
-<<<<<<< Updated upstream
 from ycheck.utils.functions import relevant_permission_objects,get_errors_from_form
 from accounts.models import User
 from dashboard.models import Facility
-=======
 from ycheck.utils.functions import relevant_permission_objects
->>>>>>> Stashed changes
 
 class GroupsAPI(SimpleCrudMixin):
     """
