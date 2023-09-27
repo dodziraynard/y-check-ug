@@ -1,13 +1,18 @@
 from rest_framework import generics, permissions, status
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework.response import Response
-from rest_api.serializers import (GroupSerializer,GroupPermissionSerializer,UserSerializer,FacilitySerializer,ServiceSerializer)
+from rest_api.serializers import (GroupSerializer,
+                                  GroupPermissionSerializer
+                                  ,UserSerializer,
+                                  FacilitySerializer,
+                                  ServiceSerializer,
+                                  SummariesFlagsSerializer)
 from dashboard.forms import GroupForm,UserForm,FacilityForm,ServiceForm
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects,get_errors_from_form
 from accounts.models import User
-from dashboard.models import Facility, Service
+from dashboard.models import Facility, Service,SummaryFlag
 from ycheck.utils.functions import relevant_permission_objects
 
 class GroupsAPI(SimpleCrudMixin):
@@ -167,6 +172,27 @@ class ServicesAPI(SimpleCrudMixin):
         response_data = {
             self.response_data_label_plural:
             self.serializer_class(services,
+                                  context={
+                                      "request": request
+                                  },
+                                  many=True).data,
+        }
+        return Response(response_data)
+    
+    
+class SummaryFlagAPI(SimpleCrudMixin):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+
+    serializer_class = SummariesFlagsSerializer
+    model_class = SummaryFlag
+    response_data_label = "summary_flag"
+    response_data_label_plural = "summary_flags"
+
+    def get(self, request):
+        summary_flags = SummaryFlag.objects.all()
+        response_data = {
+            self.response_data_label_plural:
+            self.serializer_class(summary_flags,
                                   context={
                                       "request": request
                                   },

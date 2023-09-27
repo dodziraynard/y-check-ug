@@ -234,6 +234,12 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = "__all__"
+        
+class SummariesFlagsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SummaryFlag
+        fields = "__all__"
 
 
 
