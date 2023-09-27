@@ -11,7 +11,7 @@ function SetupWidget() {
             <div className="setup-widget row">
                 <section className="col-md-2 menu">
                     <NavLink className="setup-menu-item" to="facilities"><i className="bi bi-h-circle"></i> Facilities</NavLink>
-                    <NavLink className="setup-menu-item" to="services"><i className="bi bi-h-circle"></i> Services</NavLink>
+                    <NavLink className="setup-menu-item" to="services"><i className="bi bi-gear"></i> Services</NavLink>
                     <NavLink className="setup-menu-item" to="roles"><i className="bi bi-lock"></i> Roles</NavLink>
                 </section>
                 <section className="col-md-10">

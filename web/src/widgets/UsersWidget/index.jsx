@@ -59,6 +59,8 @@ function UsersWidget() {
         setSelectedGroups(groups)
     }, [selectedUser])
 
+    console.log(selectedGroups)
+
     useEffect(() => {
         setGroups(response["groups"])
         dispatch(setStoreGroups(response["groups"]))

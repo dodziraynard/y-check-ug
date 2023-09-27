@@ -172,6 +172,11 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            getSummaryFlags: builder.query({
+                query() {
+                    return `/summary-flags/`;
+                },
+            }),
         };
     },
 });
@@ -208,5 +213,7 @@ export const {
     useLazyGetServicesQuery,
     usePutServicesMutation,
     useDeleteServicesMutation,
-
+    
+    //Summary flags
+    useLazyGetSummaryFlagsQuery
 } = resourceApiSlice;
