@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef, Fragment } from 'react'
 import {
     usePutFacilitiesMutation,
     useDeleteFacilitiesMutation,
+    useLazyGetServicesQuery,
+    usePutServicesMutation,
+    useDeleteServicesMutation,
 } from '../../features/resources/resources-api-slice';
 import { BASE_API_URI } from '../../utils/constants';
 import TableView from '../../components/Table';
