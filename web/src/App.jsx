@@ -15,6 +15,7 @@ import AdolescentReferralsWidget from "./widgets/AdolescentReferralsWidget";
 import ReferralsWidget from "./widgets/ReferralsWidget";
 import SetupWidget from "./widgets/SetupWidget";
 import FacilitiesWidget from "./widgets/FacilitiesWidget";
+import ServiceWidget from "./widgets/ServiceWidget";
 import RolesWidget from "./widgets/RolesWidget";
 import UsersWidget from "./widgets/UsersWidget";
 
@@ -42,6 +43,7 @@ function App() {
           }>
             <Route path="" element={<FacilitiesWidget />} />
             <Route path="facilities" element={<FacilitiesWidget />} />
+            <Route path="services" element={<ServiceWidget />} />
             <Route path="roles" element={<RolesWidget />} />
           </Route>
         </Route>
