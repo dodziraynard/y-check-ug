@@ -6,12 +6,10 @@ import {
 } from '../../features/resources/resources-api-slice';
 import { BASE_API_URI } from '../../utils/constants';
 import TableView from '../../components/Table';
-import { setSummaryflags as setStoreSummaryflags } from '../../features/global/global-slice';
 import { Button, Spinner, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import { monitorShowErrorReduxHttpError } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
-import TagInput from '../../components/TagInput';
 
 function ServiceWidget() {
     const dispatch = useDispatch()
@@ -27,25 +25,34 @@ function ServiceWidget() {
     const [selectedService, setSelectedService] = useState(null);
     const [deleteAlertModal, setDeleteAlertModal] = useState(null);
     const [serviceModal, setEditServiceModal] = useState(null);
-
-    const [selectedSummaryflags, setSelectedSummaryflags] = useState([]);
     const [Summaryflags, setSummaryflags] = useState([])
+    const [selectedFlags, setSelectedFlags] = useState([]);
 
+
+    
+   
     useEffect(() => {
-        const Summaryflags = selectedService?.related_summary_flags || []
-        setSelectedSummaryflags(Summaryflags)
-    }, [selectedService])
+        getSummaryflags();
+      }, [getSummaryflags]);
+    
+      useEffect(() => {
+        if (response && Array.isArray(response.summary_flags)) {
+            setSummaryflags(response.summary_flags);
+        }
+      }, [response]);
 
-    useEffect(() => {
-        setSummaryflags(response["summary_flags"])
-        dispatch(setStoreSummaryflags(response["summary_flags"]))
-    }, [isFetching])
 
-    useEffect(() => {
-        getSummaryflags()
-    }, [])
-
-    console.log(Summaryflags)
+    const handleCheckboxChange = (event) => {
+        const flagId = event.target.value;
+        if (event.target.checked) {
+            // If checkbox is checked, add the flag to the selectedFlags array
+            setSelectedFlags([...selectedFlags, flagId]);
+        } else {
+            // If checkbox is unchecked, remove the flag from the selectedFlags array
+            setSelectedFlags(selectedFlags.filter((id) => id !== flagId));
+        }
+    };
+    
 
     // Form input
     const [name, setName] = useState('');
@@ -68,7 +75,7 @@ function ServiceWidget() {
     }
     const handleFormSubmit = async (e) => {
         e.preventDefault()
-        const body = { name }
+        const body = { name,related_summary_flags: selectedFlags,}
         if (selectedService) {
             body['id'] = selectedService.id
         }
@@ -88,8 +95,7 @@ function ServiceWidget() {
     }
     const showEditServiceModal = (service) => {
         setSelectedService(service)
-        setName(service.name)
-        //setLocation(service.location)
+        setName(service.name || "")
         serviceModal?.show()
     }
 
@@ -145,7 +151,7 @@ function ServiceWidget() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">
-                                {selectedService ? "Edit Facility" : "New Facility"}
+                                {selectedService ? "Edit Service" : "New Service"}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -165,10 +171,25 @@ function ServiceWidget() {
 
                                 <div className="mt-5">
                                     <p><b>Summary Flags</b></p>
-                                    <TagInput tags={Summaryflags?.map((flag) => flag.name)} selectedTags={selectedSummaryflags} setSelectedTags={setSelectedSummaryflags} maxSelection={Summaryflags?.length} searchable={true} />
+                                </div>
+                                <div className="form-check">
+                                    {Summaryflags.map((flag) => (
+                                        <div key={flag.id} className="form-check">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                value={flag.id}
+                                                id={`flexCheck${flag.id}`}
+                                                onChange={handleCheckboxChange}
+                                            />
+                                            <label className="form-check-label" htmlFor={`flexCheck${flag.id}`}>
+                                                {flag.name}
+                                            </label>
+                                        </div>
+                                    ))}
                                 </div>
 
-                                <div className="mb-3">
+                                <div className="mb-3 mt-5">
                                     <p className="text-end">
                                         <button
                                             className='btn btn-sm btn-primary d-flex align-items-center'
@@ -213,7 +234,7 @@ function ServiceWidget() {
                                 return (
                                     <div>
                                         {item.related_summary_flags?.map((flag, index) => (
-                                            <span key={index} className="badge bg-primary">{flag}</span>
+                                            <span key={index} className="badge bg-primary">{flag.name}</span>
                                         ))}
                                     </div>
                                 )
