@@ -33,6 +33,9 @@ urlpatterns = [
     path("permissions/group/<int:group_id>/", views.PermissionsAPI.as_view()),
     # Users
     path("users/", views.UsersAPI.as_view()),
+    # services
+    path("services/", views.ServicesAPI.as_view()),
+    path("summary-flags/", views.SummaryFlagAPI.as_view()),
 
 
 

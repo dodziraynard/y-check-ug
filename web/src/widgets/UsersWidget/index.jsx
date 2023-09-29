@@ -7,7 +7,6 @@ import {
 import { Fragment, useState, useEffect, useRef } from 'react';
 import {
     setGroups as setStoreGroups,
-    setFacilities as setStoreFacilities
 } from '../../features/global/global-slice';
 import { Modal } from 'bootstrap';
 import { Button, Spinner, useToast } from '@chakra-ui/react';
@@ -60,19 +59,25 @@ function UsersWidget() {
         setSelectedGroups(groups)
     }, [selectedUser])
 
+
     useEffect(() => {
         setGroups(response["groups"])
         dispatch(setStoreGroups(response["groups"]))
-        setFacilities(res["facilities"])
-        dispatch(setStoreFacilities(res["facilities"]))
-    }, [isFetching,isFetching1])
+    }, [isFetching])
 
     useEffect(() => {
         getGroups()
-        getFacilities()
     }, [])
 
-    console.log(facilities)
+    useEffect(() => {
+        getFacilities();
+      }, [getFacilities]);
+    
+      useEffect(() => {
+        if (res && Array.isArray(res.facilities)) {
+          setFacilities(res.facilities);
+        }
+      }, [res]);
 
     useEffect(() => {
         if (modalRef.current !== null && modal === null) {

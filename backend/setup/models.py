@@ -28,6 +28,7 @@ class SetupPerm(models.Model):
             ("delete_patient", "Can delete patient records"),
 
             # System Configuration
-            ("access_system_config", "Can access system configurations"),
+            ("manage_service", "Can manage services"),
+            ("manage_facility", "Can manage facility"),
             ("edit_system_config", "Can edit and update system configurations"),
         ]
