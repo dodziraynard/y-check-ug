@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from accounts.models import User
-from dashboard.models import Facility
+from dashboard.models import Facility,Service
 
 
 class FacilityForm(forms.ModelForm):
@@ -33,4 +33,13 @@ class UserForm(forms.ModelForm):
             'other_names',
             "phone",
             'facility'
+        ]
+
+class ServiceForm(forms.ModelForm):
+
+    class Meta:
+        model = Service
+        fields = [
+            'name',
+            'related_summary_flags',
         ]

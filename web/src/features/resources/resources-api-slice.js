@@ -147,6 +147,36 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            getServices: builder.query({
+                query() {
+                    return `/services/`;
+                },
+            }),
+
+            putServices: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/services/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+
+            deleteServices: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/services/`,
+                        method: 'DELETE',
+                        body,
+                    }
+                },
+            }),
+            getSummaryFlags: builder.query({
+                query() {
+                    return `/summary-flags/`;
+                },
+            }),
         };
     },
 });
@@ -178,5 +208,12 @@ export const {
     useLazyGetFacilitiesQuery,
     usePutFacilitiesMutation,
     useDeleteFacilitiesMutation,
-
+    
+    // Services
+    useLazyGetServicesQuery,
+    usePutServicesMutation,
+    useDeleteServicesMutation,
+    
+    //Summary flags
+    useLazyGetSummaryFlagsQuery
 } = resourceApiSlice;

@@ -228,7 +228,35 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = "__all__"
+        
 
+        
+class SummariesFlagsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SummaryFlag
+        fields = ["id","name"]
+        
+class ServiceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Service
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        
+        # Check if related_summary_flags is a single instance or a queryset
+        related_flags = instance.related_summary_flags.all()  # Assuming related_summary_flags is a ManyToManyField
+
+        if related_flags:
+            # If there are related flags, serialize them as a list of dictionaries
+            response['related_summary_flags'] = SummariesFlagsSerializer(related_flags, many=True).data
+        else:
+            # If there are no related flags, set it to an empty list
+            response['related_summary_flags'] = []
+
+        return response
 
 
 class GroupPermissionSerializer(serializers.ModelSerializer):
