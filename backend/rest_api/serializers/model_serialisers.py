@@ -231,10 +231,10 @@ class GroupSerializer(serializers.ModelSerializer):
         
 
         
-class SummariesFlagsSerializer(serializers.ModelSerializer):
+class FlagLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = SummaryFlag
+        model = FlagLabel
         fields = ["id","name"]
         
 class ServiceSerializer(serializers.ModelSerializer):
@@ -247,14 +247,14 @@ class ServiceSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         
         # Check if related_summary_flags is a single instance or a queryset
-        related_flags = instance.related_summary_flags.all()  # Assuming related_summary_flags is a ManyToManyField
+        flag_label = instance.related_flag_label.all()  # Assuming related_summary_flags is a ManyToManyField
 
-        if related_flags:
+        if flag_label:
             # If there are related flags, serialize them as a list of dictionaries
-            response['related_summary_flags'] = SummariesFlagsSerializer(related_flags, many=True).data
+            response['related_flag_label'] = FlagLabelSerializer(flag_label, many=True).data
         else:
             # If there are no related flags, set it to an empty list
-            response['related_summary_flags'] = []
+            response['related_flag_label'] = []
 
         return response
 

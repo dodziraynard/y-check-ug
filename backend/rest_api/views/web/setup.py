@@ -6,13 +6,13 @@ from rest_api.serializers import (GroupSerializer,
                                   ,UserSerializer,
                                   FacilitySerializer,
                                   ServiceSerializer,
-                                  SummariesFlagsSerializer)
+                                  FlagLabelSerializer)
 from dashboard.forms import GroupForm,UserForm,FacilityForm,ServiceForm
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects,get_errors_from_form
 from accounts.models import User
-from dashboard.models import Facility, Service,SummaryFlag
+from dashboard.models import Facility, Service,FlagLabel
 from ycheck.utils.functions import relevant_permission_objects
 
 class GroupsAPI(SimpleCrudMixin):
@@ -180,19 +180,19 @@ class ServicesAPI(SimpleCrudMixin):
         return Response(response_data)
     
     
-class SummaryFlagAPI(SimpleCrudMixin):
+class FlagLabelAPI(SimpleCrudMixin):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
 
-    serializer_class = SummariesFlagsSerializer
-    model_class = SummaryFlag
-    response_data_label = "summary_flag"
-    response_data_label_plural = "summary_flags"
+    serializer_class = FlagLabelSerializer
+    model_class = FlagLabel
+    response_data_label = "flag_label"
+    response_data_label_plural = "flag_labels"
 
     def get(self, request):
-        summary_flags = SummaryFlag.objects.all()
+        flag_labels = FlagLabel.objects.all()
         response_data = {
             self.response_data_label_plural:
-            self.serializer_class(summary_flags,
+            self.serializer_class(flag_labels,
                                   context={
                                       "request": request
                                   },

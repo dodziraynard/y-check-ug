@@ -35,7 +35,7 @@ urlpatterns = [
     path("users/", views.UsersAPI.as_view()),
     # services
     path("services/", views.ServicesAPI.as_view()),
-    path("summary-flags/", views.SummaryFlagAPI.as_view()),
+    path("flag-labels/", views.FlagLabelAPI.as_view()),
 
 
 

@@ -6,7 +6,7 @@ from accounts.models import User
 
 class Service(models.Model):
     name = models.CharField(max_length=200, db_index=True)
-    related_summary_flags = models.ManyToManyField("dashboard.SummaryFlag",blank=True,null=True)
+    related_flag_label = models.ManyToManyField("dashboard.FlagLabel",blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
