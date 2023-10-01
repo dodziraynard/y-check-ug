@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import {
-    useLazyGetSummaryFlagsQuery,
+    useLazyGetFlagLabelsQuery,
     usePutServicesMutation,
     useDeleteServicesMutation,
 } from '../../features/resources/resources-api-slice';
@@ -16,7 +16,7 @@ function ServiceWidget() {
     const [triggerReload, setTriggerReload] = useState(0);
     const [putService, { isLoading: isPuttingServices, error: errorPuttingService }] = usePutServicesMutation()
     const [deleteService, { isLoading: isDeletingService, error: errorDeletingService }] = useDeleteServicesMutation()
-    const [getSummaryflags, { data: response = [], isFetching, error }] = useLazyGetSummaryFlagsQuery()
+    const [getFlagLabels, { data: response = [], isFetching, error }] = useLazyGetFlagLabelsQuery()
 
     const deletionModalRef = useRef(null);
     const serviceModalRef = useRef(null);
@@ -25,19 +25,19 @@ function ServiceWidget() {
     const [selectedService, setSelectedService] = useState(null);
     const [deleteAlertModal, setDeleteAlertModal] = useState(null);
     const [serviceModal, setEditServiceModal] = useState(null);
-    const [Summaryflags, setSummaryflags] = useState([])
+    const [flagLabels, setFlagLabels] = useState([])
     const [selectedFlags, setSelectedFlags] = useState([]);
 
 
     
    
     useEffect(() => {
-        getSummaryflags();
-      }, [getSummaryflags]);
+        getFlagLabels();
+      }, [getFlagLabels]);
     
       useEffect(() => {
-        if (response && Array.isArray(response.summary_flags)) {
-            setSummaryflags(response.summary_flags);
+        if (response && Array.isArray(response.flag_labels)) {
+            setFlagLabels(response.flag_labels);
         }
       }, [response]);
 
@@ -64,7 +64,7 @@ function ServiceWidget() {
             toast({
                 position: 'top-center',
                 title: `Success`,
-                description: "Facility deleted successfully",
+                description: "Service deleted successfully",
                 status: 'success',
                 duration: 2000,
                 isClosable: true,
@@ -75,7 +75,7 @@ function ServiceWidget() {
     }
     const handleFormSubmit = async (e) => {
         e.preventDefault()
-        const body = { name,related_summary_flags: selectedFlags,}
+        const body = { name,related_flag_label: selectedFlags,}
         if (selectedService) {
             body['id'] = selectedService.id
         }
@@ -170,10 +170,10 @@ function ServiceWidget() {
                                 </div>
 
                                 <div className="mt-5">
-                                    <p><b>Summary Flags</b></p>
+                                    <p><b>Flag Labels</b></p>
                                 </div>
                                 <div className="form-check">
-                                    {Summaryflags.map((flag) => (
+                                    {flagLabels.map((flag) => (
                                         <div key={flag.id} className="form-check">
                                             <input
                                                 className="form-check-input"
@@ -230,10 +230,10 @@ function ServiceWidget() {
                             
                         },
                         {
-                            key: "Summaryflags", value: "Summary Flags", render: (item) => {
+                            key: "flagLabels", value: "Flag Label", render: (item) => {
                                 return (
                                     <div>
-                                        {item.related_summary_flags?.map((flag, index) => (
+                                        {item.related_flag_label?.map((flag, index) => (
                                             <span key={index} className="badge bg-primary">{flag.name}</span>
                                         ))}
                                     </div>

@@ -172,9 +172,9 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
-            getSummaryFlags: builder.query({
+            getFlagLabels: builder.query({
                 query() {
-                    return `/summary-flags/`;
+                    return `/flag-labels/`;
                 },
             }),
         };
@@ -215,5 +215,5 @@ export const {
     useDeleteServicesMutation,
     
     //Summary flags
-    useLazyGetSummaryFlagsQuery
+    useLazyGetFlagLabelsQuery
 } = resourceApiSlice;
