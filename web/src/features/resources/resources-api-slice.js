@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_API_URI } from '../../utils/constants';
+import * as referrals from "./referrals"
 
 export const resourceApiSlice = createApi({
     reducerPath: 'resources-api',
@@ -17,7 +18,6 @@ export const resourceApiSlice = createApi({
                     return `/auth/user-permissions/`;
                 },
             }),
-
 
             // Groups
             getGroups: builder.query({
@@ -147,12 +147,18 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+
+            // Services
             getServices: builder.query({
                 query() {
                     return `/services/`;
                 },
             }),
-
+            getRecommendedServices: builder.query({
+                query({ pid }) {
+                    return `${pid}/recommended-services/`;
+                },
+            }),
             putServices: builder.mutation({
                 query(body) {
                     return {
@@ -162,7 +168,6 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
-
             deleteServices: builder.mutation({
                 query(body) {
                     return {
@@ -172,11 +177,13 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
-            getSummaryFlags: builder.query({
+            getFlagLabels: builder.query({
                 query() {
-                    return `/summary-flags/`;
+                    return `/get-flags/`;
                 },
             }),
+
+            ...referrals.getReferralEndpoints(builder)
         };
     },
 });
@@ -208,12 +215,15 @@ export const {
     useLazyGetFacilitiesQuery,
     usePutFacilitiesMutation,
     useDeleteFacilitiesMutation,
-    
+
     // Services
+    useLazyGetRecommendedServicesQuery,
     useLazyGetServicesQuery,
     usePutServicesMutation,
     useDeleteServicesMutation,
-    
-    //Summary flags
-    useLazyGetSummaryFlagsQuery
+
+    // Flag labels
+    useLazyGetFlagLabelsQuery
 } = resourceApiSlice;
+
+export default resourceApiSlice;

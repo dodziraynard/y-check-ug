@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class ResponseInputType(Enum):
@@ -7,3 +7,15 @@ class ResponseInputType(Enum):
     RADIO_BUTTON = "radio_button"
     CHECKBOXES = "checkboxes"
     RANGER_SLIDER = "range_slider"
+
+
+class Colors(Enum):
+    RED = "#ff0000"
+    ORANGE = "#ffa500"
+    GREEN = "#00ff00"
+
+
+class ReferralStatus(Enum):
+    NEW = "new"
+    REVIEW = 'review'
+    COMPLETED = "completed"

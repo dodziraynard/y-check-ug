@@ -2,18 +2,18 @@ from rest_framework import generics, permissions, status
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework.response import Response
 from rest_api.serializers import (GroupSerializer,
-                                  GroupPermissionSerializer
-                                  ,UserSerializer,
+                                  GroupPermissionSerializer, UserSerializer,
                                   FacilitySerializer,
                                   ServiceSerializer,
-                                  SummariesFlagsSerializer)
-from dashboard.forms import GroupForm,UserForm,FacilityForm,ServiceForm
+                                  FlagLabelSerializer)
+from dashboard.forms import GroupForm, UserForm, FacilityForm, ServiceForm
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
-from ycheck.utils.functions import relevant_permission_objects,get_errors_from_form
+from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
-from dashboard.models import Facility, Service,SummaryFlag
+from dashboard.models import Facility, Service, FlagLabel
 from ycheck.utils.functions import relevant_permission_objects
+
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -43,8 +43,8 @@ class GroupsAPI(SimpleCrudMixin):
                                   many=True).data,
         }
         return Response(response_data)
-    
-    
+
+
 class PermissionsAPI(SimpleCrudMixin):
     """
     Manage group/user permissions.
@@ -128,7 +128,6 @@ class UsersAPI(SimpleCrudMixin):
         })
 
 
-
 class AllFacilitiesAPI(SimpleCrudMixin):
     """
     Permform CRUD on facility.
@@ -154,6 +153,7 @@ class AllFacilitiesAPI(SimpleCrudMixin):
         }
         return Response(response_data)
 
+
 class ServicesAPI(SimpleCrudMixin):
     """
     Permform CRUD on service.
@@ -178,18 +178,18 @@ class ServicesAPI(SimpleCrudMixin):
                                   many=True).data,
         }
         return Response(response_data)
-    
-    
-class SummaryFlagAPI(SimpleCrudMixin):
+
+
+class FlagsAPI(SimpleCrudMixin):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
 
-    serializer_class = SummariesFlagsSerializer
-    model_class = SummaryFlag
+    serializer_class = FlagLabelSerializer
+    model_class = FlagLabel
     response_data_label = "summary_flag"
     response_data_label_plural = "summary_flags"
 
     def get(self, request):
-        summary_flags = SummaryFlag.objects.all()
+        summary_flags = FlagLabel.objects.all()
         response_data = {
             self.response_data_label_plural:
             self.serializer_class(summary_flags,

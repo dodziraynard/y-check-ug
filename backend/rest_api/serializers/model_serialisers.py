@@ -37,10 +37,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_short_name(self, obj):
         return obj.username.split("@")[0]
-    
+
     def get_groups(self, obj):
         return obj.groups.values_list("name", flat=True)
-
 
     def get_user_permissions(self, user):
         permissions = []
@@ -177,6 +176,10 @@ class AdolescentResponseSerialiser(serializers.ModelSerializer):
 class SummaryFlagSerializer(serializers.ModelSerializer):
     responses = serializers.SerializerMethodField()
     comment = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        return obj.label.name
 
     def get_comment(self, obj):
         if obj.comment and obj.updated_by:
@@ -185,12 +188,8 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
 
     def get_responses(self, obj):
         result = []
-        flag_name = obj.name  # e.g., Home
         adolescent = obj.adolescent
-        flag_label = FlagLabel.objects.filter(name=flag_name).first()
-        if not flag_label:
-            return None
-        colors = flag_label.colors.all()
+        colors = obj.label.colors.all()
         flag_conditions = FlagCondition.objects.filter(flag_color__in=colors)
         question_ids = []
 
@@ -222,21 +221,20 @@ class FacilitySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
         fields = "__all__"
-        
 
-        
-class SummariesFlagsSerializer(serializers.ModelSerializer):
+
+class FlagLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = SummaryFlag
-        fields = ["id","name"]
-        
+        model = FlagLabel
+        fields = ["id", "name"]
+
+
 class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -245,16 +243,18 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        
-        # Check if related_summary_flags is a single instance or a queryset
-        related_flags = instance.related_summary_flags.all()  # Assuming related_summary_flags is a ManyToManyField
 
-        if related_flags:
+        # Check if related_flag_labels is a single instance or a queryset
+        # Assuming related_flag_labels is a ManyToManyField
+        related_flag_labels = instance.related_flag_labels.all()
+
+        if related_flag_labels:
             # If there are related flags, serialize them as a list of dictionaries
-            response['related_summary_flags'] = SummariesFlagsSerializer(related_flags, many=True).data
+            response['related_flag_labels'] = FlagLabelSerializer(
+                related_flag_labels, many=True).data
         else:
             # If there are no related flags, set it to an empty list
-            response['related_summary_flags'] = []
+            response['related_flag_labels'] = []
 
         return response
 
@@ -268,4 +268,16 @@ class GroupPermissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Permission
+        fields = "__all__"
+
+
+class ReferralSerialiser(serializers.ModelSerializer):
+    facility_name = serializers.SerializerMethodField()
+    services = ServiceSerializer(many=True)
+
+    def get_facility_name(self, obj):
+        return obj.facility.name
+
+    class Meta:
+        model = Referral
         fields = "__all__"

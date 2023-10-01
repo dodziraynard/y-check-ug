@@ -7,7 +7,7 @@ import useAxios from '../../app/hooks/useAxios';
 import { Button, Spinner } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 
-function ReferralsWidget() {
+function TreatmentWidget() {
     const newReferralModalRef = useRef(null);
     const { trigger: getReferrals, data: referralsResponseData, referralsError, isLoadingReferrals } = useAxios({ mainUrl: `${BASE_API_URI}/referrals` });
 
@@ -68,7 +68,8 @@ function ReferralsWidget() {
                         </div>
                         <div className="modal-footer">
                             <button type="button"
-                                className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                className="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -113,4 +114,4 @@ function ReferralsWidget() {
     );
 }
 
-export default ReferralsWidget;
+export default TreatmentWidget;

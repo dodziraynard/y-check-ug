@@ -1,17 +1,27 @@
 from django.db import models
 from accounts.models import User
+from ycheck.utils.constants import Colors
 from .adolescent import *
 from .questions import *
+
+color_code_choices = [
+    (Colors.RED.value, "RED"),
+    (Colors.ORANGE.value, "ORANGE"),
+    (Colors.GREEN.value, "GREEN"),
+]
 
 
 class SummaryFlag(models.Model):
     adolescent = models.ForeignKey(
         Adolescent, on_delete=models.CASCADE, db_index=True)
-    name = models.CharField(max_length=50, db_index=True)
+    label = models.ForeignKey(
+        "dashboard.FlagLabel", null=True, on_delete=models.CASCADE, db_index=True)
     comment = models.CharField(
         max_length=200, default="This value was inffered.")
-    computed_color_code = models.CharField(max_length=10)
-    updated_color_code = models.CharField(max_length=10, null=True, blank=True)
+    computed_color_code = models.CharField(
+        choices=color_code_choices, max_length=10)
+    updated_color_code = models.CharField(
+        choices=color_code_choices, max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
@@ -20,11 +30,14 @@ class SummaryFlag(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['adolescent', 'name'], name='Adolescent flag')
+                fields=['adolescent', 'label'], name='Adolescent flag')
         ]
 
     def __str__(self) -> str:
-        return f"{self.adolescent.get_name()}: {self.name}-{self.updated_color_code}"
+        name = f"{self.adolescent.get_name()}: {self.label.name}-{self.computed_color_code}"
+        if self.updated_color_code:
+            name += f"->{self.updated_color_code}"
+        return name
 
 
 class FlagLabel(models.Model):
@@ -61,10 +74,16 @@ class FlagLabel(models.Model):
 
 
 class FlagColor(models.Model):
+    color_name_choices = [
+        ("RED", "RED"),
+        ("ORANGE", "ORANGE"),
+        ("GREEN", "GREEN"),
+    ]
     flag_label = models.ForeignKey(
         FlagLabel, related_name="colors", on_delete=models.CASCADE, db_index=True)
-    color_name = models.CharField(max_length=20, null=True, blank=True)
-    color_code = models.CharField(max_length=10)
+    color_name = models.CharField(
+        max_length=20, choices=color_name_choices, null=True, blank=True)
+    color_code = models.CharField(max_length=10, choices=color_code_choices)
     is_fallback = models.BooleanField(default=False)
 
     def __str__(self) -> str:

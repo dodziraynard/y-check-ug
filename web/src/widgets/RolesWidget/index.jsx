@@ -7,7 +7,7 @@ import {
 import {
     setGroups as setStoreGroups,
 } from '../../features/global/global-slice';
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Modal } from 'bootstrap';
 import { Button, Spinner, useToast } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
@@ -42,7 +42,6 @@ function RolesWidget() {
         getGroups()
     }, [])
 
-    console.log(groups)
     useEffect(() => {
         if (modalRef.current !== null && modal === null) {
             const modal = new Modal(modalRef.current, { keyboard: false })

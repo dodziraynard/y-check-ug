@@ -20,12 +20,13 @@ urlpatterns = [
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
     path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view()),
+    path("<str:pid>/recommended-services/", views.GetRecommendedServices.as_view()),
+    
+    path("<str:pid>/referrals/", views.AdolescentReferrals.as_view()),
 
     # Facilities
     path("facilities/", views.FacilitiesAPI.as_view()),
     path("all/facilities/", views.AllFacilitiesAPI.as_view()),
-    
-    
     
     # Groups
     path("groups/", views.GroupsAPI.as_view()),
@@ -35,8 +36,5 @@ urlpatterns = [
     path("users/", views.UsersAPI.as_view()),
     # services
     path("services/", views.ServicesAPI.as_view()),
-    path("summary-flags/", views.SummaryFlagAPI.as_view()),
-
-
-
+    path("get-flags/", views.FlagsAPI.as_view()),
 ]

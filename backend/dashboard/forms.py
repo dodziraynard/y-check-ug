@@ -41,5 +41,5 @@ class ServiceForm(forms.ModelForm):
         model = Service
         fields = [
             'name',
-            'related_summary_flags',
+            'related_flag_labels',
         ]

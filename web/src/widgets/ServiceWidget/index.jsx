@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import {
-    useLazyGetSummaryFlagsQuery,
+    useLazyGetFlagLabelsQuery,
     usePutServicesMutation,
     useDeleteServicesMutation,
 } from '../../features/resources/resources-api-slice';
@@ -12,11 +12,10 @@ import { monitorShowErrorReduxHttpError } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
 
 function ServiceWidget() {
-    const dispatch = useDispatch()
     const [triggerReload, setTriggerReload] = useState(0);
     const [putService, { isLoading: isPuttingServices, error: errorPuttingService }] = usePutServicesMutation()
     const [deleteService, { isLoading: isDeletingService, error: errorDeletingService }] = useDeleteServicesMutation()
-    const [getSummaryflags, { data: response = [], isFetching, error }] = useLazyGetSummaryFlagsQuery()
+    const [getFlagLabels, { data: response = [], isFetching, error }] = useLazyGetFlagLabelsQuery()
 
     const deletionModalRef = useRef(null);
     const serviceModalRef = useRef(null);
@@ -25,34 +24,32 @@ function ServiceWidget() {
     const [selectedService, setSelectedService] = useState(null);
     const [deleteAlertModal, setDeleteAlertModal] = useState(null);
     const [serviceModal, setEditServiceModal] = useState(null);
-    const [Summaryflags, setSummaryflags] = useState([])
+    const [summaryflags, setSummaryflags] = useState([])
     const [selectedFlags, setSelectedFlags] = useState([]);
 
 
-    
-   
     useEffect(() => {
-        getSummaryflags();
-      }, [getSummaryflags]);
-    
-      useEffect(() => {
+        getFlagLabels();
+    }, [getFlagLabels]);
+
+    useEffect(() => {
         if (response && Array.isArray(response.summary_flags)) {
             setSummaryflags(response.summary_flags);
         }
-      }, [response]);
+    }, [response]);
 
 
     const handleCheckboxChange = (event) => {
         const flagId = event.target.value;
         if (event.target.checked) {
             // If checkbox is checked, add the flag to the selectedFlags array
-            setSelectedFlags([...selectedFlags, flagId]);
+            setSelectedFlags([...selectedFlags, parseInt(flagId)]);
         } else {
             // If checkbox is unchecked, remove the flag from the selectedFlags array
-            setSelectedFlags(selectedFlags.filter((id) => id !== flagId));
+            setSelectedFlags([...selectedFlags.filter((id) => id !== parseInt(flagId))]);
         }
     };
-    
+
 
     // Form input
     const [name, setName] = useState('');
@@ -75,7 +72,7 @@ function ServiceWidget() {
     }
     const handleFormSubmit = async (e) => {
         e.preventDefault()
-        const body = { name,related_summary_flags: selectedFlags,}
+        const body = { name, related_flag_labels: selectedFlags }
         if (selectedService) {
             body['id'] = selectedService.id
         }
@@ -95,7 +92,8 @@ function ServiceWidget() {
     }
     const showEditServiceModal = (service) => {
         setSelectedService(service)
-        setName(service.name || "")
+        setName(service.name ?? "")
+        setSelectedFlags(service?.related_flag_labels?.map((flag, _) => flag.id) ?? []);
         serviceModal?.show()
     }
 
@@ -170,15 +168,16 @@ function ServiceWidget() {
                                 </div>
 
                                 <div className="mt-5">
-                                    <p><b>Summary Flags</b></p>
+                                    <p><b>Related Flags</b></p>
                                 </div>
                                 <div className="form-check">
-                                    {Summaryflags.map((flag) => (
-                                        <div key={flag.id} className="form-check">
+                                    {summaryflags.map((flag) => {
+                                        return <div key={flag.id} className="form-check">
                                             <input
                                                 className="form-check-input"
                                                 type="checkbox"
                                                 value={flag.id}
+                                                checked={selectedFlags?.includes(flag.id)}
                                                 id={`flexCheck${flag.id}`}
                                                 onChange={handleCheckboxChange}
                                             />
@@ -186,7 +185,7 @@ function ServiceWidget() {
                                                 {flag.name}
                                             </label>
                                         </div>
-                                    ))}
+                                    })}
                                 </div>
 
                                 <div className="mb-3 mt-5">
@@ -214,7 +213,10 @@ function ServiceWidget() {
             <div className="facilities-widget">
                 <div className="d-flex justify-content-between">
                     <p className="text-muted">Use the available controls to create and update Services. </p>
-                    <Button onClick={() => serviceModal?.show()}><i className="bi bi-plus"></i> Add</Button>
+                    <Button onClick={() => {
+                        setSelectedFlags([])
+                        serviceModal?.show()
+                    }}><i className="bi bi-plus"></i> Add</Button>
                 </div>
 
                 <TableView
@@ -227,13 +229,13 @@ function ServiceWidget() {
                     headers={[
                         {
                             key: "name", value: "Name"
-                            
+
                         },
                         {
-                            key: "Summaryflags", value: "Summary Flags", render: (item) => {
+                            key: "related_flag_labels", value: "Related Flags", render: (item) => {
                                 return (
                                     <div>
-                                        {item.related_summary_flags?.map((flag, index) => (
+                                        {item.related_flag_labels?.map((flag, index) => (
                                             <span key={index} className="badge bg-primary">{flag.name}</span>
                                         ))}
                                     </div>
