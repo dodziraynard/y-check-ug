@@ -182,6 +182,15 @@ export const resourceApiSlice = createApi({
                     return `/get-flags/`;
                 },
             }),
+            putUserBioData: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/user/bio/data/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
 
             ...referrals.getReferralEndpoints(builder)
         };
@@ -205,6 +214,7 @@ export const {
     usePutUsersMutation,
     useDeleteUsersMutation,
     useLogOutUserMutation,
+    usePutUserBioDataMutation,
 
     // Configurations
     useLazyGetConfigurationsQuery,

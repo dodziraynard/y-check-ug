@@ -19,6 +19,7 @@ import ServiceWidget from "./widgets/ServiceWidget";
 import RolesWidget from "./widgets/RolesWidget";
 import UsersWidget from "./widgets/UsersWidget";
 import UserProfileWidget from "./widgets/UserProfileWidget";
+import BioDataWidget from "./widgets/BioDataWidget";
 
 function App() {
   return (
@@ -36,7 +37,6 @@ function App() {
           <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
           <Route path="/referrals" element={<ReferralsWidget />} />
           <Route path="/users" element={<UsersWidget />} />
-          <Route path="/user/profile" element={<UserProfileWidget />} />
 
           <Route path="/setup" element={
             <ProtectedRoute permissions={[Permissions.MANAGE_SETUP]}>
@@ -47,6 +47,15 @@ function App() {
             <Route path="facilities" element={<FacilitiesWidget />} />
             <Route path="services" element={<ServiceWidget />} />
             <Route path="roles" element={<RolesWidget />} />
+          </Route>
+
+          <Route path="/user/profile" element={
+            <ProtectedRoute>
+              <UserProfileWidget />
+            </ProtectedRoute>
+          }>
+            <Route path="" element={<BioDataWidget />} />
+            <Route path="bio/data" element={<BioDataWidget />} />
           </Route>
         </Route>
         <Route path="*" element={<Error404Screen />} />
