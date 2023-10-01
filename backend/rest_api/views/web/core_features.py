@@ -119,7 +119,7 @@ class GetRecommendedServices(generics.GenericAPIView):
 
         already_referred_services = Referral.objects.filter(
             adolescent=adolescent).exclude(status=ReferralStatus.COMPLETED.value)
-        service_ids = already_referred_services.values_list(
+        service_ids = already_referred_services.exclude(services=None).values_list(
             "services", flat=True)
         services = Service.objects.filter(
             related_flag_labels__id__in=label_ids).exclude(id__in=service_ids)
@@ -168,7 +168,7 @@ class AdolescentReferrals(generics.GenericAPIView):
         adolescent = Adolescent.objects.filter(pid=pid).first()
         if not adolescent:
             return Response({"error_message": f"{pid} not found."})
-    
+
         referral = Referral.objects.filter(id=request.data.get("id"))
         service_names = request.data.get("service_names")
         services = Service.objects.filter(name__in=service_names)
@@ -180,6 +180,7 @@ class AdolescentReferrals(generics.GenericAPIView):
         }
         if referral:
             referral.update(**data)
+            referral = referral.first()
         else:
             referral = Referral.objects.create(created_by=request.user,
                                                adolescent=adolescent,
@@ -189,3 +190,10 @@ class AdolescentReferrals(generics.GenericAPIView):
             "referral": self.serializer_class(referral).data,
         }
         return Response(repsonse_data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pid, *args, **kwargs):
+        deleted = Referral.objects.filter(id=request.data.get("id")).delete()
+        response_data = {
+            "referral_id": request.data.get("id")
+        }
+        return Response(response_data)

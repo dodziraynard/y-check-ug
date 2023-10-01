@@ -15,5 +15,14 @@ export const getReferralEndpoints = (builder) => {
                 }
             },
         }),
+        deleteReferrals: builder.mutation({
+            query({ body, pid }) {
+                return {
+                    url: `/${pid}/referrals/`,
+                    method: 'DELETE',
+                    body,
+                }
+            },
+        }),
     }
 }

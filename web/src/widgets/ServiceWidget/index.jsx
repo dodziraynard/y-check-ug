@@ -9,7 +9,6 @@ import TableView from '../../components/Table';
 import { Button, Spinner, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import { monitorShowErrorReduxHttpError } from '../../utils/functions';
-import { useDispatch } from 'react-redux';
 
 function ServiceWidget() {
     const [triggerReload, setTriggerReload] = useState(0);
