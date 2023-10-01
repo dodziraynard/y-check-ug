@@ -18,6 +18,7 @@ import FacilitiesWidget from "./widgets/FacilitiesWidget";
 import ServiceWidget from "./widgets/ServiceWidget";
 import RolesWidget from "./widgets/RolesWidget";
 import UsersWidget from "./widgets/UsersWidget";
+import UserProfileWidget from "./widgets/UserProfileWidget";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
           <Route path="/referrals" element={<ReferralsWidget />} />
           <Route path="/users" element={<UsersWidget />} />
+          <Route path="/user/profile" element={<UserProfileWidget />} />
 
           <Route path="/setup" element={
             <ProtectedRoute permissions={[Permissions.MANAGE_SETUP]}>

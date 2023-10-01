@@ -135,7 +135,15 @@ function DashboardPage() {
                     : ""}
 
                 <hr />
+                <h6 className="header mt-4">USER PROFILE</h6>
+                <NavLink to="/user/profile">
+                    <div className="menu-item" id="users">
+                        <i className='icon bi bi-user'></i>
+                        <span className="label">Update Profile</span>
+                    </div>
+                </NavLink>
 
+                <hr />
                 <span to="/logout" onClick={logoutUser}>
                     <div className="menu-item">
                         <i className='icon bi bi-lock'></i>
