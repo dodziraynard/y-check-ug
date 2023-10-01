@@ -15,7 +15,7 @@ class SummaryFlag(models.Model):
     adolescent = models.ForeignKey(
         Adolescent, on_delete=models.CASCADE, db_index=True)
     label = models.ForeignKey(
-        "dashboard.FlagLabel", null=True, on_delete=models.CASCADE, db_index=True)
+        "dashboard.FlagLabel", on_delete=models.CASCADE, db_index=True)
     comment = models.CharField(
         max_length=200, default="This value was inffered.")
     computed_color_code = models.CharField(
@@ -34,7 +34,7 @@ class SummaryFlag(models.Model):
         ]
 
     def __str__(self) -> str:
-        name = f"{self.adolescent.get_name()}:-{self.computed_color_code}"
+        name = f"{self.adolescent.get_name()}: {self.label.name}-{self.computed_color_code}"
         if self.updated_color_code:
             name += f"->{self.updated_color_code}"
         return name
