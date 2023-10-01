@@ -34,7 +34,7 @@ class SummaryFlag(models.Model):
         ]
 
     def __str__(self) -> str:
-        name = f"{self.adolescent.get_name()}: {self.label.name}-{self.computed_color_code}"
+        name = f"{self.adolescent.get_name()}:-{self.computed_color_code}"
         if self.updated_color_code:
             name += f"->{self.updated_color_code}"
         return name
