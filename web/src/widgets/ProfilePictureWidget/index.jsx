@@ -12,7 +12,6 @@ function ProfilePictureWidget() {
 
 
     // HANDLE FILE CASE
-    // HANDLE FILE CASE
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
@@ -83,14 +82,13 @@ function ProfilePictureWidget() {
             <form className="row bio-data p-3" onSubmit={handleFormSubmit}>
                
                 <div className="mb-3 col-md-12">
-                    <label for="formFile" class="form-label">Upload Picture</label>
-                    <input class="form-control" type="file" id="formFile"
+                    <label htmlFor="formFile" className="form-label">Upload Picture</label>
+                    <input className="form-control" type="file" id="formFile"
                         name="picture"
                         onChange={handleFileChange}
                         required
                     />
                 </div>
-                {/* Add preview image */}
                 {previewURL && (
                     <div className="mb-3 col-md-12">
                         <img src={previewURL} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
