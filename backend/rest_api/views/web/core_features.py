@@ -197,3 +197,22 @@ class AdolescentReferrals(generics.GenericAPIView):
             "referral_id": request.data.get("id")
         }
         return Response(response_data)
+
+
+class MyReferrals(generics.GenericAPIView):
+    """
+    Get the list of referrals for user's facility.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    serializer_class = ReferralSerialiser
+
+    def get(self, request, *args, **kwargs):
+        referrals = Referral.objects.all()
+        if not request.user.has_perm("setup.access_all_referrals"):
+            referrals.filter(facility=request.user.facility)
+
+        referrals = self.serializer_class(referrals, many=True).data
+        repsonse_data = {
+            "referrals": referrals,
+        }
+        return Response(repsonse_data, status=status.HTTP_200_OK)

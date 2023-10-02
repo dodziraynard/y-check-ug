@@ -274,6 +274,13 @@ class GroupPermissionSerializer(serializers.ModelSerializer):
 class ReferralSerialiser(serializers.ModelSerializer):
     facility_name = serializers.SerializerMethodField()
     services = ServiceSerializer(many=True)
+    created_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, obj):
+        created_by = {
+            "fullname": obj.created_by.get_name()
+        }
+        return created_by
 
     def get_facility_name(self, obj):
         return obj.facility.name

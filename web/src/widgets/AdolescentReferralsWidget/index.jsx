@@ -224,6 +224,7 @@ function AdolescentReferralsWidget() {
                                 <tr>
                                     <th>Facility</th>
                                     <th>Services</th>
+                                    <th>Reason</th>
                                     <th>Status</th>
                                     <th style={{ textAlign: "end" }}>Actions</th>
                                 </tr>
@@ -240,6 +241,7 @@ function AdolescentReferralsWidget() {
                                                     </Badge>
                                                 })}
                                             </td>
+                                            <td>{referral.referral_reason}</td>
                                             <td>
                                                 <Badge variant='subtle' colorScheme='blue'>
                                                     {referral.status}

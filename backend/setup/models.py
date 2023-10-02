@@ -14,6 +14,7 @@ class SetupPerm(models.Model):
             ("manage_tasks", "Can manage tasks"),
             ("manage_other_report", "Can manage other reports"),
             ("manage_roles", "Can manage roles"),
+            ("access_all_referrals", "Can access all referrals"),
 
             # User
             ("view_user", "Can view user"),
@@ -27,7 +28,7 @@ class SetupPerm(models.Model):
             ("edit_patient", "Can edit existing patient records"),
             ("delete_patient", "Can delete patient records"),
 
-            # System Configuration
+            # System configuration
             ("manage_service", "Can manage services"),
             ("manage_facility", "Can manage facility"),
             ("edit_system_config", "Can edit and update system configurations"),

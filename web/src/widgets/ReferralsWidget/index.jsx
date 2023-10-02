@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
-import { BASE_API_URI } from '../../utils/constants';
-import Flag from '../../components/Flag';
-import useAxios from '../../app/hooks/useAxios';
-import { Button, Spinner } from '@chakra-ui/react';
+import { resourceApiSlice } from '../../features/resources/resources-api-slice';
+import { Badge, Spinner } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
+import { monitorAndLoadResponse, monitorShowErrorReduxHttpError } from '../../utils/functions';
 
 function ReferralsWidget() {
     const newReferralModalRef = useRef(null);
-    const { trigger: getReferrals, data: referralsResponseData, referralsError, isLoadingReferrals } = useAxios({ mainUrl: `${BASE_API_URI}/referrals` });
+    const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetMyReferralsQuery()
 
     const [referrals, setReferrals] = useState([])
     const [newReferralModal, setNewReferralModal] = useState(null);
     const [selectedReferral, setSelectedReferral] = useState(null);
 
     useEffect(() => {
+        getReferrals()
+
         // Set modals
         if (newReferralModalRef.current !== null && newReferralModal === null) {
-            const modal = new Modal(newReferralModalRef.current, { keyboard: false })
+            const modal = new Modal(newReferralModalRef.current)
             setNewReferralModal(modal)
         }
     }, [])
@@ -30,8 +31,10 @@ function ReferralsWidget() {
 
     const handleFormSubmit = (event) => {
         event.preventDefault()
-
     }
+
+    monitorAndLoadResponse(referralsResponse, "referrals", setReferrals)
+    monitorShowErrorReduxHttpError(referralsError, isLoadingReferrals)
 
     return (
         <Fragment>
@@ -79,7 +82,6 @@ function ReferralsWidget() {
                 <BreadCrumb items={[{ "name": "Referrals", "url": "" }]} />
                 <h4>Referrals</h4>
                 {isLoadingReferrals ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
-
                 <section>
                     <div className="col-md-10 mx-auto">
                         <table className='table'>
@@ -87,21 +89,40 @@ function ReferralsWidget() {
                                 <tr>
                                     <th>Facility</th>
                                     <th>Services</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th style={{ textAlign: "end" }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {Boolean(referrals?.length) ?
-                                    referrals?.map((flag, index) => {
+                                    referrals?.map((referral, index) => {
                                         return <tr key={index}>
-                                            <td>{flag.name}</td>
+                                            <td>{referral.facility_name}</td>
                                             <td>
-                                                <Flag color={flag.color} />
+                                                {referral?.services?.map((service, _) => {
+                                                    return <Badge variant='outline' colorScheme='blue' className='mx-1'>
+                                                        {service.name}
+                                                    </Badge>
+                                                })}
+                                            </td>
+                                            <td>{referral.referral_reason}</td>
+                                            <td>
+                                                <Badge variant='subtle' colorScheme='blue'>
+                                                    {referral.status}
+                                                </Badge>
+                                            </td>
+                                            <td className='d-flex justify-content-end'>
+                                                <button className="mx-1 btn btn-outline-primary btn-sm align-self-end"
+                                                    onClick={() => null}>
+                                                    <i className="bi bi-pen me-1"></i> Edit
+                                                </button>
                                             </td>
                                         </tr>
                                     })
                                     :
                                     <tr>
-                                        <td colSpan={2}><p className="d-block text-center text-warning">No data found.</p></td>
+                                        <td colSpan={4}><p className="d-block text-center text-warning">No data found.</p></td>
                                     </tr>
                                 }
                             </tbody>
