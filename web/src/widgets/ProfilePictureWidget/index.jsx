@@ -8,12 +8,19 @@ function ProfilePictureWidget() {
     const userInfo = useSelector((state) => state.authentication.user);
     const [putUploadPicture, { isLoading: isPuttingChangePassword, error: errorPuttingBiodata }] = usePutUserUploadPictureMutation()
     const [selectedFile, setSelectedFile] = useState(null);
+    const [previewURL, setPreviewURL] = useState(null); // Add state for preview URL
 
 
     // HANDLE FILE CASE
+    // HANDLE FILE CASE
     const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-        };
+        const file = event.target.files[0];
+        setSelectedFile(file);
+
+        // Generate preview URL
+        setPreviewURL(file ? URL.createObjectURL(file) : null);
+    };
+
 
     const [user, setUser] = useState({
         id:userInfo?.id,
@@ -83,7 +90,12 @@ function ProfilePictureWidget() {
                         required
                     />
                 </div>
-                
+                {/* Add preview image */}
+                {previewURL && (
+                    <div className="mb-3 col-md-12">
+                        <img src={previewURL} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                    </div>
+                )}
 
                 <div className="mb-3 col-md-12">
                 </div>
