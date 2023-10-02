@@ -20,6 +20,7 @@ import RolesWidget from "./widgets/RolesWidget";
 import UsersWidget from "./widgets/UsersWidget";
 import UserProfileWidget from "./widgets/UserProfileWidget";
 import BioDataWidget from "./widgets/BioDataWidget";
+import ChangePasswordWidget from "./widgets/ChangePasswordWidget";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           }>
             <Route path="" element={<BioDataWidget />} />
             <Route path="bio/data" element={<BioDataWidget />} />
+            <Route path="change/password" element={<ChangePasswordWidget />} />
           </Route>
         </Route>
         <Route path="*" element={<Error404Screen />} />

@@ -13,10 +13,10 @@ function UserProfileWidget() {
                     <NavLink className="profile-menu-item" to="bio/data"><i className="bi bi-person"></i> Bio Data 
                     <span  className="d-flex text-black">Update your Personal Info</span>
                     </NavLink>
-                    <NavLink className="profile-menu-item" to="services"><i className="bi bi-file-image"></i> Photo
+                    <NavLink className="profile-menu-item" to="roles"><i className="bi bi-file-image"></i> Photo
                     <span  className="d-flex text-black">Update Your Profile Picture</span>
                     </NavLink>
-                    <NavLink className="profile-menu-item" to="roles"><i className="bi bi-lock"></i> Password
+                    <NavLink className="profile-menu-item" to="change/password"><i className="bi bi-lock"></i> Password
                     <span  className="d-flex text-black">Change Your Password</span>
                     </NavLink>
                 </section>

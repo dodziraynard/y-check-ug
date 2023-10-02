@@ -191,6 +191,15 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            putUserChangePassword: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/user/change/password/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
 
             ...referrals.getReferralEndpoints(builder)
         };
@@ -215,7 +224,7 @@ export const {
     useDeleteUsersMutation,
     useLogOutUserMutation,
     usePutUserBioDataMutation,
-
+    usePutUserChangePasswordMutation,
     // Configurations
     useLazyGetConfigurationsQuery,
     usePutConfigurationsMutation,
