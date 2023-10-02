@@ -5,7 +5,8 @@ from rest_api.serializers import (GroupSerializer,
                                   GroupPermissionSerializer, UserSerializer,
                                   FacilitySerializer,
                                   ServiceSerializer,
-                                  FlagLabelSerializer)
+                                  FlagLabelSerializer,
+                                  RegisterSerializer)
 from dashboard.forms import *
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
@@ -14,6 +15,9 @@ from accounts.models import User
 from dashboard.models import Facility, Service, FlagLabel
 from ycheck.utils.functions import relevant_permission_objects
 from rest_framework import generics
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
+from knox.models import AuthToken
 
 
 class GroupsAPI(SimpleCrudMixin):
@@ -227,6 +231,39 @@ class UpdateUserBioAPI(SimpleCrudMixin):
             "message": f"{self.model_class.__name__} could not be Updated",
             "error_message": get_errors_from_form(form),
         })
+
+class ChangePasswordAPI(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get("id")
+        password = request.data.get("password")
+        new_password = request.data.get("new_password")
+        user =User.objects.filter(id=user_id).first() 
+        check_user = authenticate(request,username=user.username, password=password)
+        if check_user and len(new_password) > 0:
+            check_user.set_password(new_password)
+            check_user.save()
+            AuthToken.objects.filter(user=check_user).delete()
+
+            response_data = {
+                "message": "Password Changed Successfully",
+                "user": UserSerializer(check_user).data,
+                "token": AuthToken.objects.create(check_user)[1],
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                "error_message": "Invalid old password",
+                "user": None,
+                "token": None,
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        
+        
 
         
         

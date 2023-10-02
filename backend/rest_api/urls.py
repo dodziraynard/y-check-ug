@@ -35,6 +35,7 @@ urlpatterns = [
     # Users
     path("users/", views.UsersAPI.as_view()),
     path("user/bio/data/", views.UpdateUserBioAPI.as_view()),
+    path("user/change/password/", views.ChangePasswordAPI.as_view()),
     # services
     path("services/", views.ServicesAPI.as_view()),
     path("get-flags/", views.FlagsAPI.as_view()),
