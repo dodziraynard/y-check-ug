@@ -265,6 +265,27 @@ class ChangePasswordAPI(generics.GenericAPIView):
         
         
 
+class UploadPictureAPI(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get("id")
+        picture = request.data.get("picture")
+        print(picture)
+        user =User.objects.filter(id=user_id).first() 
+        if user:
+            user.photo = picture
+            user.save()
+            return Response({
+                "message":
+                f" Profile Picture Updated successfully",
+                
+            })
+        return Response({
+            "error_message": "Profile Picture Could not be Updated successfully",
+        })
+        
+
         
         
        
