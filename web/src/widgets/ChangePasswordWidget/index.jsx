@@ -44,7 +44,6 @@ function ChangePasswordWidget() {
             const response = await putChangePassword(body).unwrap()
             const message = response["message"]
             const errormessage = response["error_message"]
-    
             if (message !== undefined && message !== null) {
                 toast({
                     position: 'top-center',
