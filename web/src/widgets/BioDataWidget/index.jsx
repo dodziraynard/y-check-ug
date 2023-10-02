@@ -18,8 +18,6 @@ function BioDataWidget() {
         
     })
 
-    console.log(user.id)
-
     // Handle change
     const handleChange = (event) => {
         let name = event.target.name;
@@ -70,7 +68,7 @@ function BioDataWidget() {
         <Fragment>
             <form className="row bio-data p-3" onSubmit={handleFormSubmit}>
                 <div className="mb-3 col-md-6">
-                    <label htmlFor="username" className="form-label">Username/Staff ID</label>
+                    <label htmlFor="username" className="form-label">Username</label>
                     <input type="text" className="form-control" id="username" aria-describedby="username"
                         name="username"
                         value={user.username}

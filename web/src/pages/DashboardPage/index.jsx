@@ -26,6 +26,7 @@ function DashboardPage() {
         await logoutUserServerSide().unwrap()
         dispatch(logOutLocally())
     }
+
     // Logout error
     useEffect(() => {
         if (Boolean(error) && !isLoading) {
@@ -166,8 +167,13 @@ function DashboardPage() {
                                 className="m-0 p-0">{user?.title}</small></p>
                         </a>
                         <a href="" className="avatar">
-                            <img src={user?.photo_url} alt="User's picture" />
+                            {user?.photo || user?.photo_url ? (
+                                <img src={user?.photo || user?.photo_url} alt="User's picture" />
+                            ) : (
+                                <span>No Photo</span>
+                            )}
                         </a>
+                        
                     </div>
                 </nav>
 

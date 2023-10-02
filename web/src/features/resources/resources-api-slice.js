@@ -200,6 +200,15 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            putUserUploadPicture: builder.mutation({
+                query(body) {
+                    return {
+                        url: `user/upload/picture/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
 
             ...referrals.getReferralEndpoints(builder)
         };
@@ -225,6 +234,7 @@ export const {
     useLogOutUserMutation,
     usePutUserBioDataMutation,
     usePutUserChangePasswordMutation,
+    usePutUserUploadPictureMutation,
     // Configurations
     useLazyGetConfigurationsQuery,
     usePutConfigurationsMutation,
