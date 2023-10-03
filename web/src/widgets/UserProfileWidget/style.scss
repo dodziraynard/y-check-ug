@@ -1,0 +1,31 @@
+@import "../../theme-variables.scss";
+
+.user-profile-widget {
+    .menu {
+        min-height: 70vh;
+        background: rgba($color: $primary-color, $alpha: 0.1);
+        border-radius: 4px;
+    }
+    .profile-menu-item {
+        background: rgba($color: $primary-color, $alpha: 0.3);
+        padding: 1em;
+        margin: 0.3em 0;
+        display: block;
+        border-radius: 4px;
+        font-size: 16px;
+        color:rgba($primary-color, 0.9);;
+
+        &:hover,
+        &.active {
+            background: rgba($color: $primary-color, $alpha: 0.5);
+        }
+    }
+
+    @media (max-width: $breakpoint-tablet) {
+        .menu {
+            min-height: unset;
+            margin-bottom: 2em;
+            padding: 1em;
+        }
+    }
+}

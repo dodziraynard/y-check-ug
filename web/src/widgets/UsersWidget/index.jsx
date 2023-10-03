@@ -411,7 +411,15 @@ function UsersWidget() {
 
                         ]}
                         headers={[{
-                            key: "photo", value: "Photo"
+                            key: "photo",
+                             value: "Photo",
+                             render: (item) => (
+                                <img
+                                    src={item.photo ? item.photo : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
+                                    alt="User Photo"
+                                    style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                                />
+                            ),
                         }, {
                             key: "username", value: "Username/Staff ID"
                         }, {
