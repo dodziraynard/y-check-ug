@@ -18,7 +18,10 @@ import FacilitiesWidget from "./widgets/FacilitiesWidget";
 import ServiceWidget from "./widgets/ServiceWidget";
 import RolesWidget from "./widgets/RolesWidget";
 import UsersWidget from "./widgets/UsersWidget";
-
+import UserProfileWidget from "./widgets/UserProfileWidget";
+import BioDataWidget from "./widgets/BioDataWidget";
+import ChangePasswordWidget from "./widgets/ChangePasswordWidget";
+import ProfilePictureWidget from "./widgets/ProfilePictureWidget";
 function App() {
   return (
     <Router>
@@ -45,6 +48,17 @@ function App() {
             <Route path="facilities" element={<FacilitiesWidget />} />
             <Route path="services" element={<ServiceWidget />} />
             <Route path="roles" element={<RolesWidget />} />
+          </Route>
+
+          <Route path="/user/profile" element={
+            <ProtectedRoute>
+              <UserProfileWidget />
+            </ProtectedRoute>
+          }>
+            <Route path="" element={<BioDataWidget />} />
+            <Route path="bio/data" element={<BioDataWidget />} />
+            <Route path="change/password" element={<ChangePasswordWidget />} />
+            <Route path="picture" element={<ProfilePictureWidget />} />
           </Route>
         </Route>
         <Route path="*" element={<Error404Screen />} />

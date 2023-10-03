@@ -26,6 +26,7 @@ function DashboardPage() {
         await logoutUserServerSide().unwrap()
         dispatch(logOutLocally())
     }
+
     // Logout error
     useEffect(() => {
         if (Boolean(error) && !isLoading) {
@@ -135,7 +136,15 @@ function DashboardPage() {
                     : ""}
 
                 <hr />
+                <h6 className="header mt-4">USER PROFILE</h6>
+                <NavLink to="/user/profile">
+                    <div className="menu-item" id="users">
+                        <i className='icon bi bi-user'></i>
+                        <span className="label">Update Profile</span>
+                    </div>
+                </NavLink>
 
+                <hr />
                 <span to="/logout" onClick={logoutUser}>
                     <div className="menu-item">
                         <i className='icon bi bi-lock'></i>
@@ -158,8 +167,13 @@ function DashboardPage() {
                                 className="m-0 p-0">{user?.title}</small></p>
                         </a>
                         <a href="" className="avatar">
-                            <img src={user?.photo_url} alt="User's picture" />
+                            {user?.photo || user?.photo_url ? (
+                                <img src={user?.photo || user?.photo_url} alt="User's picture" />
+                            ) : (
+                                <span>No Photo</span>
+                            )}
                         </a>
+                        
                     </div>
                 </nav>
 

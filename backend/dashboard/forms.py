@@ -34,6 +34,17 @@ class UserForm(forms.ModelForm):
             "phone",
             'facility'
         ]
+        
+class UserBioDataForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = [
+            'surname',
+            'other_names',
+            "phone",
+            'gender'
+        ]
 
 class ServiceForm(forms.ModelForm):
 

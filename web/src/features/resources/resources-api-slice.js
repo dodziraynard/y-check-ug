@@ -182,6 +182,33 @@ export const resourceApiSlice = createApi({
                     return `/get-flags/`;
                 },
             }),
+            putUserBioData: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/user/bio/data/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+            putUserChangePassword: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/user/change/password/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+            putUserUploadPicture: builder.mutation({
+                query(body) {
+                    return {
+                        url: `user/upload/picture/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
 
             ...referrals.getReferralEndpoints(builder)
         };
@@ -205,7 +232,9 @@ export const {
     usePutUsersMutation,
     useDeleteUsersMutation,
     useLogOutUserMutation,
-
+    usePutUserBioDataMutation,
+    usePutUserChangePasswordMutation,
+    usePutUserUploadPictureMutation,
     // Configurations
     useLazyGetConfigurationsQuery,
     usePutConfigurationsMutation,

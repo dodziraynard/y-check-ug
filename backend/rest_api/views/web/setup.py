@@ -5,14 +5,19 @@ from rest_api.serializers import (GroupSerializer,
                                   GroupPermissionSerializer, UserSerializer,
                                   FacilitySerializer,
                                   ServiceSerializer,
-                                  FlagLabelSerializer)
-from dashboard.forms import GroupForm, UserForm, FacilityForm, ServiceForm
+                                  FlagLabelSerializer,
+                                  RegisterSerializer)
+from dashboard.forms import *
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
 from dashboard.models import Facility, Service, FlagLabel
 from ycheck.utils.functions import relevant_permission_objects
+from rest_framework import generics
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
+from knox.models import AuthToken
 
 
 class GroupsAPI(SimpleCrudMixin):
@@ -199,3 +204,81 @@ class FlagsAPI(SimpleCrudMixin):
                                   many=True).data,
         }
         return Response(response_data)
+
+class UpdateUserBioAPI(SimpleCrudMixin):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    
+    model_class = User
+    form_class =  UserBioDataForm
+    serializer_class = UserSerializer
+    response_data_label = "bio"
+    response_data_label_plural = "bios"
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get("id")
+        user =User.objects.filter(id=user_id).first() 
+        
+        if user:
+            form = self.form_class(request.data, instance=user)
+        if form.is_valid():
+            user = form.save()
+            return Response({
+                "message":
+                f"{self.model_class.__name__} Updated successfully",
+                self.response_data_label:
+                self.serializer_class(form.instance).data,
+            })
+        return Response({
+            "message": f"{self.model_class.__name__} could not be Updated",
+            "error_message": get_errors_from_form(form),
+        })
+
+class ChangePasswordAPI(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get("id")
+        password = request.data.get("password")
+        new_password = request.data.get("new_password")
+        user =User.objects.filter(id=user_id).first() 
+        check_user = authenticate(request,username=user.username, password=password)
+        
+        if check_user and len(new_password) > 0:
+            check_user.set_password(new_password)
+            check_user.save()
+            response_data = {
+                "message": "Password Changed Successfully",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                "error_message": "Invalid old password",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        
+        
+
+class UploadPictureAPI(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get("id")
+        picture = request.data.get("picture")
+        print(picture)
+        user =User.objects.filter(id=user_id).first() 
+        if user:
+            user.photo = picture
+            user.save()
+            return Response({
+                "message":
+                f" Profile Picture Updated successfully",
+                
+            })
+        return Response({
+            "error_message": "Profile Picture Could not be Updated successfully",
+        })
+        
+
+        
+        
+       
