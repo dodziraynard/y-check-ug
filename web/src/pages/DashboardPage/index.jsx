@@ -1,10 +1,10 @@
 import './styles.scss'
 import './styles-m.scss'
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect,useState } from "react";
 import logo from "../../assets/images/logo.png";
 import Permissions from "../../utils/permissions";
 import PageMeta from "../../components/PageMeta";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet,Link } from "react-router-dom";
 import Footer from '../../components/Footer';
 import {
     logOutLocally
@@ -21,6 +21,7 @@ function DashboardPage() {
     const [logoutUserServerSide, { isLoading, error }] = useLogOutUserMutation()
     const user = useSelector((state) => state.authentication.user);
     const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     async function logoutUser() {
         await logoutUserServerSide().unwrap()
@@ -134,16 +135,6 @@ function DashboardPage() {
                     </div>
                 </NavLink>
                     : ""}
-
-                <hr />
-                <h6 className="header mt-4">USER PROFILE</h6>
-                <NavLink to="/user/profile">
-                    <div className="menu-item" id="users">
-                        <i className='icon bi bi-user'></i>
-                        <span className="label">Update Profile</span>
-                    </div>
-                </NavLink>
-
                 <hr />
                 <span to="/logout" onClick={logoutUser}>
                     <div className="menu-item">
@@ -153,27 +144,35 @@ function DashboardPage() {
                 </span>
             </section>
             <section className="main-content">
-                <nav className="nav">
+                <nav className="nav mb-5">
                     <div className="">
                         <span className="open-sidebar" data-target=".sidebar">
                             <i className='bi bi-list' id="btn"></i>
                         </span>
                     </div>
-                    <div className=""></div>
-                    <div className="nav-right d-flex align-items-center">
-                        <a href="" className="me-3">
-                            <p className="m-0 p-0 text-end">{user?.username}</p>
-                            <p className="m-0 p-0 text-end text text-muted"><small
-                                className="m-0 p-0">{user?.title}</small></p>
-                        </a>
-                        <a href="" className="avatar">
-                            {user?.photo || user?.photo_url ? (
-                                <img src={user?.photo || user?.photo_url} alt="User's picture" />
-                            ) : (
-                                <span>No Photo</span>
-                            )}
-                        </a>
-                        
+                   
+                    <div className="drop-container position-relative ">
+                        <div className="d-flex align-items-center">
+                            <a href="" className="avatar mr-5">
+                                {user?.photo || user?.photo_url ? (
+                                    <img src={user?.photo || user?.photo_url} alt="User's picture" />
+                                ) : (
+                                    <span>No Photo</span>
+                                )}
+                            </a>
+                            <span className="ms-2">{user?.username}</span>
+                            <i className="ms-2 bi bi-chevron-down"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            ></i>
+                        </div>
+
+                        {isDropdownOpen && (
+                        <div className="drop-down mt-1 profile">
+                            <Link to="/user/profile" className="drop-down-item d-block">
+                                <i className="bi bi-person mx-2"></i> Profile
+                            </Link>
+                        </div>
+                        )}
                     </div>
                 </nav>
 
