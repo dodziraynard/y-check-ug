@@ -83,7 +83,7 @@ function TableView({ headers,
     useEffect(() => {
         const filtered = originalData.filter(c => {
             for (const { key } of headers) {
-                return c[key] !== null && typeof c[key] !== 'object' && c[key].toString().toLowerCase()?.includes(search?.toLowerCase())
+                return c[key] !== null && typeof c[key] !== 'object' && c[key]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
             }
         })
         setDisplayedData(filtered)
@@ -259,7 +259,7 @@ function TableView({ headers,
                                             style={{ cursor: "pointer", textAlign: textAlign }}
                                         >
                                             {value}
-                                            {sort === key && (sortAscending ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-up-fill"></i>)}
+                                            {sort === key && (sortAscending ? <i className="mx-1 bi bi-chevron-down"></i> : <i className="mx-1 bi bi-chevron-up"></i>)}
                                         </th>
                                     )
                                 })}

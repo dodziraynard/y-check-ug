@@ -1,3 +1,4 @@
+from functools import reduce
 from django.db import models
 
 from ycheck.utils.constants import ReferralStatus
@@ -37,6 +38,12 @@ class Referral(models.Model):
 
     def __str__(self) -> str:
         return self.status
+
+    @staticmethod
+    def generate_query(query):
+        queries = [models.Q(**{f"{key}__icontains": query})
+                   for key in ["adolescent__pid", "adolescent__surname", "adolescent__other_names"]]
+        return reduce(lambda x, y: x | y, queries)
 
 
 class Treatment(models.Model):

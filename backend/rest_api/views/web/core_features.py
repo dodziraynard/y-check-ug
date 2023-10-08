@@ -1,9 +1,10 @@
 import logging
+import math
 from rest_framework import permissions
 from dashboard.models.referrals import Referral
 from dashboard.forms import FacilityForm
 from dashboard.models import Facility, Service
-from rest_api.views.mixins import SimpleCrudMixin
+from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
@@ -212,12 +213,43 @@ class MyReferrals(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         referrals = Referral.objects.all()
+        query = request.GET.get("query") or request.GET.get("q")
         if not request.user.has_perm("setup.access_all_referrals"):
             referrals.filter(facility=request.user.facility)
 
-        referrals = self.serializer_class(referrals, many=True).data
+        if query and hasattr(Referral, "generate_query"):  # type: ignore
+            referrals = referrals.filter(
+                Referral.generate_query(query))  # type: ignore
+
+        # Pagination
+        page = request.GET.get("page", "")
+        page_size = request.GET.get("page_size", "")
+        page_size = int(
+            page_size) if page_size.isnumeric() else QUERY_PAGE_SIZE
+        total_pages = max(1, math.ceil(referrals.count() / page_size))
+
+        page = int(page) if page.isnumeric() else 1
+        if page > total_pages:
+            page = total_pages
+        page = max(page, 1)
+
+        paginated_referrals = referrals[(
+            page - 1) * page_size:page * page_size]
+        prev_page = page - 1 if page > 1 else None
+        next_page = page + 1 if total_pages > page else None
+
+        referrals_data = self.serializer_class(
+            paginated_referrals, many=True, context={"request": request}).data
         repsonse_data = {
-            "referrals": referrals,
+            "referrals": referrals_data,
+
+            "page": page,
+            "page_size": page_size,
+            "total": referrals.count(),
+            "next_page": next_page,
+            "previous_page": prev_page,
+            "total_pages": total_pages,
+
         }
         return Response(repsonse_data, status=status.HTTP_200_OK)
 
@@ -247,7 +279,8 @@ class ReferralDetail(generics.GenericAPIView):
         for service in referral.services.all():
             flag_labels = service.related_flag_labels.all()
             flags = SummaryFlag.objects.filter(label__in=flag_labels)
-            responses = [response for flag in flags for response in flag.get_responses()]
+            responses = [
+                response for flag in flags for response in flag.get_responses()]
             relevant_adolescent_responses[service.id] = responses
 
         repsonse_data = {

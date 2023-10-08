@@ -1,4 +1,6 @@
+from functools import reduce
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin)
 from accounts.managers import UserManager
@@ -42,6 +44,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         permissions = [
             ('reset_password', 'Can reset user password'),
         ]
+    
+    @staticmethod
+    def generate_query(query):
+        queries = [Q(**{f"{key}__icontains": query}) for key in ["phone", "surname", "other_names"]]
+        return reduce(lambda x, y: x | y, queries)
 
     def model_name(self):
         return self.__class__.__name__.lower()

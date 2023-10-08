@@ -1,10 +1,10 @@
 import './styles.scss'
 import './styles-m.scss'
-import { Fragment, useEffect,useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import logo from "../../assets/images/logo.png";
 import Permissions from "../../utils/permissions";
 import PageMeta from "../../components/PageMeta";
-import { NavLink, Outlet,Link } from "react-router-dom";
+import { NavLink, Outlet, Link } from "react-router-dom";
 import Footer from '../../components/Footer';
 import {
     logOutLocally
@@ -150,7 +150,7 @@ function DashboardPage() {
                             <i className='bi bi-list' id="btn"></i>
                         </span>
                     </div>
-                   
+
                     <div className="drop-container position-relative ">
                         <div className="d-flex align-items-center">
                             <a href="" className="avatar mr-5">
@@ -162,21 +162,21 @@ function DashboardPage() {
                             </a>
                             <span className="ms-2">{user?.username}</span>
                             <i className="ms-2 bi bi-chevron-down"
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             ></i>
                         </div>
 
                         {isDropdownOpen && (
-                        <div className="drop-down mt-1 profile">
-                            <Link to="/user/profile" className="drop-down-item d-block">
-                                <i className="bi bi-person mx-2"></i> Profile
-                            </Link>
-                        </div>
+                            <div className="drop-down mt-1 profile">
+                                <Link to="/user/profile" className="drop-down-item d-block">
+                                    <i className="bi bi-person mx-2"></i> Profile
+                                </Link>
+                            </div>
                         )}
                     </div>
                 </nav>
 
-                <section className="main">
+                <section className="main col-12 mx-auto">
                     <Outlet />
                     <Footer />
                 </section>

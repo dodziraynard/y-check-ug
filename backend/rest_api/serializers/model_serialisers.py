@@ -255,6 +255,7 @@ class ReferralSerialiser(serializers.ModelSerializer):
     facility_name = serializers.SerializerMethodField()
     services = ServiceSerializer(many=True)
     created_by = serializers.SerializerMethodField()
+    adolescent = AdolescentSerializer()
 
     def get_created_by(self, obj):
         created_by = {

@@ -42,6 +42,7 @@ class SimpleCrudMixin(generics.GenericAPIView):
         if hasattr(self, "modify_response_data"):
             objects = self.modify_response_data(objects)
 
+        # Pagination
         page = request.GET.get("page", "")
         page_size = request.GET.get("page_size", "")
         page_size = int(

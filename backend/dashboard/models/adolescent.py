@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import reduce
 from django.db import models
 from accounts.models import User
 QUESTION_TYPE = [
@@ -44,6 +45,12 @@ class Adolescent(models.Model):
 
     def get_name(self):
         return f"{self.surname} {self.other_names}"
+
+    @staticmethod
+    def generate_query(query):
+        queries = [models.Q(**{f"{key}__icontains": query})
+                   for key in ["pid", "surname", "other_names", "gender"]]
+        return reduce(lambda x, y: x | y, queries)
 
 
 class CheckupLocation(models.Model):

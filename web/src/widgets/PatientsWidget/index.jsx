@@ -10,7 +10,7 @@ function PatientsWidget() {
         <div className="patients-widget">
             <BreadCrumb items={[{ "name": "Patients" }]} />
             <p className="text-muted">Below are the adolescents registered via the mobile app.
-                Click on the <strong>more</strong> button to view the geneted flags and more.
+                Click on the <strong>more</strong> button to view the generated flags and more.
             </p>
 
             <TableView
@@ -32,10 +32,7 @@ function PatientsWidget() {
                         }
                     },
                     {
-                        key: "surname", value: "Surname"
-                    },
-                    {
-                        key: "other_names", value: "Names"
+                        key: "fullname", value: "Full Name"
                     },
                     {
                         key: "gender", value: "Gender", textAlign: "center",
@@ -44,6 +41,11 @@ function PatientsWidget() {
                         key: "visit_type", value: "Visit"
                     }, {
                         key: "check_up_location", value: "Location", textAlign: "left",
+                    },
+                    {
+                        key: "status", value: "Status", textAlign: "center", render: (item) => {
+                            return "..."
+                        }
                     }, {
                         value: "Actions", textAlign: "right", render: (item) => {
                             return (
