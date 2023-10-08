@@ -23,6 +23,7 @@ urlpatterns = [
     path("<str:pid>/recommended-services/", views.GetRecommendedServices.as_view()),
     
     path("<str:pid>/referrals/", views.AdolescentReferrals.as_view()),
+    path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view()),
     path("my-referrals/", views.MyReferrals.as_view()),
 
     # Facilities

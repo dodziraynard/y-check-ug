@@ -6,6 +6,11 @@ export const getReferralEndpoints = (builder) => {
                 return `/${pid}/referrals/`;
             },
         }),
+        getReferral: builder.query({
+            query({ referralId }) {
+                return `/referrals/${referralId}/detail/`;
+            },
+        }),
         getMyReferrals: builder.query({
             query() {
                 return `/my-referrals/`;

@@ -39,6 +39,29 @@ class SummaryFlag(models.Model):
             name += f"->{self.updated_color_code}"
         return name
 
+    def get_responses(self):
+        result = []
+        adolescent = self.adolescent
+        colors = self.label.colors.all()
+        flag_conditions = FlagCondition.objects.filter(flag_color__in=colors)
+        question_ids = []
+
+        for condition in flag_conditions:
+            if condition.question1:
+                question_ids.append(condition.question1.question_id)
+            if condition.question2:
+                question_ids.append(condition.question2.question_id)
+
+        for question in Question.objects.filter(question_id__in=question_ids).distinct():
+            response = question.get_response(adolescent)
+            data = {
+                "question": question.text,
+                "question_id": question.question_id,
+                "answers": response
+            }
+            result.append(data)
+        return result
+
 
 class FlagLabel(models.Model):
     name = models.CharField(max_length=50, unique=True, db_index=True)

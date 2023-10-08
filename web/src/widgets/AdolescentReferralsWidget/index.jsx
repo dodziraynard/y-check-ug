@@ -9,14 +9,15 @@ import { resourceApiSlice } from '../../features/resources/resources-api-slice';
 import { BASE_API_URI } from '../../utils/constants';
 import { useParams } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
-import { Button, Spinner, Badge } from '@chakra-ui/react';
+import { Button, Spinner, Badge, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
-import { monitorAndLoadResponse, monitorShowErrorReduxHttpError } from '../../utils/functions';
+import { monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastErrorMessage } from '../../utils/functions';
 import TagInput from '../../components/TagInput';
 
 function AdolescentReferralsWidget() {
     const { pid } = useParams()
     const newReferralModalRef = useRef(null);
+    const toast = useToast(null);
     const deleteReferralModalRef = useRef(null);
     const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetReferralsQuery()
     const [getFacilities, { data: facilitiesResponse = [], isLoading: isLoadingFacilities, error: errorLoadingFacilities }] = useLazyGetAllFacilitiesQuery()
@@ -58,10 +59,11 @@ function AdolescentReferralsWidget() {
     }, [])
 
     const showNewReferralModal = () => {
-        setSelectedReferral(null)
-        setFacilityId("")
+        setSelectedReferral("")
+        setFacilityId(null)
         setServiceType("")
         setReferralReason("")
+        setSelectedServices([])
         newReferralModal?.show()
     }
 
@@ -93,7 +95,7 @@ function AdolescentReferralsWidget() {
         if (referral !== undefined) {
             setReferrals([referral, ...referrals.filter(c => c.id !== referral.id)])
         } else if (Boolean(response?.error_message)) {
-            toastErrorMessage(response.error_message)
+            toastErrorMessage(response.error_message, toast)
         }
         newReferralModal?.hide()
 
@@ -108,6 +110,7 @@ function AdolescentReferralsWidget() {
         const response = await deleteReferral({ body, pid }).unwrap()
         if (response?.referral_id !== undefined) {
             setReferrals([...referrals.filter(c => c.id !== response.referral_id)])
+            getServices({ pid })
         }
         deleteReferralModal?.hide()
     }
@@ -261,7 +264,7 @@ function AdolescentReferralsWidget() {
                                     })
                                     :
                                     <tr>
-                                        <td colSpan={4}><p className="d-block text-center text-warning">No data found.</p></td>
+                                        <td colSpan={5}><p className="d-block text-center text-warning">No data found.</p></td>
                                     </tr>
                                 }
                             </tbody>

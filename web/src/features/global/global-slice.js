@@ -3,17 +3,16 @@ import { createSlice } from '@reduxjs/toolkit';
 export const globalSlice = createSlice({
     name: "global",
     initialState: {
-        activeTopNavMenu: "home",
         groups: [],
+        referralInReview: null,
         configurations: null,
-        balance: null,
     },
     reducers: {
-        setActiveNavMenu: (state, action) => {
-            state.activeTopNavMenu = action.payload
-        },
         setGroups: (state, action) => {
             state.groups = action.payload
+        },
+        setReferralInReview: (state, action) => {
+            state.referralInReview = action.payload
         },
         setConfigurations: (state, action) => {
             state.configurations = action.payload
@@ -21,5 +20,5 @@ export const globalSlice = createSlice({
     },
 });
 
-export const { setActiveNavMenu, setGroups, setConfigurations} = globalSlice.actions;
+export const { setGroups, setReferralInReview, setConfigurations } = globalSlice.actions;
 export default globalSlice.reducer;

@@ -10,7 +10,7 @@ from ycheck.utils.constants import Colors, ReferralStatus
 from django.db.models import Q
 from dashboard.models import Adolescent, FlagLabel, SummaryFlag
 from rest_framework.response import Response
-
+from django.db.utils import IntegrityError
 from rest_api.serializers import *
 
 logger = logging.getLogger("app")
@@ -178,13 +178,17 @@ class AdolescentReferrals(generics.GenericAPIView):
             "facility_id": request.data.get("facility_id"),
             "referral_reason": request.data.get("referral_reason"),
         }
-        if referral:
-            referral.update(**data)
-            referral = referral.first()
-        else:
-            referral = Referral.objects.create(created_by=request.user,
-                                               adolescent=adolescent,
-                                               ** data)
+        try:
+            if referral:
+                referral.update(**data)
+                referral = referral.first()
+            else:
+                referral = Referral.objects.create(created_by=request.user,
+                                                   adolescent=adolescent,
+                                                   ** data)
+        except IntegrityError as e:
+            return Response({"error_message": f"{str(e)}"})
+
         referral.services.set(services)
         repsonse_data = {
             "referral": self.serializer_class(referral).data,
@@ -216,3 +220,42 @@ class MyReferrals(generics.GenericAPIView):
             "referrals": referrals,
         }
         return Response(repsonse_data, status=status.HTTP_200_OK)
+
+
+class ReferralDetail(generics.GenericAPIView):
+    """
+    Get the list of referrals for user's facility.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    serializer_class = ReferralSerialiser
+
+    def get(self, request, referral_id, *args, **kwargs):
+        referral = Referral.objects.filter(id=referral_id).first()
+
+        if not referral:
+            return Response({"error_message": f"Referral not found."})
+        if referral.status == ReferralStatus.NEW.value:
+            referral.status = ReferralStatus.REVIEW.value
+            referral.save()
+
+        adolescent = AdolescentSerializer(
+            referral.adolescent, context={"request": request}).data
+        referral_data = self.serializer_class(referral).data
+
+        # Retrieve all flags
+        relevant_adolescent_responses = {}
+        for service in referral.services.all():
+            flag_labels = service.related_flag_labels.all()
+            flags = SummaryFlag.objects.filter(label__in=flag_labels)
+            responses = [response for flag in flags for response in flag.get_responses()]
+            relevant_adolescent_responses[service.id] = responses
+
+        repsonse_data = {
+            "referral": referral_data,
+            "adolescent": adolescent,
+            "relevant_adolescent_responses": relevant_adolescent_responses,
+        }
+        return Response(repsonse_data, status=status.HTTP_200_OK)
+
+    def post(self, request, referral_id, *args, **kwargs):
+        pass

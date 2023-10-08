@@ -264,13 +264,14 @@ function SummaryFlagWidget() {
             <div className="patients-widget">
                 <BreadCrumb items={[{ "name": "Patients", "url": "/patients" }, { "name": "Summary", "url": "" }]} />
                 <section className="d-flex align-items-center">
-                    <h4> Summary for </h4>
-                    {Boolean(adolescent) ?
-                        <Fragment>
-                            <Text className='tex-primary mx-3'>{adolescent.fullname}</Text>
-                            <Button size='md' variant='ghost' onClick={() => profileModal?.show()}>Details</Button>
-                        </Fragment>
-                        : ""}
+                    <h4> Summary Flags for:
+                        {Boolean(adolescent) ?
+                            <Fragment>
+                                <Text className='tex-primary mx-3'>{adolescent.fullname}</Text>
+                                <Button size='sm' onClick={() => profileModal?.show()}>View Profile</Button>
+                            </Fragment>
+                            : ""}
+                    </h4>
                 </section>
                 {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
@@ -287,12 +288,13 @@ function SummaryFlagWidget() {
                             <tbody>
                                 {Boolean(flags?.length) ?
                                     flags?.map((flag, index) => {
+                                        const mutable = !Boolean(flag.updated_color_code);
                                         return <tr key={index}>
                                             <td>{flag.name}</td>
                                             <td>
                                                 <div className="d-flex">
-                                                    <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
-                                                        <Flag color={flag.computed_color_code} mutable={!Boolean(flag.updated_color_code)} onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                    <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
+                                                        <Flag color={flag.computed_color_code} mutable={mutable} onColorChange={(color) => onColorChange(color, flag.id)} />
                                                     </Tooltip>
                                                     <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
                                                         {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}

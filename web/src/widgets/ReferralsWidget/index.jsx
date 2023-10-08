@@ -4,6 +4,7 @@ import './style.scss';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
 import { Badge, Spinner } from '@chakra-ui/react';
 import { monitorAndLoadResponse, monitorShowErrorReduxHttpError } from '../../utils/functions';
+import { Link } from 'react-router-dom';
 
 function ReferralsWidget() {
     const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetMyReferralsQuery()
@@ -55,10 +56,10 @@ function ReferralsWidget() {
                                                 </Badge>
                                             </td>
                                             <td className='d-flex justify-content-end'>
-                                                <button className="mx-1 btn btn-outline-primary btn-sm align-self-end"
+                                                <Link to={`/referrals/${referral.id}/details`} className="mx-1 btn btn-outline-primary btn-sm align-self-end"
                                                     onClick={() => null}>
                                                     <i className="bi bi-list me-1"></i> More
-                                                </button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     })
