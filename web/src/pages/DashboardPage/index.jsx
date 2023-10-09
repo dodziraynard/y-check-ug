@@ -119,6 +119,13 @@ function DashboardPage() {
                     </div>
                 </NavLink>
 
+                <NavLink to="/treatments">
+                    <div className="menu-item" id="action_center">
+                        <i className='icon bi bi-hospital'></i>
+                        <span className="label">Treatments</span>
+                    </div>
+                </NavLink>
+
                 <hr />
                 <h6 className="header mt-4">SYSTEM</h6>
                 <NavLink to="/users">

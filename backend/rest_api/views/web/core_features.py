@@ -1,6 +1,7 @@
 import logging
 import math
 from rest_framework import permissions
+from ycheck.utils.functions import apply_filters
 from dashboard.models.referrals import Referral
 from dashboard.forms import FacilityForm
 from dashboard.models import Facility, Service
@@ -146,6 +147,19 @@ class FacilitiesAPI(SimpleCrudMixin):
     response_data_label_plural = "facilities"
 
 
+class TreatmentsAPI(SimpleCrudMixin):
+    """
+    Permform CRUD on treatment object.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    required_permissions = ["setup.view_adolescent"]
+
+    serializer_class = TreatmentSerialiser
+    model_class = Treatment
+    response_data_label = "treatment"
+    response_data_label_plural = "treatments"
+
+
 class AdolescentReferrals(generics.GenericAPIView):
     """
     Get the summary flags for an adolescent/patient.
@@ -212,14 +226,18 @@ class MyReferrals(generics.GenericAPIView):
     serializer_class = ReferralSerialiser
 
     def get(self, request, *args, **kwargs):
-        referrals = Referral.objects.all()
+        referrals = Referral.objects.all().order_by("-created_at")
         query = request.GET.get("query") or request.GET.get("q")
+        filters = request.GET.getlist("filters")
         if not request.user.has_perm("setup.access_all_referrals"):
             referrals.filter(facility=request.user.facility)
 
         if query and hasattr(Referral, "generate_query"):  # type: ignore
             referrals = referrals.filter(
                 Referral.generate_query(query))  # type: ignore
+
+        if filters:
+            referrals = apply_filters(referrals, filters)
 
         # Pagination
         page = request.GET.get("page", "")
@@ -313,7 +331,7 @@ class ReferralTreatment(generics.GenericAPIView):
         if not referral:
             return Response({"error_message": f"Referral not found."})
         treatment = Treatment.objects.filter(referral=referral)
-        
+
         # Posted data
         total_service_cost = request.data.get("total_service_cost")
         full_treatment_received = request.data.get("full_treatment_received")
@@ -342,12 +360,10 @@ class ReferralTreatment(generics.GenericAPIView):
             treatment.update(**treatment_data)
             treatment = treatment.first()
 
-        print("treatment_data", treatment_data)
-        # referral.status = ReferralStatus.COMPLETED.value
-        # referral.save()
+        referral.status = ReferralStatus.COMPLETED.value
+        referral.save()
 
         response_data = {
             "treatment": self.serializer_class(treatment).data
         }
-        print("response_data",response_data)
         return Response(response_data)

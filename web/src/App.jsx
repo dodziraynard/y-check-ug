@@ -23,6 +23,7 @@ import BioDataWidget from "./widgets/BioDataWidget";
 import ChangePasswordWidget from "./widgets/ChangePasswordWidget";
 import ProfilePictureWidget from "./widgets/ProfilePictureWidget";
 import ReferralDetailWidget from "./widgets/ReferralDetailWidget";
+import TreatmentsWidget from "./widgets/TreatmentsWidget";
 function App() {
   return (
     <Router>
@@ -38,6 +39,7 @@ function App() {
           <Route path="/patients/:pid/summary" element={<SummaryFlagWidget />} />
           <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
           <Route path="/referrals" element={<ReferralsWidget />} />
+          <Route path="/treatments" element={<TreatmentsWidget />} />
           <Route path="/referrals/:referralId/details" element={<ReferralDetailWidget />} />
 
           <Route path="/users" element={<UsersWidget />} />

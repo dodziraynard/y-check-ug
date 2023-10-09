@@ -273,6 +273,17 @@ class ReferralSerialiser(serializers.ModelSerializer):
 
 
 class TreatmentSerialiser(serializers.ModelSerializer):
+    adolescent = AdolescentSerializer()
+    facility_name = serializers.SerializerMethodField()
+    further_referred_to = serializers.SerializerMethodField()
+
+    def get_facility_name(self, obj):
+        return obj.referral.facility.name
+
+    def get_further_referred_to(self, obj):
+        if obj.further_referral_facility:
+            return obj.further_referral_facility.name
+        return ""
 
     class Meta:
         model = Treatment

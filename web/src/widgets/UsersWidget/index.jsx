@@ -244,7 +244,7 @@ function UsersWidget() {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <div className="modal-body d-flex justify-content-center overflow-scroll">
+                            <div className="modal-body d-flex justify-content-center">
                                 <div className="d-flex flex-column">
                                     <h5>Are you sure you want to delete this user?</h5>
                                     <p className="text-muted">This action cannot be undone.</p>

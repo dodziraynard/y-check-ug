@@ -18,6 +18,11 @@ function ReferralsWidget() {
                         <TableView
                             responseDataAttribute="referrals"
                             dataSourceUrl={`${BASE_API_URI}/my-referrals/`}
+                            filters={[
+                                { key: `status:new`, value: `New` },
+                                { key: `status:review`, value: `Review` },
+                                { key: `status:completed`, value: `Completed` },
+                            ]}
                             headers={[
                                 {
                                     key: "photo", value: "Photo", textAlign: "center", render: (item) => {
