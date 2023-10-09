@@ -68,7 +68,7 @@ class Question(models.Model):
     section = models.ForeignKey(
         Section, related_name="questions", on_delete=models.PROTECT, db_index=True)
     number = models.IntegerField(unique=True, db_index=True)
-    text = models.CharField(max_length=200)
+    text = models.TextField()
     input_type = models.CharField(max_length=100, choices=INPUT_TYPES)
     answer_preamble = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
@@ -81,7 +81,7 @@ class Question(models.Model):
     type_of_visit = models.CharField(max_length=100, null=True, blank=True)
     min_age = models.IntegerField(null=True, blank=True)
     max_age = models.IntegerField(null=True, blank=True)
-    gender = models.IntegerField(null=True, blank=True)
+    gender = models.CharField(max_length=100, null=True, blank=True)
     adolescent_type = models.CharField(
         max_length=100, choices=TYPE_CHOICES, null=True, blank=True)
 

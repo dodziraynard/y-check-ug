@@ -25,6 +25,20 @@ export const getReferralEndpoints = (builder) => {
                 }
             },
         }),
+        getTreatment: builder.query({
+            query({ referralId }) {
+                return `/referrals/${referralId}/treatment-feedback/`
+            },
+        }),
+        putTreatment: builder.mutation({
+            query({ body, referralId }) {
+                return {
+                    url: `/referrals/${referralId}/treatment-feedback/`,
+                    method: 'POST',
+                    body,
+                }
+            },
+        }),
         deleteReferrals: builder.mutation({
             query({ body, pid }) {
                 return {

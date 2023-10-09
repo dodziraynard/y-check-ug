@@ -270,3 +270,10 @@ class ReferralSerialiser(serializers.ModelSerializer):
     class Meta:
         model = Referral
         fields = "__all__"
+
+
+class TreatmentSerialiser(serializers.ModelSerializer):
+
+    class Meta:
+        model = Treatment
+        fields = "__all__"

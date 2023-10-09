@@ -14,7 +14,6 @@ function PatientsWidget() {
             </p>
 
             <TableView
-                // reloadTrigger={triggerReload}
                 responseDataAttribute="adolescents"
                 dataSourceUrl={`${BASE_API_URI}/web-adolescents/`}
                 filters={[

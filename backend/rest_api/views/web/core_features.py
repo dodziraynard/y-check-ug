@@ -256,14 +256,13 @@ class MyReferrals(generics.GenericAPIView):
 
 class ReferralDetail(generics.GenericAPIView):
     """
-    Get the list of referrals for user's facility.
+    Get the details of a referral
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
     serializer_class = ReferralSerialiser
 
     def get(self, request, referral_id, *args, **kwargs):
         referral = Referral.objects.filter(id=referral_id).first()
-
         if not referral:
             return Response({"error_message": f"Referral not found."})
         if referral.status == ReferralStatus.NEW.value:
@@ -290,5 +289,65 @@ class ReferralDetail(generics.GenericAPIView):
         }
         return Response(repsonse_data, status=status.HTTP_200_OK)
 
+
+class ReferralTreatment(generics.GenericAPIView):
+    """
+    Get the treatment feedback for a referral
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    serializer_class = TreatmentSerialiser
+
+    def get(self, request, referral_id, *args, **kwargs):
+        referral = Referral.objects.filter(id=referral_id).first()
+        if not referral:
+            return Response({"error_message": f"Referral not found."})
+
+        treatment = Treatment.objects.filter(referral=referral).first()
+        response_data = {
+            "treatment": self.serializer_class(treatment).data
+        }
+        return Response(response_data)
+
     def post(self, request, referral_id, *args, **kwargs):
-        pass
+        referral = Referral.objects.filter(id=referral_id).first()
+        if not referral:
+            return Response({"error_message": f"Referral not found."})
+        treatment = Treatment.objects.filter(referral=referral)
+        
+        # Posted data
+        total_service_cost = request.data.get("total_service_cost")
+        full_treatment_received = request.data.get("full_treatment_received")
+        provided_treaments = request.data.get("provided_treaments")
+        is_referred = request.data.get("is_referred")
+        no_referral_reason = request.data.get("no_referral_reason")
+        remarks = request.data.get("remarks")
+        further_referral_facility = request.data.get(
+            "further_referral_facility")
+
+        treatment_data = {
+            "referral": referral,
+            "adolescent": referral.adolescent,
+            "total_service_cost": total_service_cost,
+            "full_treatment_received": full_treatment_received,
+            "provided_treaments": provided_treaments,
+            "is_referred": is_referred,
+            "further_referral_facility_id": further_referral_facility,
+            "no_referral_reason": no_referral_reason,
+            "remarks": remarks,
+        }
+        if not treatment:
+            treatment_data["created_by"] = request.user
+            treatment = Treatment.objects.create(**treatment_data)
+        else:
+            treatment.update(**treatment_data)
+            treatment = treatment.first()
+
+        print("treatment_data", treatment_data)
+        # referral.status = ReferralStatus.COMPLETED.value
+        # referral.save()
+
+        response_data = {
+            "treatment": self.serializer_class(treatment).data
+        }
+        print("response_data",response_data)
+        return Response(response_data)
