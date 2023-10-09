@@ -34,7 +34,7 @@ function UsersWidget() {
     const [putUser, { isLoading: isPuttingUser, error: errorPuttingUser }] = usePutUsersMutation()
     const [deleteUser, { isLoading: isDeletingUser, error: errorDeletingUser }] = useDeleteUsersMutation()
     const [getGroups, { data: response = [], isFetching, error }] = useLazyGetGroupsQuery()
-    const [getFacilities, { data: res = [], isFetching1,  }] = useLazyGetAllFacilitiesQuery()
+    const [getFacilities, { data: res = [], isFetching1, }] = useLazyGetAllFacilitiesQuery()
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [allUsers] = useState([])
     const [groups, setGroups] = useState([])
@@ -48,7 +48,7 @@ function UsersWidget() {
     const [facility, setFacility] = useState('');
     const [password, setPassword] = useState('');
     const [isActive, setIsActive] = useState(true);
-    
+
 
     // Filter inputs
     const [search, setSearch] = useState('');
@@ -71,13 +71,13 @@ function UsersWidget() {
 
     useEffect(() => {
         getFacilities();
-      }, [getFacilities]);
-    
-      useEffect(() => {
+    }, [getFacilities]);
+
+    useEffect(() => {
         if (res && Array.isArray(res.facilities)) {
-          setFacilities(res.facilities);
+            setFacilities(res.facilities);
         }
-      }, [res]);
+    }, [res]);
 
     useEffect(() => {
         if (modalRef.current !== null && modal === null) {
@@ -97,7 +97,7 @@ function UsersWidget() {
         setSurname(user.surname || "")
         setOtherNames(user.other_names || "")
         setPhone(user.phone || "")
-        setFacility(user.facility || "")        
+        setFacility(user.facility || "")
         setIsActive(user.is_active)
         setPassword("")
         modal?.show()
@@ -233,7 +233,7 @@ function UsersWidget() {
 
     return (
         <div>
-             <BreadCrumb items={[{ "name": "Users" }]} />
+            <BreadCrumb items={[{ "name": "Users" }]} />
             <div ref={deletionModalRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-md">
                     <div className="modal-content">
@@ -389,8 +389,8 @@ function UsersWidget() {
                 </div>
             </div>
 
-            <div className="card">
-                <div className="card-header d-flex justify-content-between" style={{ "position": "sticky", "top": "0em", "zIndex": "1", "background": "white" }}>
+            <div className="">
+                <div className="d-flex justify-content-between" style={{ "position": "sticky", "top": "0em", "zIndex": "1", "background": "white" }}>
                     <p>USERS</p>
                     <div className="d-flex justify-content-end">
                         <Button onClick={showNewFormUserModal}><i className="bi bi-plus"></i> Add</Button>
@@ -412,8 +412,8 @@ function UsersWidget() {
                         ]}
                         headers={[{
                             key: "photo",
-                             value: "Photo",
-                             render: (item) => (
+                            value: "Photo",
+                            render: (item) => (
                                 <img
                                     src={item.photo ? item.photo : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
                                     alt="User Photo"
@@ -421,7 +421,7 @@ function UsersWidget() {
                                 />
                             ),
                         }, {
-                            key: "username", value: "Username/Staff ID"
+                            key: "username", value: "Username"
                         }, {
                         }, {
                             key: "surname", value: "Surname"
@@ -439,9 +439,9 @@ function UsersWidget() {
                                 )
                             }
                         }, {
-                            value: "Actions", render: (item) => {
+                            value: "Actions", textAlign: "right", render: (item) => {
                                 return (
-                                    <div className="d-flex">
+                                    <div className="d-flex justify-content-end">
                                         <button className="btn btn-sm btn-primary me-1 d-flex" onClick={() => showEditUserModal(item)}>
                                             <i className="bi bi-list me-1"></i>
                                             More

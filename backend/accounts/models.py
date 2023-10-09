@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     @staticmethod
     def generate_query(query):
-        queries = [Q(**{f"{key}__icontains": query}) for key in ["phone", "surname", "other_names"]]
+        queries = [Q(**{f"{key}__icontains": query}) for key in ["phone", "surname", "username", "other_names"]]
         return reduce(lambda x, y: x | y, queries)
 
     def model_name(self):
