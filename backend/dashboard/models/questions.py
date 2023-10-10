@@ -71,6 +71,7 @@ class Question(models.Model):
     text = models.TextField()
     input_type = models.CharField(max_length=100, choices=INPUT_TYPES)
     answer_preamble = models.CharField(max_length=100, blank=True, null=True)
+    apk_id = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
 
     # Useful if input_type is range slider
