@@ -267,6 +267,13 @@ class GetSurveyQuestions(generics.GenericAPIView):
         # All available questions for this questionnaire type
         target_questions = Question.objects.filter(question_type=question_type)
 
+        # Filter questions for adolescent attributes
+        target_questions = target_questions.filter(
+            (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
+            (Q(adolescent_type=None) | Q(adolescent_type__iexact=adolescent.type)) &
+            (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
+        )
+
         current_question = target_questions.filter(
             id=current_question_id).first()
 
@@ -287,6 +294,12 @@ class GetSurveyQuestions(generics.GenericAPIView):
         for question in target_questions:
             if not question.are_previous_response_conditions_met(
                     adolescent):
+                invalid_questions_ids.append(question.id)
+
+            # Check age requirements
+            if question.min_age and adolescent.get_age() < question.min_age:
+                invalid_questions_ids.append(question.id)
+            if question.max_age and adolescent.get_age() > question.max_age:
                 invalid_questions_ids.append(question.id)
 
         question = target_questions.exclude(
