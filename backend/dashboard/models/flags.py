@@ -163,7 +163,7 @@ class FlagCondition(models.Model):
 
         matched = None
         if self.operator == "equal_expected_value":
-            matched = self.expected_value.lower() in list(
+            matched = self.expected_value.strip().lower() in list(
                 map(str, response1.get_values_as_list()))
         elif self.operator == "less_than_expected_integer_value":
             matched = all([int(self.expected_integer_value) > int(res)
@@ -171,7 +171,7 @@ class FlagCondition(models.Model):
         elif self.operator == "min_age":
             matched = self.expected_integer_value <= adolescent.get_age()
         elif self.operator == "gender_is":
-            matched = self.expected_value == adolescent.gender
+            matched = self.expected_value.strip() == adolescent.gender
         elif response2 != None:
             values1_as_list = response1.get_values_as_list(numeric=True)
             values2_as_list = response2.get_values_as_list(numeric=True)

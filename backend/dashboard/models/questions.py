@@ -126,7 +126,7 @@ class AdolescentResponse(models.Model):
         Adolescent, on_delete=models.CASCADE, db_index=True)
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, db_index=True)
-    chosen_options = models.ManyToManyField(Option)
+    chosen_options = models.ManyToManyField(Option, blank=True)
     text = models.CharField(max_length=200)
 
     def __str__(self) -> str:
@@ -138,17 +138,17 @@ class AdolescentResponse(models.Model):
                                         ResponseInputType.TEXT_FIELD.value,
                                         ResponseInputType.RANGER_SLIDER.value]:
             if numeric and self.text.isdigit():
-                responses.append(int(self.text))
+                responses.append(int(self.text.strip()))
             else:
-                responses.append(self.text.lower())
+                responses.append(self.text.strip().lower())
 
         elif self.question.input_type in [ResponseInputType.RADIO_BUTTON.value,
                                           ResponseInputType.CHECKBOXES.value]:
             for option in self.chosen_options.all():
-                if numeric and (option.numeric_value != None or self.text.isdigit()):
+                if numeric and (option.numeric_value != None or self.text.strip().isdigit()):
                     value = option.numeric_value if option.numeric_value != None else int(
-                        self.text)
+                        self.text.strip())
                 else:
-                    value = option.value.lower() if option.value != None else ""
+                    value = option.value.strip().lower() if option.value != None else ""
                 responses.append(value)
         return responses
