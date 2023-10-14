@@ -38,6 +38,8 @@ class PreviousResponseRequirement(models.Model):
     def is_previous_response_condition_met(self, adolescent):
         response = AdolescentResponse.objects.filter(
             question=self.question, adolescent=adolescent).first()
+        if not response:
+            return False
 
         if self.min_integer_value == None and self.response_is:
             matched = self.response_is.lower() in response.get_values_as_list()

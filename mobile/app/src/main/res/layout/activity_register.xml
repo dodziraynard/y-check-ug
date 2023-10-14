@@ -6,11 +6,11 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="@dimen/screen_horizontal_padding"
         tools:context=".ui.authentication.RegistrationActivity">
 
         <ImageButton
@@ -37,8 +37,8 @@
 
             <ImageView
                 android:id="@+id/image_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/logo_size"
+                android:layout_height="@dimen/logo_size"
                 android:contentDescription="@string/app_logo"
                 android:foregroundTint="@color/text_color"
                 android:src="@mipmap/ic_launcher"
@@ -60,13 +60,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/register_instruction" />
+                    android:text="@string/register_instruction"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size" />
 
                 <EditText
                     android:id="@+id/username_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="30dp"
+                    android:layout_marginVertical="@dimen/item_vertical_spacing"
                     android:background="@drawable/round_rect_shape"
                     android:drawableStart="@drawable/baseline_person_24"
                     android:drawableLeft="@drawable/baseline_person_24"
@@ -74,12 +76,14 @@
                     android:drawableTint="@color/text_color"
                     android:hint="@string/username"
                     android:inputType="textPersonName"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:textSize="@dimen/text_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/show_hide_password_instruction" />
+                    android:text="@string/show_hide_password_instruction"
+                    android:textSize="@dimen/text_small" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,15 +103,15 @@
                         android:drawableTint="@color/text_color"
                         android:hint="@string/password"
                         android:inputType="textPassword"
-                        android:padding="5dp" />
+                        android:padding="5dp"
+                        android:textSize="@dimen/text_size" />
 
                     <ImageButton
                         android:id="@+id/toggle_password_visibility_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/text_size"
+                        android:layout_height="@dimen/text_size"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
-                        android:layout_weight="9"
                         android:background="@drawable/baseline_remove_red_eye_24"
                         android:backgroundTint="@color/text_color"
                         android:clickable="true"
@@ -124,6 +128,7 @@
                     android:layout_marginVertical="10dp"
                     android:textAlignment="center"
                     android:textColor="@color/color_warning"
+                    android:textSize="@dimen/error_text_size"
                     android:visibility="gone"
                     tools:text="Error message"
                     tools:visibility="visible" />
@@ -140,7 +145,7 @@
                         android:layout_marginHorizontal="50dp"
                         android:text="@string/register"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/button_text_size"
                         tools:enabled="false" />
 
                     <ProgressBar
@@ -163,7 +168,8 @@
                     android:layout_marginVertical="20dp"
                     android:text="@string/already_have_account"
                     android:textAlignment="center"
-                    android:textColor="@color/color_700" />
+                    android:textColor="@color/color_700"
+                    android:textSize="@dimen/text_small" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

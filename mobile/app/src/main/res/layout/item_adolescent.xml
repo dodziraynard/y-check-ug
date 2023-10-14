@@ -13,14 +13,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_padding"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/image_view"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/logo_size"
+            android:layout_height="@dimen/logo_size"
             app:civ_border_color="@color/color_200"
             app:civ_border_width="1dp"
             app:civ_shadow="true"
@@ -42,7 +42,6 @@
                 android:id="@+id/fullname_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Raynard Dodzi" />
 
@@ -51,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_success"
+                android:textSize="@dimen/text_small"
                 android:textStyle="bold"
                 tools:text="YC3423" />
         </LinearLayout>

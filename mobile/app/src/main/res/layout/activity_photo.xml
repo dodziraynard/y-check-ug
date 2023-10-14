@@ -8,8 +8,8 @@
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/image_view"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
         app:civ_border_color="@color/color_200"
         app:civ_border_width="1dp"
         app:civ_shadow="true"
@@ -24,9 +24,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/item_vertical_spacing"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
         app:layout_constraintTop_toBottomOf="@id/image_view">
 
         <Button
@@ -35,6 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/open_camera"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -51,6 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/upload"
+                android:textAllCaps="false"
+                android:textSize="@dimen/button_text_size"
                 android:visibility="gone"
                 tools:visibility="visible" />
 

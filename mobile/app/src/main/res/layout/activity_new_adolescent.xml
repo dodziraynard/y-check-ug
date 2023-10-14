@@ -7,16 +7,17 @@
     tools:context=".ui.adolescent_enrollment.NewAdolescentActivity">
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:paddingBottom="20dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:padding="@dimen/screen_horizontal_padding"
         app:layout_constraintBottom_toTopOf="@id/button_container"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,9 +25,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/header"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_margin="20dp"
+                android:layout_width="@dimen/logo_size"
+                android:layout_height="@dimen/logo_size"
+                android:layout_margin="@dimen/item_vertical_spacing"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -82,6 +83,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/item_vertical_spacing"
                     android:orientation="vertical">
 
                     <TextView
@@ -100,14 +102,15 @@
                         android:drawablePadding="10dp"
                         android:drawableTint="@color/text_color"
                         android:inputType="textPersonName"
-                        android:padding="10dp" />
+                        android:padding="@dimen/text_small" />
 
                     <TextView
                         android:id="@+id/pid_error_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PID is required."
+                        android:text="@string/pid_is_required"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:visibility="visible" />
                 </LinearLayout>
@@ -121,7 +124,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Surname"
+                        android:text="@string/surname"
                         android:textStyle="bold" />
 
                     <EditText
@@ -140,8 +143,9 @@
                         android:id="@+id/surname_error_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Surname is required."
+                        android:text="@string/surname_is_required"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:visibility="visible" />
                 </LinearLayout>
@@ -173,8 +177,9 @@
                         android:id="@+id/other_names_error_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Other names are required."
+                        android:text="@string/other_names_are_required"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:visibility="visible" />
                 </LinearLayout>
@@ -207,8 +212,9 @@
                         android:id="@+id/dob_error"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Invalid age"
+                        android:text="@string/invalid_age"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:visibility="visible" />
                 </LinearLayout>
@@ -262,6 +268,7 @@
                         android:layout_marginVertical="10dp"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:text="Adolescent type is required."
                         tools:visibility="visible" />
@@ -310,6 +317,8 @@
                         android:layout_marginVertical="10dp"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_warning"
+
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:text="Visit type is required."
                         tools:visibility="visible" />
@@ -357,6 +366,7 @@
                         android:layout_marginVertical="10dp"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:text="Gender is required."
                         tools:visibility="visible" />
@@ -392,7 +402,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="10dp"
                         android:textAlignment="textStart"
+
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:text="Check-up location is required."
                         tools:visibility="visible" />
@@ -418,6 +430,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/location_loading_error"
                             android:textColor="@color/color_warning"
+                            android:textSize="@dimen/error_text_size"
                             android:visibility="gone"
                             tools:visibility="visible" />
                     </LinearLayout>
@@ -463,7 +476,7 @@
                             android:id="@+id/icf_conf_no"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="No" />
+                            android:text="@string/no" />
                     </RadioGroup>
 
                     <TextView
@@ -473,6 +486,7 @@
                         android:layout_marginVertical="10dp"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:text="Please confirm consent"
                         tools:visibility="visible" />
@@ -491,10 +505,10 @@
                     android:layout_marginVertical="10dp"
                     android:textAlignment="center"
                     android:textColor="@color/color_warning"
+                    android:textSize="@dimen/error_text_size"
                     android:visibility="gone"
                     tools:text="Error message"
                     tools:visibility="visible" />
-
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -515,6 +529,7 @@
             android:layout_marginHorizontal="50dp"
             android:text="@string/save_amp_continue"
             android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size"
             tools:enabled="false" />
 
         <ProgressBar

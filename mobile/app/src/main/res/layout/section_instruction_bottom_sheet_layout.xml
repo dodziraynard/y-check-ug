@@ -22,7 +22,7 @@
             android:id="@+id/section_name_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size"
             android:textStyle="bold"
             tools:text="Section 2: Home" />
 
@@ -38,6 +38,7 @@
                 android:id="@+id/section_instruction_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size"
                 tools:text="The following section contains set onf questions on home." />
         </LinearLayout>
 
@@ -51,9 +52,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginVertical="20dp"
-            android:text="Noted, continue"
-            android:textAllCaps="false" />
+            android:layout_marginVertical="@dimen/item_vertical_spacing"
+            android:text="@string/noted_continue"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

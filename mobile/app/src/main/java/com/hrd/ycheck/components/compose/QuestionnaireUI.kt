@@ -2,7 +2,6 @@ package com.hrd.ycheck.components.compose
 
 
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -16,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -48,16 +48,18 @@ fun QuestionnaireUI(
     ) {
         Text(
             text = "Section $currentSectionNumber/$totalSectionCount",
-            fontSize = 20.sp,
+            fontSize = dimensionResource(id = R.dimen.text_size_title).value.sp,
             color = colorResource(R.color.text_color),
-            modifier = Modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         LinearProgressIndicator(
             progress = (currentSectionNumber).toFloat() / totalSectionCount.toFloat(),
             color = accentAmber,
             modifier = Modifier
-                .height(8.dp)
+                .height(dimensionResource(id = R.dimen._10sdp))
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp)),
             backgroundColor = lightGrey
@@ -69,12 +71,12 @@ fun QuestionnaireUI(
         ) {
             Text(
                 text = currentQuestion.text,
-                fontSize = 30.sp,
+                fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
                 color = colorResource(R.color.text_color),
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp),
+                    .padding(vertical = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
                 textAlign = TextAlign.Center
             )
             if (currentQuestion.imageUrl?.isNotEmpty() == true) {
@@ -97,7 +99,7 @@ fun QuestionnaireUI(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 20.sp,
+                    fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
                     color = colorResource(R.color.text_color),
                     textAlign = TextAlign.Center
                 )
@@ -138,9 +140,6 @@ fun SimpleInputResponse(
     isNumber: Boolean = false
 ) {
     val currentValue: String = currentResponse?.text ?: ""
-
-    Log.d("Randome", "currentValue: $currentValue")
-
     val textState = remember { mutableStateOf(TextFieldValue(currentValue)) }
 
     // Update response
@@ -184,6 +183,7 @@ fun SingleSelectionResponse(
                     })
                 Text(
                     text = option.value,
+                    fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
                     color = colorResource(R.color.text_color),
                     style = MaterialTheme.typography.body1.merge(),
                 )
@@ -215,7 +215,11 @@ fun MultiSelectionResponse(
                             option
                         )
                     })
-                Text(option.value, color = colorResource(R.color.text_color))
+                Text(
+                    option.value,
+                    fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
+                    color = colorResource(R.color.text_color)
+                )
             }
         }
     }
@@ -241,7 +245,10 @@ fun RangeSliderSelectionResponse(
             steps = 1,
             valueRange = (minValue.toFloat())..(maxValue.toFloat()),
             onValueChange = { sliderPosition = it })
-        Text(text = sliderPosition.toString())
+        Text(
+            text = sliderPosition.toString(),
+            fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
+        )
     }
 
 }

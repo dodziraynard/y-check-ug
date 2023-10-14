@@ -8,9 +8,12 @@
 
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/questionnaire_ui"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:maxWidth="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,8 +32,9 @@
             android:drawableLeft="@drawable/baseline_skip_previous_24"
             android:drawableTint="@color/color_500"
             android:text="@string/previous"
+            android:textAllCaps="false"
             android:textColor="@color/color_500"
-            android:textSize="15sp" />
+            android:textSize="@dimen/button_text_size" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +48,9 @@
                 android:layout_height="match_parent"
                 android:drawableRight="@drawable/baseline_skip_next_24"
                 android:drawableTint="@color/white"
-                android:text="@string/next_question" />
+                android:text="@string/proceed"
+                android:textAllCaps="false"
+                android:textSize="@dimen/button_text_size" />
 
             <ProgressBar
                 android:id="@+id/login_loading_process_bar"

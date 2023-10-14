@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">@dimen/_16sdp</dimen>
+    <dimen name="text_small">@dimen/_10sdp</dimen>
+    <dimen name="button_text_size">@dimen/_12sdp</dimen>
+    <dimen name="error_text_size">@dimen/_10sdp</dimen>
+    <dimen name="text_size_title">@dimen/_22sdp</dimen>
+    <dimen name="screen_horizontal_padding">@dimen/_10sdp</dimen>
+    <dimen name="item_vertical_spacing">@dimen/_20sdp</dimen>
+    <dimen name="logo_size">@dimen/_100sdp</dimen>
+</resources>

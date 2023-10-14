@@ -30,13 +30,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:contentDescription="@string/edit"
                 android:src="@drawable/baseline_edit_24" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/edit"
-                android:textSize="19sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -58,13 +58,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:contentDescription="@string/questionnaire"
                 android:src="@drawable/baseline_question_answer_24" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/questionnaire"
-                android:textSize="19sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -86,13 +86,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:contentDescription="@string/lap_result"
                 android:src="@drawable/baseline_health_and_safety_24" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/enter_assessment_values"
-                android:textSize="19sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

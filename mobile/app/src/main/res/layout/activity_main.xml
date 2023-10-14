@@ -9,6 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/home_screen_background_image"
         android:scaleType="center"
         android:src="@drawable/adolescent" />
 
@@ -29,27 +30,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="20dp"
-                android:text="Hi"
+                android:text="@string/hi"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="@dimen/text_size" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="What would you want to do today?"
+                android:text="@string/what_todo"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="@dimen/text_size_title" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp"
-                android:text="Choose an activity below to begin ..."
+                android:layout_marginVertical="@dimen/item_vertical_spacing"
+                android:text="@string/choose_activity"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size" />
         </LinearLayout>
     </ScrollView>
 
@@ -67,7 +69,8 @@
             android:id="@+id/new_adolescent_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginHorizontal="@dimen/screen_horizontal_padding"
+            android:layout_marginVertical="@dimen/item_vertical_spacing"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:selectableItemBackground"
@@ -83,14 +86,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="New adolescent"
-                    android:textSize="20sp"
+                    android:text="@string/new_adolescent"
+                    android:textColor="@color/text_color"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Enroll a new adolescent to fill out the adolescent questionnaire." />
+                    android:text="@string/new_adolescent_instruction"
+                    android:textSize="@dimen/text_small" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -98,7 +102,7 @@
             android:id="@+id/search_adolescent_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginHorizontal="@dimen/screen_horizontal_padding"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:selectableItemBackground"
@@ -114,14 +118,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Seach adolescent"
-                    android:textSize="20sp"
+                    android:text="@string/search_adolescent"
+                    android:textColor="@color/text_color"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Input data such as height, BMI, and more for an adolescent." />
+                    android:text="@string/search_adolescent_instruction"
+                    android:textSize="@dimen/text_small" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

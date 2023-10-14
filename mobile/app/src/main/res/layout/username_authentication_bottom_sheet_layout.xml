@@ -8,8 +8,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="30dp"
+    android:paddingHorizontal="@dimen/screen_horizontal_padding"
+    android:paddingVertical="@dimen/item_vertical_spacing"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:id="@+id/section_name_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size"
             android:textStyle="bold"
             tools:text="Access Feedback Form" />
 
@@ -38,13 +38,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Please enter the username of the currently autheticated user to access feedback form." />
+                android:text="@string/feedback_form_access_instruction"
+                android:textSize="@dimen/text_size" />
 
             <EditText
                 android:id="@+id/username_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="@dimen/item_vertical_spacing"
                 android:background="@drawable/round_rect_shape"
                 android:drawableStart="@drawable/baseline_person_24"
                 android:drawableLeft="@drawable/baseline_person_24"
@@ -61,6 +62,7 @@
                 android:layout_marginVertical="10dp"
                 android:textAlignment="center"
                 android:textColor="@color/color_warning"
+                android:textSize="@dimen/error_text_size"
                 android:visibility="gone"
                 tools:text="Error message"
                 tools:visibility="visible" />
@@ -76,11 +78,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginVertical="20dp"
+            android:layout_marginVertical="@dimen/item_vertical_spacing"
             android:drawableLeft="@drawable/baseline_lock_open_24"
             android:drawableTint="@color/white"
-            android:text="Access form"
-            android:textAllCaps="false" />
+            android:text="@string/access_form"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

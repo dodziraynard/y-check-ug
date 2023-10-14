@@ -37,8 +37,8 @@
 
             <ImageView
                 android:id="@+id/image_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/logo_size"
+                android:layout_height="@dimen/logo_size"
                 android:contentDescription="@string/app_logo"
                 android:foregroundTint="@color/text_color"
                 android:src="@mipmap/ic_launcher"
@@ -60,7 +60,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/security_question_instruction" />
+                    android:layout_marginVertical="@dimen/item_vertical_spacing"
+                    android:text="@string/security_question_instruction"
+                    android:textColor="@color/text_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,6 +120,7 @@
                     android:layout_marginVertical="10dp"
                     android:textAlignment="center"
                     android:textColor="@color/color_warning"
+                    android:textSize="@dimen/error_text_size"
                     android:visibility="gone"
                     tools:text="Error message"
                     tools:visibility="visible" />
@@ -131,10 +134,10 @@
                         android:id="@+id/save_button"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginHorizontal="@dimen/item_vertical_spacing"
                         android:text="@string/save"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/button_text_size"
                         tools:enabled="false" />
 
                     <ProgressBar
