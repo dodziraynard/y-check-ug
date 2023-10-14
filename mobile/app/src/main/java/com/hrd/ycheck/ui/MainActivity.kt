@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this, ProfileActivity::class.java))
                         finish()
                     }
-                    binding.greetingText.text = getString(R.string.welcome)
                     title = "Hi ${user?.username},"
                 } else {
                     startActivity(Intent(this, LoginActivity::class.java))

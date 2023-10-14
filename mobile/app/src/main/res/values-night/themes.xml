@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/color_200</item>
         <item name="colorPrimaryVariant">@color/color_700</item>
         <item name="colorOnPrimary">@color/black</item>
+        <item name="android:textSize">@dimen/text_size</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary_200</item>
         <item name="colorSecondaryVariant">@color/secondary_200</item>

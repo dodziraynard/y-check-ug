@@ -100,4 +100,6 @@
     <string name="noted_continue">Noted, continue</string>
     <string name="feedback_form_access_instruction">Please enter the username of the currently autheticated user to access feedback form.</string>
     <string name="access_form">Access form</string>
+    <string name="welcome_to_y_check">Welcome to Y-Check</string>
+    <string name="picture_of_adolescent_playing">Picture of adolescent playing</string>
 </resources>

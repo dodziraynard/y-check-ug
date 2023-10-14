@@ -113,6 +113,7 @@ class Option(models.Model):
     question = models.ForeignKey(
         Question, related_name="options", on_delete=models.CASCADE, db_index=True)
     value = models.CharField(max_length=200)
+    context = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     numeric_value = models.IntegerField(null=True, blank=True)
 
