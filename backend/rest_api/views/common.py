@@ -17,7 +17,8 @@ class UserLogoutAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
-        AuthToken.objects.filter(user=request.user).delete()
+        if request.user.is_authenticated:
+            AuthToken.objects.filter(user=request.user).delete()
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 
