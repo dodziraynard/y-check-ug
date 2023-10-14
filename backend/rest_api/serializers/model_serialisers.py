@@ -111,6 +111,10 @@ class AdolescentSerializer(serializers.ModelSerializer):
 
 
 class OptionSerlialiser(serializers.ModelSerializer):
+    value = serializers.SerializerMethodField()
+
+    def get_value(self, obj):
+        return f"{obj.value} {obj.context}"
 
     class Meta:
         model = Option
