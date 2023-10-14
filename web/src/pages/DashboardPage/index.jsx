@@ -11,7 +11,7 @@ import {
 } from '../../features/authentication/authentication-api-slice';
 import {
     useLogOutUserMutation
-} from '../../features/resources/resources-api-slice';
+} from '../../features/authentication/authentication-api-slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToast } from '@chakra-ui/react';
 

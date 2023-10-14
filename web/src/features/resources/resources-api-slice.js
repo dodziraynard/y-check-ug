@@ -80,15 +80,6 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
-            logOutUser: builder.mutation({
-                query() {
-                    return {
-                        url: `/auth/logout/`,
-                        method: 'POST',
-                    }
-                },
-            }),
-
             deleteUsers: builder.mutation({
                 query(body) {
                     return {
@@ -231,7 +222,6 @@ export const {
     useLazyGetUsersQuery,
     usePutUsersMutation,
     useDeleteUsersMutation,
-    useLogOutUserMutation,
     usePutUserBioDataMutation,
     usePutUserChangePasswordMutation,
     usePutUserUploadPictureMutation,
