@@ -17,7 +17,7 @@ import com.hrd.ycheck.databinding.ActivityQuestionnaireBinding
 import com.hrd.ycheck.databinding.SectionInstructionBottomSheetLayoutBinding
 import com.hrd.ycheck.models.*
 import com.hrd.ycheck.ui.adolescent_enrollment.SurveyFeedbackActivity
-import com.hrd.ycheck.ui.game.GameActivity
+import com.hrd.ycheck.game.GameActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 
 class QuestionnaireActivity : AppCompatActivity() {

@@ -16,8 +16,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.game.GameActivity"
-            android:exported="false" />
+            android:name=".game.GameOverActivity"
+            android:exported="false"
+            android:theme="@style/Theme.YCheck.NoActionBar" />
+        <activity
+            android:name=".game.GameActivity"
+            android:exported="false"
+            android:theme="@style/Theme.YCheck.NoActionBar" />
         <activity
             android:name=".ui.adolescent_enrollment.SurveyFeedbackActivity"
             android:exported="false" />
@@ -57,7 +62,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

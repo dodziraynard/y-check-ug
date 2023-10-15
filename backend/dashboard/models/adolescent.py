@@ -1,7 +1,9 @@
 from datetime import datetime
-from functools import reduce
 from django.db import models
+from functools import reduce
 from accounts.models import User
+from django.utils.timezone import make_aware
+
 QUESTION_TYPE = [
     ('survey', 'survey'),
     ('assessment', 'assessment'),
@@ -41,7 +43,7 @@ class Adolescent(models.Model):
         return f'{self.surname} {self.other_names}'
 
     def get_age(self):
-        return int((datetime.today()-self.dob).days / 365.25)
+        return int((make_aware(datetime.today())-self.dob).days / 365.25)
 
     def get_name(self):
         return f"{self.surname} {self.other_names}"
