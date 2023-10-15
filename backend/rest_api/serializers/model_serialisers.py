@@ -114,7 +114,10 @@ class OptionSerlialiser(serializers.ModelSerializer):
     value = serializers.SerializerMethodField()
 
     def get_value(self, obj):
-        return f"{obj.value} {obj.context}"
+        value = f"{obj.value}"
+        if obj.context:
+            value += f" {obj.context}"
+        return value
 
     class Meta:
         model = Option

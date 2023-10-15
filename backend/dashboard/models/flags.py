@@ -158,8 +158,10 @@ class FlagCondition(models.Model):
             question=self.question1, adolescent=adolescent).first()
         response2 = AdolescentResponse.objects.filter(
             question=self.question2, adolescent=adolescent).first() if self.question2 else None
-        if not response1:
-            return None
+        if self.question1 and not response1:
+            return True
+        if self.question2 and not response2:
+            return True
 
         matched = None
         if self.operator == "equal_expected_value":
