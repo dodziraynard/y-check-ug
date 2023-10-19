@@ -62,6 +62,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             val intent = Intent(this@NewAdolescentActivity, PhotoActivity::class.java)
             intent.putExtra("adolescent", adolescent)
             startActivity(intent)
+            finish()
         }
 
         viewModel.updatedAdolescent.observe(this) { adolescent ->
@@ -70,6 +71,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             val intent = Intent(this@NewAdolescentActivity, PhotoActivity::class.java)
             intent.putExtra("adolescent", adolescent)
             startActivity(intent)
+            finish()
         }
 
         val dialog = AlertDialog.Builder(this).setMessage("Saving...").setCancelable(false).create()

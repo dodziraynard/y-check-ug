@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/screen_horizontal_padding"
     tools:context=".ui.adolescent_enrollment.PhotoActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/item_vertical_spacing"
+        android:text="@string/take_photo_instruction"
+        android:textAlignment="center"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_title" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/image_view"
         android:layout_width="@dimen/_200sdp"
         android:layout_height="@dimen/_200sdp"
+        android:layout_gravity="center"
         app:civ_border_color="@color/color_200"
         app:civ_border_width="1dp"
         app:civ_shadow="true"
         app:civ_shadow_color="@color/secondary_200"
         app:civ_shadow_radius="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout
@@ -26,8 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/item_vertical_spacing"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/image_view">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/open_camera_button"
@@ -73,4 +81,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

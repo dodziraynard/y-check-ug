@@ -38,7 +38,6 @@ fun QuestionnaireUI(
     totalSectionCount: Int = 8,
 ) {
     val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp
     val screenHeight = configuration.screenHeightDp
 
     Column(
@@ -77,7 +76,7 @@ fun QuestionnaireUI(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Justify
             )
             if (currentQuestion.imageUrl?.isNotEmpty() == true) {
                 GlideImage(
@@ -88,7 +87,6 @@ fun QuestionnaireUI(
                         .height((screenHeight / 2).dp)
                         .padding(10.dp),
                     alignment = Alignment.Center,
-
                     failure = placeholder(ColorDrawable(R.drawable.placeholder)),
                     loading = placeholder(ColorDrawable(R.drawable.placeholder))
                 )
@@ -140,17 +138,19 @@ fun SimpleInputResponse(
     isNumber: Boolean = false
 ) {
     val currentValue: String = currentResponse?.text ?: ""
-    val textState = remember { mutableStateOf(TextFieldValue(currentValue)) }
+    val textState = remember(currentValue) { mutableStateOf(TextFieldValue(currentValue)) }
 
     // Update response
     newResponse.value = textState.value.text
 
-    TextField(value = textState.value,
+    TextField(
+        value = textState.value,
         modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        colors = TextFieldDefaults.textFieldColors(textColor = colorResource(R.color.text_color)),
         keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Number else KeyboardType.Text),
         onValueChange = { textState.value = it })
 }
-
 
 @Composable
 fun SingleSelectionResponse(

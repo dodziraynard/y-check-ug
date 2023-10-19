@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityMainBinding
+import com.hrd.ycheck.game.GameActivity
 import com.hrd.ycheck.models.User
 import com.hrd.ycheck.ui.adolescent_enrollment.NewAdolescentActivity
 import com.hrd.ycheck.ui.adolescent_enrollment.SearchAdolescentActivity
@@ -73,6 +74,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.searchAdolescentCard.setOnClickListener {
             startActivity(Intent(this, SearchAdolescentActivity::class.java))
+        }
+        binding.playGameLabel.setOnClickListener {
+            startActivity(Intent(this, GameActivity::class.java))
         }
     }
 

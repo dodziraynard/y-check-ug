@@ -43,7 +43,6 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
     val updatedAdolescent = MutableLiveData<Adolescent>()
     val adolescents = MutableLiveData<List<Adolescent>>()
 
-
     fun getCheckupLocations(filters: String) {
         isLoadingLocations.value = true
         checkupLocations.value = listOf()

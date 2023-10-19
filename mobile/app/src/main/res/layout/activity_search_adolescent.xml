@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/round_rect_shape"
-            android:hint="Enter PID or name"
+            android:hint="@string/enter_pid_or_name"
             android:padding="10dp" />
 
         <ImageButton

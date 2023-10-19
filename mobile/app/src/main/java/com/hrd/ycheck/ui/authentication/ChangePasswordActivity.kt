@@ -86,7 +86,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             val newPassword = binding.newPasswordInput.text.toString()
             if (oldPassword.isEmpty() || newPassword.isEmpty()) {
                 viewModel.errorMessage.value =
-                    getString(R.string.old_new_password_required_intruction)
+                    getString(R.string.old_new_password_required_instruction)
             } else {
                 viewModel.changePassword(oldPassword, newPassword)
             }

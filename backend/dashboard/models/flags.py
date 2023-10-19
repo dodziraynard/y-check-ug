@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from ycheck.utils.constants import Colors
+from django.db.models import Q
 from .adolescent import *
 from .questions import *
 
@@ -76,9 +77,13 @@ class FlagLabel(models.Model):
             if color.is_fallback:
                 fallback_color = color  # There should be only one fallback per color group
 
-            required_conditions = color.conditions.filter(
+            conditions = color.conditions.filter(
+                (Q(min_age=None) | Q(min_age__gte=adolescent.get_age())) &
+                (Q(max_age=None) | Q(max_age__lte=adolescent.get_age()))
+            )
+            required_conditions = conditions.filter(
                 is_required=True).order_by("-priority")
-            optional_conditions = color.conditions.filter(
+            optional_conditions = conditions.filter(
                 is_required=False).order_by("-priority")
             for condition in required_conditions:
                 matched = condition.check_condition(adolescent)
@@ -127,6 +132,7 @@ class FlagCondition(models.Model):
         ("q1_q2_difference_is_less_than_expected_integer_value",
          "q1_q2_difference_is_less_than_expected_integer_value"),
         ("min_age", "min_age"),
+        ("range_sum_between", "range_sum_between"),
         ("gender_is", "gender_is"),
     ]
 
@@ -149,9 +155,28 @@ class FlagCondition(models.Model):
 
     priority = models.IntegerField(default=1)
 
+    min_age = models.IntegerField(null=True, blank=True)
+    max_age = models.IntegerField(null=True, blank=True)
+
+    range_min = models.IntegerField(null=True, blank=True)
+    range_max = models.IntegerField(null=True, blank=True)
+
     def __str__(self) -> str:
         expected_value = self.expected_value or self.expected_integer_value
         return f"{str(self.flag_color)}-{expected_value}"
+
+    def _handle_range_sum_operator(self, adolescent):
+        if not self.range_min and self.range_max and self.question2:
+            return True
+        responses = AdolescentResponse.objects.filter(
+            question__number__gte=self.question1.number,
+            question__number__lte=self.question2.number,
+            adolescent=adolescent)
+        all_values = [
+            value for response in responses for value in response.get_values_as_list(numeric=True)]
+        matched = all([value >= self.range_min and value <=
+                      self.range_max for value in all_values])
+        return matched if not self.invert_operator_evaluation else not matched
 
     def check_condition(self, adolescent: Adolescent):
         response1 = AdolescentResponse.objects.filter(
@@ -174,6 +199,8 @@ class FlagCondition(models.Model):
             matched = self.expected_integer_value <= adolescent.get_age()
         elif self.operator == "gender_is":
             matched = self.expected_value.strip() == adolescent.gender
+        elif self.operator == "range_sum_between":
+            matched = self._handle_range_sum_operator(adolescent)
         elif response2 != None:
             values1_as_list = response1.get_values_as_list(numeric=True)
             values2_as_list = response2.get_values_as_list(numeric=True)

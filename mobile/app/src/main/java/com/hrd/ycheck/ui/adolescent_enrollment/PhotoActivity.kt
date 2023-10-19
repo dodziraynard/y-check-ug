@@ -56,7 +56,6 @@ class PhotoActivity : AppCompatActivity() {
         cameraLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
-                    // There are no request codes
                     binding.imageView.setImageURI(cameraUri)
                     binding.uploadButton.visibility = View.VISIBLE
                 }

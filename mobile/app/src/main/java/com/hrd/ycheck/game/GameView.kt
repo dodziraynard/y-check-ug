@@ -14,7 +14,6 @@ class GameView(context: Context) : View(context) {
     companion object {
         var width: Int = 0
         var height = 0;
-
     }
 
     private var updateMills = 100L
@@ -91,7 +90,6 @@ class GameView(context: Context) : View(context) {
             }
 
             spike.spikeY += spike.spikeVelocity
-
             if (spike.spikeY + spike.getSpikeHeight() >= GameView.height - ground.height) {
                 points += 10
                 val explosion = Explosion(context)
@@ -105,7 +103,6 @@ class GameView(context: Context) : View(context) {
 
         for (i in 0 until spikes.size) {
             val spike = spikes[i]
-
             if (spike.spikeX + spike.getSpikeWidth() > rabbitX && spike.spikeX < rabbitX + rabbit.width && spike.spikeY + spike.getSpikeWidth() >= rabbitY && spike.spikeY + spike.getSpikeWidth() <= rabbitY + rabbit.height) {
                 life--
                 spike.resetPosition()
@@ -173,7 +170,6 @@ class GameView(context: Context) : View(context) {
                     } else {
                         newRabbitX
                     }
-
                 }
             }
         }

@@ -38,7 +38,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="350dp"
+                android:layout_height="300dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginVertical="@dimen/item_vertical_spacing"
                 android:contentDescription="@string/picture_of_adolescent_playing"
@@ -127,6 +127,34 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/screen_horizontal_padding"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/feeling_bored"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_small" />
+
+                <TextView
+                    android:id="@+id/play_game_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:padding="@dimen/screen_horizontal_padding"
+                    android:text="@string/play_it_now"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_700"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
