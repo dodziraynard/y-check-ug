@@ -15,9 +15,10 @@ import com.hrd.ycheck.components.compose.QuestionnaireUI
 import com.hrd.ycheck.components.compose.YCheckTheme
 import com.hrd.ycheck.databinding.ActivityQuestionnaireBinding
 import com.hrd.ycheck.databinding.SectionInstructionBottomSheetLayoutBinding
+import com.hrd.ycheck.game.GameActivity
 import com.hrd.ycheck.models.*
 import com.hrd.ycheck.ui.adolescent_enrollment.SurveyFeedbackActivity
-import com.hrd.ycheck.game.GameActivity
+import com.hrd.ycheck.utils.AudioPlayer
 import com.hrd.ycheck.utils.QuestionnaireType
 
 class QuestionnaireActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     private var adolescent: Adolescent? = null
     private var questionnaireType: String = QuestionnaireType.SURVEY
     private var currentQuestionId: Long = 0
+    lateinit var audioPlayer: AudioPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,8 @@ class QuestionnaireActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[QuestionnaireActivityViewModel::class.java]
 
         adolescent = intent.getParcelableExtra("adolescent")
+
+        audioPlayer = AudioPlayer()
 
         if (adolescent == null) {
             Toast.makeText(this, getString(R.string.adolescent_not_found), Toast.LENGTH_LONG).show()
@@ -132,9 +136,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         totalSessions: Int,
         section: Section
     ) {
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Game Available")
-            .setCancelable(false)
+        val dialog = AlertDialog.Builder(this).setTitle("Game Available").setCancelable(false)
             .setNegativeButton(getString(R.string.no)) { _, _ ->
                 renderNewSectionInstructionAndQuestion(
                     adolescent,
@@ -144,8 +146,7 @@ class QuestionnaireActivity : AppCompatActivity() {
                     totalSessions,
                     section
                 )
-            }
-            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+            }.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 val intent = Intent(this@QuestionnaireActivity, GameActivity::class.java)
                 intent.putExtra("adolescent", this.adolescent)
                 startActivity(intent)
@@ -171,7 +172,8 @@ class QuestionnaireActivity : AppCompatActivity() {
                         newResponse = newAdolescentResponse!!,
                         submittedResponse = submittedAdolescentResponse,
                         currentSectionNumber = currentSessionNumber,
-                        totalSectionCount = totalSessions
+                        totalSectionCount = totalSessions,
+                        audioPlayer = audioPlayer
                     )
                 }
             }
@@ -221,5 +223,10 @@ class QuestionnaireActivity : AppCompatActivity() {
             )
         dialog.create()
         dialog.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        audioPlayer?.release()
     }
 }

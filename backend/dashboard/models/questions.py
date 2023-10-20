@@ -75,6 +75,7 @@ class Question(models.Model):
     answer_preamble = models.CharField(max_length=100, blank=True, null=True)
     apk_id = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
+    audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
 
     # Useful if input_type is range slider
     min_numeric_value = models.IntegerField(null=True, blank=True)
@@ -113,6 +114,7 @@ class Option(models.Model):
     question = models.ForeignKey(
         Question, related_name="options", on_delete=models.CASCADE, db_index=True)
     value = models.CharField(max_length=200)
+    audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
     context = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     numeric_value = models.IntegerField(null=True, blank=True)

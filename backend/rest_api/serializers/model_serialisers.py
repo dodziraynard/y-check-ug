@@ -112,6 +112,13 @@ class AdolescentSerializer(serializers.ModelSerializer):
 
 class OptionSerlialiser(serializers.ModelSerializer):
     value = serializers.SerializerMethodField()
+    audio_url = serializers.SerializerMethodField()
+
+    def get_audio_url(self, option):
+        request = self.context.get("request")
+        if option.audio_file and request:
+            return request.build_absolute_uri(option.audio_file.url)
+        return ""
 
     def get_value(self, obj):
         value = f"{obj.value}"
@@ -121,17 +128,24 @@ class OptionSerlialiser(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ["id", "value", "numeric_value"]
+        fields = ["id", "value", "numeric_value", "audio_url"]
 
 
 class QuestionSerialiser(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     options = serializers.SerializerMethodField()
+    audio_url = serializers.SerializerMethodField()
+
+    def get_audio_url(self, question):
+        request = self.context.get("request")
+        if question.audio_file and request:
+            return request.build_absolute_uri(question.audio_file.url)
+        return ""
 
     def get_options(self, question):
         if hasattr(question, "options"):
             options = question.options.all()
-            return OptionSerlialiser(options, many=True).data
+            return OptionSerlialiser(options, context=self.context, many=True).data
         return None
 
     def get_image_url(self, question):
@@ -156,6 +170,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
             "min_numeric_value",
             "max_numeric_value",
             "options",
+            "audio_url",
         ]
 
 

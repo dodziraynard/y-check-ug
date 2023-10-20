@@ -15,7 +15,8 @@ data class Question(
     @SerializedName("min_numeric_value") val minNumericValue: Int? = 0,
     @SerializedName("max_numeric_value") val maxNumericValue: Int? = 10,
     val options: List<Option>? = null,
-    @SerializedName("image_url") val imageUrl: String? = null
+    @SerializedName("image_url") val imageUrl: String? = null,
+    @SerializedName("audio_url") val audioUrl: String? = null
 )
 
 object InputType {

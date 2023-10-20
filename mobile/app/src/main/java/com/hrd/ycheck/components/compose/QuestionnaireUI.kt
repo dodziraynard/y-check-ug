@@ -2,6 +2,7 @@ package com.hrd.ycheck.components.compose
 
 
 import android.graphics.drawable.ColorDrawable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -16,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -27,6 +29,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.hrd.ycheck.R
 import com.hrd.ycheck.models.*
+import com.hrd.ycheck.utils.AudioPlayer
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -36,6 +39,7 @@ fun QuestionnaireUI(
     submittedResponse: SubmittedAdolescentResponse? = null,
     currentSectionNumber: Int = 1,
     totalSectionCount: Int = 8,
+    audioPlayer: AudioPlayer? = null
 ) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
@@ -75,9 +79,23 @@ fun QuestionnaireUI(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                    .padding(top = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
                 textAlign = TextAlign.Justify
             )
+            if (currentQuestion.audioUrl?.isNotEmpty() == true)
+                IconButton(
+                    onClick = {
+                        audioPlayer?.playAudio(currentQuestion.audioUrl)
+                    },
+                    modifier = Modifier
+                        .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                ) {
+                    Image(
+                        painterResource(R.drawable.baseline_audiotrack_24),
+                        contentDescription = null,
+                        modifier = Modifier.requiredSize(25.dp)
+                    )
+                }
             if (currentQuestion.imageUrl?.isNotEmpty() == true) {
                 GlideImage(
                     model = currentQuestion.imageUrl,
@@ -111,12 +129,12 @@ fun QuestionnaireUI(
                 )
                 InputType.CHECKBOXES -> currentQuestion.options?.let {
                     MultiSelectionResponse(
-                        submittedResponse, it, newResponse
+                        submittedResponse, it, newResponse, audioPlayer
                     )
                 }
                 InputType.RADIO_BUTTON -> currentQuestion.options?.let {
                     SingleSelectionResponse(
-                        submittedResponse, it, newResponse
+                        submittedResponse, it, newResponse, audioPlayer
                     )
                 }
                 InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
@@ -156,7 +174,8 @@ fun SimpleInputResponse(
 fun SingleSelectionResponse(
     currentResponse: SubmittedAdolescentResponse?,
     options: List<Option>,
-    newResponse: NewAdolescentResponse
+    newResponse: NewAdolescentResponse,
+    audioPlayer: AudioPlayer? = null
 ) {
     val chosenOptions = currentResponse?.chosenOptions
     val currentValue = if ((chosenOptions?.size ?: 0) > 0) chosenOptions?.get(0) else null
@@ -187,6 +206,19 @@ fun SingleSelectionResponse(
                     color = colorResource(R.color.text_color),
                     style = MaterialTheme.typography.body1.merge(),
                 )
+                if (option.audioUrl?.isNotEmpty() == true)
+                    IconButton(
+                        onClick = {
+                            audioPlayer?.playAudio(option.audioUrl)
+
+                        },
+                    ) {
+                        Image(
+                            painterResource(R.drawable.baseline_audiotrack_24),
+                            contentDescription = null,
+                            modifier = Modifier.requiredSize(25.dp)
+                        )
+                    }
             }
         }
     }
@@ -196,7 +228,8 @@ fun SingleSelectionResponse(
 fun MultiSelectionResponse(
     currentResponse: SubmittedAdolescentResponse?,
     options: List<Option>,
-    newResponse: NewAdolescentResponse
+    newResponse: NewAdolescentResponse,
+    audioPlayer: AudioPlayer? = null
 ) {
     val currentValue = currentResponse?.chosenOptions ?: mutableListOf()
     val selectedOptions = remember(currentValue) { currentValue.toMutableStateList() }
@@ -220,6 +253,18 @@ fun MultiSelectionResponse(
                     fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
                     color = colorResource(R.color.text_color)
                 )
+                if (option.audioUrl?.isNotEmpty() == true)
+                    IconButton(
+                        onClick = {
+                            audioPlayer?.playAudio(option.audioUrl)
+                        },
+                    ) {
+                        Image(
+                            painterResource(R.drawable.baseline_audiotrack_24),
+                            contentDescription = null,
+                            modifier = Modifier.requiredSize(25.dp)
+                        )
+                    }
             }
         }
     }
