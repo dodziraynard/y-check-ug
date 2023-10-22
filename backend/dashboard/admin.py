@@ -22,6 +22,7 @@ class FlagConditionInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['text__icontains', 'number', 'question_id']
+    ordering = ['number']
     inlines = [
         OptionInline,
         PreviousResponseRequirementInline,
