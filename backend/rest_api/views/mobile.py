@@ -362,8 +362,14 @@ class RespondToSurveyQuestion(generics.GenericAPIView):
         if not current_question:
             return Response({"error_message": "Question not found."})
 
-        response, _ = AdolescentResponse.objects.get_or_create(
-            question=current_question, adolescent=adolescent)
+        try:
+            response, _ = AdolescentResponse.objects.get_or_create(
+                question=current_question, adolescent=adolescent)
+        except AdolescentResponse.MultipleObjectsReturned:
+            AdolescentResponse.objects.filter(
+                question=current_question, adolescent=adolescent).delete()
+            response = AdolescentResponse.objects.create(
+                question=current_question, adolescent=adolescent)
 
         if current_question.input_type in [ResponseInputType.TEXT_FIELD.value,
                                            ResponseInputType.NUMBER_FIELD.value,
