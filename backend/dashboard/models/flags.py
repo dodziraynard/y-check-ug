@@ -53,7 +53,12 @@ class SummaryFlag(models.Model):
             if condition.question2:
                 question_ids.append(condition.question2.question_id)
 
-        for question in Question.objects.filter(question_id__in=question_ids).distinct():
+        for question in Question.objects.filter(
+            Q(question_id__in=question_ids) &
+            (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
+            (Q(adolescent_type=None) | Q(adolescent_type__iexact=adolescent.type)) &
+            (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
+        ).distinct():
             response = question.get_response(adolescent)
             data = {
                 "question": question.text,

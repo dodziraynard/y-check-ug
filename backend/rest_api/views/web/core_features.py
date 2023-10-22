@@ -66,6 +66,9 @@ class GetSummaryFlags(generics.GenericAPIView):
         for label in flag_lables:
             color = label.get_flag_color(adolescent)
             if not color:
+                # This flag is no longer applicable, delete.
+                SummaryFlag.objects.filter(
+                    adolescent=adolescent, label=label).delete()
                 continue
 
             flag = SummaryFlag.objects.filter(
