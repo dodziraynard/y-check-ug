@@ -138,7 +138,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
     audio_url = serializers.SerializerMethodField()
 
     def get_text(self, question):
-        return f"{question.question_id} {question.text}"
+        return f"({question.question_id}). {question.text}"
 
     def get_audio_url(self, question):
         request = self.context.get("request")
