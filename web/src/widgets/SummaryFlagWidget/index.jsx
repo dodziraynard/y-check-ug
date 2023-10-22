@@ -182,6 +182,10 @@ function SummaryFlagWidget() {
                                         <strong className="col-md-8 text">{adolescent?.visit_type}</strong>
                                     </div>
                                     <div className="row align-items-center">
+                                        <h6 className="col-md-4 text-muted">ADOLESCENT TYPE</h6>
+                                        <strong className="col-md-8 text">{adolescent?.type}</strong>
+                                    </div>
+                                    <div className="row align-items-center">
                                         <h6 className="col-md-4 text-muted">GENDER</h6>
                                         <strong className="col-md-8 text">{adolescent?.gender}</strong>
                                     </div>
