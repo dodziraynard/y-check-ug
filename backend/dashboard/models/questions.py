@@ -102,7 +102,7 @@ class Question(models.Model):
         return all(conditions_met)
 
     def __str__(self):
-        return f"{self.question_id}. {self.text}"
+        return f"{self.question_id} ({self.number}). {self.text}"
 
     def get_response(self, adolescent):
         response = AdolescentResponse.objects.filter(
