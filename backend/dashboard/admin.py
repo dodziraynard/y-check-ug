@@ -20,10 +20,6 @@ class FlagConditionInline(admin.TabularInline):
     model = FlagCondition
 
 
-class AdolescentResponseInline(admin.TabularInline):
-    model = AdolescentResponse
-
-
 class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['text__icontains', 'number', 'question_id']
     inlines = [
@@ -50,9 +46,6 @@ class AdolescentResponseAdmin(admin.ModelAdmin):
 
 class AdolescentAdmin(admin.ModelAdmin):
     search_fields = ['pid', 'surname', 'other_names']
-    inlines = [
-        AdolescentResponseInline,
-    ]
 
 
 admin.site.register(CheckupLocation)
