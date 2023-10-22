@@ -270,7 +270,20 @@ class GetSurveyQuestions(generics.GenericAPIView):
         # Filter questions for adolescent attributes
         target_questions = target_questions.filter(
             (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
-            (Q(adolescent_type=None) | Q(adolescent_type__iexact=adolescent.type)) &
+            (
+                # Adolescent type is not required
+                Q(adolescent_type=None) |
+
+                # OR
+                (
+                    # Or required type is set and not invertted
+                    Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False) |
+
+                    # Or required type is set and invertted
+                    ~Q(adolescent_type__iexact=adolescent.type) & Q(
+                        invert_adolescent_attribute_requirements=True)
+                )
+            ) &
             (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
         )
 
