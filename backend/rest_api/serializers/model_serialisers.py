@@ -132,9 +132,13 @@ class OptionSerlialiser(serializers.ModelSerializer):
 
 
 class QuestionSerialiser(serializers.ModelSerializer):
+    text = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
     options = serializers.SerializerMethodField()
     audio_url = serializers.SerializerMethodField()
+
+    def get_text(self, question):
+        return f"{question.question_id} {question.text}"
 
     def get_audio_url(self, question):
         request = self.context.get("request")
