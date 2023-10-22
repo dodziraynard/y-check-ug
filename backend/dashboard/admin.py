@@ -12,11 +12,31 @@ class PreviousResponseRequirementInline(admin.TabularInline):
     model = PreviousResponseRequirement
 
 
+class FlagColorInline(admin.TabularInline):
+    model = FlagColor
+
+
+class FlagConditionInline(admin.TabularInline):
+    model = FlagCondition
+
+
 class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['text__icontains', 'number', 'question_id']
     inlines = [
         OptionInline,
         PreviousResponseRequirementInline,
+    ]
+
+
+class FlagLabelAdmin(admin.ModelAdmin):
+    inlines = [
+        FlagColorInline
+    ]
+
+
+class FlagColorAdmin(admin.ModelAdmin):
+    inlines = [
+        FlagConditionInline
     ]
 
 
@@ -28,8 +48,8 @@ admin.site.register(Option)
 admin.site.register(AdolescentResponse)
 admin.site.register(Adolescent)
 admin.site.register(SummaryFlag)
-admin.site.register(FlagLabel)
-admin.site.register(FlagColor)
+admin.site.register(FlagLabel, FlagLabelAdmin)
+admin.site.register(FlagColor, FlagColorAdmin)
 admin.site.register(FlagCondition)
 admin.site.register(Facility)
 admin.site.register(Service)
