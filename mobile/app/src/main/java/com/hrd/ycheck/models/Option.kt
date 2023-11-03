@@ -7,5 +7,6 @@ data class Option(
     val id: Long,
     val value: String,
     @SerializedName("numeric_value") val numericValue: String,
-    @SerializedName("audio_url") val audioUrl: String? = null
+    @SerializedName("audio_url") val audioUrl: String? = null,
+    @SerializedName("image_url") val imageUrl: String? = null
 )

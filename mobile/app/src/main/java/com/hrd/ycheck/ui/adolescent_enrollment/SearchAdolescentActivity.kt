@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import com.hrd.ycheck.adapters.AdolescentAdapter
 import com.hrd.ycheck.databinding.ActivitySearchAdolescentBinding
 import com.hrd.ycheck.databinding.AdolescentSearchResultOptionLayoutBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.AdolescentIntroductionActivity
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 
@@ -61,7 +61,6 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 binding.errorMessageLabel.text = getString(R.string.no_results_found)
             }
             adapter.setData(adolescents)
-            Toast.makeText(this, "${adolescents.size}", Toast.LENGTH_SHORT).show()
         }
 
         binding.searchButton.setOnClickListener {
@@ -85,7 +84,10 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 }
                 dialogBinding.questionnaireOptionContainer.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            AdolescentIntroductionActivity::class.java
+                        )
                     intent.putExtra("question_type", QuestionnaireType.SURVEY)
                     intent.putExtra("adolescent", adolescent)
                     startActivity(intent)

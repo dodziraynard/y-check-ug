@@ -77,6 +77,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:1.5.1"
     debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.1"
     implementation 'androidx.compose.material:material:1.5.1'
+//    implementation "androidx.compose.foundation:foundation:1.7.2"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.5.1"
 
     // Room components
@@ -106,4 +107,5 @@ dependencies {
 
     // Bug collection
     implementation 'com.bugfender.sdk:android:3.+'
+    implementation "com.airbnb.android:lottie:4.2.2"
 }

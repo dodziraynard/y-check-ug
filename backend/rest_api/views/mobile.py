@@ -335,7 +335,7 @@ class GetSurveyQuestions(generics.GenericAPIView):
             "new_section": SectionSerialiser(new_section).data if new_section and action == "next" else None,
             "current_session_number": current_session_number,
             "total_sessions": total_sessions,
-            "current_response": AdolescentResponseSerialiser(response).data if response else None,
+            "current_response": AdolescentResponseSerialiser(response, context={"request": request}).data if response else None,
         }
         return Response(response_data)
 

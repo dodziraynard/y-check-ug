@@ -21,6 +21,7 @@ object AdolescentTypes {
 }
 
 object QuestionnaireType {
+    const val SURVEY_PRACTICE = "practice"
     const val SURVEY = "survey"
     const val ASSESSMENT = "assessment"
     const val SURVEY_FEEDBACK = "survey_feedback"

@@ -16,6 +16,7 @@ import com.hrd.ycheck.models.User
 import com.hrd.ycheck.ui.adolescent_enrollment.NewAdolescentActivity
 import com.hrd.ycheck.ui.adolescent_enrollment.SearchAdolescentActivity
 import com.hrd.ycheck.ui.authentication.*
+import com.hrd.ycheck.ui.session_end.SessionEndActivity
 import com.hrd.ycheck.utils.Constants
 import com.hrd.ycheck.utils.Constants.SHARED_PREFS_FILE
 

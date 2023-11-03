@@ -16,7 +16,9 @@ data class Question(
     @SerializedName("max_numeric_value") val maxNumericValue: Int? = 10,
     val options: List<Option>? = null,
     @SerializedName("image_url") val imageUrl: String? = null,
-    @SerializedName("audio_url") val audioUrl: String? = null
+    @SerializedName("audio_url") val audioUrl: String? = null,
+    @SerializedName("has_image_options") val hasImageOptions: Boolean? = false,
+    @SerializedName("apk_id") val apkId: String? = null
 )
 
 object InputType {

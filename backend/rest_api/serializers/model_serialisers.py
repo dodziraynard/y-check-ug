@@ -113,6 +113,13 @@ class AdolescentSerializer(serializers.ModelSerializer):
 class OptionSerlialiser(serializers.ModelSerializer):
     value = serializers.SerializerMethodField()
     audio_url = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
+
+    def get_image_url(self, option):
+        request = self.context.get("request")
+        if option.image and request:
+            return request.build_absolute_uri(option.image.url)
+        return ""
 
     def get_audio_url(self, option):
         request = self.context.get("request")
@@ -128,7 +135,7 @@ class OptionSerlialiser(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ["id", "value", "numeric_value", "audio_url"]
+        fields = ["id", "value", "numeric_value", "audio_url", "image_url"]
 
 
 class QuestionSerialiser(serializers.ModelSerializer):
@@ -136,6 +143,16 @@ class QuestionSerialiser(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     options = serializers.SerializerMethodField()
     audio_url = serializers.SerializerMethodField()
+    has_image_options = serializers.SerializerMethodField()
+
+    def get_has_image_options(self, question):
+        if hasattr(question, "options"):
+            if not hasattr(self, "options"):
+                self.options = question.options.all()
+            for option in self.options:
+                if option.has_image():
+                    return True
+        return False
 
     def get_text(self, question):
         return f"({question.question_id}). {question.text}"
@@ -148,8 +165,9 @@ class QuestionSerialiser(serializers.ModelSerializer):
 
     def get_options(self, question):
         if hasattr(question, "options"):
-            options = question.options.all()
-            return OptionSerlialiser(options, context=self.context, many=True).data
+            if not hasattr(self, "options"):
+                self.options = question.options.all()
+            return OptionSerlialiser(self.options, context=self.context, many=True).data
         return None
 
     def get_image_url(self, question):
@@ -175,6 +193,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
             "max_numeric_value",
             "options",
             "audio_url",
+            "has_image_options",
         ]
 
 
@@ -191,7 +210,7 @@ class AdolescentResponseSerialiser(serializers.ModelSerializer):
     def get_chosen_options(self, response):
         if hasattr(response, "chosen_options"):
             options = response.chosen_options.all()
-            return OptionSerlialiser(options, many=True).data
+            return OptionSerlialiser(options, context=self.context,  many=True).data
         return None
 
     class Meta:

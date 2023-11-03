@@ -6,6 +6,7 @@ QUESTION_TYPE = [
     ('survey', 'survey'),
     ('assessment', 'assessment'),
     ('survey_feedback', 'survey_feedback'),
+    ('practice', 'practice'),
 ]
 
 
@@ -121,6 +122,9 @@ class Option(models.Model):
 
     def __str__(self) -> str:
         return f"{self.question.text} ({self.value})"
+    
+    def has_image(self):
+        return bool(self.image and self.image.file and True or False)
 
 
 class AdolescentResponse(models.Model):

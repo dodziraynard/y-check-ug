@@ -263,7 +263,6 @@ class MyReferrals(generics.GenericAPIView):
             paginated_referrals, many=True, context={"request": request}).data
         repsonse_data = {
             "referrals": referrals_data,
-
             "page": page,
             "page_size": page_size,
             "total": referrals.count(),

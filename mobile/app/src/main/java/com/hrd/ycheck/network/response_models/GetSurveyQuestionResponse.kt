@@ -1,12 +1,14 @@
 package com.hrd.ycheck.network.response_models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.hrd.ycheck.models.Question
 import com.hrd.ycheck.models.Section
 import com.hrd.ycheck.models.SubmittedAdolescentResponse
+import kotlinx.parcelize.Parcelize
 
-
-class GetSurveyQuestionResponse {
+@Parcelize
+class GetSurveyQuestionResponse : Parcelable {
     @SerializedName("question")
     val question: Question? = null
 
