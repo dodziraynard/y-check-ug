@@ -41,11 +41,12 @@ class PreviousResponseRequirement(models.Model):
             question=self.question, adolescent=adolescent).first()
         if not response:
             return False
+        matched = False
 
         if self.min_integer_value == None and self.response_is:
             matched = self.response_is.lower() in response.get_values_as_list()
 
-        elif self.response_is.isdigit() and self.min_integer_value:
+        elif self.response_is and self.response_is.isdigit() and self.min_integer_value:
             matched = all([int(self.min_integer_value) > int(res)
                           for res in response.get_values_as_list(numeric=True)])
         return matched if not self.is_inverted else not matched

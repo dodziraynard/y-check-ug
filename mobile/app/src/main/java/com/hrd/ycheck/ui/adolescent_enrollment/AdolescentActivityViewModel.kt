@@ -1,7 +1,6 @@
 package com.hrd.ycheck.ui.adolescent_enrollment
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -89,6 +88,8 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
                 ) {
                     if (response.body()?.adolescent != null) {
                         updatedAdolescent.value = response.body()?.adolescent
+                    } else if (response.body()?.errorMessage?.isNotEmpty() == true) {
+                        postErrorMessage.value = response.body()?.errorMessage
                     } else {
                         postErrorMessage.value =
                             response.code().toString() + ": " + response.message()

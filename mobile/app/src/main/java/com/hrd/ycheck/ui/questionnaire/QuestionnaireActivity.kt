@@ -281,11 +281,14 @@ class QuestionnaireActivity : AppCompatActivity() {
             .setPositiveButton(R.string.ok) { _, _ -> }
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        audioPlayer?.release()
+        audioPlayer.release()
+    }
+
+    override fun onBackPressed() {
+        showExitDialog()
     }
 }

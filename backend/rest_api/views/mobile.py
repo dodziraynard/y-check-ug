@@ -208,16 +208,27 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
         uuid = adolescent_data.pop("uuid")
         adolescent_data.pop("id")
 
-        adolescent, _ = Adolescent.objects.get_or_create(uuid=uuid)
-        for key, value in adolescent_data.items():
-            if hasattr(adolescent, key) and value:
-                setattr(adolescent, key, value)
-        adolescent.save()
-        response_data = {
-            "adolescent": AdolescentSerializer(adolescent, context={"request": request}).data,
-            "error_message": "",
-            "message": "Adolescent created successfully.",
-        }
+        try:
+            adolescent, _ = Adolescent.objects.get_or_create(uuid=uuid)
+            for key, value in adolescent_data.items():
+                if hasattr(adolescent, key) and value:
+                    setattr(adolescent, key, value)
+            adolescent.save()
+        except Exception as e:
+            error_message = f"Error: {e}",
+            if "UNIQUE" in str(e):
+                error_message = "PID already exists."
+            response_data = {
+                "error_message": error_message,
+                "message": "",
+                "adolescent": None,
+            }
+        else:
+            response_data = {
+                "adolescent": AdolescentSerializer(adolescent, context={"request": request}).data,
+                "error_message": "",
+                "message": "Adolescent created successfully.",
+            }
         return Response(response_data)
 
 

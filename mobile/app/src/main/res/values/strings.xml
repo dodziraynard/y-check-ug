@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Y-Check</string>
     <string name="couldnt_connect_to_server">Couldn\'t connect to server.</string>
     <string name="app_logo" translatable="false">App logo</string>
     <string name="host">Host</string>
@@ -108,6 +107,6 @@
     <string name="play_it_now">Play it now.</string>
     <string name="take_photo_instruction">Open camera to take a picture of the adolescent.</string>
     <string name="end_survey">Are you sure you want to exit the survey?</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="hello_person">Hello %1$s !</string>
 </resources>
