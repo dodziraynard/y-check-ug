@@ -26,18 +26,15 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
     val isSearchingAdolescent: MutableLiveData<Boolean> = MutableLiveData(false)
     val isUploadingPhoto: MutableLiveData<Boolean> = MutableLiveData(false)
 
-
     val postErrorMessage = MutableLiveData<String>()
     val searchErrorMessage = MutableLiveData<String>()
     val locationLoadingErrorMessage = MutableLiveData<String>()
     val photoUploadErrorMessage = MutableLiveData<String>()
 
-
     private val apiService = RestApiFactory.create(application);
     private val context: Application = application
 
     val checkupLocations = MutableLiveData<List<CheckupLocation>>()
-
 
     val updatedAdolescent = MutableLiveData<Adolescent>()
     val adolescents = MutableLiveData<List<Adolescent>>()

@@ -13,7 +13,7 @@ QUESTION_TYPE = [
 
 class Adolescent(models.Model):
     ADOLESCENT_TYPE_CHOICES = [
-        ("primary", 'primary'),
+        ("basic", 'basic'),
         ("secondary", 'secondary'),
         ("community", 'community'),
     ]
@@ -31,6 +31,9 @@ class Adolescent(models.Model):
     dob = models.DateTimeField(null=True, blank=True)
     check_up_location = models.CharField(max_length=200)
     type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
+    residential_status = models.CharField(max_length=200, null=True, blank=True)
+    school = models.CharField(max_length=200, null=True, blank=True)
+    grade = models.CharField(max_length=200, null=True, blank=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)

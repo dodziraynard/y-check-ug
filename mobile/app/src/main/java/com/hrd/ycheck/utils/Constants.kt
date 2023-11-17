@@ -5,8 +5,6 @@ object Constants {
     const val USER_TABLE = "users"
     const val CONFIGURATIONS_TABLE = "configurations"
     const val ADOLESCENT_TABLE = "adolescents"
-
-
     const val USER_TOKEN = "com.hrd.ycheck.USER_TOKEN"
     const val SHARED_PREFS_FILE = "ycheck-pf"
     const val USER_ID = "com.hrd.ycheck.USER_ID"
@@ -15,7 +13,7 @@ object Constants {
 }
 
 object AdolescentTypes {
-    const val PRIMARY = "primary"
+    const val BASIC = "basic"
     const val SECONDARY = "secondary"
     const val COMMUNITY = "community"
 }
@@ -33,6 +31,12 @@ object Genders {
 }
 
 object VisitTypes {
+    const val PILOT_TESTING = "pilot_testing"
     const val INITIAL = "initial"
     const val FOLLOW_UP = "follow-up"
+}
+
+object ResidentialStatus {
+    const val DAY = "day"
+    const val BOARDING = "boarding"
 }

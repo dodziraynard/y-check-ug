@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +22,7 @@ import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.AdolescentTypes
 import com.hrd.ycheck.utils.Genders
+import com.hrd.ycheck.utils.ResidentialStatus
 import com.hrd.ycheck.utils.VisitTypes
 import java.util.*
 
@@ -47,7 +47,17 @@ class NewAdolescentActivity : AppCompatActivity() {
             binding.editPhotoButton.visibility = View.GONE
             val uuid = UUID.randomUUID().toString()
             adolescent = Adolescent(
-                "", "", "", 1694350811258, "", "", "", uuid = uuid
+                "",
+                "",
+                "",
+                1694350811258,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                uuid = uuid
             )
         } else {
             adolescent = postedAdolescent
@@ -127,7 +137,6 @@ class NewAdolescentActivity : AppCompatActivity() {
             }
         }
 
-
         binding.pidInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -154,9 +163,9 @@ class NewAdolescentActivity : AppCompatActivity() {
 
         binding.adolescentTypeGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.adolescent_type_primary -> {
-                    adolescent.type = AdolescentTypes.PRIMARY
-                    viewModel.getCheckupLocations("type:${AdolescentTypes.PRIMARY}")
+                R.id.adolescent_type_basic -> {
+                    adolescent.type = AdolescentTypes.BASIC
+                    viewModel.getCheckupLocations("type:${AdolescentTypes.BASIC}")
                 }
                 R.id.adolescent_type_secondary -> {
                     adolescent.type = AdolescentTypes.SECONDARY
@@ -171,6 +180,9 @@ class NewAdolescentActivity : AppCompatActivity() {
 
         binding.visitTypeGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
+                R.id.visit_type_pilot_testing -> {
+                    adolescent.visitType = VisitTypes.PILOT_TESTING
+                }
                 R.id.visit_type_initial -> {
                     adolescent.visitType = VisitTypes.INITIAL
                 }
@@ -187,6 +199,17 @@ class NewAdolescentActivity : AppCompatActivity() {
                 }
                 R.id.sex_female -> {
                     adolescent.gender = Genders.FEMALE
+                }
+            }
+        }
+
+        binding.residentialStatusGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.residential_status_day -> {
+                    adolescent.residentialStatus = ResidentialStatus.DAY
+                }
+                R.id.residential_status_boarding -> {
+                    adolescent.residentialStatus = ResidentialStatus.BOARDING
                 }
             }
         }
@@ -211,7 +234,6 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-            Log.d("DADFHJADF", "adolescent: $adolescent")
             if (validateForm(adolescent)) {
                 viewModel.postAdolescent(adolescent)
             } else {
@@ -229,21 +251,28 @@ class NewAdolescentActivity : AppCompatActivity() {
 
         // Adolescent type
         when (adolescent.type.uppercase()) {
-            "PRIMARY" -> binding.adolescentTypeGroup.check(R.id.adolescent_type_primary)
-            "SECONDARY" -> binding.adolescentTypeGroup.check(R.id.adolescent_type_secondary)
-            "COMMUNITY" -> binding.adolescentTypeGroup.check(R.id.adolescent_type_community)
+            AdolescentTypes.BASIC.uppercase() -> binding.adolescentTypeGroup.check(R.id.adolescent_type_basic)
+            AdolescentTypes.SECONDARY.uppercase() -> binding.adolescentTypeGroup.check(R.id.adolescent_type_secondary)
+            AdolescentTypes.COMMUNITY.uppercase() -> binding.adolescentTypeGroup.check(R.id.adolescent_type_community)
         }
 
         // Type of visit
         when (adolescent.visitType.uppercase()) {
-            "INITIAL" -> binding.visitTypeGroup.check(R.id.visit_type_initial)
-            "FOLLOW-UP" -> binding.visitTypeGroup.check(R.id.visit_type_follow_up)
+            VisitTypes.PILOT_TESTING.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_initial)
+            VisitTypes.INITIAL.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_initial)
+            VisitTypes.FOLLOW_UP.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_follow_up)
         }
 
         // Gender
         when (adolescent.gender.uppercase()) {
-            "MALE" -> binding.sexGroup.check(R.id.sex_male)
-            "FEMALE" -> binding.sexGroup.check(R.id.sex_female)
+            Genders.MALE.uppercase() -> binding.sexGroup.check(R.id.sex_male)
+            Genders.FEMALE.uppercase() -> binding.sexGroup.check(R.id.sex_female)
+        }
+
+        // Residential status
+        when (adolescent.residentialStatus?.uppercase()) {
+            ResidentialStatus.DAY.uppercase() -> binding.residentialStatusGroup.check(R.id.residential_status_day)
+            ResidentialStatus.BOARDING.uppercase() -> binding.residentialStatusGroup.check(R.id.residential_status_boarding)
         }
 
         // DoB

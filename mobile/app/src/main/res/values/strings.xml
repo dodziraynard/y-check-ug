@@ -41,7 +41,7 @@
     <string name="change_password">Change Password</string>
     <string name="submit">Submit</string>
     <string name="old_new_password_required_instruction">Please enter your old and new passwords.</string>
-    <string name="primary">Primary</string>
+    <string name="basic">Basic</string>
     <string name="secondary">Secondary</string>
     <string name="community">Community</string>
     <string name="initial">Initial</string>
@@ -78,7 +78,8 @@
     <string name="adolescent_not_found">Adolescent not found.</string>
     <string name="no_more_questions">You have successfully completed all the questions in this survey.</string>
     <string name="play_game_confirmation">Would you like to take a break by playing a game?</string>
-    <string name="yes_adolescent_consent_assent">Yes adolescent consent/assent</string>
+    <string name="yes_adolescent_consent">Yes adolescent consent</string>
+    <string name="yes_adolescent_parent_consent">Yes adolescent and parent consent</string>
     <string name="yes_parental_consent">Yes parental consent</string>
     <string name="confirmation_of_consent_form_received">Confirmation of consent form received</string>
     <string name="enter_new_password">Enter new password</string>
@@ -109,4 +110,13 @@
     <string name="end_survey">Are you sure you want to exit the survey?</string>
     <string name="ok">OK</string>
     <string name="hello_person">Hello %1$s !</string>
+    <string name="pilot_test">Pilot/testing</string>
+    <string name="school_loading_error">An error occured while loading school.</string>
+    <string name="school">School</string>
+    <string name="boarding">Boarding</string>
+    <string name="day">Day</string>
+    <string name="residential_status">Residential Status</string>
+    <string name="grade_1">1</string>
+    <string name="grade_2">2</string>
+    <string name="young_person_s_grade">Young person\'s grade</string>
 </resources>
