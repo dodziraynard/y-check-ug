@@ -69,7 +69,7 @@ class QuestionnaireActivity : AppCompatActivity() {
                         || newAdolescentResponse?.chosenOptions?.isNotEmpty() == true
             viewModel.currentQuestionAnswered.value = currentQuestionAnswered
 
-            if (newAdolescentResponse?.value?.isNotEmpty() == true and !isNumericResponseValid(
+            if (newAdolescentResponse?.value?.isNotEmpty() == true && !isNumericResponseValid(
                     currentQuestion!!,
                     newAdolescentResponse!!.value
                 )
@@ -80,7 +80,7 @@ class QuestionnaireActivity : AppCompatActivity() {
             } else if (currentQuestionAnswered) {
                 saveAndLoadNextQuestion(adolescentId)
             } else {
-                Toast.makeText(this, "Please response to continuing.", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Please respond to continuing.", Toast.LENGTH_LONG)
                     .show();
             }
         }
@@ -302,15 +302,13 @@ class QuestionnaireActivity : AppCompatActivity() {
         question: Question,
         value: String
     ): Boolean {
-        if (!value.isDigitsOnly()) return false
-
         val minNumericValue = question.minNumericValue
         val maxNumericValue = question.maxNumericValue
-
-        val numericValueRange = minNumericValue?.rangeTo(maxNumericValue!!)
-        return numericValueRange?.contains(value.toInt()) ?: false
+        if (question.inputType == InputType.NUMBER_FIELD && !value.isDigitsOnly()) return false
+        if (minNumericValue != null && value.toInt() < minNumericValue) return false
+        if (maxNumericValue != null && value.toInt() > maxNumericValue) return false
+        return true
     }
-
 
     private fun showSessionEndScreen(
         message: String, question_type: String, currentSessionNumber: Long

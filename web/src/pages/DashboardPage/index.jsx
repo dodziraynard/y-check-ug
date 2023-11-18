@@ -105,43 +105,55 @@ function DashboardPage() {
                     </div>
                 </NavLink>
 
-                <NavLink to="/patients">
-                    <div className="menu-item" id="action_center">
-                        <i className='icon bi bi-file-medical'></i>
-                        <span className="label">Patients</span>
-                    </div>
-                </NavLink>
+                {userPermissions.has(Permissions.ACCESS_PATIENTS) ?
+                    <NavLink to="/patients">
+                        <div className="menu-item" id="action_center">
+                            <i className='icon bi bi-file-medical'></i>
+                            <span className="label">Patients</span>
+                        </div>
+                    </NavLink>
+                    : ""
+                }
 
-                <NavLink to="/referrals">
-                    <div className="menu-item" id="action_center">
-                        <i className='icon bi bi-h-circle'></i>
-                        <span className="label">Referrals</span>
-                    </div>
-                </NavLink>
+                {userPermissions.has(Permissions.ACCESS_REFERRALS) ?
+                    <NavLink to="/referrals">
+                        <div className="menu-item" id="action_center">
+                            <i className='icon bi bi-h-circle'></i>
+                            <span className="label">Referrals</span>
+                        </div>
+                    </NavLink>
+                    : ""
+                }
 
-                <NavLink to="/treatments">
-                    <div className="menu-item" id="action_center">
-                        <i className='icon bi bi-hospital'></i>
-                        <span className="label">Treatments</span>
-                    </div>
-                </NavLink>
+                {userPermissions.has(Permissions.ACCESS_TREATMENTS) ?
+                    <NavLink to="/treatments">
+                        <div className="menu-item" id="action_center">
+                            <i className='icon bi bi-hospital'></i>
+                            <span className="label">Treatments</span>
+                        </div>
+                    </NavLink>
+                    : ""
+                }
 
-                <hr />
-                <h6 className="header mt-4">SYSTEM</h6>
-                <NavLink to="/users">
-                    <div className="menu-item" id="users">
-                        <i className='icon bi bi-user'></i>
-                        <span className="label">Users</span>
-                    </div>
-                </NavLink>
+                {userPermissions.has(Permissions.MANAGE_SETUP) ?
+                    <>
+                        <hr />
+                        <h6 className="header mt-4">SYSTEM</h6>
+                        <NavLink to="/users">
+                            <div className="menu-item" id="users">
+                                <i className='icon bi bi-user'></i>
+                                <span className="label">Users</span>
+                            </div>
+                        </NavLink>
 
-                {userPermissions.has(Permissions.MANAGE_SETUP) ? <NavLink to="/setup">
-                    <div className="menu-item" id="setup">
-                        <i className='icon bi bi-cog'></i>
-                        <span className="label">Setup</span>
-                    </div>
-                </NavLink>
-                    : ""}
+                        <NavLink to="/setup">
+                            <div className="menu-item" id="setup">
+                                <i className='icon bi bi-cog'></i>
+                                <span className="label">Setup</span>
+                            </div>
+                        </NavLink></>
+                    : ""
+                }
                 <hr />
                 <span to="/logout" onClick={logoutUser}>
                     <div className="menu-item">

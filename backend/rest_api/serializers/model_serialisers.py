@@ -5,11 +5,18 @@ from rest_framework import serializers
 import timeago
 from datetime import datetime
 from accounts.models import User
+from setup.models import MobileConfig
 from dashboard.models import *
 from django.utils.timezone import make_aware
 
 
 logger = logging.getLogger("app")
+
+
+class MobileConfigSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MobileConfig
+        fields = "__all__"
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -94,7 +101,8 @@ class AdolescentSerializer(serializers.ModelSerializer):
     photo_url = serializers.SerializerMethodField()
 
     def get_dob(self, obj):
-        return obj.dob.timestamp() * 1000
+        if obj.dob:
+            return obj.dob.timestamp() * 1000
 
     def get_fullname(self, obj):
         return f"{obj.surname} {obj.other_names}"

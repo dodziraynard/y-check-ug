@@ -34,6 +34,8 @@ interface ApiService {
         @Part photo: MultipartBody.Part? = null,
     ): Call<AuthenticationResponse?>?
 
+    @GET("mobile-config/")
+    fun getMobileConfig(): Call<MobileConfigResponse?>?
 
     @GET("checkup-location/")
     fun getCheckupLocations(

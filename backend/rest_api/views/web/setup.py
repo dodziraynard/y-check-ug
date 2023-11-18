@@ -138,7 +138,7 @@ class AllFacilitiesAPI(SimpleCrudMixin):
     Permform CRUD on facility.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    required_permissions = ["setup.manage_facility"]
+    required_permissions = []
 
     serializer_class = FacilitySerializer
     model_class = Facility

@@ -1,6 +1,11 @@
 from django.db import models
 
 
+class MobileConfig(models.Model):
+    show_create_account = models.BooleanField(default=False)
+
+
+
 class SetupPerm(models.Model):
 
     class Meta:
@@ -11,10 +16,9 @@ class SetupPerm(models.Model):
             ('manage_users', 'Can manage users'),
             ('view_dashboard', 'Can view dashboard'),
             ('view_system_configuration', 'Can view system configuration'),
-            ("manage_tasks", "Can manage tasks"),
-            ("manage_other_report", "Can manage other reports"),
-            ("manage_roles", "Can manage roles"),
             ("access_all_referrals", "Can access all referrals"),
+            ("access_all_patients", "Can access all patients"),
+            ("access_treatments", "Can access all treatment records"),
 
             # User
             ("view_user", "Can view user"),

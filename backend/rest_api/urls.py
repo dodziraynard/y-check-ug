@@ -4,6 +4,7 @@ from rest_api import views
 
 app_label = "rest_api"
 urlpatterns = [
+    path("mobile-config/", views.MobileConfigAPI.as_view()),
     path("auth/login/", views.UserLoginAPI.as_view()),
     path("auth/logout/", views.UserLogoutAPI.as_view()),
     path("auth/register/", views.UserRegistrationAPI.as_view()),

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "845cc40637beb303010f6bc14fc7e797",
+    "identityHash": "aaef0ac8b269c57035a6aab3c6daa471",
     "entities": [
       {
         "tableName": "users",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "configurations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `host` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `host` TEXT NOT NULL, `showCreateAccount` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -99,6 +99,12 @@
             "columnName": "host",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "showCreateAccount",
+            "columnName": "showCreateAccount",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -114,7 +120,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '845cc40637beb303010f6bc14fc7e797')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aaef0ac8b269c57035a6aab3c6daa471')"
     ]
   }
 }

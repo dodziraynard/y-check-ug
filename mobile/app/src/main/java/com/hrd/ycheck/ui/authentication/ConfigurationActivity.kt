@@ -13,7 +13,6 @@ import com.hrd.ycheck.models.Configuration
 import com.hrd.ycheck.ui.MainActivity
 
 class ConfigurationActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityConfigurationBinding
     private lateinit var viewModel: AuthenticationActivityViewModel
     private var configuration: Configuration = Configuration(1, "")

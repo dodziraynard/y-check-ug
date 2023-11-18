@@ -3,6 +3,7 @@ package com.hrd.ycheck.ui.authentication
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +14,7 @@ import com.hrd.ycheck.models.Configuration
 import com.hrd.ycheck.models.User
 import com.hrd.ycheck.network.RestApiFactory
 import com.hrd.ycheck.network.response_models.AuthenticationResponse
+import com.hrd.ycheck.network.response_models.MobileConfigResponse
 import com.hrd.ycheck.utils.Constants.IS_NEW_USER
 import com.hrd.ycheck.utils.Constants.SHARED_PREFS_FILE
 import com.hrd.ycheck.utils.Constants.USER_TOKEN
@@ -36,6 +38,28 @@ class AuthenticationActivityViewModel(application: Application) : AndroidViewMod
 
     val configuration: LiveData<Configuration?>?
         get() = repository.configuration
+
+    fun getMobileConfig() {
+        apiService?.getMobileConfig()?.enqueue(object : Callback<MobileConfigResponse?> {
+            override fun onResponse(
+                call: Call<MobileConfigResponse?>, response: Response<MobileConfigResponse?>
+            ) {
+                if (response.body()?.config != null) {
+                    val config = response.body()!!.config
+                    if (config != null) {
+                        AppRoomDatabase.databaseWriteExecutor.execute {
+                            config.host = configuration?.value?.host ?: ""
+                            repository.configurationDao?.insertConfiguration(config);
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MobileConfigResponse?>, t: Throwable) {
+                Log.d("AuthenticationActivityViewModel", "onFailure: getMobileConfig failed. ")
+            }
+        })
+    }
 
     fun login(username: String, password: String) {
         isLoading.value = true

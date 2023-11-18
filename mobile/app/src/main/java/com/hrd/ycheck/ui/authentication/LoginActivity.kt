@@ -21,11 +21,16 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         title = getString(R.string.login)
         viewModel = ViewModelProvider(this)[AuthenticationActivityViewModel::class.java]
+        viewModel.getMobileConfig()
 
         viewModel.configuration?.observe(this) {
             if (it == null) {
                 startActivity(Intent(this, ConfigurationActivity::class.java))
                 finish()
+            } else if (it.showCreateAccount == true) {
+                binding.createAccountLabel.visibility = View.VISIBLE
+            } else {
+                binding.createAccountLabel.visibility = View.GONE
             }
         }
 
@@ -40,11 +45,6 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, ConfigurationActivity::class.java)
             startActivity(intent)
         }
-
-//        binding.forgotPassword.setOnClickListener {
-//            val intent = Intent(this, ForgotPasswordActivity::class.java)
-//            startActivity(intent)
-//        }
 
         viewModel.isLoading.observe(this) { value ->
             if (value) {

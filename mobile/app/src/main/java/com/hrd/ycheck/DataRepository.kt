@@ -14,7 +14,7 @@ class DataRepository(application: Application) {
     val configuration: LiveData<Configuration?>?
 
     private val userDao: UserDao?
-    private val configurationDao: ConfigurationDao?
+    val configurationDao: ConfigurationDao?
 
     init {
         db = AppRoomDatabase.getDatabase(application)

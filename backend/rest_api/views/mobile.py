@@ -6,6 +6,7 @@ from django.utils.timezone import make_aware
 from django.contrib.auth import authenticate
 from knox.models import AuthToken
 from django.db.models import Q
+from setup.models import MobileConfig
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from ycheck.utils.constants import ResponseInputType
@@ -19,9 +20,20 @@ from rest_api.serializers import (CheckupLocationSerializer,
                                   SectionSerialiser,
                                   ResponseSerialiser,
                                   AdolescentResponseSerialiser,
-                                  RegisterSerializer, UserSerializer)
+                                  MobileConfigSerializer,
+                                  RegisterSerializer,
+                                  UserSerializer)
 
 logger = logging.getLogger("app")
+
+
+class MobileConfigAPI(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        config, _ = MobileConfig.objects.get_or_create()
+        config = MobileConfigSerializer(config).data
+        return Response({'config': config}, status=status.HTTP_200_OK)
 
 
 class UpdateUserObject(generics.GenericAPIView):

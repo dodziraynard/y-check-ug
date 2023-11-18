@@ -179,7 +179,9 @@
                     android:text="@string/create_new_account"
                     android:textAlignment="center"
                     android:textColor="@color/color_700"
-                    android:textSize="@dimen/text_small" />
+                    android:textSize="@dimen/text_small"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
