@@ -26,7 +26,7 @@ class Adolescent(models.Model):
     surname = models.CharField(max_length=50, db_index=True)
     other_names = models.CharField(max_length=50, db_index=True)
     visit_type = models.CharField(max_length=50, blank=True, null=True)
-    consent = models.CharField(max_length=50, blank=True, null=True)
+    consent = models.CharField(max_length=100, blank=True, null=True)
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
     dob = models.DateTimeField(null=True, blank=True)
     check_up_location = models.CharField(max_length=200)
@@ -34,6 +34,7 @@ class Adolescent(models.Model):
     residential_status = models.CharField(max_length=200, null=True, blank=True)
     school = models.CharField(max_length=200, null=True, blank=True)
     grade = models.CharField(max_length=200, null=True, blank=True)
+    leaves_in_catchment = models.CharField(max_length=200, null=True, blank=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)
@@ -60,7 +61,7 @@ class Adolescent(models.Model):
 
 class CheckupLocation(models.Model):
     TYPE_CHOICES = [
-        ('primary', 'primary'),
+        ('basic', 'basic'),
         ('secondary', 'secondary'),
         ('community', 'community'),
     ]

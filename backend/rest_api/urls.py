@@ -44,4 +44,5 @@ urlpatterns = [
     # services
     path("services/", views.ServicesAPI.as_view()),
     path("get-flags/", views.FlagsAPI.as_view()),
+    path("get-schools/", views.GetSchoolsAPI.as_view()),
 ]

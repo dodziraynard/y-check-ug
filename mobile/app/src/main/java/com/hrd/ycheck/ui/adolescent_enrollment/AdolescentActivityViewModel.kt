@@ -10,6 +10,7 @@ import com.hrd.ycheck.models.CheckupLocation
 import com.hrd.ycheck.network.RestApiFactory
 import com.hrd.ycheck.network.response_models.AdolescentResponse
 import com.hrd.ycheck.network.response_models.CheckupLocationResponse
+import com.hrd.ycheck.network.response_models.SchoolResponse
 import com.hrd.ycheck.network.response_models.SearchAdolescentResponse
 import com.hrd.ycheck.utils.Functions
 import okhttp3.MediaType
@@ -24,12 +25,14 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
     val isLoadingLocations: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoadingAdolescent: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSearchingAdolescent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isLoadingSchools: MutableLiveData<Boolean> = MutableLiveData(false)
     val isUploadingPhoto: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val postErrorMessage = MutableLiveData<String>()
     val searchErrorMessage = MutableLiveData<String>()
     val locationLoadingErrorMessage = MutableLiveData<String>()
     val photoUploadErrorMessage = MutableLiveData<String>()
+    val schoolsErrorMessage = MutableLiveData<String>()
 
     private val apiService = RestApiFactory.create(application);
     private val context: Application = application
@@ -38,6 +41,10 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
 
     val updatedAdolescent = MutableLiveData<Adolescent>()
     val adolescents = MutableLiveData<List<Adolescent>>()
+    val schools = MutableLiveData<List<String>>()
+
+    val isFormValid: MutableLiveData<Boolean> = MutableLiveData(false)
+
 
     fun getCheckupLocations(filters: String) {
         isLoadingLocations.value = true
@@ -169,5 +176,33 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
                     isUploadingPhoto.value = false
                 }
             })
+    }
+
+    fun getSchool() {
+        isLoadingSchools.value = true
+        schoolsErrorMessage.value = ""
+
+        apiService?.getSchools()?.enqueue(object : Callback<SchoolResponse?> {
+            override fun onResponse(
+                call: Call<SchoolResponse?>,
+                response: Response<SchoolResponse?>
+            ) {
+                if (response.body()?.schools != null) {
+                    schools.value = response.body()?.schools
+                } else {
+                    schoolsErrorMessage.value =
+                        response.code().toString() + ": " + response.message()
+                    if (response.code() == 401) {
+                        Functions.removeUserToken(context)
+                    }
+                }
+                isLoadingSchools.value = false
+            }
+
+            override fun onFailure(call: Call<SchoolResponse?>, t: Throwable) {
+                schoolsErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
+                isLoadingSchools.value = false
+            }
+        })
     }
 }

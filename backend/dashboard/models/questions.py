@@ -78,6 +78,7 @@ class Question(models.Model):
     apk_id = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
+    to_be_confirmed = models.BooleanField(default=False)
 
     # Useful if input_type is range slider
     min_numeric_value = models.IntegerField(null=True, blank=True)

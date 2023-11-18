@@ -3,10 +3,12 @@ package com.hrd.ycheck.ui.questionnaire
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -31,6 +33,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     private var adolescent: Adolescent? = null
     private var questionnaireType: String = QuestionnaireType.SURVEY
     private var currentQuestionId: Long = 0
+    private var currentQuestion: Question? = null
     lateinit var audioPlayer: AudioPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,18 +60,29 @@ class QuestionnaireActivity : AppCompatActivity() {
         }
 
         val adolescentId = adolescent!!.id
-        // Auto load first questions.
+        // Auto load first questions
         viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
 
         binding.nextButton.setOnClickListener {
-            if (newAdolescentResponse != null) {
-                currentQuestionId = newAdolescentResponse!!.questionId
-                val value = newAdolescentResponse!!.value
-                val options =
-                    newAdolescentResponse!!.chosenOptions.map { option -> option?.id ?: -1 }
-                viewModel.postSurveyResponse(adolescentId, currentQuestionId, value, options)
+            val currentQuestionAnswered =
+                newAdolescentResponse?.value?.isNotEmpty() == true
+                        || newAdolescentResponse?.chosenOptions?.isNotEmpty() == true
+            viewModel.currentQuestionAnswered.value = currentQuestionAnswered
+
+            if (newAdolescentResponse?.value?.isNotEmpty() == true and !isNumericResponseValid(
+                    currentQuestion!!,
+                    newAdolescentResponse!!.value
+                )
+            ) {
+                showInvalidValueDialog(newAdolescentResponse!!.value, currentQuestion!!);
+            } else if (currentQuestion?.toBeConfirmed == true && newAdolescentResponse?.value?.isNotEmpty() == true) {
+                confirmResponseValue(newAdolescentResponse!!.value, adolescentId);
+            } else if (currentQuestionAnswered) {
+                saveAndLoadNextQuestion(adolescentId)
+            } else {
+                Toast.makeText(this, "Please response to continuing.", Toast.LENGTH_LONG)
+                    .show();
             }
-            viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
         }
 
         viewModel.isLoading.observe(this) { value ->
@@ -96,17 +110,17 @@ class QuestionnaireActivity : AppCompatActivity() {
 
         viewModel.nextQuestionResponse.observe(this) { response ->
             if (response != null) {
-                val question = response.question
+                currentQuestion = response.question
                 val section = response.newSection
                 val submittedResponse = response.currentResponse
                 val currentSessionNumber = response.currentSessionNumber
                 val totalSessions = response.totalSessions
 
-                if (section != null && question != null && adolescent != null) {
+                if (section != null && currentQuestion != null && adolescent != null) {
                     if (section.requiresGame) {
                         confirmGamePlay(
                             adolescent!!,
-                            question,
+                            currentQuestion!!,
                             submittedResponse,
                             currentSessionNumber,
                             totalSessions,
@@ -122,17 +136,17 @@ class QuestionnaireActivity : AppCompatActivity() {
                     } else {
                         renderNewSectionInstructionAndQuestion(
                             adolescent!!,
-                            question,
+                            currentQuestion!!,
                             submittedResponse,
                             currentSessionNumber,
                             totalSessions,
                             section
                         )
                     }
-                } else if (question != null && adolescent != null) {
+                } else if (currentQuestion != null && adolescent != null) {
                     renderQuestion(
                         adolescent!!,
-                        question,
+                        currentQuestion!!,
                         submittedResponse,
                         currentSessionNumber,
                         totalSessions
@@ -150,6 +164,17 @@ class QuestionnaireActivity : AppCompatActivity() {
         binding.closeQuizButton.setOnClickListener {
             showExitDialog()
         }
+    }
+
+    private fun saveAndLoadNextQuestion(adolescentId: Long) {
+        if (newAdolescentResponse != null) {
+            currentQuestionId = newAdolescentResponse!!.questionId
+            val value = newAdolescentResponse!!.value
+            val options =
+                newAdolescentResponse!!.chosenOptions.map { option -> option?.id ?: -1 }
+            viewModel.postSurveyResponse(adolescentId, currentQuestionId, value, options)
+        }
+        viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
     }
 
     private fun confirmGamePlay(
@@ -191,6 +216,8 @@ class QuestionnaireActivity : AppCompatActivity() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 YCheckTheme {
+                    viewModel.currentQuestionAnswered.postValue(false)
+                    viewModel.currentQuestionConfirmed.postValue(false)
                     QuestionnaireUI(
                         currentQuestion = question,
                         newResponse = newAdolescentResponse!!,
@@ -260,6 +287,31 @@ class QuestionnaireActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun showInvalidValueDialog(value: String, question: Question) {
+        val message =
+            "$value is not between ${question.minNumericValue} and ${question.maxNumericValue}."
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Invalid Input").setCancelable(false)
+            .setPositiveButton(getString(R.string.ok)) { _, _ -> }
+            .setMessage(message)
+        dialog.create()
+        dialog.show()
+    }
+
+    private fun isNumericResponseValid(
+        question: Question,
+        value: String
+    ): Boolean {
+        if (!value.isDigitsOnly()) return false
+
+        val minNumericValue = question.minNumericValue
+        val maxNumericValue = question.maxNumericValue
+
+        val numericValueRange = minNumericValue?.rangeTo(maxNumericValue!!)
+        return numericValueRange?.contains(value.toInt()) ?: false
+    }
+
+
     private fun showSessionEndScreen(
         message: String, question_type: String, currentSessionNumber: Long
     ) {
@@ -282,6 +334,23 @@ class QuestionnaireActivity : AppCompatActivity() {
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
     }
+
+    private fun confirmResponseValue(value: String, adolescentId: Long) {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = this.layoutInflater
+        val dialogView: View = inflater.inflate(R.layout.dialog_confirm_response, null)
+        val valueView = dialogView.findViewById<TextView>(R.id.value_view)
+        valueView.text = value
+
+        dialogBuilder.setView(dialogView).setCancelable(false)
+            .setNegativeButton(R.string.no) { _, _ -> }
+            .setPositiveButton(R.string.yes) { _, _ ->
+                saveAndLoadNextQuestion(adolescentId)
+            }
+        val alertDialog = dialogBuilder.create()
+        alertDialog.show()
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

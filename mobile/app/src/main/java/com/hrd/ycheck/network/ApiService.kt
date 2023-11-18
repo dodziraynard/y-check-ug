@@ -76,4 +76,7 @@ interface ApiService {
         @Field("option_ids") optionIds: List<Long>? = null,
     ): Call<PostSurveyResponseResponse?>?
 
+    @GET("get-schools/")
+    fun getSchools(): Call<SchoolResponse?>?
+
 }

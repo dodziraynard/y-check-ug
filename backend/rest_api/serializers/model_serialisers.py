@@ -192,6 +192,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
             "min_numeric_value",
             "max_numeric_value",
             "options",
+            "to_be_confirmed",
             "audio_url",
             "has_image_options",
         ]

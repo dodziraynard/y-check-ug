@@ -20,10 +20,7 @@ import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityNewAdolescentBinding
 import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
-import com.hrd.ycheck.utils.AdolescentTypes
-import com.hrd.ycheck.utils.Genders
-import com.hrd.ycheck.utils.ResidentialStatus
-import com.hrd.ycheck.utils.VisitTypes
+import com.hrd.ycheck.utils.*
 import java.util.*
 
 
@@ -51,6 +48,8 @@ class NewAdolescentActivity : AppCompatActivity() {
                 "",
                 "",
                 1694350811258,
+                "",
+                "",
                 "",
                 "",
                 "",
@@ -98,25 +97,46 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         viewModel.checkupLocations.observe(this) { locs ->
-            val locations = locs.map { it.name }
-            // Update location spinner
-            binding.checkupLocationSpinner.setSelection(locations.indexOf(adolescent.checkupLocation))
-
+            val locations = listOf("Choose location") + locs.map { it.name }
             val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
                 applicationContext, android.R.layout.simple_dropdown_item_1line, locations
             )
             binding.checkupLocationSpinner.adapter = adapter
             binding.checkupLocationSpinner.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
-
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(
                         parent: AdapterView<*>?, view: View?, position: Int, id: Long
                     ) {
                         adolescent.checkupLocation = locations[position]
                     }
                 }
+
+            // Update location spinner
+            binding.checkupLocationSpinner.setSelection(locations.indexOf(adolescent.checkupLocation))
+        }
+
+        viewModel.schools.observe(this) { schools ->
+            val allSchoolOptions = listOf("Not a student") + schools
+            val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
+                applicationContext, android.R.layout.simple_dropdown_item_1line, allSchoolOptions
+            )
+            binding.schoolSpinner.adapter = adapter
+            binding.schoolSpinner.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        adolescent.school = allSchoolOptions[position]
+                    }
+                }
+
+            // Update school spinner
+            binding.schoolSpinner.setSelection(allSchoolOptions.indexOf(adolescent.school))
         }
 
         viewModel.locationLoadingErrorMessage.observe(this) { message ->
@@ -128,12 +148,30 @@ class NewAdolescentActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.schoolsErrorMessage.observe(this) { message ->
+            if (message.isNotEmpty()) {
+                binding.errorLoadingSchool.text = message
+                binding.errorLoadingSchool.visibility = View.VISIBLE
+            } else {
+                binding.errorLoadingSchool.visibility = View.GONE
+            }
+        }
+
         viewModel.isLoadingLocations.observe(this) { isLoading ->
             if (isLoading) {
                 binding.locationLoadingProcessBar.visibility = View.VISIBLE
                 binding.errorLoadingLocation.visibility = View.GONE
             } else {
                 binding.locationLoadingProcessBar.visibility = View.GONE
+            }
+        }
+
+        viewModel.isLoadingSchools.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.schoolLoadingProcessBar.visibility = View.VISIBLE
+                binding.errorLoadingSchool.visibility = View.GONE
+            } else {
+                binding.schoolLoadingProcessBar.visibility = View.GONE
             }
         }
 
@@ -203,6 +241,38 @@ class NewAdolescentActivity : AppCompatActivity() {
             }
         }
 
+        binding.livesInCatchmentGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.lives_in_catchment_yes -> {
+                    adolescent.livesInCatchment = LivesInCatchment.YES
+                }
+                R.id.lives_in_catchment_no -> {
+                    adolescent.livesInCatchment = LivesInCatchment.NO
+                }
+                R.id.lives_in_catchment_na -> {
+                    adolescent.livesInCatchment = LivesInCatchment.NA
+                }
+            }
+        }
+
+        binding.icfConfGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.icf_conf_adolescent -> {
+                    adolescent.consent = IAFConsents.ADOLESCENT
+                }
+                R.id.icf_conf_parent -> {
+                    adolescent.consent = IAFConsents.PARENT
+                }
+                R.id.icf_conf_adolescent_parent -> {
+                    adolescent.consent = IAFConsents.ADOLESCENT_PARENT
+                }
+                R.id.icf_conf_no -> {
+                    adolescent.consent = IAFConsents.NO
+                }
+            }
+        }
+
+
         binding.residentialStatusGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.residential_status_day -> {
@@ -210,6 +280,17 @@ class NewAdolescentActivity : AppCompatActivity() {
                 }
                 R.id.residential_status_boarding -> {
                     adolescent.residentialStatus = ResidentialStatus.BOARDING
+                }
+            }
+        }
+
+        binding.gradeGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.grade_1 -> {
+                    adolescent.grade = Grade.YEAR_ONE
+                }
+                R.id.grade_2 -> {
+                    adolescent.grade = Grade.YEAR_TWO
                 }
             }
         }
@@ -248,6 +329,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         binding.pidInput.setText(adolescent.pid)
         binding.otherNamesInput.setText(adolescent.otherNames)
         viewModel.getCheckupLocations("type:${adolescent.type}")
+        viewModel.getSchool()
 
         // Adolescent type
         when (adolescent.type.uppercase()) {
@@ -275,6 +357,27 @@ class NewAdolescentActivity : AppCompatActivity() {
             ResidentialStatus.BOARDING.uppercase() -> binding.residentialStatusGroup.check(R.id.residential_status_boarding)
         }
 
+        // Grade
+        when (adolescent.grade?.uppercase()) {
+            Grade.YEAR_ONE.uppercase() -> binding.gradeGroup.check(R.id.grade_1)
+            Grade.YEAR_TWO.uppercase() -> binding.gradeGroup.check(R.id.grade_2)
+        }
+
+        // Leaves in catchment
+        when (adolescent.livesInCatchment?.uppercase()) {
+            LivesInCatchment.YES.uppercase() -> binding.livesInCatchmentGroup.check(R.id.lives_in_catchment_yes)
+            LivesInCatchment.NO.uppercase() -> binding.livesInCatchmentGroup.check(R.id.lives_in_catchment_no)
+            LivesInCatchment.NA.uppercase() -> binding.livesInCatchmentGroup.check(R.id.lives_in_catchment_na)
+        }
+
+        // Consent
+        when (adolescent.consent?.uppercase()) {
+            IAFConsents.PARENT.uppercase() -> binding.icfConfGroup.check(R.id.icf_conf_parent)
+            IAFConsents.ADOLESCENT_PARENT.uppercase() -> binding.icfConfGroup.check(R.id.icf_conf_adolescent_parent)
+            IAFConsents.ADOLESCENT.uppercase() -> binding.icfConfGroup.check(R.id.icf_conf_adolescent)
+            IAFConsents.NO.uppercase() -> binding.icfConfGroup.check(R.id.icf_conf_no)
+        }
+
         // DoB
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = adolescent.dob
@@ -295,7 +398,7 @@ class NewAdolescentActivity : AppCompatActivity() {
     }
 
     private fun validateForm(adolescent: Adolescent): Boolean {
-        // Surname
+        // PID
         if (adolescent.pid.isEmpty()) {
             binding.pidErrorMessage.visibility = View.VISIBLE
             return false
@@ -350,6 +453,16 @@ class NewAdolescentActivity : AppCompatActivity() {
         } else {
             binding.checkupLocationErrorMessageLabel.visibility = View.GONE
         }
+
+        // Consent location
+        val consents = listOf(IAFConsents.ADOLESCENT, IAFConsents.PARENT, IAFConsents.ADOLESCENT_PARENT)
+        if (!consents.contains(adolescent.consent)) {
+            binding.icfConfErrorMessageLabel.visibility = View.VISIBLE
+            return false
+        } else {
+            binding.icfConfErrorMessageLabel.visibility = View.GONE
+        }
+
 
         // Age
         val age = ((System.currentTimeMillis() - adolescent.dob) / 31556952000).toInt()

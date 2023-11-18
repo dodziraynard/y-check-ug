@@ -4,8 +4,6 @@ from django.shortcuts import render
 from django.views import View
 
 
-
-
 class DashboardOverview(PermissionRequiredMixin, View):
     template_name = "dashboard/accounting/index.html"
     permission_required = [

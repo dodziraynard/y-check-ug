@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
@@ -226,7 +227,9 @@ fun SingleSelectionResponse(
         mutableStateOf(currentValue)
     }
     // Update response
-    newResponse.chosenOptions = listOf(selectedOption)
+    if (selectedOption != null) {
+        newResponse.chosenOptions = listOf(selectedOption)
+    }
 
     FlowRow(
         modifier = Modifier.padding(8.dp),
@@ -310,8 +313,10 @@ fun MultiSelectionResponse(
     val currentValue = currentResponse?.chosenOptions ?: mutableListOf()
     val selectedOptions = remember(id) { currentValue.toMutableStateList() }
 
-    // Update responses
-    newResponse.chosenOptions = selectedOptions.toList()
+    // Update response
+    if (selectedOptions.toList().isNotEmpty()) {
+        newResponse.chosenOptions = selectedOptions.toList()
+    }
 
     FlowRow(
         modifier = Modifier.padding(8.dp),

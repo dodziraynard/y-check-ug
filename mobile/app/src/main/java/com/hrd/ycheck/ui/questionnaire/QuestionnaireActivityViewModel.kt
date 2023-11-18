@@ -24,6 +24,9 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
     val nextQuestionResponse: MutableLiveData<GetSurveyQuestionResponse?> = MutableLiveData(null)
     val surveyResponseResult: MutableLiveData<PostSurveyResponseResponse?> = MutableLiveData(null)
 
+    val currentQuestionAnswered: MutableLiveData<Boolean> = MutableLiveData(false)
+    val currentQuestionConfirmed: MutableLiveData<Boolean> = MutableLiveData(false)
+
     fun getQuestion(
         adolescentId: Long,
         currentQuestionId: Long,

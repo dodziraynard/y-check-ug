@@ -119,4 +119,10 @@
     <string name="grade_1">1</string>
     <string name="grade_2">2</string>
     <string name="young_person_s_grade">Young person\'s grade</string>
+    <string name="select_type_of_adolescent">Select type of adolescent.</string>
+    <string name="leaves_in_catchment_area">Leaves in catchment area.</string>
+    <string name="n_a">N/A</string>
+    <string name="adolescent_parent_consent"><![CDATA[Adolescent & parent consent]]></string>
+    <string name="form_is_not_valid">Form is not valid.</string>
+    <string name="please_confirm_consent">Please confirm consent</string>
 </resources>

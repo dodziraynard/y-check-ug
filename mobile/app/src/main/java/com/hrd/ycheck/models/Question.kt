@@ -18,7 +18,8 @@ data class Question(
     @SerializedName("image_url") val imageUrl: String? = null,
     @SerializedName("audio_url") val audioUrl: String? = null,
     @SerializedName("has_image_options") val hasImageOptions: Boolean? = false,
-    @SerializedName("apk_id") val apkId: String? = null
+    @SerializedName("apk_id") val apkId: String? = null,
+    @SerializedName("to_be_confirmed") val toBeConfirmed: Boolean? = false
 )
 
 object InputType {

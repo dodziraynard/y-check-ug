@@ -40,3 +40,21 @@ object ResidentialStatus {
     const val DAY = "day"
     const val BOARDING = "boarding"
 }
+
+object Grade {
+    const val YEAR_ONE = "1"
+    const val YEAR_TWO = "2"
+}
+
+object LivesInCatchment {
+    const val YES = "yes"
+    const val NO = "no"
+    const val NA = "n/a"
+}
+
+object IAFConsents {
+    const val PARENT = "Yes parent consent"
+    const val ADOLESCENT = "Yes adolescent consent"
+    const val ADOLESCENT_PARENT = "Yes adolescent and parent consent"
+    const val NO = "No"
+}
