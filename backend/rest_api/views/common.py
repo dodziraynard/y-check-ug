@@ -52,7 +52,7 @@ class UserLoginAPI(generics.GenericAPIView):
 
         response_data = {
             "error_message": None,
-            "user": UserSerializer(user).data,
+            "user": UserSerializer(user, context={"request":request}).data,
             "token": AuthToken.objects.create(user)[1],
             "user_permissions": get_all_user_permissions(user)
         }

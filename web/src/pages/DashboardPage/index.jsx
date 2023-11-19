@@ -173,8 +173,8 @@ function DashboardPage() {
                     <div className="drop-container position-relative ">
                         <div className="d-flex align-items-center">
                             <a href="" className="avatar mr-5">
-                                {user?.photo || user?.photo_url ? (
-                                    <img src={user?.photo || user?.photo_url} alt="User's picture" />
+                                {user?.photo_url ? (
+                                    <img src={user?.photo_url} alt="User's picture" />
                                 ) : (
                                     <span>No Photo</span>
                                 )}
