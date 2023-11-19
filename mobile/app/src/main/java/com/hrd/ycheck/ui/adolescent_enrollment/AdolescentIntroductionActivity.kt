@@ -1,4 +1,4 @@
-package com.hrd.ycheck.ui
+package com.hrd.ycheck.ui.adolescent_enrollment
 
 import android.content.Intent
 import android.os.Bundle

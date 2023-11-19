@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.AdolescentIntroductionActivity"
+            android:name=".ui.adolescent_enrollment.AdolescentIntroductionActivity"
             android:exported="false"
             android:theme="@style/Theme.YCheck.NoActionBar" />
         <activity

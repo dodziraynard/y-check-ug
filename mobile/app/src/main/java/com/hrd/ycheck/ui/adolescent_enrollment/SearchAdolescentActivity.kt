@@ -13,7 +13,6 @@ import com.hrd.ycheck.adapters.AdolescentAdapter
 import com.hrd.ycheck.databinding.ActivitySearchAdolescentBinding
 import com.hrd.ycheck.databinding.AdolescentSearchResultOptionLayoutBinding
 import com.hrd.ycheck.models.Adolescent
-import com.hrd.ycheck.ui.AdolescentIntroductionActivity
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/board"
-    tools:context=".ui.AdolescentIntroductionActivity">
+    tools:context=".ui.adolescent_enrollment.AdolescentIntroductionActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:fontFamily="@font/calligraffitti_regular"
+                android:fontFamily="@font/agbalumo_regular"
                 android:text="@string/hello_person"
                 android:textSize="@dimen/text_size_title"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_10sdp"
-                    android:text="This survey's got 11 sections. Celebrate after each one, and enjoy a game halfway through! Ready to continue?"
+                    android:text="@string/this_survey_s_got_11_sections_celebrate_after_each_one_and_enjoy_a_game_halfway_through_ready_to_continue"
                     android:textAlignment="center"
                     android:textFontWeight="1000"
                     android:textSize="@dimen/text_size"
