@@ -201,13 +201,10 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
-            deletePatients: builder.mutation({
-                query(body) {
-                    return {
-                        url: `web-adolescents/`,
-                        method: 'DELETE',
-                        body,
-                    }
+            // Facilities
+            getAllAdolescentTypes: builder.query({
+                query() {
+                    return `/web-adolescents-types/`;
                 },
             }),
 
@@ -251,12 +248,13 @@ export const {
     usePutServicesMutation,
     useDeleteServicesMutation,
 
+    //Adolescents-Types
+    useLazyGetAllAdolescentTypesQuery,
+
+
     // Flag labels
-    useLazyGetFlagLabelsQuery,
-
-    // Patients
-    useDeletePatientsMutation
-
+    useLazyGetFlagLabelsQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;
+
