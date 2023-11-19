@@ -50,6 +50,10 @@ class AdolescentAdmin(admin.ModelAdmin):
     search_fields = ['pid', 'surname', 'other_names']
 
 
+class FlagConditionAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
+
 admin.site.register(CheckupLocation)
 admin.site.register(Section)
 admin.site.register(Question, QuestionAdmin)
@@ -60,9 +64,8 @@ admin.site.register(Adolescent, AdolescentAdmin)
 admin.site.register(SummaryFlag)
 admin.site.register(FlagLabel, FlagLabelAdmin)
 admin.site.register(FlagColor, FlagColorAdmin)
-admin.site.register(FlagCondition)
+admin.site.register(FlagCondition, FlagConditionAdmin)
 admin.site.register(Facility)
 admin.site.register(Service)
 admin.site.register(Treatment)
 admin.site.register(MobileConfig)
-

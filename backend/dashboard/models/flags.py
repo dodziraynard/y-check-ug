@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.db import models
 from accounts.models import User
 from ycheck.utils.constants import Colors
@@ -141,6 +142,7 @@ class FlagCondition(models.Model):
         ("range_sum_between", "range_sum_between"),
         ("gender_is", "gender_is"),
     ]
+    name = models.CharField(max_length=100, null=True, blank=True)
 
     flag_color = models.ForeignKey(
         FlagColor, related_name="conditions", on_delete=models.CASCADE, db_index=True)
@@ -170,6 +172,10 @@ class FlagCondition(models.Model):
     def __str__(self) -> str:
         expected_value = self.expected_value or self.expected_integer_value
         return f"{str(self.flag_color)}-{expected_value}"
+
+    def save(self, *arg, **kwargs) -> None:
+        self.name = str(self)
+        return super().save(*arg, **kwargs)
 
     def _handle_range_sum_operator(self, adolescent):
         if not self.range_min and self.range_max and self.question2:
