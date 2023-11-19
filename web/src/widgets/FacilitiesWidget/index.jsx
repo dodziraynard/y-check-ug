@@ -174,7 +174,7 @@ function FacilitiesWidget() {
             <div className="facilities-widget">
                 <div className="d-flex justify-content-between">
                     <p className="text-muted">Use the available controls to create and update partner facilities. </p>
-                    <Button onClick={() => facilityModal?.show()}><i className="bi bi-plus"></i> Add</Button>
+                    <Button onClick={() => { setSelectedFacility(null); facilityModal?.show() }}><i className="bi bi-plus"></i> Add</Button>
                 </div>
 
                 <TableView
