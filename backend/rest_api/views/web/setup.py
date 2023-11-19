@@ -1,18 +1,13 @@
 from rest_framework import generics, permissions, status
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework.response import Response
-from rest_api.serializers import (GroupSerializer,
-                                  GroupPermissionSerializer, UserSerializer,
-                                  FacilitySerializer,
-                                  ServiceSerializer,
-                                  FlagLabelSerializer,
-                                  RegisterSerializer)
+from rest_api.serializers import *
 from dashboard.forms import *
 from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
-from dashboard.models import Facility, Service, FlagLabel
+from dashboard.models import Facility, Service, FlagLabel,Adolescent
 from ycheck.utils.functions import relevant_permission_objects
 from rest_framework import generics
 from django.contrib.auth import authenticate
@@ -278,6 +273,27 @@ class UploadPictureAPI(generics.GenericAPIView):
             "error_message": "Profile Picture Could not be Updated successfully",
         })
         
+class getAdolescentType(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    def get(self, request, format=None):
+        #BASIC
+        basic = Adolescent.objects.filter(type="basic")
+        basic_serializer = AdolescentSerializer(basic,many=True)
+        basic_count = len(basic_serializer.data) 
+        # SECONDARY
+        secondary = Adolescent.objects.filter(type="secondary")
+        secondary_serializer = AdolescentSerializer(secondary,many=True)
+        secondary_count = len(secondary_serializer.data) 
+        # COMMUNITY
+        community = Adolescent.objects.filter(type="community")
+        community_serializer = AdolescentSerializer(community,many=True)
+        community_count = len(community_serializer.data) 
+        
+        return Response({
+            "basic": basic_count,
+            "secondary":secondary_count,
+            "community":community_count
+        })
 
         
         
