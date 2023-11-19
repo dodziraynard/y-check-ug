@@ -201,6 +201,16 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
+            deletePatients: builder.mutation({
+                query(body) {
+                    return {
+                        url: `web-adolescents/`,
+                        method: 'DELETE',
+                        body,
+                    }
+                },
+            }),
+
             ...referrals.getReferralEndpoints(builder)
         };
     },
@@ -242,7 +252,11 @@ export const {
     useDeleteServicesMutation,
 
     // Flag labels
-    useLazyGetFlagLabelsQuery
+    useLazyGetFlagLabelsQuery,
+
+    // Patients
+    useDeletePatientsMutation
+
 } = resourceApiSlice;
 
 export default resourceApiSlice;
