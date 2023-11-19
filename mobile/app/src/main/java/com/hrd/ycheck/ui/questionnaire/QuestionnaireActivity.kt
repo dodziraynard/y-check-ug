@@ -80,7 +80,7 @@ class QuestionnaireActivity : AppCompatActivity() {
             } else if (currentQuestionAnswered) {
                 saveAndLoadNextQuestion(adolescentId)
             } else {
-                Toast.makeText(this, "Please respond to continuing.", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Please respond to continue.", Toast.LENGTH_LONG)
                     .show();
             }
         }

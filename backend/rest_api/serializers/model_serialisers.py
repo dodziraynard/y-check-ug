@@ -195,6 +195,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
             "text",
             "question_type",
             "input_type",
+            "apk_id",
             "answer_preamble",
             "adolescent_type",
             "min_numeric_value",
