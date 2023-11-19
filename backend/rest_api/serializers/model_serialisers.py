@@ -102,7 +102,8 @@ class AdolescentSerializer(serializers.ModelSerializer):
 
     def get_dob(self, obj):
         if obj.dob:
-            return obj.dob.timestamp() * 1000
+            return int(obj.dob.timestamp() * 1000)
+        return 0
 
     def get_fullname(self, obj):
         return f"{obj.surname} {obj.other_names}"

@@ -1,7 +1,6 @@
 package com.hrd.ycheck.ui.adolescent_enrollment
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -106,11 +105,8 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
                 }
 
                 override fun onFailure(call: Call<AdolescentResponse?>, t: Throwable) {
-                    postErrorMessage.value =
-                        context.getString(R.string.couldnt_connect_to_server) + ": ${t.message}"
+                    postErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
                     isLoadingAdolescent.value = false
-
-                    Log.d("DEBUGGG", "onFailure: ${t.message}")
                 }
             })
     }
@@ -137,8 +133,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
             }
 
             override fun onFailure(call: Call<SearchAdolescentResponse?>, t: Throwable) {
-                searchErrorMessage.value =
-                    context.getString(R.string.couldnt_connect_to_server) + ": ${t.message}"
+                searchErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
                 isSearchingAdolescent.value = false
             }
         })
@@ -177,7 +172,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
 
                 override fun onFailure(call: Call<AdolescentResponse?>, t: Throwable) {
                     photoUploadErrorMessage.value =
-                        context.getString(R.string.couldnt_connect_to_server) + ": ${t.message}"
+                        context.getString(R.string.couldnt_connect_to_server)
                     isUploadingPhoto.value = false
                 }
             })
@@ -205,8 +200,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
             }
 
             override fun onFailure(call: Call<SchoolResponse?>, t: Throwable) {
-                schoolsErrorMessage.value =
-                    context.getString(R.string.couldnt_connect_to_server) + ": ${t.message}"
+                schoolsErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
                 isLoadingSchools.value = false
             }
         })
