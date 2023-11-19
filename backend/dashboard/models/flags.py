@@ -6,6 +6,7 @@ from .adolescent import *
 from .questions import *
 
 color_code_choices = [
+    (Colors.GREY.value, "GREY"),
     (Colors.RED.value, "RED"),
     (Colors.ORANGE.value, "ORANGE"),
     (Colors.GREEN.value, "GREEN"),
@@ -95,7 +96,7 @@ class FlagLabel(models.Model):
                 if matched != True:
                     break  # To go different color.
             else:  # All required conditions are satisfied.
-                # At lest one optional condition must be met
+                # At least one optional condition must be met
                 if not optional_conditions:
                     return color.color_code
                 for condition in optional_conditions:

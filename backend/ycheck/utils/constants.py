@@ -10,6 +10,7 @@ class ResponseInputType(Enum):
 
 
 class Colors(Enum):
+    GREY = "#808080"
     RED = "#ff0000"
     ORANGE = "#ffa500"
     GREEN = "#00ff00"

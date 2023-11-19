@@ -298,7 +298,7 @@ function SummaryFlagWidget() {
                                             <td>
                                                 <div className="d-flex">
                                                     <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
-                                                        <Flag color={flag.computed_color_code} mutable={mutable} onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                        <Flag color={flags[index]?.responses?.length > 0 ? flag.computed_color_code : "#808080"} mutable={mutable} onColorChange={(color) => onColorChange(color, flag.id)} />
                                                     </Tooltip>
                                                     <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
                                                         {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}

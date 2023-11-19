@@ -1,5 +1,5 @@
 <resources>
-    <string name="couldnt_connect_to_server">Couldn\'t connect to server.</string>
+    <string name="couldnt_connect_to_server">Communication with the server failed.</string>
     <string name="app_logo" translatable="false">App logo</string>
     <string name="host">Host</string>
     <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
