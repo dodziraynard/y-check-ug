@@ -276,6 +276,10 @@ class GetSurveyQuestions(generics.GenericAPIView):
         total_sessions = Section.objects.filter(
             question_type=question_type,).count()
 
+        # Community adolescents have only 10 sesions.
+        if adolescent.type == "community":
+            total_sessions = min(total_sessions, 10)
+
         response_data = {
             "question": QuestionSerialiser(question, context={"request": request}).data if question else None,
             "new_section": SectionSerialiser(new_section).data if new_section and action == "next" else None,

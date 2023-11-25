@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_10sdp"
-                    android:text="@string/this_survey_s_got_11_sections_celebrate_after_each_one_and_enjoy_a_game_halfway_through_ready_to_continue"
+                    android:text="@string/total_session_hint"
                     android:textAlignment="center"
                     android:textFontWeight="1000"
                     android:textSize="@dimen/text_size"
