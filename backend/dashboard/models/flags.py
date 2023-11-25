@@ -50,7 +50,11 @@ class SummaryFlag(models.Model):
         question_ids = []
 
         for condition in flag_conditions:
-            if condition.question1:
+            if condition.operator == "range_sum_between" and condition.question1 and condition.question2:
+                ids = Question.objects.filter(
+                    id__gte=condition.question1.id, id__lte=condition.question2.id).values_list("question_id", flat=True)
+                question_ids.extend(ids)
+            elif condition.question1:
                 question_ids.append(condition.question1.question_id)
             if condition.question2:
                 question_ids.append(condition.question2.question_id)
