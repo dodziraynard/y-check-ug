@@ -45,7 +45,6 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
 
     val isFormValid: MutableLiveData<Boolean> = MutableLiveData(false)
 
-
     fun getCheckupLocations(filters: String) {
         isLoadingLocations.value = true
         checkupLocations.value = listOf()
@@ -117,8 +116,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
 
         apiService?.searchAdolescent(query)?.enqueue(object : Callback<SearchAdolescentResponse?> {
             override fun onResponse(
-                call: Call<SearchAdolescentResponse?>,
-                response: Response<SearchAdolescentResponse?>
+                call: Call<SearchAdolescentResponse?>, response: Response<SearchAdolescentResponse?>
             ) {
                 if (response.body()?.adolescents != null) {
                     adolescents.value = response.body()?.adolescents
@@ -178,14 +176,13 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
             })
     }
 
-    fun getSchool() {
+    fun getSchool(type: String? = null) {
         isLoadingSchools.value = true
         schoolsErrorMessage.value = ""
 
-        apiService?.getSchools()?.enqueue(object : Callback<SchoolResponse?> {
+        apiService?.getSchools(type)?.enqueue(object : Callback<SchoolResponse?> {
             override fun onResponse(
-                call: Call<SchoolResponse?>,
-                response: Response<SchoolResponse?>
+                call: Call<SchoolResponse?>, response: Response<SchoolResponse?>
             ) {
                 if (response.body()?.schools != null) {
                     schools.value = response.body()?.schools

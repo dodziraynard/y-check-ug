@@ -79,6 +79,8 @@ interface ApiService {
     ): Call<PostSurveyResponseResponse?>?
 
     @GET("get-schools/")
-    fun getSchools(): Call<SchoolResponse?>?
+    fun getSchools(
+        @Query("type") filters: String? = ""
+    ): Call<SchoolResponse?>?
 
 }

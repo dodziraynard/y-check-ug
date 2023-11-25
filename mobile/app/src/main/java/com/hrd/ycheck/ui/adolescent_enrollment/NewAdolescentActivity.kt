@@ -204,14 +204,28 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.adolescent_type_basic -> {
                     adolescent.type = AdolescentTypes.BASIC
                     viewModel.getCheckupLocations("type:${AdolescentTypes.BASIC}")
+                    binding.residentialStatusContainer.visibility = View.VISIBLE
+                    binding.livesInCatchmentContainer.visibility = View.GONE
+                    binding.schoolContainer.visibility = View.VISIBLE
+                    binding.gradeContainer.visibility = View.VISIBLE
+                    viewModel.getSchool(adolescent.type)
                 }
                 R.id.adolescent_type_secondary -> {
                     adolescent.type = AdolescentTypes.SECONDARY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.SECONDARY}")
+                    binding.residentialStatusContainer.visibility = View.VISIBLE
+                    binding.livesInCatchmentContainer.visibility = View.GONE
+                    binding.schoolContainer.visibility = View.VISIBLE
+                    binding.gradeContainer.visibility = View.VISIBLE
+                    viewModel.getSchool(adolescent.type)
                 }
                 R.id.adolescent_type_community -> {
                     adolescent.type = AdolescentTypes.COMMUNITY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.COMMUNITY}")
+                    binding.residentialStatusContainer.visibility = View.GONE
+                    binding.livesInCatchmentContainer.visibility = View.VISIBLE
+                    binding.schoolContainer.visibility = View.GONE
+                    binding.gradeContainer.visibility = View.GONE
                 }
             }
         }
@@ -329,7 +343,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         binding.pidInput.setText(adolescent.pid)
         binding.otherNamesInput.setText(adolescent.otherNames)
         viewModel.getCheckupLocations("type:${adolescent.type}")
-        viewModel.getSchool()
+        viewModel.getSchool(adolescent.type)
 
         // Adolescent type
         when (adolescent.type.uppercase()) {
@@ -455,7 +469,8 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         // Consent location
-        val consents = listOf(IAFConsents.ADOLESCENT, IAFConsents.PARENT, IAFConsents.ADOLESCENT_PARENT)
+        val consents =
+            listOf(IAFConsents.ADOLESCENT, IAFConsents.PARENT, IAFConsents.ADOLESCENT_PARENT)
         if (!consents.contains(adolescent.consent)) {
             binding.icfConfErrorMessageLabel.visibility = View.VISIBLE
             return false

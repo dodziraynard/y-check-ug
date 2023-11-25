@@ -349,8 +349,13 @@ class GetSchoolsAPI(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        type = request.GET.get("type")
         locations = CheckupLocation.objects.exclude(
             type="community").order_by("name")
+
+        if type:
+            locations = locations.filter(type=type)
+
         schools = [location.name for location in locations]
 
         response_data = {

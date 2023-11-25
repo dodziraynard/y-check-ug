@@ -31,7 +31,7 @@ object Genders {
 }
 
 object VisitTypes {
-    const val PILOT_TESTING = "pilot_testing"
+    const val PILOT_TESTING = "pilot"
     const val INITIAL = "initial"
     const val FOLLOW_UP = "follow-up"
 }
