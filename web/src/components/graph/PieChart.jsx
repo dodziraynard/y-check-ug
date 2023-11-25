@@ -3,7 +3,20 @@ import { Doughnut } from 'react-chartjs-2';
 ChartJs.register(
     Tooltip,Title,ArcElement,Legend
 )
+import { useLazyGetAllAdolescentTypesQuery } from '../../features/resources/resources-api-slice';
+import React, { useEffect } from 'react';
+
 function PieChart() {
+  const [getAdolescentTypes, { data: response = [], isFetching }] = useLazyGetAllAdolescentTypesQuery();
+
+  useEffect(() => {
+    getAdolescentTypes(); 
+  }, [getAdolescentTypes]);
+
+
+  const basicCount = response?.basic || 0;
+  const secondaryCount = response?.secondary || 0;
+  const communityCount = response?.community || 0;
 
     const chartOptions = {
         plugins: {
@@ -15,13 +28,13 @@ function PieChart() {
     };
     const data = {
         labels: [
-          'Primary',
+          'Basic',
           'secondary',
           'community'
         ],
         datasets: [{
           label: 'Y-Check',
-          data: [300, 200, 400],
+          data: [basicCount, secondaryCount, communityCount],
           backgroundColor: [
             'rgb(54,162,235)',
             'rgb(100,158,255)',

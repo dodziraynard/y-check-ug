@@ -211,6 +211,13 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
+            // Adolescent
+            getAllAdolescentTypes: builder.query({
+                query() {
+                    return `/web-adolescents-types/`;
+                },
+            }),
+
             ...referrals.getReferralEndpoints(builder)
         };
     },
@@ -253,6 +260,8 @@ export const {
 
     // Flag labels
     useLazyGetFlagLabelsQuery,
+    //Adolescents-Types
+    useLazyGetAllAdolescentTypesQuery,
 
     // Patients
     useDeletePatientsMutation
