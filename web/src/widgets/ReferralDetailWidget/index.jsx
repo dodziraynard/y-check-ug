@@ -216,7 +216,7 @@ function ReferralDetailWidget() {
                                                                 type="radio" name="further_referral"
                                                                 required
                                                                 onChange={() => setIsFurtherReferred(true)}
-                                                                checked={fullTreatmentProvided == true}
+                                                                checked={isFurtherReferred == true}
                                                                 id="further_referral_yes" />
                                                             <label htmlFor="further_referral_yes">Yes</label>
                                                         </div>
@@ -225,7 +225,7 @@ function ReferralDetailWidget() {
                                                                 required
                                                                 type="radio" name="further_referral"
                                                                 onChange={() => setIsFurtherReferred(false)}
-                                                                checked={fullTreatmentProvided == false}
+                                                                checked={isFurtherReferred == false}
                                                                 id="further_referral_no" />
                                                             <label htmlFor="further_referral_no">No</label>
                                                         </div>
@@ -376,7 +376,9 @@ function ReferralDetailWidget() {
                                                 <Badge key={serIndex} variant={""} colorScheme='blue' className='me-2'>
                                                     {service.name}
                                                 </Badge>
-                                                <Button size={"sm"} onClick={() => showResponses(service.id)}>View responses</Button>
+
+                                                {/* The Y-Check team explans there's no need to show responses here */}
+                                                {/* <Button size={"sm"} onClick={() => showResponses(service.id)}>View responses</Button> */}
                                             </div>
                                         })}
                                     </div>

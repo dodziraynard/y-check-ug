@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
-import { Badge } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import TableView from '../../components/Table';
 import { BASE_API_URI } from '../../utils/constants';
@@ -50,9 +49,9 @@ function TreatmentsWidget() {
                                     value: "Actions", textAlign: "right", render: (item) => {
                                         return (
                                             <div className="d-flex justify-content-end">
-                                                <Link to={`/referrals/${item.referral}/details`} className="mx-1 btn btn-outline-primary btn-sm align-self-end"
+                                                <Link to={`/treatments/${item.referral}/details`} className="mx-1 btn btn-outline-primary btn-sm align-self-end"
                                                     onClick={() => null}>
-                                                    <i className="bi bi-list me-1"></i> View referral
+                                                    <i className="bi bi-list me-1"></i> More
                                                 </Link>
                                             </div>
                                         )

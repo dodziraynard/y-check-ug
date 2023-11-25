@@ -112,7 +112,7 @@ class AdolescentSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         if obj.picture and request:
             return request.build_absolute_uri(obj.picture.url)
-        return ""
+        return "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
 
     class Meta:
         model = Adolescent
