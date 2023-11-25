@@ -190,8 +190,8 @@ class FlagCondition(models.Model):
             adolescent=adolescent)
         all_values = [
             value for response in responses for value in response.get_values_as_list(numeric=True)]
-        matched = all([value >= self.range_min and value <=
-                      self.range_max for value in all_values])
+        total = sum(all_values)
+        matched = self.range_min <= total <= self.range_max
         return matched if not self.invert_operator_evaluation else not matched
 
     def check_condition(self, adolescent: Adolescent):
