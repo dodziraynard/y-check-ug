@@ -129,7 +129,7 @@ class Option(models.Model):
         return bool(self.image and self.image.file and True or False)
 
 
-class AdolescentResponse(models.Model):
+class AdolescentResponse(UpstreamSyncBaseModel):
     adolescent = models.ForeignKey(
         Adolescent, on_delete=models.CASCADE, db_index=True)
     question = models.ForeignKey(

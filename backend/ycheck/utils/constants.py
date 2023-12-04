@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 
 class ResponseInputType(Enum):
@@ -19,4 +19,11 @@ class Colors(Enum):
 class ReferralStatus(Enum):
     NEW = "new"
     REVIEW = 'review'
+    COMPLETED = "completed"
+
+
+class SyncStatus(Enum):
+    IDLE = "idle"
+    PROGRESS = "progress"
+    FAILED = 'failed'
     COMPLETED = "completed"

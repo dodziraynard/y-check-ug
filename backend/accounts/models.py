@@ -8,15 +8,17 @@ from accounts.managers import UserManager
 
 import geocoder
 
+from dashboard.models.mixin import UpstreamSyncBaseModel
 
-class User(AbstractBaseUser, PermissionsMixin):
-    uuid = models.UUIDField(null=True, blank=True)
+
+class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     surname = models.CharField(max_length=50, null=True, blank=True)
     other_names = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     photo = models.ImageField(upload_to='users', blank=True, null=True)
-    facility = models.ForeignKey("dashboard.Facility", on_delete=models.SET_NULL, blank=True, null=True)
+    facility = models.ForeignKey(
+        "dashboard.Facility", on_delete=models.SET_NULL, blank=True, null=True)
     gender = models.CharField(max_length=50, null=True, blank=True)
     activated = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
@@ -44,10 +46,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         permissions = [
             ('reset_password', 'Can reset user password'),
         ]
-    
+
     @staticmethod
     def generate_query(query):
-        queries = [Q(**{f"{key}__icontains": query}) for key in ["phone", "surname", "username", "other_names"]]
+        queries = [Q(**{f"{key}__icontains": query})
+                   for key in ["phone", "surname", "username", "other_names"]]
         return reduce(lambda x, y: x | y, queries)
 
     def model_name(self):
@@ -66,6 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def fullname(self):
         return f"{self.surname} {self.other_names}"
+
 
 class ActivityLog(models.Model):
     username = models.CharField(max_length=100)

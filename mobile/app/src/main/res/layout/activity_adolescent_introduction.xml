@@ -9,7 +9,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/continue_button">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,14 +23,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:fontFamily="@font/agbalumo_regular"
                 android:text="@string/hello_person"
                 android:textSize="@dimen/text_size_title"
                 android:textStyle="bold" />
 
             <com.airbnb.lottie.LottieAnimationView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_250sdp"
                 android:layout_gravity="center"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
@@ -40,12 +41,11 @@
                 android:layout_margin="@dimen/_5sdp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_10sdp"
                     android:text="@string/total_session_hint"
-                    android:textAlignment="center"
                     android:textFontWeight="1000"
                     android:textSize="@dimen/text_size"
                     android:textStyle="bold" />

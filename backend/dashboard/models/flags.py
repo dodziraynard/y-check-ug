@@ -1,6 +1,4 @@
-from collections.abc import Iterable
 from django.db import models
-from accounts.models import User
 from ycheck.utils.constants import Colors
 from django.db.models import Q
 from .adolescent import *
@@ -28,7 +26,7 @@ class SummaryFlag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.CASCADE)
+        "accounts.User", null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [

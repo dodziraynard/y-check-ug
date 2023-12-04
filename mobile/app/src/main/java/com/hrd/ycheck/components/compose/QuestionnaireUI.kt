@@ -240,7 +240,7 @@ fun SingleSelectionResponse(
         val configuration = LocalConfiguration.current
         val screenWidth = configuration.screenWidthDp
         val columnWidth: Double =
-            if (hasImage == true) screenWidth / 3.3 else screenWidth.toDouble()
+            if (hasImage == true) screenWidth / 2.2 else screenWidth.toDouble()
 
         options.forEach { option ->
             Column(
@@ -308,7 +308,7 @@ fun MultiSelectionResponse(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
     val columnWidth: Double =
-        if (hasImage == true) screenWidth / 3.3 else screenWidth.toDouble()
+        if (hasImage == true) screenWidth / 2.2 else screenWidth.toDouble()
 
     val currentValue = currentResponse?.chosenOptions ?: mutableListOf()
     val selectedOptions = remember(id) { currentValue.toMutableStateList() }

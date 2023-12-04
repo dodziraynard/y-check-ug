@@ -1,8 +1,8 @@
 from datetime import datetime
 from django.db import models
 from functools import reduce
-from accounts.models import User
 from django.utils.timezone import make_aware
+from .mixin import UpstreamSyncBaseModel
 
 QUESTION_TYPE = [
     ('survey', 'survey'),
@@ -11,7 +11,7 @@ QUESTION_TYPE = [
 ]
 
 
-class Adolescent(models.Model):
+class Adolescent(UpstreamSyncBaseModel):
     ADOLESCENT_TYPE_CHOICES = [
         ("basic", 'basic'),
         ("secondary", 'secondary'),
@@ -21,7 +21,6 @@ class Adolescent(models.Model):
         ("male", 'male'),
         ("female", 'female'),
     ]
-    uuid = models.UUIDField(null=True, blank=True, db_index=True)
     pid = models.CharField(unique=True, max_length=20, db_index=True)
     surname = models.CharField(max_length=50, db_index=True)
     other_names = models.CharField(max_length=50, db_index=True)
@@ -39,7 +38,7 @@ class Adolescent(models.Model):
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)
     created_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+        "accounts.User", on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -59,13 +58,12 @@ class Adolescent(models.Model):
         return reduce(lambda x, y: x | y, queries)
 
 
-class CheckupLocation(models.Model):
+class CheckupLocation(UpstreamSyncBaseModel):
     TYPE_CHOICES = [
         ('basic', 'basic'),
         ('secondary', 'secondary'),
         ('community', 'community'),
     ]
-    uuid = models.UUIDField(null=True, blank=True)
     name = models.CharField(max_length=200, unique=True)
     type = models.CharField(max_length=100, choices=TYPE_CHOICES)
 

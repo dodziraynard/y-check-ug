@@ -4,7 +4,7 @@ from django.db import models
 from ycheck.utils.constants import ReferralStatus
 from .adolescent import Adolescent
 from .facility import Facility
-from accounts.models import User
+from .mixin import UpstreamSyncBaseModel
 
 
 class Service(models.Model):
@@ -18,7 +18,7 @@ class Service(models.Model):
         return self.name
 
 
-class Referral(models.Model):
+class Referral(UpstreamSyncBaseModel):
     referral_status_choices = [
         (ReferralStatus.NEW.value, ReferralStatus.NEW.value),
         (ReferralStatus.REVIEW.value, ReferralStatus.REVIEW.value),
@@ -29,7 +29,7 @@ class Referral(models.Model):
     referral_reason = models.TextField()
     service_type = models.CharField(max_length=200)
     services = models.ManyToManyField(Service)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -46,7 +46,7 @@ class Referral(models.Model):
         return reduce(lambda x, y: x | y, queries)
 
 
-class Treatment(models.Model):
+class Treatment(UpstreamSyncBaseModel):
     referral = models.OneToOneField(
         Referral, related_name="treatment", on_delete=models.CASCADE)
     adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE)
@@ -59,7 +59,7 @@ class Treatment(models.Model):
     no_referral_reason = models.TextField(null=True, blank=True)
     further_referral_facility = models.ForeignKey(
         Facility, on_delete=models.SET_NULL, null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
     remarks = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)

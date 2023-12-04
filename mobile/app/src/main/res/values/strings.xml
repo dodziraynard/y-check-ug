@@ -63,7 +63,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="profile_complete">Profile complete</string>
-    <string name="psychosocial_survey">Psychosocial survey</string>
+    <string name="screening_test">Screening test</string>
     <string name="enter_assessment_values">Enter physical assessment value.</string>
     <string name="welcome">Welcome!</string>
     <string name="previous">Previous</string>
@@ -87,7 +87,7 @@
     <string name="what_todo">What would you want to do today?</string>
     <string name="hi">Hi</string>
     <string name="new_adolescent">New adolescent</string>
-    <string name="new_adolescent_instruction">Enroll a new adolescent to fill out the adolescent questionnaire.</string>
+    <string name="new_adolescent_instruction">Enroll a new adolescent to complete the screening tests.</string>
     <string name="search_adolescent">Search adolescent</string>
     <string name="search_adolescent_instruction">Enter lab assessment results.</string>
     <string name="home_screen_background_image">Home screen background image</string>
@@ -125,7 +125,11 @@
     <string name="adolescent_parent_consent"><![CDATA[Adolescent & parent consent]]></string>
     <string name="form_is_not_valid">Form is not valid.</string>
     <string name="please_confirm_consent">Please confirm consent</string>
-    <string name="total_session_hint">This survey\'s got maximum 11 sections. Celebrate after each one, and enjoy a game halfway through! Ready to continue?</string>
+    <string name="total_session_hint">Welcome to Y-Check! This screening tool has 11 parts, each of which takes about 2 minutes. There will be a short break after part 5 and we will play a small game together. Your answers will be kept confidential and your name will not be written anywhere on this screening test. \n\nTap continue to begin.</string>
     <string name="sex">Sex</string>
     <string name="please_choose_one">Please choose one.</string>
+    <string name="_3_navigate_questions_using_previous_or_next_buttons">3. Navigate questions using previous or next buttons.</string>
+    <string name="_2_tap_the_speaker_icon_next_to_the_question_or_option_to_hear_a_friendly_lady_read_the_text_aloud">2. Tap the speaker icon next to the question or option to hear a friendly lady read the text aloud.</string>
+    <string name="_1_pick_the_options_that_fit_you_for_each_question_they_re_multiple_choice">1. Pick the options that fit you for each question—they\'re multiple choice!</string>
+    <string name="please_read_me">Please read me.</string>
 </resources>

@@ -83,7 +83,7 @@ class PhotoActivity : AppCompatActivity() {
                             finish()
                         }
                         .setMessage(
-                            "Adolescent's profile setup is complete. Would you like to continue to the questionaire?"
+                            "Adolescent's profile setup is complete. Would you like to continue to the questionnaire?"
                         )
                 dialog.create()
                 dialog.show()
