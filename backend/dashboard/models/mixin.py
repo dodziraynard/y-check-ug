@@ -4,6 +4,7 @@ from django.db import models
 
 
 class UpstreamSyncBaseModel(models.Model):
+    id = models.CharField(max_length=120, default=uuid.uuid4, db_index=True, primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4, db_index=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
@@ -29,13 +30,11 @@ class UpstreamSyncBaseModel(models.Model):
     def serialise(self):
         fields = self._meta.fields
         my_model_fields = {field.name:self._get_serialised_value(field) for field in fields}
-        my_model_fields.pop("id", None)
         return my_model_fields
 
     @classmethod
     def deserialise_into_object(cls, model, data:dict):
         if not isinstance(data, dict): return None
-        data.pop("id", None)
         
         parameters = {}
         for key, value in data.items():
