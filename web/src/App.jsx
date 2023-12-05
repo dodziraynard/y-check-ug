@@ -25,6 +25,7 @@ import ProfilePictureWidget from "./widgets/ProfilePictureWidget";
 import ReferralDetailWidget from "./widgets/ReferralDetailWidget";
 import TreatmentsWidget from "./widgets/TreatmentsWidget";
 import TreatmentDetailWidget from "./widgets/TreatmentDetailWidget";
+import NodeWidget from "./widgets/NodeWidget";
 function App() {
   return (
     <Router>
@@ -55,6 +56,7 @@ function App() {
             <Route path="facilities" element={<FacilitiesWidget />} />
             <Route path="services" element={<ServiceWidget />} />
             <Route path="roles" element={<RolesWidget />} />
+            <Route path="nodes" element={<NodeWidget />} />
           </Route>
 
           <Route path="/user/profile" element={
