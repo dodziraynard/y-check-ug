@@ -1,6 +1,7 @@
 from functools import reduce
 from django.db import models
 from django.db.models import Q
+import uuid
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin)
 from accounts.managers import UserManager
@@ -12,6 +13,7 @@ from dashboard.models.mixin import UpstreamSyncBaseModel
 
 
 class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
+    id = models.CharField(max_length=120, default=uuid.uuid4, db_index=True, primary_key=True)
     username = models.CharField(max_length=30, unique=True)
     surname = models.CharField(max_length=50, null=True, blank=True)
     other_names = models.CharField(max_length=50, null=True, blank=True)

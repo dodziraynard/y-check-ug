@@ -11,7 +11,7 @@ from setup.models import NodeConfig
 
 
 class UpstreamSyncBaseModel(models.Model):
-    id = models.CharField(max_length=120, default=uuid.uuid4, db_index=True, primary_key=True)
+    # id = models.CharField(max_length=120, default=uuid.uuid4, db_index=True, primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4, db_index=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)

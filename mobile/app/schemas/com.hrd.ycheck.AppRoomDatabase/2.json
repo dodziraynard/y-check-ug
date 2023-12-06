@@ -2,16 +2,16 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "a8672bfd5c84f004aac3508d7de6b548",
+    "identityHash": "215bc9d13f8544d3413d032b6362f447",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `photo_url` TEXT, `uuid` TEXT, `username` TEXT, `phone` TEXT, `surname` TEXT, `otherNames` TEXT, `changedPassword` INTEGER NOT NULL, `permissions` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `photo_url` TEXT, `uuid` TEXT, `username` TEXT, `phone` TEXT, `securityAnswer1` TEXT, `securityAnswer2` TEXT, `surname` TEXT, `otherNames` TEXT, `changedPassword` INTEGER NOT NULL, `permissions` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -35,6 +35,18 @@
           {
             "fieldPath": "phone",
             "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "securityAnswer1",
+            "columnName": "securityAnswer1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "securityAnswer2",
+            "columnName": "securityAnswer2",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -74,7 +86,7 @@
       },
       {
         "tableName": "configurations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `host` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `host` TEXT NOT NULL, `showCreateAccount` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -87,6 +99,12 @@
             "columnName": "host",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "showCreateAccount",
+            "columnName": "showCreateAccount",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -102,7 +120,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8672bfd5c84f004aac3508d7de6b548')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '215bc9d13f8544d3413d032b6362f447')"
     ]
   }
 }
