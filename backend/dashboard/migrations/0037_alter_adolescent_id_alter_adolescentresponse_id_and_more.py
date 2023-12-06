@@ -14,26 +14,26 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='adolescent',
             name='id',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
+            field=models.CharField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='adolescentresponse',
             name='id',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
+            field=models.CharField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='checkuplocation',
             name='id',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
+            field=models.CharField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='referral',
             name='id',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
+            field=models.CharField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='treatment',
             name='id',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
+            field=models.CharField(db_index=True, default=uuid.uuid4, primary_key=True, serialize=False),
         ),
     ]
