@@ -36,7 +36,7 @@ class UpstreamSyncBaseModel(models.Model):
             if obj:
                 return obj.id
             return ""
-        return str(getattr(self, field.name))
+        return getattr(self, field.name)
 
     @classmethod
     def _get_deserialised_value(cls, field, value):

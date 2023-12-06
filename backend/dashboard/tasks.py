@@ -174,6 +174,7 @@ def download_entities_from_upstream(entity_name, model):
     if response.status_code == 200:
         data_items = response.json().get("data")
         for data_dict in data_items:
+            print("data_dict", data_dict)
             obj = UpstreamSyncBaseModel.deserialise_into_object(model, data_dict)
             print("Downloaded ", obj)
         return True
