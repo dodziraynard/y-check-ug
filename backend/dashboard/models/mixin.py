@@ -30,6 +30,7 @@ class UpstreamSyncBaseModel(models.Model):
             file =  getattr(self, field.name)
             if file:
                 return file.url
+            return None
         if type(field) == models.fields.related.ForeignKey:
             obj = getattr(self, field.name)
             if obj:
@@ -48,7 +49,7 @@ class UpstreamSyncBaseModel(models.Model):
         my_model_fields = {}
         for field in fields:
             value = self._get_serialised_value(field)
-            my_model_fields[field.name] =  value if value != "None" else None
+            my_model_fields[field.name] =  value
         return my_model_fields
     
     def _download_image(self, field_name, source_url):

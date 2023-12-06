@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dashboard',
     'rest_api.apps.RestApiConfig',
+    "django_celery_beat",
 ]
 
 

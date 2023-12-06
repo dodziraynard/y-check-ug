@@ -28,7 +28,7 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
     val currentQuestionConfirmed: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getQuestion(
-        adolescentId: Long,
+        adolescentId: String,
         currentQuestionId: Long,
         action: String?,
         questionType: String
@@ -65,7 +65,7 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
     }
 
     fun postSurveyResponse(
-        adolescentId: Long,
+        adolescentId: String,
         questionId: Long,
         value: String?,
         chosenOptions: List<Long>?

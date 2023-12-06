@@ -25,7 +25,7 @@ data class Adolescent(
     var gender: String,
     @SerializedName("photo_url") val photoUrl: String? = "",
     var createdByUserUuid: Long? = null,
-    @PrimaryKey val id: Long = 0,
+    @PrimaryKey val id: String = "0",
 
     val uuid: String? = "",
     var pid: String = "",

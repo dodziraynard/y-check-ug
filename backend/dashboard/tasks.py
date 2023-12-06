@@ -1,7 +1,7 @@
 import logging
 import requests
 from accounts.models import User
-from dashboard.models.questions import Section, Option, Question, PreviousResponseRequirement
+from dashboard.models import *
 from celery import shared_task
 from ycheck.utils.constants import SyncStatus
 from setup.models import NodeConfig
@@ -32,6 +32,51 @@ def sync_all_data():
     elif config.is_local and not config.sync_enabled:
         config.general_sync_message = "Syncing is disabled."
         config.save()
+
+
+@shared_task()
+def download_all_setup_data():
+    config, _ = NodeConfig.objects.get_or_create()
+
+    config.general_sync_message = "Downloading users"
+    config.save()
+    downloaded_users = download_users_from_upstream()
+
+    config.general_sync_message = "Downloading questions"
+    config.save()
+    downloaded_questions = download_questions_from_upstream()
+
+    config.general_sync_message = "Downloading facilities"
+    config.save()
+    downloaded_facilities = download_entities_from_upstream("facility", Facility)
+
+    config.general_sync_message = "Downloading services"
+    config.save()
+    downloaded_services = download_entities_from_upstream("service", Service)
+
+    config.general_sync_message = "Downloading flag label"
+    config.save()
+    downloaded_labels = download_entities_from_upstream("flaglabel", FlagLabel)
+
+    config.general_sync_message = "Downloading flag colours"
+    config.save()
+    downloaded_colours = download_entities_from_upstream("flagcolor", FlagColor)
+
+    config.general_sync_message = "Downloading flag conditions"
+    config.save()
+    downloaded_conditions = download_entities_from_upstream("flagcondition", FlagCondition)
+
+    config.general_sync_message = "Downloading checkup locations"
+    config.save()
+    downloaded_locations = download_entities_from_upstream("checkuplocation", CheckupLocation)
+    
+    if all([downloaded_users, downloaded_questions,downloaded_services, 
+            downloaded_labels, downloaded_colours, downloaded_conditions, downloaded_locations]):
+        config.general_sync_message = "Setup entities downloaded"
+    else:
+        config.general_sync_message = "Some setup entities couldn't be downloaded"
+    
+    config.save()
 
 
 @shared_task()
@@ -96,9 +141,13 @@ def download_questions_from_upstream():
                 config.save()
             
             options_donwnloaded = download_entities_from_upstream("option", Option)
+            if not options_donwnloaded:
+                config.questions_download_status_message = "Couldn't download all options"
+                config.questions_download_status = SyncStatus.FAILED.value
+            
             previous_req_donwnloaded = download_entities_from_upstream("previousresponserequirement", PreviousResponseRequirement)
-            if not all([options_donwnloaded, previous_req_donwnloaded]):
-                config.questions_download_status_message = "Couln't download previous response requirements for the questions."
+            if not previous_req_donwnloaded:
+                config.questions_download_status_message = "Couldn't download previous response requirements for the questions."
                 config.questions_download_status = SyncStatus.FAILED.value
             else:
                 config.questions_download_status = SyncStatus.COMPLETED.value

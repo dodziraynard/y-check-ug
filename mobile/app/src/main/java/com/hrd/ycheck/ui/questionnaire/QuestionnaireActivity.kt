@@ -166,7 +166,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveAndLoadNextQuestion(adolescentId: Long) {
+    private fun saveAndLoadNextQuestion(adolescentId: String) {
         if (newAdolescentResponse != null) {
             currentQuestionId = newAdolescentResponse!!.questionId
             val value = newAdolescentResponse!!.value
@@ -333,7 +333,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun confirmResponseValue(value: String, adolescentId: Long) {
+    private fun confirmResponseValue(value: String, adolescentId: String) {
         val dialogBuilder = AlertDialog.Builder(this)
         val inflater = this.layoutInflater
         val dialogView: View = inflater.inflate(R.layout.dialog_confirm_response, null)
