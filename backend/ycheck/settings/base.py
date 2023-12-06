@@ -178,6 +178,7 @@ SITE_CODE = os.environ.get("SITE_CODE", "LC")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_IMPORTS = [
+    "dashboard.tasks",
 ]
 
 REDIS_HOST = os.environ.get(

@@ -183,19 +183,19 @@ def download_entities_from_upstream(entity_name, model):
 @shared_task()
 def upload_adolescents():
     config, _ = NodeConfig.objects.get_or_create()
-    if config.adolescents_sync_status == SyncStatus.PROGRESS.value:
+    if config.adolescents_upload_status == SyncStatus.PROGRESS.value:
         return
 
 
 @shared_task()
 def upload_treatments():
     config, _ = NodeConfig.objects.get_or_create()
-    if config.treatments_sync_status == SyncStatus.PROGRESS.value:
+    if config.treatments_upload_status == SyncStatus.PROGRESS.value:
         return
 
 
 @shared_task()
 def upload_referrals():
     config, _ = NodeConfig.objects.get_or_create()
-    if config.referrals_sync_status == SyncStatus.PROGRESS.value:
+    if config.referrals_upload_status == SyncStatus.PROGRESS.value:
         return
