@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4),
         ),
     ]
