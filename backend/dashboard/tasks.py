@@ -40,11 +40,11 @@ def download_all_setup_data():
 
     config.general_sync_message = "Downloading users"
     config.save()
-    downloaded_users = download_users_from_upstream()
+    download_users_from_upstream()
 
     config.general_sync_message = "Downloading questions"
     config.save()
-    downloaded_questions = download_questions_from_upstream()
+    download_questions_from_upstream()
 
     config.general_sync_message = "Downloading facilities"
     config.save()
@@ -70,7 +70,7 @@ def download_all_setup_data():
     config.save()
     downloaded_locations = download_entities_from_upstream("checkuplocation", CheckupLocation)
     
-    if all([downloaded_users, downloaded_questions,downloaded_services, 
+    if all([downloaded_services, 
             downloaded_labels, downloaded_colours, downloaded_conditions, downloaded_locations]):
         config.general_sync_message = "Setup entities downloaded"
     else:
@@ -125,7 +125,7 @@ def download_questions_from_upstream():
         config.questions_download_status_message = "Couldn't download all sections."
         config.questions_download_status = SyncStatus.FAILED.value
         config.save()
-        return
+        return False
 
     url = config.up_stream_host + "/api/sync/download/question/"
     try:
@@ -150,6 +150,7 @@ def download_questions_from_upstream():
                 config.questions_download_status_message = "Couldn't download previous response requirements for the questions."
                 config.questions_download_status = SyncStatus.FAILED.value
             else:
+                config.questions_download_status_message = "Questions downloaded."
                 config.questions_download_status = SyncStatus.COMPLETED.value
             config.save()
         else:
@@ -174,7 +175,6 @@ def download_entities_from_upstream(entity_name, model):
     if response.status_code == 200:
         data_items = response.json().get("data")
         for data_dict in data_items:
-            print("data_dict", data_dict)
             obj = UpstreamSyncBaseModel.deserialise_into_object(model, data_dict)
             print("Downloaded ", obj)
         return True
