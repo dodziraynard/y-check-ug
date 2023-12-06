@@ -6,7 +6,7 @@ from celery import shared_task
 from ycheck.utils.constants import SyncStatus
 from setup.models import NodeConfig
 from dashboard.models.mixin import UpstreamSyncBaseModel
-
+from django.db.utils import IntegrityError
 
 logger = logging.getLogger("app")
 
@@ -49,7 +49,11 @@ def download_users_from_upstream():
             users = response.json().get("data")
             total_users = len(users)
             for index, user_dict in enumerate(users, 1):
-                UpstreamSyncBaseModel.deserialise_into_object(User, user_dict)
+                try:
+                    UpstreamSyncBaseModel.deserialise_into_object(User, user_dict)
+                except IntegrityError as e:
+                    print("error", type(e), str(e))
+                    continue
                 config.users_download_status_message = f"Downloaded {index}/{total_users}, {int(index/total_users*100)}%"
                 config.save()
             config.users_download_status = SyncStatus.COMPLETED.value
@@ -57,7 +61,7 @@ def download_users_from_upstream():
             config.users_download_status_message = "User query request failed."
             config.users_download_status = SyncStatus.FAILED.value
     except Exception as e:
-        print("error", str(e))
+        print("error", type(e), str(e))
         config.users_download_status_message = f"Error occured: {str(e)}"
         config.users_download_status = SyncStatus.FAILED.value
     finally:
@@ -98,14 +102,16 @@ def download_questions_from_upstream():
                 config.questions_download_status = SyncStatus.FAILED.value
             else:
                 config.questions_download_status = SyncStatus.COMPLETED.value
+            config.save()
         else:
             config.questions_download_status_message = "User query request failed."
             config.questions_download_status = SyncStatus.FAILED.value
     except Exception as e:
-        print("Error", str(e.with_traceback()))
-        config.questions_download_status_message = f"Error occured: {str(e.with_traceback())}"
+        print("Error", e)
+        config.questions_download_status_message = f"Error occured: {str(e)}"
         config.questions_download_status = SyncStatus.FAILED.value
     finally:
+        config.questions_download_status = SyncStatus.FAILED.value
         config.save()
 
 
@@ -118,8 +124,9 @@ def download_entities_from_upstream(entity_name, model):
     response = requests.get(url)
     if response.status_code == 200:
         data_items = response.json().get("data")
-        for data_dict in enumerate(data_items, 1):
-            UpstreamSyncBaseModel.deserialise_into_object(model, data_dict)
+        for data_dict in data_items:
+            obj = UpstreamSyncBaseModel.deserialise_into_object(model, data_dict)
+            print("Downloaded ", obj)
         return True
     return False
 

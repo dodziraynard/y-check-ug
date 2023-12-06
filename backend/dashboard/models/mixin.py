@@ -56,6 +56,7 @@ class UpstreamSyncBaseModel(models.Model):
         filename = source_url.split("/")[-1].split(".")[0] + ".jpg"
         if response.status_code == 200:
             image = PillowImage.open(BytesIO(response.content))
+            image = image.convert('RGB')
             image_io = BytesIO()
             image.save(image_io, "jpeg", quality=100)
             file = files.File(image_io, filename)
@@ -77,7 +78,9 @@ class UpstreamSyncBaseModel(models.Model):
 
     @classmethod
     def deserialise_into_object(cls, model, data:dict, download_files=True):
-        if not isinstance(data, dict): return None
+        if not isinstance(data, dict):
+            print("Valid data type. Expected dict but got ", type(data))
+            return None
     
         parameters = {}
         unique_parameters = {}
@@ -95,9 +98,9 @@ class UpstreamSyncBaseModel(models.Model):
         exists = model.objects.filter(**unique_parameters).exists()
         if exists:
             all(map(parameters.pop, unique_parameters))
-            obj = model.objects.update(**parameters)
+            model.objects.filter(**unique_parameters).update(**parameters)
         else:
-            obj = model.objects.create(**parameters)
+            model.objects.create(**parameters)
         obj = model.objects.filter(**unique_parameters).first()
         
         # Download files
