@@ -119,7 +119,7 @@ class AdolescentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class OptionSerlialiser(serializers.ModelSerializer):
+class OptionSerlializer(serializers.ModelSerializer):
     value = serializers.SerializerMethodField()
     audio_url = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
@@ -147,7 +147,7 @@ class OptionSerlialiser(serializers.ModelSerializer):
         fields = ["id", "value", "numeric_value", "audio_url", "image_url"]
 
 
-class QuestionSerialiser(serializers.ModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
     text = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
     options = serializers.SerializerMethodField()
@@ -176,7 +176,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
         if hasattr(question, "options"):
             if not hasattr(self, "options"):
                 self.options = question.options.all()
-            return OptionSerlialiser(self.options, context=self.context, many=True).data
+            return OptionSerlializer(self.options, context=self.context, many=True).data
         return None
 
     def get_image_url(self, question):
@@ -208,7 +208,7 @@ class QuestionSerialiser(serializers.ModelSerializer):
         ]
 
 
-class SectionSerialiser(serializers.ModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
@@ -221,7 +221,7 @@ class AdolescentResponseSerialiser(serializers.ModelSerializer):
     def get_chosen_options(self, response):
         if hasattr(response, "chosen_options"):
             options = response.chosen_options.all()
-            return OptionSerlialiser(options, context=self.context,  many=True).data
+            return OptionSerlializer(options, context=self.context,  many=True).data
         return None
 
     class Meta:
@@ -307,7 +307,7 @@ class GroupPermissionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ReferralSerialiser(serializers.ModelSerializer):
+class ReferralSerializer(serializers.ModelSerializer):
     facility_name = serializers.SerializerMethodField()
     services = ServiceSerializer(many=True)
     created_by = serializers.SerializerMethodField()
@@ -328,7 +328,7 @@ class ReferralSerialiser(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TreatmentSerialiser(serializers.ModelSerializer):
+class TreatmentSerializer(serializers.ModelSerializer):
     adolescent = AdolescentSerializer()
     facility_name = serializers.SerializerMethodField()
     further_referred_to = serializers.SerializerMethodField()

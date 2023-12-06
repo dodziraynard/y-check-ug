@@ -10,7 +10,7 @@ QUESTION_TYPE = [
 ]
 
 
-class Section(models.Model):
+class Section(UpstreamSyncBaseModel):
     name = models.CharField(max_length=100, db_index=True)
     instruction = models.TextField()
     question_type = models.CharField(
@@ -23,7 +23,7 @@ class Section(models.Model):
         return self.name
 
 
-class PreviousResponseRequirement(models.Model):
+class PreviousResponseRequirement(UpstreamSyncBaseModel):
     requirement_for = models.ForeignKey(
         "Question", related_name="previous_response_requirements", on_delete=models.CASCADE, db_index=True)
     question = models.ForeignKey("Question", on_delete=models.CASCADE)
@@ -52,7 +52,7 @@ class PreviousResponseRequirement(models.Model):
         return matched if not self.is_inverted else not matched
 
 
-class Question(models.Model):
+class Question(UpstreamSyncBaseModel):
     TYPE_CHOICES = [
         ('primary', 'primary'),
         ('secondary', 'secondary'),
@@ -66,7 +66,7 @@ class Question(models.Model):
         ('range_slider', 'range_slider'),
     ]
     admins_comment = models.TextField(null=True, blank=True)
-    caption = models.CharField(max_length=100, default="", blank=True)
+    caption = models.CharField(max_length=100, default="", null=True, blank=True)
     question_type = models.TextField(choices=QUESTION_TYPE)
     question_id = models.CharField(max_length=50, unique=True, db_index=True)
     section = models.ForeignKey(
@@ -113,7 +113,7 @@ class Question(models.Model):
         return response.get_values_as_list() if response else []
 
 
-class Option(models.Model):
+class Option(UpstreamSyncBaseModel):
     question = models.ForeignKey(
         Question, related_name="options", on_delete=models.CASCADE, db_index=True)
     value = models.CharField(max_length=200)

@@ -16,8 +16,8 @@ from dashboard.models import Adolescent, CheckupLocation, AdolescentResponse, Op
 
 from rest_api.serializers import (CheckupLocationSerializer,
                                   AdolescentSerializer,
-                                  QuestionSerialiser,
-                                  SectionSerialiser,
+                                  QuestionSerializer,
+                                  SectionSerializer,
                                   ResponseSerialiser,
                                   AdolescentResponseSerialiser,
                                   MobileConfigSerializer,
@@ -198,7 +198,7 @@ class GetSurveyQuestions(generics.GenericAPIView):
     Retrieve a list of checkup locations.
     """
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = QuestionSerialiser
+    serializer_class = QuestionSerializer
 
     def get(self, request, *args, **kwargs):
         current_question_id = request.GET.get("current_question_id")
@@ -281,8 +281,8 @@ class GetSurveyQuestions(generics.GenericAPIView):
             total_sessions = min(total_sessions, 10)
 
         response_data = {
-            "question": QuestionSerialiser(question, context={"request": request}).data if question else None,
-            "new_section": SectionSerialiser(new_section).data if new_section and action == "next" else None,
+            "question": QuestionSerializer(question, context={"request": request}).data if question else None,
+            "new_section": SectionSerializer(new_section).data if new_section and action == "next" else None,
             "current_session_number": current_session_number,
             "total_sessions": total_sessions,
             "current_response": AdolescentResponseSerialiser(response, context={"request": request}).data if response else None,

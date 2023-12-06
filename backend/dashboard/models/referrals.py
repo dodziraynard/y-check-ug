@@ -2,12 +2,12 @@ from functools import reduce
 from django.db import models
 
 from ycheck.utils.constants import ReferralStatus
-from .adolescent import Adolescent
+from .adolescent import *
 from .facility import Facility
 from .mixin import UpstreamSyncBaseModel
 
 
-class Service(models.Model):
+class Service(UpstreamSyncBaseModel):
     name = models.CharField(max_length=200, db_index=True)
     related_flag_labels = models.ManyToManyField(
         "dashboard.FlagLabel", blank=True)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from dashboard.models import *
-from setup.models import MobileConfig
+from setup.models import MobileConfig, NodeConfig
 
 
 class OptionInline(admin.TabularInline):
@@ -69,3 +69,5 @@ admin.site.register(Facility)
 admin.site.register(Service)
 admin.site.register(Treatment)
 admin.site.register(MobileConfig)
+admin.site.register(NodeConfig)
+

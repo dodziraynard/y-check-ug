@@ -157,7 +157,7 @@ class TreatmentsAPI(SimpleCrudMixin):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
     required_permissions = ["setup.view_adolescent"]
 
-    serializer_class = TreatmentSerialiser
+    serializer_class = TreatmentSerializer
     model_class = Treatment
     response_data_label = "treatment"
     response_data_label_plural = "treatments"
@@ -168,7 +168,7 @@ class AdolescentReferrals(generics.GenericAPIView):
     Get the summary flags for an adolescent/patient.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    serializer_class = ReferralSerialiser
+    serializer_class = ReferralSerializer
 
     def get(self, request, pid, *args, **kwargs):
         adolescent = Adolescent.objects.filter(pid=pid).first()
@@ -226,7 +226,7 @@ class MyReferrals(generics.GenericAPIView):
     Get the list of referrals for user's facility.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    serializer_class = ReferralSerialiser
+    serializer_class = ReferralSerializer
 
     def get(self, request, *args, **kwargs):
         referrals = Referral.objects.all().order_by("-created_at")
@@ -279,7 +279,7 @@ class ReferralDetail(generics.GenericAPIView):
     Get the details of a referral
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    serializer_class = ReferralSerialiser
+    serializer_class = ReferralSerializer
 
     def get(self, request, referral_id, *args, **kwargs):
         referral = Referral.objects.filter(id=referral_id).first()
@@ -315,7 +315,7 @@ class ReferralTreatment(generics.GenericAPIView):
     Get the treatment feedback for a referral
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    serializer_class = TreatmentSerialiser
+    serializer_class = TreatmentSerializer
 
     def get(self, request, referral_id, *args, **kwargs):
         referral = Referral.objects.filter(id=referral_id).first()

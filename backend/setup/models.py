@@ -20,10 +20,20 @@ class NodeConfig(models.Model):
     up_stream_host = models.URLField(null=True, blank=True)
     sync_enabled = models.BooleanField(default=True)
 
-    adolescents_sync_status = models.CharField(max_length=200)
-    treatments_sync_status = models.CharField(max_length=200)
-    referrals_sync_status = models.CharField(max_length=200)
-    users_sync_status = models.CharField(max_length=100, choices=SYNC_STATUS)
+    adolescents_upload_status = models.CharField(max_length=200, choices=SYNC_STATUS)
+    treatments_upload_status = models.CharField(max_length=200, choices=SYNC_STATUS)
+    referrals_upload_status = models.CharField(max_length=200, choices=SYNC_STATUS)
+    
+    users_download_status = models.CharField(max_length=100, choices=SYNC_STATUS)
+    users_download_status_message = models.TextField(null=True, blank=True)
+
+
+    
+    questions_download_status = models.CharField(max_length=100, choices=SYNC_STATUS)
+    questions_download_status_message = models.TextField(null=True, blank=True)
+
+
+
 
     general_sync_message = models.TextField(null=True, blank=True)
 

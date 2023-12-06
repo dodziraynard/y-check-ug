@@ -12,7 +12,7 @@ color_code_choices = [
 ]
 
 
-class SummaryFlag(models.Model):
+class SummaryFlag(UpstreamSyncBaseModel):
     adolescent = models.ForeignKey(
         Adolescent, on_delete=models.CASCADE, db_index=True)
     label = models.ForeignKey(
@@ -73,7 +73,7 @@ class SummaryFlag(models.Model):
         return result
 
 
-class FlagLabel(models.Model):
+class FlagLabel(UpstreamSyncBaseModel):
     name = models.CharField(max_length=50, unique=True, db_index=True)
 
     def __str__(self) -> str:
@@ -110,7 +110,7 @@ class FlagLabel(models.Model):
             return fallback_color.color_code
 
 
-class FlagColor(models.Model):
+class FlagColor(UpstreamSyncBaseModel):
     color_name_choices = [
         ("RED", "RED"),
         ("ORANGE", "ORANGE"),
@@ -131,7 +131,7 @@ class FlagColor(models.Model):
         return super().save(*args, **kwars)
 
 
-class FlagCondition(models.Model):
+class FlagCondition(UpstreamSyncBaseModel):
 
     OPERATORS = [
         ("equal_expected_value", "equal_expected_value"),

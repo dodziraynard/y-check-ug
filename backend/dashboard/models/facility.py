@@ -1,7 +1,7 @@
 from django.db import models
+from .mixin import UpstreamSyncBaseModel
 
-
-class Facility(models.Model):
+class Facility(UpstreamSyncBaseModel):
     name = models.CharField(max_length=100, db_index=True)
     location = models.CharField(max_length=100)
 
