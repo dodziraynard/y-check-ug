@@ -1,3 +1,4 @@
+import json
 import logging
 import requests
 from accounts.models import User
@@ -48,7 +49,8 @@ def download_all_setup_data():
 
     config.general_sync_message = "Downloading facilities"
     config.save()
-    downloaded_facilities = download_entities_from_upstream("facility", Facility)
+    downloaded_facilities = download_entities_from_upstream(
+        "facility", Facility)
 
     config.general_sync_message = "Downloading services"
     config.save()
@@ -60,22 +62,25 @@ def download_all_setup_data():
 
     config.general_sync_message = "Downloading flag colours"
     config.save()
-    downloaded_colours = download_entities_from_upstream("flagcolor", FlagColor)
+    downloaded_colours = download_entities_from_upstream(
+        "flagcolor", FlagColor)
 
     config.general_sync_message = "Downloading flag conditions"
     config.save()
-    downloaded_conditions = download_entities_from_upstream("flagcondition", FlagCondition)
+    downloaded_conditions = download_entities_from_upstream(
+        "flagcondition", FlagCondition)
 
     config.general_sync_message = "Downloading checkup locations"
     config.save()
-    downloaded_locations = download_entities_from_upstream("checkuplocation", CheckupLocation)
-    
-    if all([downloaded_services, 
+    downloaded_locations = download_entities_from_upstream(
+        "checkuplocation", CheckupLocation)
+
+    if all([downloaded_services,
             downloaded_labels, downloaded_colours, downloaded_conditions, downloaded_locations]):
         config.general_sync_message = "Setup entities downloaded"
     else:
         config.general_sync_message = "Some setup entities couldn't be downloaded"
-    
+
     config.save()
 
 
@@ -95,7 +100,8 @@ def download_users_from_upstream():
             total_users = len(users)
             for index, user_dict in enumerate(users, 1):
                 try:
-                    UpstreamSyncBaseModel.deserialise_into_object(User, user_dict)
+                    UpstreamSyncBaseModel.deserialise_into_object(
+                        User, user_dict)
                 except IntegrityError as e:
                     print("error", type(e), str(e))
                     continue
@@ -112,14 +118,14 @@ def download_users_from_upstream():
     finally:
         config.save()
 
-    
+
 @shared_task()
 def download_questions_from_upstream():
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
         logger.info("No host or syncing already in progress.")
         return
-    
+
     sections_donwnloaded = download_entities_from_upstream("section", Section)
     if not sections_donwnloaded:
         config.questions_download_status_message = "Couldn't download all sections."
@@ -136,16 +142,19 @@ def download_questions_from_upstream():
             users = response.json().get("data")
             total_users = len(users)
             for index, user_dict in enumerate(users, 1):
-                UpstreamSyncBaseModel.deserialise_into_object(Question, user_dict)
+                UpstreamSyncBaseModel.deserialise_into_object(
+                    Question, user_dict)
                 config.questions_download_status_message = f"Downloaded {index}/{total_users}, {int(index/total_users*100)}%"
                 config.save()
-            
-            options_donwnloaded = download_entities_from_upstream("option", Option)
+
+            options_donwnloaded = download_entities_from_upstream(
+                "option", Option)
             if not options_donwnloaded:
                 config.questions_download_status_message = "Couldn't download all options"
                 config.questions_download_status = SyncStatus.FAILED.value
-            
-            previous_req_donwnloaded = download_entities_from_upstream("previousresponserequirement", PreviousResponseRequirement)
+
+            previous_req_donwnloaded = download_entities_from_upstream(
+                "previousresponserequirement", PreviousResponseRequirement)
             if not previous_req_donwnloaded:
                 config.questions_download_status_message = "Couldn't download previous response requirements for the questions."
                 config.questions_download_status = SyncStatus.FAILED.value
@@ -175,27 +184,44 @@ def download_entities_from_upstream(entity_name, model):
     if response.status_code == 200:
         data_items = response.json().get("data")
         for data_dict in data_items:
-            obj = UpstreamSyncBaseModel.deserialise_into_object(model, data_dict)
+            obj = UpstreamSyncBaseModel.deserialise_into_object(
+                model, data_dict)
             print("Downloaded ", obj)
         return True
     return False
 
+
 @shared_task()
 def upload_adolescents():
     config, _ = NodeConfig.objects.get_or_create()
-    if config.adolescents_upload_status == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
         return
+
+    url = config.up_stream_host + f"/api/sync/upload/adolescent/"
+    adolescents = Adolescent.objects.filter(synced=False)
+    data = {"data_items": json.dumps([obj.serialise() for obj in adolescents])}
+    response = requests.post(url, data=data)
+    if response.status_code == 200:
+        response = response.json()
+        success_ids = response.get("success_ids", [])
+        error_message = response.get("error_message")
+        adolescents.filter(id__in=success_ids).update(synced=True)
+        if error_message:
+            config.adolescents_upload_status_message = error_message
+    else:
+        config.adolescents_upload_status_message = response.content.decode()
+    config.save()
 
 
 @shared_task()
 def upload_treatments():
     config, _ = NodeConfig.objects.get_or_create()
-    if config.treatments_upload_status == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host or config.treatments_upload_status == SyncStatus.PROGRESS.value:
         return
 
 
 @shared_task()
 def upload_referrals():
     config, _ = NodeConfig.objects.get_or_create()
-    if config.referrals_upload_status == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host or config.referrals_upload_status == SyncStatus.PROGRESS.value:
         return

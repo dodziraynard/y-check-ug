@@ -12,7 +12,6 @@ from setup.models import NodeConfig
 
 class UpstreamSyncBaseModel(models.Model):
     id = models.BigAutoField(primary_key=True, db_index=True)
-    uuid = models.UUIDField(default=uuid.uuid4, db_index=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
