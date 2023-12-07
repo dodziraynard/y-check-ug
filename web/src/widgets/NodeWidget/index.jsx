@@ -8,24 +8,24 @@ import { BASE_API_URI } from '../../utils/constants';
 
 function NodeWidget() {
     const [triggerReload, setTriggerReload] = useState(0);
-    const deletionModalRef = useRef(null);
-    const [deleteAlertModal, setDeletionAlertModal] = useState(null);
+    const nodeModalRef = useRef(null);
+    const [nodeModal, setNodeModal] = useState(null);
 
     useEffect(() => {
-        if (deletionModalRef.current !== null && deleteAlertModal === null) {
-            const modal = new Modal(deletionModalRef.current, { keyboard: false })
-            setDeletionAlertModal(modal)
+        if (nodeModalRef.current !== null && nodeModal === null) {
+            const modal = new Modal(nodeModalRef.current, { keyboard: false })
+            setNodeModal(modal)
         }
         
-    }, [deleteAlertModal])
+    }, [nodeModal])
 
-    const showDeleteUserAlert = (user) => {
-        deleteAlertModal?.show()
+    const showNodeModal = (user) => {
+        nodeModal?.show()
     }
    
     return (
         <Fragment>
-            <div ref={deletionModalRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div ref={nodeModalRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-md">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -106,7 +106,7 @@ function NodeWidget() {
                             value: "Actions", textAlign: "right", render: (item) => {
                                 return (
                                     <div className="d-flex justify-content-end">
-                                        <button className="btn btn-sm btn-primary me-1 d-flex" onClick={() => showDeleteUserAlert(item)}>
+                                        <button className="btn btn-sm btn-primary me-1 d-flex" onClick={() => showNodeModal(item)}>
                                             <i className="bi bi-list me-1"></i>
                                             More
                                         </button>
