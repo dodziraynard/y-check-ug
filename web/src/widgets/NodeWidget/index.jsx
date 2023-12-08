@@ -26,7 +26,7 @@ function NodeWidget() {
     return (
         <Fragment>
             <div ref={nodeModalRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-md">
+                <div className="modal-dialog modal-lg" style={{ marginLeft: '400px' }}>
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">
@@ -57,12 +57,36 @@ function NodeWidget() {
                                         <strong className="col-md-6 text">sjss hgysys</strong>
                                     </div>
                                     <div className="row align-items-center">
+                                        <h6 className="col-md-6 text-muted"> Adolescents Upload Status Message</h6>
+                                        <strong className="col-md-6 text">sjss hgysys</strong>
+                                    </div>
+                                    <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Treatments Sync Status</h6>
                                         <strong className="col-md-6 text">louis</strong>
                                     </div>
                                     
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Referrals Sync Status</h6>
+                                        <strong className="col-md-6 text">louis</strong>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <h6 className="col-md-6 text-muted">Users Download Status</h6>
+                                        <strong className="col-md-6 text">louis</strong>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <h6 className="col-md-6 text-muted">Users Download Status Message</h6>
+                                        <strong className="col-md-6 text">louis</strong>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <h6 className="col-md-6 text-muted">Questions Download Status</h6>
+                                        <strong className="col-md-6 text">louis</strong>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <h6 className="col-md-6 text-muted">Questions Download Status Message</h6>
+                                        <strong className="col-md-6 text">louis</strong>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <h6 className="col-md-6 text-muted">General Sync Message</h6>
                                         <strong className="col-md-6 text">louis</strong>
                                     </div>
                                     
