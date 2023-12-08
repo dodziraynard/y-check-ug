@@ -23,7 +23,7 @@ class AdolescentsAPI(SimpleCrudMixin):
     Permform CRUD on adolescent.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    required_permissions = ["setup.view_adolescent"]
+    required_permissions = ["setup.access_all_patients"]
 
     serializer_class = AdolescentSerializer
     model_class = Adolescent
@@ -141,7 +141,7 @@ class FacilitiesAPI(SimpleCrudMixin):
     Permform CRUD on facility.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    required_permissions = ["setup.view_adolescent"]
+    required_permissions = ["setup.access_all_patients"]
 
     serializer_class = FacilitySerializer
     model_class = Facility
@@ -155,7 +155,7 @@ class TreatmentsAPI(SimpleCrudMixin):
     Permform CRUD on treatment object.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    required_permissions = ["setup.view_adolescent"]
+    required_permissions = ["setup.access_all_patients"]
 
     serializer_class = TreatmentSerializer
     model_class = Treatment
