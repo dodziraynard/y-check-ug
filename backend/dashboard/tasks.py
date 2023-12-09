@@ -195,6 +195,34 @@ def download_entities_from_upstream(model_name, model):
     return False
 
 
+def prepare_entity_files(objects: list[UpstreamSyncBaseModel], model_name: str) -> dict | None:
+    logger.debug("Upload all %s files triggered.", model_name)
+    config, _ = NodeConfig.objects.get_or_create()
+    if not config.up_stream_host:
+        logger.debug(
+            "No hosts configured or %s upload already in process", model_name)
+        return
+
+    failed_ids = []
+    for item in objects:
+        url = config.up_stream_host + \
+            f"/api/sync/upload-file/{model_name}/{item.id}"
+
+        fields = item.get_file_fields()
+        for field in fields:
+            file = getattr(item, field)
+            if not file:
+                continue
+            file = file.path
+            files = {'file': open(file, 'rb')}
+            values = {"field_name": field}
+            response = requests.post(url, files=files, data=values)
+            if not (response.status_code == 200 and response.json().get("success")):
+                failed_ids.append(item.id)
+
+    objects.exclude(id__in=list(set(failed_ids))).update(synced=True)
+
+
 def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: str, status_field: str):
     logger.debug("Upload all %s entities triggered.", model_name)
 
@@ -208,7 +236,7 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
     config.save()
 
     url = config.up_stream_host + f"/api/sync/upload/{model_name}/"
-    objects = model.objects.filter(synced=False)
+    objects: list[UpstreamSyncBaseModel] = model.objects.filter(synced=False)
     data = {"data_items": json.dumps([obj.serialise() for obj in objects])}
     response = requests.post(url, data=data)
     if response.status_code == 200:
@@ -218,10 +246,13 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
                      str(len(success_ids)), model_name)
 
         error_message = response.get("error_message")
-        objects.filter(id__in=success_ids).update(synced=True)
+        updated_objects = objects.filter(id__in=success_ids)
         if error_message:
             logger.debug("Server errored: %s", error_message)
             setattr(config, f"{status_field}_message", error_message)
+
+        # Now upload files associated with the objects.
+        prepare_entity_files(updated_objects, model_name)
     else:
         logger.debug("Request to %s returned %s",
                      url, response.content.decode())

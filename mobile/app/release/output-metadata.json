@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 2,
-      "versionName": "1.4",
-      "outputFile": "ycheck-v1.4-release.apk"
+      "versionCode": 4,
+      "versionName": "2.0",
+      "outputFile": "ycheck-v2.0-release.apk"
     }
   ],
   "elementType": "File"

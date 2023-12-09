@@ -1,6 +1,7 @@
 import logging
 from io import BytesIO
 from datetime import datetime
+from unittest import result
 import uuid
 from django.db import models
 import requests
@@ -15,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class UpstreamSyncBaseModel(models.Model):
-    id = models.CharField(primary_key=True, max_length=120, unique=True, default=uuid.uuid4, db_index=True)
+    id = models.CharField(primary_key=True, max_length=120,
+                          unique=True, default=uuid.uuid4, db_index=True)
     uuid = models.UUIDField(default=uuid.uuid4, null=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
@@ -54,6 +56,14 @@ class UpstreamSyncBaseModel(models.Model):
             return datetime.fromisoformat(value).astimezone()
         return value if value != "" else None
 
+    def get_file_fields(self):
+        fields = self._meta.fields
+        result = []
+        for field in fields:
+            if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
+                result.append(field.name)
+        return result
+
     def serialise(self):
         logger.debug("Serialising %s", str(self))
 
@@ -78,7 +88,7 @@ class UpstreamSyncBaseModel(models.Model):
             getattr(self, field_name).save(filename, file)
             logger.debug("Saved %s", getattr(self, field_name).url)
         else:
-            logger.error("error while downloading image: %s",
+            logger.error("Error while downloading image: %s",
                          response.status_code)
 
     def _download_file(self, field_name, source_url):

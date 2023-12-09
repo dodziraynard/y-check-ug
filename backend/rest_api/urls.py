@@ -54,4 +54,5 @@ urlpatterns = [
     # Syncing
     path("sync/download/<str:model_name>/", views.DownStreamSyncModelView.as_view()),
     path("sync/upload/<str:model_name>/", views.UpstreamSyncModelView.as_view()),
+    path("sync/upload-file/<str:model_name>/<str:instance_id>", views.UpstreamFileUpload.as_view()),
 ]
