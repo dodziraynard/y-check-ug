@@ -29,7 +29,7 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
 
     fun getQuestion(
         adolescentId: String,
-        currentQuestionId: Long,
+        currentQuestionId: String,
         action: String?,
         questionType: String
     ) {
@@ -66,7 +66,7 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
 
     fun postSurveyResponse(
         adolescentId: String,
-        questionId: Long,
+        questionId: String,
         value: String?,
         chosenOptions: List<Long>?
     ) {

@@ -1,10 +1,11 @@
 package com.hrd.ycheck.models
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
 data class Option(
-    val id: String,
+    @PrimaryKey val id: String = "0",
     val value: String,
     @SerializedName("numeric_value") val numericValue: String,
     @SerializedName("audio_url") val audioUrl: String? = null,

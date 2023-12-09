@@ -1,10 +1,11 @@
 package com.hrd.ycheck.models
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
 data class Question(
-    val id: Long,
+    @PrimaryKey val id: String = "0",
     @SerializedName("question_id") val questionID: String? = null,
     val number: Int,
     val caption: String,

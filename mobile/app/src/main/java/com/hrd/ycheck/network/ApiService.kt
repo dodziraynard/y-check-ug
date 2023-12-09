@@ -64,7 +64,7 @@ interface ApiService {
     @GET("get-survey-questions/")
     fun getQuestion(
         @Query("adolescent_id") adolescentId: String,
-        @Query("current_question_id") currentQuestionId: Long,
+        @Query("current_question_id") currentQuestionId: String,
         @Query("action") action: String? = "next",
         @Query("question_type") questionType: String? = "survey",
     ): Call<GetSurveyQuestionResponse?>?
@@ -73,7 +73,7 @@ interface ApiService {
     @POST("post-survey-response/")
     fun postSurveyResponse(
         @Field("adolescent_id") adolescentId: String,
-        @Field("question_id") questionId: Long,
+        @Field("question_id") questionId: String,
         @Field("value") value: String? = null,
         @Field("option_ids") optionIds: List<Long>? = null,
     ): Call<PostSurveyResponseResponse?>?

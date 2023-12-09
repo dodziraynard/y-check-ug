@@ -32,9 +32,9 @@ class QuestionnaireActivity : AppCompatActivity() {
     private var newAdolescentResponse: NewAdolescentResponse? = null
     private var adolescent: Adolescent? = null
     private var questionnaireType: String = QuestionnaireType.SURVEY
-    private var currentQuestionId: Long = 0
+    private var currentQuestionId: String = "-1"
     private var currentQuestion: Question? = null
-    lateinit var audioPlayer: AudioPlayer
+    private lateinit var audioPlayer: AudioPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +52,8 @@ class QuestionnaireActivity : AppCompatActivity() {
         }
 
         questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
-        currentQuestionId = intent.getLongExtra("current_question_id", 0L)
-        val congratulatedFor = intent.getLongExtra("congratulated_for_session_id", -1L)
+        currentQuestionId = intent.getStringExtra("current_question_id") ?: "-1"
+        val congratulatedFor = intent.getLongExtra("congratulated_for_session_number", -1L)
 
         if (questionnaireType == SURVEY_PRACTICE) {
             showPracticeTourText()
@@ -98,7 +98,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         }
 
         binding.previousButton.setOnClickListener {
-            val questionId = newAdolescentResponse?.questionId ?: 0
+            val questionId = newAdolescentResponse?.questionId ?: "0"
             viewModel.getQuestion(adolescentId, questionId, "previous", questionnaireType)
         }
 
@@ -129,10 +129,10 @@ class QuestionnaireActivity : AppCompatActivity() {
                     }
                     // else if not first section and congratulation not
                     // shown for previous section, show congratulation screen.
-                    else if (currentSessionNumber > 1 && congratulatedFor != section.id) {
+                    else if (currentSessionNumber > 1 && congratulatedFor != section.number) {
                         val message =
-                            "Session ${currentSessionNumber - 1} of ${totalSessions} completed. Continue to unlock and play the fun games we mentioned earlier."
-                        showSessionEndScreen(message, questionnaireType, section.id)
+                            "Session ${currentSessionNumber - 1} of $totalSessions completed. Continue to unlock and play the fun games we mentioned earlier."
+                        showSessionEndScreen(message, questionnaireType, section.number)
                     } else {
                         renderNewSectionInstructionAndQuestion(
                             adolescent!!,
@@ -317,7 +317,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         val intent = Intent(this, SessionEndActivity::class.java)
         intent.putExtra("current_question_id", currentQuestionId)
         intent.putExtra("question_type", question_type)
-        intent.putExtra("congratulated_for_session_id", currentSessionNumber)
+        intent.putExtra("congratulated_for_session_number", currentSessionNumber)
         intent.putExtra("adolescent", adolescent)
         intent.putExtra("message", message)
         startActivity(intent)

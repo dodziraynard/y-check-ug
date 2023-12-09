@@ -25,10 +25,10 @@ class SessionEndActivity : AppCompatActivity() {
         val superlatives =
             listOf("Congratulations!", "Perfect!", "Wonderful!", "Keep it up!", "Good Job!")
 
-        val currentQuestionId = intent.getLongExtra("current_question_id", 0L)
+        val currentQuestionId = intent.getStringExtra("current_question_id") ?: "-1"
         val questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
         val adolescent: Adolescent? = intent.getParcelableExtra("adolescent")
-        val congratulatedFor = intent.getLongExtra("congratulated_for_session_id", -1L)
+        val congratulatedFor = intent.getLongExtra("congratulated_for_session_number", -1L)
 
         val message =
             intent.getStringExtra("message") ?: "You have successfully completed the session."
@@ -40,7 +40,7 @@ class SessionEndActivity : AppCompatActivity() {
             val intent = Intent(this@SessionEndActivity, QuestionnaireActivity::class.java)
             intent.putExtra("current_question_id", currentQuestionId)
             intent.putExtra("question_type", questionnaireType)
-            intent.putExtra("congratulated_for_session_id", congratulatedFor)
+            intent.putExtra("congratulated_for_session_number", congratulatedFor)
             intent.putExtra("adolescent", adolescent)
             startActivity(intent)
             finish()

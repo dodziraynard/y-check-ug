@@ -9,7 +9,7 @@ import com.hrd.ycheck.utils.StringListConvector
 
 @Entity(tableName = Constants.USER_TABLE)
 data class User(
-    @PrimaryKey val id: Long,
+    @PrimaryKey val id: String = "0",
     val photo_url: String?,
     val uuid: String?,
     var username: String?,

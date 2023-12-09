@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 class UpstreamSyncBaseModel(models.Model):
     id = models.CharField(primary_key=True, max_length=120, unique=True, default=uuid.uuid4, db_index=True)
+    uuid = models.UUIDField(default=uuid.uuid4, null=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,6 +34,8 @@ class UpstreamSyncBaseModel(models.Model):
             return getattr(self, field.name).isoformat()
         if type(field) == models.fields.BooleanField:
             return getattr(self, field.name)
+        if type(field) == models.fields.UUIDField:
+            return str(getattr(self, field.name))
         if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
             file = getattr(self, field.name)
             if file:
