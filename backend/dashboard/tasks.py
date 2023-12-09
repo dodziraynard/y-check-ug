@@ -9,7 +9,7 @@ from setup.models import NodeConfig
 from dashboard.models.mixin import UpstreamSyncBaseModel
 from django.db.utils import IntegrityError
 
-logger = logging.getLogger("app")
+logger = logging.getLogger(__name__)
 
 
 @shared_task()  # Will be run periodically.
@@ -112,7 +112,7 @@ def download_users_from_upstream():
             config.users_download_status_message = "User query request failed."
             config.users_download_status = SyncStatus.FAILED.value
     except Exception as e:
-        print("error", type(e), str(e))
+        logger.exception("User download failed with error %s", str(e))
         config.users_download_status_message = f"Error occured: {str(e)}"
         config.users_download_status = SyncStatus.FAILED.value
     finally:
@@ -121,6 +121,7 @@ def download_users_from_upstream():
 
 @shared_task()
 def download_questions_from_upstream():
+    logger.debug("download_questions_from_upstream triggered.")
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
         logger.info("No host or syncing already in progress.")
@@ -128,6 +129,7 @@ def download_questions_from_upstream():
 
     sections_donwnloaded = download_entities_from_upstream("section", Section)
     if not sections_donwnloaded:
+        logger.debug("All sections couldn't be downloaded.")
         config.questions_download_status_message = "Couldn't download all sections."
         config.questions_download_status = SyncStatus.FAILED.value
         config.save()
@@ -166,7 +168,8 @@ def download_questions_from_upstream():
             config.questions_download_status_message = "User query request failed."
             config.questions_download_status = SyncStatus.FAILED.value
     except Exception as e:
-        print("Error", e)
+        logger.exception(
+            "Error occured while downloading questions: %s", str(e))
         config.questions_download_status_message = f"Error occured: {str(e)}"
         config.questions_download_status = SyncStatus.FAILED.value
     finally:
@@ -174,54 +177,72 @@ def download_questions_from_upstream():
         config.save()
 
 
-def download_entities_from_upstream(entity_name, model):
+def download_entities_from_upstream(model_name, model):
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
         logger.info("No host or syncing already in progress.")
         return False
-    url = config.up_stream_host + f"/api/sync/download/{entity_name}/"
+    url = config.up_stream_host + f"/api/sync/download/{model_name}/"
     response = requests.get(url)
     if response.status_code == 200:
         data_items = response.json().get("data")
+        logger.info("Retrieved %s: %s items", model_name, len(data_items))
         for data_dict in data_items:
             obj = UpstreamSyncBaseModel.deserialise_into_object(
                 model, data_dict)
-            print("Downloaded ", obj)
+            logger.info("Downloaded %s: %s", model_name, str(obj))
         return True
     return False
 
 
-@shared_task()
-def upload_adolescents():
-    config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
-        return
+def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: str, status_field: str):
+    logger.debug("Upload all %s entities triggered.", model_name)
 
-    url = config.up_stream_host + f"/api/sync/upload/adolescent/"
-    adolescents = Adolescent.objects.filter(synced=False)
-    data = {"data_items": json.dumps([obj.serialise() for obj in adolescents])}
+    config, _ = NodeConfig.objects.get_or_create()
+    if not config.up_stream_host or getattr(config, status_field) == SyncStatus.PROGRESS.value:
+        logger.debug(
+            "No hosts configured or %s upload already in process", model_name)
+        return
+    setattr(config, status_field, SyncStatus.PROGRESS.value)
+    setattr(config, f"{status_field}_message", "")
+    config.save()
+
+    url = config.up_stream_host + f"/api/sync/upload/{model_name}/"
+    objects = model.objects.filter(synced=False)
+    data = {"data_items": json.dumps([obj.serialise() for obj in objects])}
     response = requests.post(url, data=data)
     if response.status_code == 200:
         response = response.json()
         success_ids = response.get("success_ids", [])
+        logger.debug("%s %s entities uploaded successfully",
+                     str(len(success_ids)), model_name)
+
         error_message = response.get("error_message")
-        adolescents.filter(id__in=success_ids).update(synced=True)
+        objects.filter(id__in=success_ids).update(synced=True)
         if error_message:
-            config.adolescents_upload_status_message = error_message
+            logger.debug("Server errored: %s", error_message)
+            setattr(config, f"{status_field}_message", error_message)
     else:
-        config.adolescents_upload_status_message = response.content.decode()
+        logger.debug("Request to %s returned %s",
+                     url, response.content.decode())
+        setattr(config, f"{status_field}_message", response.content.decode())
+    setattr(config, status_field, SyncStatus.IDLE.value)
     config.save()
 
 
 @shared_task()
 def upload_treatments():
-    config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or config.treatments_upload_status == SyncStatus.PROGRESS.value:
-        return
+    upload_entity_and_update_status(
+        Treatment, "treatment", "treatments_upload_status")
 
 
 @shared_task()
 def upload_referrals():
-    config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or config.referrals_upload_status == SyncStatus.PROGRESS.value:
-        return
+    upload_entity_and_update_status(
+        Referral, "referral", "referrals_upload_status")
+
+
+@shared_task()
+def upload_adolescents():
+    upload_entity_and_update_status(
+        Adolescent, "adolescent", "adolescents_upload_status")

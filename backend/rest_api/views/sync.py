@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from regex import P
 from rest_framework import generics, permissions
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.response import Response
