@@ -1,6 +1,7 @@
 import logging
 from io import BytesIO
 from datetime import datetime
+import uuid
 from django.db import models
 import requests
 from PIL import Image as PillowImage
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class UpstreamSyncBaseModel(models.Model):
-    id = models.BigAutoField(primary_key=True, db_index=True)
+    id = models.CharField(primary_key=True, max_length=120, unique=True, default=uuid.uuid4, db_index=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
