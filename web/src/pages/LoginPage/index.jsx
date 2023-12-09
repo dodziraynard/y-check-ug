@@ -90,7 +90,7 @@ function LoginScreen() {
 
 
             <div className="login-page">
-                <form className="col-md-3 col-10 mx-auto login-card" onSubmit={handleLogin}>
+                <form className="col-lg-3 col-md-6 col-10 mx-auto login-card" onSubmit={handleLogin}>
                     <div className="d-flex justify-content-center">
                         <img className='app-logo' src={logo} alt="logo" />
                     </div>
