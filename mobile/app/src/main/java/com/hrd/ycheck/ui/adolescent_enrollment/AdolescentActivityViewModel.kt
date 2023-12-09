@@ -1,6 +1,7 @@
 package com.hrd.ycheck.ui.adolescent_enrollment
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -67,6 +68,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
                 }
 
                 override fun onFailure(call: Call<CheckupLocationResponse?>, t: Throwable) {
+                    Log.d("AdolescentActivityViewModel", "onFailure: ${t.message}")
                     locationLoadingErrorMessage.value =
                         context.getString(R.string.couldnt_connect_to_server)
                     isLoadingLocations.value = false
@@ -104,6 +106,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
                 }
 
                 override fun onFailure(call: Call<AdolescentResponse?>, t: Throwable) {
+                    Log.e("AdolescentActivityViewModel", "onFailure: ${t.message}")
                     postErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
                     isLoadingAdolescent.value = false
                 }
@@ -131,6 +134,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
             }
 
             override fun onFailure(call: Call<SearchAdolescentResponse?>, t: Throwable) {
+                Log.e("AdolescentActivityViewModel", "onFailure: ${t.message}")
                 searchErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
                 isSearchingAdolescent.value = false
             }
@@ -169,6 +173,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
                 }
 
                 override fun onFailure(call: Call<AdolescentResponse?>, t: Throwable) {
+                    Log.e("AdolescentActivityViewModel", "onFailure: ${t.message}")
                     photoUploadErrorMessage.value =
                         context.getString(R.string.couldnt_connect_to_server)
                     isUploadingPhoto.value = false
@@ -197,6 +202,7 @@ class AdolescentActivityViewModel(application: Application) : AndroidViewModel(a
             }
 
             override fun onFailure(call: Call<SchoolResponse?>, t: Throwable) {
+                Log.e("AdolescentActivityViewModel", "onFailure: ${t.message}")
                 schoolsErrorMessage.value = context.getString(R.string.couldnt_connect_to_server)
                 isLoadingSchools.value = false
             }

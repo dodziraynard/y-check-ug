@@ -170,8 +170,9 @@ class QuestionnaireActivity : AppCompatActivity() {
         if (newAdolescentResponse != null) {
             currentQuestionId = newAdolescentResponse!!.questionId
             val value = newAdolescentResponse!!.value
-            val options =
-                newAdolescentResponse!!.chosenOptions.map { option -> option?.id ?: -1 }
+            val options = newAdolescentResponse!!.chosenOptions.map { option ->
+                option?.id ?: -1
+            } as List<Long>?
             viewModel.postSurveyResponse(adolescentId, currentQuestionId, value, options)
         }
         viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
