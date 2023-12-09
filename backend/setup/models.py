@@ -22,7 +22,7 @@ class NodeConfig(models.Model):
 
     adolescents_upload_status = models.CharField(max_length=200,
                                                  choices=SYNC_STATUS)
-    adolescents_upload_status_message = models.TextField()
+    adolescents_upload_status_message = models.TextField(null=True, blank=True)
 
     treatments_upload_status = models.CharField(max_length=200,
                                                 choices=SYNC_STATUS)
