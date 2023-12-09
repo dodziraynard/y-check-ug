@@ -3,7 +3,7 @@ from asyncio.log import logger
 
 from .base import *
 
-logger = logging.getLogger("app")
+logger = logging.getLogger(__name__)
 
 try:
     from .local_settings import *

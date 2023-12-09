@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
 
-    .app-logo{
+    .app-logo {
         height: 5em;
     }
 
@@ -18,5 +18,43 @@
 
     input {
         padding: 1em;
+    }
+}
+
+.ip-config {
+    position: absolute;
+    background-color: white;
+    width: fit-content;
+    padding: 2em;
+    right: 0;
+    margin: 1em;
+    transition: 0.2s all ease-in-out;
+
+    &.hide {
+        width: 0;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+}
+
+.close-id-config {
+    height: 2em;
+    width: 2em;
+    position: absolute;
+    right: 0;
+    margin: 1em;
+    z-index: 1;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: gray;
+
+    &:hover {
+        background-color: rgba($danger, 0.6);
+        color: white;
+        padding: 0.2em;
     }
 }

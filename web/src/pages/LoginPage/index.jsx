@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { useLoginUserMutation, setUser as setStoreUser, setToken, setUserPermissions } from '../../features/authentication/authentication-api-slice';
 import PasswordInput from '../../components/PasswordInput';
+import { BASE_API_URI } from '../../utils/constants';
 
 
 function LoginScreen() {
@@ -13,8 +14,16 @@ function LoginScreen() {
     const [loginUser, { isLoading }] = useLoginUserMutation()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [showIpConfig, setShowIpConfig] = useState(false)
+    const [configuredIp, setConfiguredIp] = useState(BASE_API_URI)
     const [user, setUser] = useState(null)
     const dispatch = useDispatch();
+
+    const saveConfiguredIp = () => {
+        localStorage.setItem("base_api", configuredIp)
+        setShowIpConfig(false)
+        window.location.reload()
+    }
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -67,6 +76,19 @@ function LoginScreen() {
             {user && (
                 <Navigate to="/" replace={true} />
             )}
+
+            <span className='close-id-config' onClick={() => setShowIpConfig(!showIpConfig)}>
+                {showIpConfig ? <i className="bi bi-x-lg"></i> : <i className="bi bi-gear"></i>}
+            </span>
+
+            <form className={`ip-config ${showIpConfig ? "" : "hide"}`}>
+                <div className="form-group d-flex">
+                    <input type="text" onChange={(event) => setConfiguredIp(event.target.value)} value={configuredIp} className='form-control' />
+                    <button type='button' onClick={saveConfiguredIp} className='btn btn-sm btn-primary'>Save</button>
+                </div>
+            </form>
+
+
             <div className="login-page">
                 <form className="col-md-3 col-10 mx-auto login-card" onSubmit={handleLogin}>
                     <div className="d-flex justify-content-center">
