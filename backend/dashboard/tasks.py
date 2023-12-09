@@ -12,29 +12,6 @@ from django.db.utils import IntegrityError
 logger = logging.getLogger(__name__)
 
 
-@shared_task()  # Will be run periodically.
-def sync_all_data():
-    config, _ = NodeConfig.objects.get_or_create()
-    can_connect = False
-    if config.is_local and config.sync_enabled and config.up_stream_host:
-        can_connect = requests.get(config.up_stream_host).status_code == 200
-
-    # If can connect to upstream server
-    if can_connect:
-        upload_adolescents.delay()
-        upload_treatments.delay()
-        upload_referrals.delay()
-    elif config.is_local and config.sync_enabled:
-        config.general_sync_message = "Couldn't connect to upstream server."
-        config.save()
-    elif config.is_local and not config.up_stream_host:
-        config.general_sync_message = "No upstream host configured."
-        config.save()
-    elif config.is_local and not config.sync_enabled:
-        config.general_sync_message = "Syncing is disabled."
-        config.save()
-
-
 @shared_task()
 def download_all_setup_data():
     config, _ = NodeConfig.objects.get_or_create()

@@ -36,7 +36,7 @@ class UpstreamSyncModelView(generics.GenericAPIView):
             except Exception as e:
                 error_message = str(e)
                 print("Error", str(e))
-                continue
+                raise e
 
         response_data = {
             "success_ids": success_ids,

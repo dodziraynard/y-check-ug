@@ -68,6 +68,7 @@ admin.site.register(FlagCondition, FlagConditionAdmin)
 admin.site.register(Facility)
 admin.site.register(Service)
 admin.site.register(Treatment)
+admin.site.register(Referral)
 admin.site.register(MobileConfig)
 admin.site.register(NodeConfig)
 

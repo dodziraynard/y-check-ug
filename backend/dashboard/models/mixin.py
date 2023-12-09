@@ -32,6 +32,8 @@ class UpstreamSyncBaseModel(models.Model):
         return super().save(*args, **kwargs)
 
     def _get_serialised_value(self, field):
+        if type(field) == models.fields.related.ManyToManyField:
+            return list(getattr(self, field.name).all().values_list("id", flat=True))
         if type(field) == models.fields.DateTimeField:
             return getattr(self, field.name).isoformat()
         if type(field) == models.fields.BooleanField:
@@ -43,12 +45,12 @@ class UpstreamSyncBaseModel(models.Model):
             if file:
                 return file.url
             return None
-        if type(field) == models.fields.related.ForeignKey:
+        if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
             obj = getattr(self, field.name)
             if obj:
                 return obj.id
             return ""
-        return getattr(self, field.name)
+        return str(getattr(self, field.name))
 
     @classmethod
     def _get_deserialised_value(cls, field, value):
@@ -57,7 +59,7 @@ class UpstreamSyncBaseModel(models.Model):
         return value if value != "" else None
 
     def get_file_fields(self):
-        fields = self._meta.fields
+        fields = self._meta.get_fields()
         result = []
         for field in fields:
             if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
@@ -67,7 +69,7 @@ class UpstreamSyncBaseModel(models.Model):
     def serialise(self):
         logger.debug("Serialising %s", str(self))
 
-        fields = self._meta.fields
+        fields = self._meta.get_fields()
         my_model_fields = {}
         for field in fields:
             value = self._get_serialised_value(field)
@@ -113,13 +115,18 @@ class UpstreamSyncBaseModel(models.Model):
 
         parameters = {}
         unique_parameters = {}
+        many_to_many_params = {}
         for key, value in data.items():
-            if not hasattr(model, key):
+            if not (hasattr(model, key) and hasattr(getattr(model, key), "field")):
                 continue
             field = getattr(model, key).field
+            if type(field) == models.fields.related.ManyToManyField:
+                many_to_many_params[key] = cls._get_deserialised_value(
+                    field, value)
+                continue
             if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
                 continue
-            if type(field) == models.fields.related.ForeignKey:
+            if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
                 key += "_id"
             if field.unique:
                 unique_parameters[key] = cls._get_deserialised_value(
@@ -134,6 +141,11 @@ class UpstreamSyncBaseModel(models.Model):
             model.objects.create(**parameters)
         obj = model.objects.filter(**unique_parameters).first()
 
+        # Set many to many relations.
+        for key, value in many_to_many_params.items():
+            getattr(obj, key).set(value)
+            obj.save()
+
         # Download files
         if download_files:
             config, _ = NodeConfig.objects.get_or_create()
@@ -141,7 +153,7 @@ class UpstreamSyncBaseModel(models.Model):
                 # Only local nodes should donwload using the upstream host.
                 # Host cannot download from local node.
                 host = config.up_stream_host
-                for field in obj._meta.fields:
+                for field in obj._meta.get_fields():
                     if type(field) == models.fields.files.ImageField and data.get(field.name):
                         source_url = host + data.get(field.name)
                         source_url = source_url.replace("//assets", "/assets")
