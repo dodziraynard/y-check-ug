@@ -11,6 +11,7 @@ class UpstreamSyncModelView(generics.GenericAPIView):
 
     def post(self, request, model_name):
         data_items = request.data.get("data_items")
+        file_items = request.data.get("file_items")
         data_items = json.loads(data_items)
 
         # Get the model
@@ -25,7 +26,10 @@ class UpstreamSyncModelView(generics.GenericAPIView):
         for item in data_items:
             try:
                 object = UpstreamSyncBaseModel.deserialise_into_object(
-                    Model, item)
+                    Model, item, download_files=False)
+                
+                
+                
                 success_ids.append(object.id)
             except Exception as e:
                 error_message = str(e)

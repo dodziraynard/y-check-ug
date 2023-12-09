@@ -127,15 +127,18 @@ class UpstreamSyncBaseModel(models.Model):
         # Download files
         if download_files:
             config, _ = NodeConfig.objects.get_or_create()
-            host = config.up_stream_host
-            for field in obj._meta.fields:
-                if type(field) == models.fields.files.ImageField and data.get(field.name):
-                    source_url = host + data.get(field.name)
-                    source_url = source_url.replace("//assets", "/assets")
-                    obj._download_image(field.name, source_url)
+            if config.is_local and config.up_stream_host:
+                # Only local nodes should donwload using the upstream host.
+                # Host cannot download from local node.
+                host = config.up_stream_host
+                for field in obj._meta.fields:
+                    if type(field) == models.fields.files.ImageField and data.get(field.name):
+                        source_url = host + data.get(field.name)
+                        source_url = source_url.replace("//assets", "/assets")
+                        obj._download_image(field.name, source_url)
 
-                if type(field) == models.fields.files.FileField and data.get(field.name):
-                    source_url = host + data.get(field.name)
-                    source_url = source_url.replace("//assets", "/assets")
-                    obj._download_file(field.name, source_url)
+                    if type(field) == models.fields.files.FileField and data.get(field.name):
+                        source_url = host + data.get(field.name)
+                        source_url = source_url.replace("//assets", "/assets")
+                        obj._download_file(field.name, source_url)
         return obj
