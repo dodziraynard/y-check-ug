@@ -17,12 +17,12 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "root": {
-        "level": "INFO",
+        "level": "DEBUG",
         "handlers": ["file"]
     },
     "handlers": {
         "file": {
-            "level": "INFO",
+            "level": "DEBUG",
             "class": "logging.FileHandler",
             "filename": LOGS_ROOT / "system.log",
             "formatter": "app",
@@ -32,13 +32,6 @@ LOGGING = {
             'stream': sys.stdout,
         }
     },
-    # "loggers": {
-    #     "app": {
-    #         "handlers": ["file"],
-    #         "level": "INFO",
-    #         "propagate": True
-    #     },
-    # },
     "formatters": {
         "app": {
             "format": (u"%(asctime)s [%(levelname)-8s] "
