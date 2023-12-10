@@ -35,7 +35,10 @@ class UpstreamSyncBaseModel(models.Model):
         if type(field) == models.fields.related.ManyToManyField:
             return list(getattr(self, field.name).all().values_list("id", flat=True))
         if type(field) == models.fields.DateTimeField:
-            return getattr(self, field.name).isoformat()
+            date = getattr(self, field.name)
+            if date:
+                return date.isoformat()
+            return None
         if type(field) == models.fields.BooleanField:
             return getattr(self, field.name)
         if type(field) in [models.fields.UUIDField, models.fields.DecimalField]:
