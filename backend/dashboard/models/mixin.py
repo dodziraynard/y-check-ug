@@ -139,8 +139,6 @@ class UpstreamSyncBaseModel(models.Model):
         exists = model.objects.filter(**unique_parameters).exists()
         if exists:
             all(map(parameters.pop, unique_parameters))
-            print("unique_parameters", unique_parameters)
-            print("parameters", parameters)
             model.objects.filter(**unique_parameters).update(**parameters)
         else:
             model.objects.create(**parameters)

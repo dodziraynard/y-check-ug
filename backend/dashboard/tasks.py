@@ -156,7 +156,7 @@ def download_questions_from_upstream():
 
 def download_entities_from_upstream(model_name, model):
     config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host:
         logger.info("No host or syncing already in progress.")
         return False
     url = config.up_stream_host + f"/api/sync/download/{model_name}/"
