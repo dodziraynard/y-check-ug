@@ -58,7 +58,9 @@ class UpstreamSyncBaseModel(models.Model):
     @classmethod
     def _get_deserialised_value(cls, field, value):
         if type(field) == models.fields.DateTimeField:
-            return datetime.fromisoformat(value).astimezone()
+            if isinstance(value, str):
+                return datetime.fromisoformat(value).astimezone()
+            return None
         return value if value != "" else None
 
     def get_file_fields(self):
