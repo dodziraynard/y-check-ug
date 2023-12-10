@@ -60,7 +60,8 @@ class SummaryFlag(UpstreamSyncBaseModel):
         for question in Question.objects.filter(
             Q(question_id__in=question_ids) &
             (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
-            (Q(adolescent_type=None) | Q(adolescent_type__iexact=adolescent.type)) &
+            ((Q(adolescent_type=None) | (Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False))) |
+            (Q(adolescent_type=None) | (~Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=True)))) &
             (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
         ).distinct():
             response = question.get_response(adolescent)
