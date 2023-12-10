@@ -1,6 +1,7 @@
 package com.hrd.ycheck.ui.authentication
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +12,7 @@ import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityConfigurationBinding
 import com.hrd.ycheck.models.Configuration
 import com.hrd.ycheck.ui.MainActivity
+import com.hrd.ycheck.utils.Constants
 
 class ConfigurationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigurationBinding
@@ -45,6 +47,10 @@ class ConfigurationActivity : AppCompatActivity() {
                     AppRoomDatabase.INSTANCE?.ConfigurationDao()?.insertConfiguration(configuration)
                     startActivity(Intent(this, MainActivity::class.java))
                 }
+                val prefsEditor: SharedPreferences.Editor =
+                    getSharedPreferences(Constants.SHARED_PREFS_FILE, MODE_PRIVATE).edit()
+                prefsEditor.putString(Constants.HOST_URL, host)
+                prefsEditor.apply()
             }
         }
     }

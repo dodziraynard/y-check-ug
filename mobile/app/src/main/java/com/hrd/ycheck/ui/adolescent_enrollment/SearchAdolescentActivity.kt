@@ -2,9 +2,11 @@ package com.hrd.ycheck.ui.adolescent_enrollment
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -101,6 +103,32 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 bottomSheetDialog.show()
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_activity_menu, menu)
+
+        val menuItem = menu?.findItem(R.id.action_search)
+        val searchView = menuItem?.actionView as SearchView?
+        searchView?.let {
+            it.queryHint = "Search PID, name ..."
+        }
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.searchAdolescents(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+
+                return true;
+            }
+        })
+
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

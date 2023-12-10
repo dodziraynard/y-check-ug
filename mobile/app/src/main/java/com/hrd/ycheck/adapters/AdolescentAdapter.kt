@@ -35,6 +35,7 @@ class AdolescentAdapter(private val context: Context) :
             with(binding) {
                 fullnameLabel.text = fullName
                 pidLabel.text = adolescent.pid
+                details.text = "${adolescent.school}, ${adolescent.type}"
 
                 if (adolescent.photoUrl?.isNotEmpty() == true) {
                     val imageUrl = adolescent.photoUrl

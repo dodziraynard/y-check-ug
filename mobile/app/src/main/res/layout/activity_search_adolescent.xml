@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:visibility="gone"
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -42,12 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:visibility="gone"
             android:text="@string/search_result"
             app:layout_constraintTop_toBottomOf="@id/search_container" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
+            android:visibility="gone"
             android:background="@color/border_color" />
 
         <TextView
@@ -57,7 +60,6 @@
             android:layout_margin="10dp"
             android:text="@string/no_results_found"
             android:textAlignment="center"
-            android:textColor="@color/color_warning"
             android:textSize="@dimen/error_text_size"
             app:layout_constraintTop_toBottomOf="@id/search_container" />
 

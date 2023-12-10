@@ -18,14 +18,30 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
+
+from dashboard.models.questions import Question
+
+
+def health(request):
+    use_db = request.GET.get("use_db", False)
+    if use_db:
+        questions = Question.objects.all()
+        response = {"success": True, "all_questions": questions.count()}
+    else:
+        response = {"success": True}
+    return JsonResponse(response)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('accounts.urls')),
     path('api/', include('rest_api.urls')),
+    path('health/', health),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Customize django admin page.
-admin.site.site_header = "Y-CHECK UG SYSTEM ADMINISTRATION"  # default: "Django Administration"
+# default: "Django Administration"
+admin.site.site_header = "Y-CHECK UG SYSTEM ADMINISTRATION"
 admin.site.index_title = "Site Administration"  # default: "Site Administration"
 admin.site.site_title = 'Y-CHECK System Site Admin'  # default: "Django site admin"

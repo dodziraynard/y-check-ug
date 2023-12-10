@@ -6,6 +6,7 @@ object Constants {
     const val CONFIGURATIONS_TABLE = "configurations"
     const val ADOLESCENT_TABLE = "adolescents"
     const val USER_TOKEN = "com.hrd.ycheck.USER_TOKEN"
+    const val HOST_URL = "com.hrd.ycheck.HOST_URL"
     const val SHARED_PREFS_FILE = "ycheck-pf"
     const val USER_ID = "com.hrd.ycheck.USER_ID"
     const val IS_NEW_USER = "com.hrd.ycheck.IS_NEW_USER"

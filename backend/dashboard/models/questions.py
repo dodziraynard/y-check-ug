@@ -54,7 +54,7 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
 
 class Question(UpstreamSyncBaseModel):
     TYPE_CHOICES = [
-        ('primary', 'primary'),
+        ('basic', 'basic'),
         ('secondary', 'secondary'),
         ('community', 'community'),
     ]
@@ -92,7 +92,7 @@ class Question(UpstreamSyncBaseModel):
     adolescent_type = models.CharField(
         max_length=100, choices=TYPE_CHOICES, null=True, blank=True)
 
-    # This is useful for situations like "This questions is for adolescent_type=primary and secondary"
+    # This is useful for situations like "This questions is for adolescent_type=basic and secondary"
     # In that case, we just use the dependencies adoeslcent_type=communit + invert_adolescent_attribute_requirements=True
     invert_adolescent_attribute_requirements = models.BooleanField(
         default=False, null=True, blank=True)
