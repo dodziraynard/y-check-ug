@@ -19,3 +19,4 @@ redis>=4.5.1
 django-rest-knox>=4.1.0
 psycopg2-binary>=2.8.6
 timeago>=1.0.16
+uuid7>=0.1.0
