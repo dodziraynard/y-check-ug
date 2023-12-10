@@ -45,7 +45,7 @@ def get_errors_from_form(form):
 
 def make_model_key_value(obj):
     data = {}
-    for field in obj._meta.get_fields():
+    for field in obj.get_fields():
         if field.name in obj.__dict__:
             value = obj.__dict__[field.name]
             if isinstance(value, datetime.datetime) or isinstance(

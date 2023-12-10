@@ -59,17 +59,20 @@ class UpstreamSyncBaseModel(models.Model):
         return value if value != "" else None
 
     def get_file_fields(self):
-        fields = self._meta.get_fields()
+        fields = self.get_fields()
         result = []
         for field in fields:
             if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
                 result.append(field.name)
         return result
 
+    def get_fields(self):
+        return self._meta.fields + self._meta.many_to_many
+
     def serialise(self):
         logger.debug("Serialising %s", str(self))
 
-        fields = self._meta.get_fields()
+        fields = self.get_fields()
         my_model_fields = {}
         for field in fields:
             value = self._get_serialised_value(field)
@@ -136,6 +139,8 @@ class UpstreamSyncBaseModel(models.Model):
         exists = model.objects.filter(**unique_parameters).exists()
         if exists:
             all(map(parameters.pop, unique_parameters))
+            print("unique_parameters", unique_parameters)
+            print("parameters", parameters)
             model.objects.filter(**unique_parameters).update(**parameters)
         else:
             model.objects.create(**parameters)
@@ -153,7 +158,7 @@ class UpstreamSyncBaseModel(models.Model):
                 # Only local nodes should donwload using the upstream host.
                 # Host cannot download from local node.
                 host = config.up_stream_host
-                for field in obj._meta.get_fields():
+                for field in obj.get_fields():
                     if type(field) == models.fields.files.ImageField and data.get(field.name):
                         source_url = host + data.get(field.name)
                         source_url = source_url.replace("//assets", "/assets")
