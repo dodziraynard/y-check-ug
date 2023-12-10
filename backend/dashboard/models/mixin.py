@@ -34,7 +34,7 @@ class UpstreamSyncBaseModel(models.Model):
     def _get_serialised_value(self, field):
         if type(field) == models.fields.related.ManyToManyField:
             return list(getattr(self, field.name).all().values_list("id", flat=True))
-        if type(field) == models.fields.DateTimeField:
+        if type(field) in [models.fields.DateTimeField, models.fields.DateField]:
             date = getattr(self, field.name)
             if date:
                 return date.isoformat()
@@ -57,7 +57,7 @@ class UpstreamSyncBaseModel(models.Model):
 
     @classmethod
     def _get_deserialised_value(cls, field, value):
-        if type(field) == models.fields.DateTimeField:
+        if type(field) in [models.fields.DateTimeField, models.fields.DateField]:
             if isinstance(value, str):
                 return datetime.fromisoformat(value).astimezone()
             return None
