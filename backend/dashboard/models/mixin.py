@@ -38,7 +38,7 @@ class UpstreamSyncBaseModel(models.Model):
             return getattr(self, field.name).isoformat()
         if type(field) == models.fields.BooleanField:
             return getattr(self, field.name)
-        if type(field) == models.fields.UUIDField:
+        if type(field) in [models.fields.UUIDField, models.fields.DecimalField]:
             return str(getattr(self, field.name))
         if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
             file = getattr(self, field.name)
@@ -50,7 +50,7 @@ class UpstreamSyncBaseModel(models.Model):
             if obj:
                 return obj.id
             return ""
-        return str(getattr(self, field.name))
+        return getattr(self, field.name)
 
     @classmethod
     def _get_deserialised_value(cls, field, value):
