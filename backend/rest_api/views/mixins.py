@@ -18,8 +18,7 @@ class SimpleCrudMixin(generics.GenericAPIView):
         end_date = request.GET.get("end_date")
         query = request.GET.get("query") or request.GET.get("q")
 
-        objects = self.model_class.objects.all().order_by(
-            "-id")  # type: ignore
+        objects = self.model_class.objects.all()
         if filters:
             objects = apply_filters(objects, filters)
         if query and hasattr(self.model_class,
@@ -28,6 +27,7 @@ class SimpleCrudMixin(generics.GenericAPIView):
                 self.model_class.generate_query(query))  # type: ignore
 
         if hasattr(self.model_class, "created_at"):
+            objects = objects.order_by("-created_at")
             if start_date:
                 start_date = datetime.strptime(start_date, '%Y-%m-%d')
                 objects = objects.filter(
