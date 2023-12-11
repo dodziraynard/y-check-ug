@@ -28,6 +28,7 @@ class UpstreamSyncBaseModel(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.synced = False
+        self.full_clean()
         return super().save(*args, **kwargs)
 
     def _get_serialised_value(self, field):
