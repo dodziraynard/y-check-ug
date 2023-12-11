@@ -147,7 +147,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
                                         ResponseInputType.RANGER_SLIDER.value]:
             if numeric and self.text.isdigit():
                 responses.append(int(self.text.strip()))
-            else:
+            elif not numeric:
                 responses.append(self.text.strip().lower())
 
         elif self.question.input_type in [ResponseInputType.RADIO_BUTTON.value,
@@ -156,7 +156,8 @@ class AdolescentResponse(UpstreamSyncBaseModel):
                 if numeric and (option.numeric_value != None or self.text.strip().isdigit()):
                     value = option.numeric_value if option.numeric_value != None else int(
                         self.text.strip())
-                else:
+                    responses.append(value)           
+                elif not numeric:
                     value = option.value.strip().lower() if option.value != None else ""
-                responses.append(value)
+                    responses.append(value)
         return responses
