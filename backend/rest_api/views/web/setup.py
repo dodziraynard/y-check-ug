@@ -304,8 +304,8 @@ class AllNodeAPI(SimpleCrudMixin):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
     required_permissions = ["setup.manage_setup"]
 
-    serializer_class = NodeConfig
-    model_class = Facility
+    serializer_class = NodeConfigSerializer
+    model_class = NodeConfig
     response_data_label = "nodeconfig"
     response_data_label_plural = "nodeconfigs"
 
