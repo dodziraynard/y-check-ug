@@ -1,6 +1,7 @@
 from django.db import models
 
 from ycheck.utils.constants import SyncStatus
+from django.conf import settings
 
 
 class MobileConfig(models.Model):
@@ -41,6 +42,10 @@ class NodeConfig(models.Model):
 
     def __str__(self) -> str:
         return self.node_name
+
+    def save(self, *args, **kwargs) -> None:
+        self.node_name = settings.NODE_NAME
+        return super().save(*args, **kwargs)
 
 
 class SetupPerm(models.Model):

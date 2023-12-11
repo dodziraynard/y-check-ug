@@ -2,6 +2,7 @@ import logging
 from io import BytesIO
 from datetime import datetime
 import uuid_extensions 
+from django.conf import settings
 from django.db import models
 import requests
 from PIL import Image as PillowImage
@@ -28,6 +29,7 @@ class UpstreamSyncBaseModel(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.synced = False
+        self.localnode = settings.NODE_NAME
         self.full_clean()
         return super().save(*args, **kwargs)
 
