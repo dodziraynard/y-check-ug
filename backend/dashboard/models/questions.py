@@ -135,7 +135,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, db_index=True)
     chosen_options = models.ManyToManyField(Option, blank=True)
-    text = models.CharField(max_length=200, null=True, default="")
+    text = models.CharField(max_length=200, null=True, blank=True, default="")
 
     def __str__(self) -> str:
         return str(self.question)
