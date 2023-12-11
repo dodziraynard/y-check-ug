@@ -33,6 +33,7 @@ urlpatterns = [
     # Facilities
     path("facilities/", views.FacilitiesAPI.as_view()),
     path("all/facilities/", views.AllFacilitiesAPI.as_view()),
+    path("all-nodes/", views.AllNodeAPI.as_view()),
     
     # Groups
     path("groups/", views.GroupsAPI.as_view()),
