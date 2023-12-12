@@ -125,7 +125,6 @@ class UpstreamSyncBaseModel(models.Model):
 
         parameters = {}
         unique_parameters = {}
-        field_id = None
         many_to_many_params = {}
         for key, value in data.items():
             if not (hasattr(model, key) and hasattr(getattr(model, key), "field")):
@@ -139,15 +138,10 @@ class UpstreamSyncBaseModel(models.Model):
                 continue
             if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
                 key += "_id"
-            if field.name == "id":
-                field_id = cls._get_deserialised_value(field, value)
             if field.unique:
                 unique_parameters[key] = cls._get_deserialised_value(
                     field, value)
-                continue
             parameters[key] = cls._get_deserialised_value(field, value)
-
-        unique_parameters = {"id": field_id} # Override unique parameters i.e., use only id for selection.
 
         exists = model.objects.filter(**unique_parameters).exists()
         if exists:
