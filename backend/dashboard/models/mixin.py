@@ -30,7 +30,6 @@ class UpstreamSyncBaseModel(models.Model):
     def save(self, *args, **kwargs) -> None:
         self.synced = False
         self.localnode = settings.NODE_NAME
-        self.full_clean()
         return super().save(*args, **kwargs)
 
     def _get_serialised_value(self, field):
