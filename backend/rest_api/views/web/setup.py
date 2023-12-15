@@ -296,4 +296,16 @@ class getAdolescentType(generics.GenericAPIView):
 
         
         
-       
+class AllNodeAPI(SimpleCrudMixin):
+    """
+    get all node configurations.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    required_permissions = ["setup.manage_setup"]
+
+    serializer_class = NodeConfigSerializer
+    model_class = NodeConfig
+    response_data_label = "nodeconfig"
+    response_data_label_plural = "nodeconfigs"
+
+  

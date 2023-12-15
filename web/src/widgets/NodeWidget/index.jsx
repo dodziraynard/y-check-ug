@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
-import BreadCrumb from '../../components/BreadCrumb';
 import TableView from '../../components/Table';
 import './style.scss';
 import { Modal } from 'bootstrap';
@@ -10,6 +9,7 @@ function NodeWidget() {
     const [triggerReload, setTriggerReload] = useState(0);
     const nodeModalRef = useRef(null);
     const [nodeModal, setNodeModal] = useState(null);
+    const [node, setNode] = useState(null);
 
     useEffect(() => {
         if (nodeModalRef.current !== null && nodeModal === null) {
@@ -19,10 +19,10 @@ function NodeWidget() {
         
     }, [nodeModal])
 
-    const showNodeModal = (user) => {
+    const showNodeModal = (node) => {
+        setNode(node)
         nodeModal?.show()
     }
-   
     return (
         <Fragment>
             <div ref={nodeModalRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -38,56 +38,56 @@ function NodeWidget() {
                                 <section className="">
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Node Name</h6>
-                                        <strong className="col-md-6 text">hshshsh</strong>
+                                        <strong className="col-md-6 text">{node?.node_name}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Is Local</h6>
-                                        <strong className="col-md-6 text">ossjss</strong>
+                                        <strong className="col-md-6 text">{node?.is_local? "True":"False"}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Up Stream Host</h6>
-                                        <strong className="col-md-6 text">skksjshs</strong>
+                                        <strong className="col-md-6 text">{node?.up_stream_host ? node?.up_stream_host :"null"}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Sync Enabled</h6>
-                                        <strong className="col-md-6 text">hsjsjjsjs</strong>
+                                        <strong className="col-md-6 text">{node?.sync_enabled? "True":"False"}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-6 text-muted"> Adolescents Sync Status</h6>
-                                        <strong className="col-md-6 text">sjss hgysys</strong>
+                                        <h6 className="col-md-6 text-muted"> Adolescents Upload Status</h6>
+                                        <strong className="col-md-6 text">{node?.adolescents_upload_status}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted"> Adolescents Upload Status Message</h6>
-                                        <strong className="col-md-6 text">sjss hgysys</strong>
+                                        <strong className="col-md-6 text">{node?.adolescents_upload_status_message ? node?.adolescents_upload_status_message :"null"} </strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-6 text-muted">Treatments Sync Status</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <h6 className="col-md-6 text-muted">Treatments Upload Status</h6>
+                                        <strong className="col-md-6 text">{node?.treatments_upload_status}</strong>
                                     </div>
                                     
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-6 text-muted">Referrals Sync Status</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <h6 className="col-md-6 text-muted">Referrals Upload Status</h6>
+                                        <strong className="col-md-6 text">{node?.referrals_upload_status}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Users Download Status</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <strong className="col-md-6 text">{node?.users_download_status}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Users Download Status Message</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <strong className="col-md-6 text">{node?.users_download_status_message ? node?.users_download_status_message :"null"}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Questions Download Status</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <strong className="col-md-6 text">{node?.questions_download_status}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">Questions Download Status Message</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <strong className="col-md-6 text">{node?.questions_download_status_message ? node?.questions_download_status_message :"null"}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-6 text-muted">General Sync Message</h6>
-                                        <strong className="col-md-6 text">louis</strong>
+                                        <strong className="col-md-6 text">{node?.general_sync_message ? node?.general_sync_message :"null"}</strong>
                                     </div>
                                     
                                 </section>
@@ -100,31 +100,45 @@ function NodeWidget() {
 
                 <TableView
                     reloadTrigger={triggerReload}
-                    responseDataAttribute="adolescents"
-                    dataSourceUrl={`${BASE_API_URI}/web-adolescents/`}
+                    responseDataAttribute="nodeconfigs"
+                    dataSourceUrl={`${BASE_API_URI}/all-nodes/`}
                     filters={[
 
                     ]}
                     headers={[
                         {
-                            key: "fullname", value: " Node Name"
+                            key: "node_name",
+                            value: " Node Name"
                         },
                         {
-                            key: "gender", value: "Is Local", textAlign: "center",
+                            key: "is_local",
+                            value: "Is Local",
+                            textAlign: "center",
+                            render: (item) => (item.is_local ? "True" : "False"),
                         },
                         {
-                            key: "visit_type", value: "Up Stream Host"
-                        }, {
-                            key: "check_up_location", value: "Sync Enabled", textAlign: "left",
+                            key: "up_stream_host",
+                            value: "Up Stream Host"
                         },
                         {
-                            key: "status", value: "adolescents sync status", textAlign: "center",
+                            key: "sync_enabled",
+                            value: "Sync Enabled",
+                            textAlign: "left",
+                            render: (item) => (item.sync_enabled ? "True" : "False"),
+
                         },
                         {
-                            key: "fullname", value: "treatments sync status"
+                            key: "adolescents_upload_status", 
+                            value: "adolescents Upload status", 
+                            textAlign: "center",
                         },
                         {
-                            key: "fullname", value: " referrals sync status"
+                            key: "adolescents_upload_status_message", 
+                            value: "Adolescents Upload Status Message"
+                        },
+                        {
+                            key: "treatments_upload_status", 
+                            value: " Treatments Upload Status"
                         },
                         {
                             value: "Actions", textAlign: "right", render: (item) => {
