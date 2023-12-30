@@ -27,3 +27,11 @@ class SyncStatus(Enum):
     PROGRESS = "progress"
     FAILED = 'failed'
     COMPLETED = "completed"
+
+
+COLOR_CHOICES = [
+    (Colors.GREY.value, "GREY"),
+    (Colors.RED.value, "RED"),
+    (Colors.ORANGE.value, "ORANGE"),
+    (Colors.GREEN.value, "GREEN"),
+]

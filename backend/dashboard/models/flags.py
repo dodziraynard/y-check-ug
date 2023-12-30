@@ -1,15 +1,11 @@
+import sys
 from django.db import models
-from ycheck.utils.constants import Colors
+from traitlets import default
+from dashboard.models.conditions_until_functions import compute_bmi_sd_function
+from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
 from .adolescent import *
 from .questions import *
-
-color_code_choices = [
-    (Colors.GREY.value, "GREY"),
-    (Colors.RED.value, "RED"),
-    (Colors.ORANGE.value, "ORANGE"),
-    (Colors.GREEN.value, "GREEN"),
-]
 
 
 class SummaryFlag(UpstreamSyncBaseModel):
@@ -20,9 +16,9 @@ class SummaryFlag(UpstreamSyncBaseModel):
     comment = models.CharField(
         max_length=200, default="This value was inffered.")
     computed_color_code = models.CharField(
-        choices=color_code_choices, max_length=10)
+        choices=COLOR_CHOICES, max_length=10)
     updated_color_code = models.CharField(
-        choices=color_code_choices, max_length=10, null=True, blank=True)
+        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
@@ -33,6 +29,9 @@ class SummaryFlag(UpstreamSyncBaseModel):
             models.UniqueConstraint(
                 fields=['adolescent', 'label'], name='Adolescent flag')
         ]
+
+    def get_final_colour(self):
+        return self.updated_color_code if self.updated_color_code else self.computed_color_code
 
     def __str__(self) -> str:
         name = f"{self.adolescent.get_name()}: {self.label.name}-{self.computed_color_code}"
@@ -61,7 +60,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
             Q(question_id__in=question_ids) &
             (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
             ((Q(adolescent_type=None) | (Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False))) |
-            (Q(adolescent_type=None) | (~Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=True)))) &
+             (Q(adolescent_type=None) | (~Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=True)))) &
             (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
         ).distinct():
             response = question.get_response(adolescent)
@@ -121,7 +120,7 @@ class FlagColor(UpstreamSyncBaseModel):
         FlagLabel, related_name="colors", on_delete=models.CASCADE, db_index=True)
     color_name = models.CharField(
         max_length=20, choices=color_name_choices, null=True, blank=True)
-    color_code = models.CharField(max_length=10, choices=color_code_choices)
+    color_code = models.CharField(max_length=10, choices=COLOR_CHOICES)
     is_fallback = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -144,16 +143,20 @@ class FlagCondition(UpstreamSyncBaseModel):
         ("min_age", "min_age"),
         ("range_sum_between", "range_sum_between"),
         ("gender_is", "gender_is"),
+        ("invoke_bmi_sd_function", "invoke_bmi_sd_function"),
+        ("group_value_between", "group_value_between"),
     ]
     name = models.CharField(max_length=100, null=True, blank=True)
 
     flag_color = models.ForeignKey(
         FlagColor, related_name="conditions", on_delete=models.CASCADE, db_index=True)
     question1 = models.ForeignKey(
-        Question, related_name="flag1s", on_delete=models.CASCADE)
+        Question, related_name="flag1s", on_delete=models.CASCADE, null=True, blank=True)
     # For only difference.
     question2 = models.ForeignKey(
         Question, on_delete=models.CASCADE, related_name="flag2s", null=True, blank=True)
+    question_group = models.ForeignKey(QuestionGroup, related_name="flag_conditions",
+                                       on_delete=models.CASCADE, null=True, blank=True)
 
     expected_value = models.CharField(max_length=100, null=True, blank=True)
     expected_integer_value = models.IntegerField(null=True, blank=True)
@@ -181,7 +184,7 @@ class FlagCondition(UpstreamSyncBaseModel):
         return super().save(*arg, **kwargs)
 
     def _handle_range_sum_operator(self, adolescent):
-        if not self.range_min and self.range_max and self.question2:
+        if not (self.range_min and self.range_max and self.question1 and self.question2):
             return True
         responses = AdolescentResponse.objects.filter(
             question__number__gte=self.question1.number,
@@ -192,6 +195,17 @@ class FlagCondition(UpstreamSyncBaseModel):
         total = sum(all_values)
         matched = self.range_min <= total <= self.range_max
         return matched if not self.invert_operator_evaluation else not matched
+
+    def _process_diff_value(self, response1, response2) -> int | None:
+        diff = None
+        if response2 and response1:
+            values1_as_list = response1.get_values_as_list(numeric=True)
+            values2_as_list = response2.get_values_as_list(numeric=True)
+            if values1_as_list and values2_as_list:
+                value_1 = values1_as_list[0]
+                value_2 = values2_as_list[0]
+                diff = value_1 - value_2
+        return diff
 
     def check_condition(self, adolescent: Adolescent):
         response1 = AdolescentResponse.objects.filter(
@@ -204,29 +218,38 @@ class FlagCondition(UpstreamSyncBaseModel):
             return True
 
         matched = None
-        if self.operator == "equal_expected_value":
-            matched = self.expected_value.strip().lower() in list(
-                map(str, response1.get_values_as_list()))
-        elif self.operator == "less_than_expected_integer_value":
-            matched = all([int(self.expected_integer_value) > int(res)
-                          for res in response1.get_values_as_list(numeric=True)])
-        elif self.operator == "min_age":
-            matched = self.expected_integer_value <= adolescent.get_age()
-        elif self.operator == "gender_is":
-            matched = self.expected_value.strip() == adolescent.gender
-        elif self.operator == "range_sum_between":
-            matched = self._handle_range_sum_operator(adolescent)
-        elif response2 != None:
-            values1_as_list = response1.get_values_as_list(numeric=True)
-            values2_as_list = response2.get_values_as_list(numeric=True)
-            if values1_as_list and values2_as_list:
-                value_1 = values1_as_list[0]
-                value_2 = values2_as_list[0]
-                diff = value_1 - value_2
-                if self.operator == "q1_q2_difference_is_equal_to_expected_integer_value":
-                    matched = diff == self.expected_integer_value
-                elif self.operator == "q1_q2_difference_is_less_than_expected_integer_value":
-                    matched = diff < self.expected_integer_value
+        match self.operator:
+            case "group_value_between":
+                question_group = self.question_group
+                group_value = question_group.get_group_value(
+                    adolescent) if question_group else sys.maxsize
+                matched = bool(self.range_min) and bool(
+                    self.range_max) and bool(group_value) and self.range_min <= group_value <= self.range_max
+            case "invoke_bmi_sd_function":
+                adolescent_bmi_sd = compute_bmi_sd_function(adolescent)
+                if not (self.range_min and self.range_max):
+                    return True
+                matched = self.range_min <= adolescent_bmi_sd <= self.range_max
+            case "equal_expected_value":
+                matched = bool(self.expected_value) and bool(response1) and self.expected_value.strip().lower() in list(
+                    map(str, response1.get_values_as_list()))
+            case "less_than_expected_integer_value":
+                matched = self.expected_integer_value != None and bool(response1) and all([int(self.expected_integer_value) > int(res)
+                                                                                           for res in response1.get_values_as_list(numeric=True)])
+            case "min_age":
+                matched = self.expected_integer_value != None and self.expected_integer_value <= adolescent.get_age()
+            case "gender_is":
+                matched = bool(
+                    self.expected_value) and self.expected_value.strip() == adolescent.gender
+            case "range_sum_between":
+                matched = self._handle_range_sum_operator(adolescent)
+            case "q1_q2_difference_is_equal_to_expected_integer_value":
+                diff = self._process_diff_value(response1, response2)
+                matched = diff == self.expected_integer_value
+            case "q1_q2_difference_is_less_than_expected_integer_value":
+                diff = self._process_diff_value(response1, response2)
+                matched = diff != None and self.expected_integer_value != None and diff < self.expected_integer_value
+
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched
         return matched

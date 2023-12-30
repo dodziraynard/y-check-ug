@@ -2,15 +2,13 @@ import logging
 import math
 from rest_framework import permissions
 from ycheck.utils.functions import apply_filters
-from dashboard.models.referrals import Referral
 from dashboard.forms import FacilityForm
-from dashboard.models import Facility, Service
 from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
 from django.db.models import Q
-from dashboard.models import Adolescent, FlagLabel, SummaryFlag
+from dashboard.models import Adolescent, FlagLabel, SummaryFlag, Referral, Facility, Service
 from rest_framework.response import Response
 from django.db.utils import IntegrityError
 from rest_api.serializers import *
@@ -81,7 +79,8 @@ class GetSummaryFlags(generics.GenericAPIView):
                 flag.save()
 
         # Retrieve all flags
-        flags = SummaryFlag.objects.filter(adolescent=adolescent).order_by("label__name")
+        flags = SummaryFlag.objects.filter(
+            adolescent=adolescent).order_by("label__name")
         data = SummaryFlagSerializer(flags, many=True).data
         repsonse_data = {
             "summary_flags": data,

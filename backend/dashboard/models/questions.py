@@ -1,26 +1,19 @@
 from django.db import models
+from ycheck.utils.constants import COLOR_CHOICES
+from .section import Section
 from ycheck.utils.constants import ResponseInputType
-from .adolescent import *
+from .adolescent import Adolescent
+from .mixin import UpstreamSyncBaseModel
 
 QUESTION_TYPE = [
-    ('survey', 'survey'),
-    ('assessment', 'assessment'),
-    ('survey_feedback', 'survey_feedback'),
+    ('pre_screening', 'pre_screening'),
     ('practice', 'practice'),
+    ('survey', 'survey'),
+    ('survey_feedback', 'survey_feedback'),
+    ('physical_assessment', 'physical_assessment'),
+    ('lab_assessment', 'lab_assessment'),
+    ('clinical_assessment', 'clinical_assessment'),
 ]
-
-
-class Section(UpstreamSyncBaseModel):
-    name = models.CharField(max_length=100, db_index=True)
-    instruction = models.TextField()
-    question_type = models.CharField(
-        max_length=100, default="survey",
-        choices=QUESTION_TYPE, db_index=True)
-    number = models.IntegerField(unique=True)
-    requires_game = models.BooleanField(default=False)
-
-    def __str__(self) -> str:
-        return self.name
 
 
 class PreviousResponseRequirement(UpstreamSyncBaseModel):
@@ -52,6 +45,32 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
         return matched if not self.is_inverted else not matched
 
 
+class QuestionGroup(UpstreamSyncBaseModel):
+    GROUP_EFFECT_CHOICES = [
+        ('highest_value', 'highest_value'),
+        ('lowest_value', 'lowest_value'),
+    ]
+    name = models.CharField(max_length=100)
+    group_effect = models.CharField(
+        max_length=100, choices=GROUP_EFFECT_CHOICES)
+
+    def get_group_value(self, adolescent: Adolescent):
+        if not hasattr(self, "questions"):
+            return
+
+        questions = self.questions.all()
+
+        responses = AdolescentResponse.objects.filter(
+            question__in=questions, adolescent=adolescent)
+        values = [value for response in responses for value in response.get_values_as_list(
+            numeric=True)]
+
+        if self.group_effect == "highest_value":
+            return max(values)
+        if self.group_effect == "lowest_value":
+            return min(values)
+
+
 class Question(UpstreamSyncBaseModel):
     TYPE_CHOICES = [
         ('basic', 'basic'),
@@ -65,8 +84,15 @@ class Question(UpstreamSyncBaseModel):
         ('checkboxes', 'checkboxes'),
         ('range_slider', 'range_slider'),
     ]
+    UNTIL_FUNCTION_TAG_CHOICES = [
+        ('bmi_height', 'bmi_height'),
+        ('bmi_weight', 'bmi_weight'),
+    ]
     admins_comment = models.TextField(null=True, blank=True)
-    caption = models.CharField(max_length=100, default="", null=True, blank=True)
+    group = models.ForeignKey(QuestionGroup, related_name="questions",
+                              on_delete=models.SET_NULL, null=True, blank=True)
+    caption = models.CharField(
+        max_length=100, default="", null=True, blank=True)
     question_type = models.TextField(choices=QUESTION_TYPE)
     question_id = models.CharField(max_length=50, unique=True, db_index=True)
     section = models.ForeignKey(
@@ -97,7 +123,34 @@ class Question(UpstreamSyncBaseModel):
     invert_adolescent_attribute_requirements = models.BooleanField(
         default=False, null=True, blank=True)
 
+    # Other conditions
+    previous_question_group = models.ForeignKey(QuestionGroup, related_name="dependent_questions",
+                                                on_delete=models.CASCADE, null=True, blank=True)
+    min_group_value = models.IntegerField(null=True, blank=True)
+    max_group_value = models.IntegerField(null=True, blank=True)
+
+    dependent_on_flag = models.ForeignKey(
+        "dashboard.SummaryFlag", on_delete=models.SET_NULL, null=True, blank=True)
+    expected_flag_color = models.CharField(
+        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
+
+    util_function_tag = models.CharField(
+        max_length=100, choices=UNTIL_FUNCTION_TAG_CHOICES, null=True, blank=True)
+
     def are_previous_response_conditions_met(self, adolescent):
+        if self.previous_question_group:
+            group_value = self.previous_question_group.get_group_value(
+                adolescent)
+            if group_value and self.min_group_value and group_value < self.min_group_value:
+                return False
+            if group_value and self.max_group_value and group_value > self.max_group_value:
+                return False
+
+        if (self.dependent_on_flag
+            and self.expected_flag_color
+                and self.dependent_on_flag.get_final_colour() != self.expected_flag_color):
+            return False
+
         conditions_met = []
         for response in self.previous_response_requirements.all():
             conditions_met.append(
@@ -107,10 +160,10 @@ class Question(UpstreamSyncBaseModel):
     def __str__(self):
         return f"{self.question_id} ({self.number}). {self.text}"
 
-    def get_response(self, adolescent):
+    def get_response(self, adolescent: Adolescent, numeric=False) -> list:
         response = AdolescentResponse.objects.filter(
             question=self, adolescent=adolescent).first()
-        return response.get_values_as_list() if response else []
+        return response.get_values_as_list(numeric) if response else []
 
 
 class Option(UpstreamSyncBaseModel):
@@ -124,7 +177,7 @@ class Option(UpstreamSyncBaseModel):
 
     def __str__(self) -> str:
         return f"{self.question.text} ({self.value})"
-    
+
     def has_image(self):
         return bool(self.image and self.image.file and True or False)
 
@@ -156,7 +209,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
                 if numeric and (option.numeric_value != None or self.text.strip().isdigit()):
                     value = option.numeric_value if option.numeric_value != None else int(
                         self.text.strip())
-                    responses.append(value)           
+                    responses.append(value)
                 elif not numeric:
                     value = option.value.strip().lower() if option.value != None else ""
                     responses.append(value)
