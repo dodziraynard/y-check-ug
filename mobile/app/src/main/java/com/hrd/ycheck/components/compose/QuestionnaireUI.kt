@@ -57,7 +57,7 @@ fun QuestionnaireUI(
     ) {
         Text(
             text = "Section $currentSectionNumber/$totalSectionCount",
-            fontSize = dimensionResource(id = R.dimen.text_size_title).value.sp,
+            fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
             color = colorResource(R.color.text_color),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth()

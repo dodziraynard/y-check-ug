@@ -238,7 +238,10 @@ class GetSurveyQuestions(generics.GenericAPIView):
 
         current_section = current_question.section if current_question else None
         if current_question:
-            if action == "next":
+            if action == "next_answered":
+                target_questions = target_questions.exclude(adolescentresponse__adolescent=adolescent)
+
+            if action in ["next", "next_answered"]:
                 target_questions = target_questions.filter(
                     number__gt=current_question.number).order_by("number")
             else:

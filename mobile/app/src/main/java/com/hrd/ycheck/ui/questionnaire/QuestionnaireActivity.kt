@@ -64,25 +64,11 @@ class QuestionnaireActivity : AppCompatActivity() {
         viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
 
         binding.nextButton.setOnClickListener {
-            val currentQuestionAnswered =
-                newAdolescentResponse?.value?.isNotEmpty() == true
-                        || newAdolescentResponse?.chosenOptions?.isNotEmpty() == true
-            viewModel.currentQuestionAnswered.value = currentQuestionAnswered
+            validateResponseAndProceed(adolescentId, "next")
+        }
 
-            if (newAdolescentResponse?.value?.isNotEmpty() == true && !isNumericResponseValid(
-                    currentQuestion!!,
-                    newAdolescentResponse!!.value
-                )
-            ) {
-                showInvalidValueDialog(newAdolescentResponse!!.value, currentQuestion!!);
-            } else if (currentQuestion?.toBeConfirmed == true && newAdolescentResponse?.value?.isNotEmpty() == true) {
-                confirmResponseValue(newAdolescentResponse!!.value, adolescentId);
-            } else if (currentQuestionAnswered) {
-                saveAndLoadNextQuestion(adolescentId)
-            } else {
-                Toast.makeText(this, "Please respond to continue.", Toast.LENGTH_LONG)
-                    .show();
-            }
+        binding.nextAnsweredQuestionButton.setOnClickListener {
+            validateResponseAndProceed(adolescentId, "next_answered")
         }
 
         viewModel.isLoading.observe(this) { value ->
@@ -166,7 +152,29 @@ class QuestionnaireActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveAndLoadNextQuestion(adolescentId: String) {
+    private fun validateResponseAndProceed(adolescentId: String, action: String = "next") {
+        val currentQuestionAnswered =
+            newAdolescentResponse?.value?.isNotEmpty() == true
+                    || newAdolescentResponse?.chosenOptions?.isNotEmpty() == true
+        viewModel.currentQuestionAnswered.value = currentQuestionAnswered
+
+        if (newAdolescentResponse?.value?.isNotEmpty() == true && !isNumericResponseValid(
+                currentQuestion!!,
+                newAdolescentResponse!!.value
+            )
+        ) {
+            showInvalidValueDialog(newAdolescentResponse!!.value, currentQuestion!!);
+        } else if (currentQuestion?.toBeConfirmed == true && newAdolescentResponse?.value?.isNotEmpty() == true) {
+            confirmResponseValue(newAdolescentResponse!!.value, adolescentId);
+        } else if (currentQuestionAnswered) {
+            saveAndLoadNextQuestion(adolescentId, action)
+        } else {
+            Toast.makeText(this, "Please respond to continue.", Toast.LENGTH_LONG)
+                .show();
+        }
+    }
+
+    private fun saveAndLoadNextQuestion(adolescentId: String, action: String = "next") {
         if (newAdolescentResponse != null) {
             currentQuestionId = newAdolescentResponse!!.questionId
             val value = newAdolescentResponse!!.value
@@ -175,7 +183,7 @@ class QuestionnaireActivity : AppCompatActivity() {
             } as List<Long>?
             viewModel.postSurveyResponse(adolescentId, currentQuestionId, value, options)
         }
-        viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
+        viewModel.getQuestion(adolescentId, currentQuestionId, action, questionnaireType)
     }
 
     private fun confirmGamePlay(
@@ -356,7 +364,9 @@ class QuestionnaireActivity : AppCompatActivity() {
         audioPlayer.release()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        super.onBackPressed()
         showExitDialog()
     }
 }

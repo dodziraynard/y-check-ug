@@ -132,4 +132,6 @@
     <string name="_2_tap_the_speaker_icon_next_to_the_question_or_option_to_hear_a_friendly_lady_read_the_text_aloud">2. Tap the speaker icon next to the question or option to hear a friendly lady read the text aloud.</string>
     <string name="_1_pick_the_options_that_fit_you_for_each_question_they_re_multiple_choice">1. Pick the options that fit you for each question—they\'re multiple choice!</string>
     <string name="please_read_me">Please read me.</string>
+    <string name="next_answered_question">Next answered question.</string>
+    <string name="close_test">Close test</string>
 </resources>
