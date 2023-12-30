@@ -5,7 +5,7 @@ from rest_framework import serializers
 import timeago
 from datetime import datetime
 from accounts.models import User
-from setup.models import MobileConfig
+from setup.models import MobileConfig, NodeConfig
 from dashboard.models import *
 from django.utils.timezone import make_aware
 
@@ -343,4 +343,12 @@ class TreatmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Treatment
+        fields = "__all__"
+        
+        
+        
+
+class NodeConfigSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NodeConfig
         fields = "__all__"
