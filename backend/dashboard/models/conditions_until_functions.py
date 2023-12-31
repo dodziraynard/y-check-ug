@@ -1,7 +1,61 @@
-from bisect import bisect_left
 import sys
+from bisect import bisect_left
+from collections import namedtuple
 from .adolescent import Adolescent
-from .questions import Question
+from .questions import Question, QuestionGroup
+
+
+def compute_grip_test(adolescent: Adolescent, for_right_arm=False) -> int:
+    """Determine the status of the adolescent grip test.
+        Returns:
+        - 0: No valid computation available.
+        - (-1): Below the recommended value.
+        - (+1): Above the recommended value.
+    """
+    GripTestValue = namedtuple("GripTestValue", "left_arm, right_arm")
+    males_age_min_value = {
+        10: GripTestValue(9.1, 10.8),
+        11: GripTestValue(11.2, 12.9),
+        12: GripTestValue(14.1, 15.8),
+        13: GripTestValue(17.9, 19.1),
+        14: GripTestValue(22.1, 22.7),
+        15: GripTestValue(26.1, 26.0),
+        16: GripTestValue(29.2, 28.7),
+        17: GripTestValue(31.2, 30.7),
+        18: GripTestValue(34.1, 34.1),
+        19: GripTestValue(35.7, 35.7),
+    }
+    females_age_min_value = {
+        10: GripTestValue(9.4, 10.4),
+        11: GripTestValue(11.2, 12.5),
+        12: GripTestValue(13.0, 14.6),
+        13: GripTestValue(14.6, 16.5),
+        14: GripTestValue(15.8, 18.0),
+        15: GripTestValue(16.7, 18.9),
+        16: GripTestValue(17.3, 19.3),
+        17: GripTestValue(17.8, 19.3),
+        18: GripTestValue(18.2, 19.3),
+        19: GripTestValue(19.2, 19.3),
+    }
+
+    group = QuestionGroup.objects.filter(
+        util_function_tag="right_grip_test").first()
+    if not (group and adolescent and adolescent.gender):
+        return 0
+    grip_test_result = group.get_group_value(adolescent)
+    if not grip_test_result:
+        return 0
+
+    age = adolescent.get_age()
+    recommended_value = None
+    match adolescent.gender.lower():
+        case "male":
+            recommended_value = males_age_min_value.get(age)
+        case "female":
+            recommended_value = females_age_min_value.get(age)
+    if recommended_value and recommended_value[for_right_arm] > grip_test_result:
+        return 1
+    return -1
 
 
 def compute_bmi_sd_function(adolescent: Adolescent) -> int:

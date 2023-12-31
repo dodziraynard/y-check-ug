@@ -50,11 +50,17 @@ class QuestionGroup(UpstreamSyncBaseModel):
         ('highest_value', 'highest_value'),
         ('lowest_value', 'lowest_value'),
     ]
+    UNTIL_FUNCTION_TAG_CHOICES = [
+        ('right_grip_test', 'right_grip_test'),
+        ('left_grip_test', 'left_grip_test'),
+    ]
     name = models.CharField(max_length=100)
+    util_function_tag = models.CharField(
+        max_length=100, choices=UNTIL_FUNCTION_TAG_CHOICES, null=True, blank=True)
     group_effect = models.CharField(
         max_length=100, choices=GROUP_EFFECT_CHOICES)
 
-    def get_group_value(self, adolescent: Adolescent):
+    def get_group_value(self, adolescent: Adolescent) -> int | None:
         if not hasattr(self, "questions"):
             return
 

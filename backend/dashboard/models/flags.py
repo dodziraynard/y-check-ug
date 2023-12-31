@@ -1,7 +1,6 @@
 import sys
 from django.db import models
-from traitlets import default
-from dashboard.models.conditions_until_functions import compute_bmi_sd_function
+from dashboard.models.conditions_until_functions import compute_bmi_sd_function, compute_grip_test
 from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
 from .adolescent import *
@@ -145,6 +144,8 @@ class FlagCondition(UpstreamSyncBaseModel):
         ("gender_is", "gender_is"),
         ("invoke_bmi_sd_function", "invoke_bmi_sd_function"),
         ("group_value_between", "group_value_between"),
+        ("compute_right_grip_test", "compute_right_grip_test"),
+        ("compute_left_grip_test", "compute_left_grip_test"),
     ]
     name = models.CharField(max_length=100, null=True, blank=True)
 
@@ -249,6 +250,12 @@ class FlagCondition(UpstreamSyncBaseModel):
             case "q1_q2_difference_is_less_than_expected_integer_value":
                 diff = self._process_diff_value(response1, response2)
                 matched = diff != None and self.expected_integer_value != None and diff < self.expected_integer_value
+            case "compute_right_grip_test":
+                test_result = compute_grip_test(adolescent, for_right_arm=True)
+                matched = self.expected_integer_value == test_result
+            case "compute_left_grip_test":
+                test_result = compute_grip_test(adolescent, for_right_arm=False)
+                matched = self.expected_integer_value == test_result
 
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched
