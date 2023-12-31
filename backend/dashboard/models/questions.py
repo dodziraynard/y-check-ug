@@ -60,6 +60,9 @@ class QuestionGroup(UpstreamSyncBaseModel):
     group_effect = models.CharField(
         max_length=100, choices=GROUP_EFFECT_CHOICES)
 
+    def __str__(self) -> str:
+        return self.name
+
     def get_group_value(self, adolescent: Adolescent) -> int | None:
         if not hasattr(self, "questions"):
             return
@@ -136,7 +139,7 @@ class Question(UpstreamSyncBaseModel):
     max_group_value = models.IntegerField(null=True, blank=True)
 
     dependent_on_flag = models.ForeignKey(
-        "dashboard.SummaryFlag", on_delete=models.SET_NULL, null=True, blank=True)
+        "dashboard.FlagColor", on_delete=models.SET_NULL, null=True, blank=True)
     expected_flag_color = models.CharField(
         choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
 
