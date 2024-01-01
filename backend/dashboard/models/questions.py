@@ -22,6 +22,10 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
     question = models.ForeignKey("Question", on_delete=models.CASCADE)
     response_is = models.CharField(max_length=100, null=True, blank=True)
     min_integer_value = models.IntegerField(null=True, blank=True)
+    dependent_on_flag = models.ForeignKey(
+        "dashboard.FlagColor", on_delete=models.SET_NULL, null=True, blank=True)
+    expected_flag_color = models.CharField(
+        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
 
     # Can be used to establish 'skip' dependencies.
     is_inverted = models.BooleanField(default=False)
@@ -30,6 +34,11 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
         return f"'{self.question.text}' must be '{self.response_is}'"
 
     def is_previous_response_condition_met(self, adolescent):
+        if (self.dependent_on_flag
+            and self.expected_flag_color
+                and self.dependent_on_flag.get_final_colour() != self.expected_flag_color):
+            return False
+
         response = AdolescentResponse.objects.filter(
             question=self.question, adolescent=adolescent).first()
         if not response:
@@ -138,11 +147,6 @@ class Question(UpstreamSyncBaseModel):
     min_group_value = models.IntegerField(null=True, blank=True)
     max_group_value = models.IntegerField(null=True, blank=True)
 
-    dependent_on_flag = models.ForeignKey(
-        "dashboard.FlagColor", on_delete=models.SET_NULL, null=True, blank=True)
-    expected_flag_color = models.CharField(
-        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
-
     util_function_tag = models.CharField(
         max_length=100, choices=UNTIL_FUNCTION_TAG_CHOICES, null=True, blank=True)
 
@@ -154,11 +158,6 @@ class Question(UpstreamSyncBaseModel):
                 return False
             if group_value and self.max_group_value and group_value > self.max_group_value:
                 return False
-
-        if (self.dependent_on_flag
-            and self.expected_flag_color
-                and self.dependent_on_flag.get_final_colour() != self.expected_flag_color):
-            return False
 
         conditions_met = []
         for response in self.previous_response_requirements.all():
