@@ -232,7 +232,7 @@ class GetSurveyQuestions(generics.GenericAPIView):
                         invert_adolescent_attribute_requirements=True)
                 )
             ) &
-            (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
+            (Q(study_phase=None) | Q(study_phase__iexact=adolescent.study_phase))
         )
 
         current_question = target_questions.filter(
