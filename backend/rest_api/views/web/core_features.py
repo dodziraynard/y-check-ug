@@ -60,24 +60,8 @@ class GetSummaryFlags(generics.GenericAPIView):
             return Response({"error_message": f"{pid} not found."})
 
         # Compute flags
-        flag_lables = FlagLabel.objects.all()
-        for label in flag_lables:
-            color = label.get_flag_color(adolescent)
-            if not color:
-                # This flag is no longer applicable, delete.
-                SummaryFlag.objects.filter(
-                    adolescent=adolescent, label=label).delete()
-                continue
-
-            flag = SummaryFlag.objects.filter(
-                adolescent=adolescent, label=label).first()
-            if not flag:
-                flag = SummaryFlag.objects.create(
-                    adolescent=adolescent, label=label, computed_color_code=color)
-            elif flag.computed_color_code != color:
-                flag.computed_color_code = color
-                flag.save()
-
+        SummaryFlag.compute_flag_color(adolescent=adolescent)
+        
         # Retrieve all flags
         flags = SummaryFlag.objects.filter(
             adolescent=adolescent).order_by("label__name")

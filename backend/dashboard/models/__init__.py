@@ -5,5 +5,6 @@ from .treatment import *
 from .referrals import *
 from .service import *
 from .section import *
+from .questions import *
 from .checkup_location import *
 from .previous_question_requirement import *

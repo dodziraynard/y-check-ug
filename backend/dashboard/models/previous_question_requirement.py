@@ -29,11 +29,14 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
             return "INVALID REQUIREMENTS"
 
     def is_previous_response_condition_met(self, adolescent):
-        summary = SummaryFlag.objects.filter(
-            label=self.dependent_on_flag, adolescent=adolescent).first()
-
         # Check previous flag requirements
         if self.dependent_on_flag and self.expected_flag_color:
+            
+            # Compute/update all flag colors before checking the conditions.
+            SummaryFlag.compute_flag_color(adolescent=adolescent)
+
+            summary = SummaryFlag.objects.filter(label=self.dependent_on_flag, adolescent=adolescent).first()
+
             if (summary and self.dependent_on_flag
                     and summary.get_final_colour() != self.expected_flag_color):
                 return False

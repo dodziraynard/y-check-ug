@@ -3,8 +3,9 @@ from django.db import models
 from dashboard.models.conditions_until_functions import compute_bmi_sd_function, compute_grip_test
 from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
-from .adolescent import *
-from .questions import *
+from .adolescent import Adolescent
+from .questions import Question, QuestionGroup, AdolescentResponse
+from .mixin import UpstreamSyncBaseModel
 
 
 class SummaryFlag(UpstreamSyncBaseModel):
@@ -28,6 +29,26 @@ class SummaryFlag(UpstreamSyncBaseModel):
             models.UniqueConstraint(
                 fields=['adolescent', 'label'], name='Adolescent flag')
         ]
+    
+    @classmethod
+    def compute_flag_color(cls, adolescent: Adolescent):
+        flag_lables = FlagLabel.objects.all()
+        for label in flag_lables:
+            color = label.get_flag_color(adolescent)
+            if not color:
+                # This flag is no longer applicable, delete.
+                SummaryFlag.objects.filter(
+                    adolescent=adolescent, label=label).delete()
+                continue
+
+            flag = SummaryFlag.objects.filter(
+                adolescent=adolescent, label=label).first()
+            if not flag:
+                flag = SummaryFlag.objects.create(
+                    adolescent=adolescent, label=label, computed_color_code=color)
+            elif flag.computed_color_code != color:
+                flag.computed_color_code = color
+                flag.save()
 
     def get_final_colour(self):
         return self.updated_color_code if self.updated_color_code else self.computed_color_code
