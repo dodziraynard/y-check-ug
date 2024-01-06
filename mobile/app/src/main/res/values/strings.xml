@@ -116,8 +116,8 @@
     <string name="boarding">Boarding</string>
     <string name="day">Day</string>
     <string name="residential_status">Residential Status</string>
-    <string name="grade_1">1</string>
-    <string name="grade_2">2</string>
+    <string name="grade_1">Year 1</string>
+    <string name="grade_2">Year 2</string>
     <string name="young_person_s_grade">Young person\'s grade</string>
     <string name="select_type_of_adolescent">Select type of adolescent.</string>
     <string name="leaves_in_catchment_area">Leaves in catchment area.</string>
@@ -137,4 +137,7 @@
     <string name="lab_assessment">Lab Assessment</string>
     <string name="clinical_assessment">Clinical Assessment</string>
     <string name="pre_screening_assessment">Pre-screening Assessment</string>
+    <string name="pid">PID</string>
+    <string name="y_check_services_research"><![CDATA[Y-Check Services & Research]]></string>
+    <string name="y_check_services_only">Y-Check Services Only</string>
 </resources>

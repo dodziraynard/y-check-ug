@@ -46,8 +46,13 @@ object ResidentialStatus {
 }
 
 object Grade {
-    const val YEAR_ONE = "1"
-    const val YEAR_TWO = "2"
+    const val YEAR_ONE = "YEAR 1"
+    const val YEAR_TWO = "YEAR 2"
+}
+
+object CheckUpReason {
+    const val Y_CHECK_SERVICES_AND_RESEARCH = "Y-Check Services & Research"
+    const val Y_CHECK_SERVICES_ONLY = "Y-Check Services Only"
 }
 
 object LivesInCatchment {

@@ -16,6 +16,7 @@ data class Adolescent(
     @SerializedName("visit_type") var visitType: String,
     var dob: Long,
     @SerializedName("check_up_location") var checkupLocation: String,
+    @SerializedName("check_up_reason") var checkupReason: String?,
     @SerializedName("school") var school: String? = null,
     @SerializedName("consent") var consent: String? = null,
     @SerializedName("grade") var grade: String? = null,

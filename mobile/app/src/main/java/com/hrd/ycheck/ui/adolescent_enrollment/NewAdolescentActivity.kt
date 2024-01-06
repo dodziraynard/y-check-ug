@@ -49,6 +49,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 "",
                 1694350811258,
                 "",
+                null,
                 "",
                 "",
                 "",
@@ -126,10 +127,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 object : AdapterView.OnItemSelectedListener {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                     override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
+                        parent: AdapterView<*>?, view: View?, position: Int, id: Long
                     ) {
                         adolescent.school = allSchoolOptions[position]
                     }
@@ -210,6 +208,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                     binding.gradeContainer.visibility = View.VISIBLE
                     viewModel.getSchool(adolescent.type)
                 }
+
                 R.id.adolescent_type_secondary -> {
                     adolescent.type = AdolescentTypes.SECONDARY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.SECONDARY}")
@@ -219,6 +218,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                     binding.gradeContainer.visibility = View.VISIBLE
                     viewModel.getSchool(adolescent.type)
                 }
+
                 R.id.adolescent_type_community -> {
                     adolescent.type = AdolescentTypes.COMMUNITY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.COMMUNITY}")
@@ -235,9 +235,11 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.visit_type_pilot_testing -> {
                     adolescent.visitType = VisitTypes.PILOT_TESTING
                 }
+
                 R.id.visit_type_initial -> {
                     adolescent.visitType = VisitTypes.INITIAL
                 }
+
                 R.id.visit_type_follow_up -> {
                     adolescent.visitType = VisitTypes.FOLLOW_UP
                 }
@@ -249,6 +251,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.sex_male -> {
                     adolescent.gender = Genders.MALE
                 }
+
                 R.id.sex_female -> {
                     adolescent.gender = Genders.FEMALE
                 }
@@ -260,9 +263,11 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.lives_in_catchment_yes -> {
                     adolescent.livesInCatchment = LivesInCatchment.YES
                 }
+
                 R.id.lives_in_catchment_no -> {
                     adolescent.livesInCatchment = LivesInCatchment.NO
                 }
+
                 R.id.lives_in_catchment_na -> {
                     adolescent.livesInCatchment = LivesInCatchment.NA
                 }
@@ -274,12 +279,15 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.icf_conf_adolescent -> {
                     adolescent.consent = IAFConsents.ADOLESCENT
                 }
+
                 R.id.icf_conf_parent -> {
                     adolescent.consent = IAFConsents.PARENT
                 }
+
                 R.id.icf_conf_adolescent_parent -> {
                     adolescent.consent = IAFConsents.ADOLESCENT_PARENT
                 }
+
                 R.id.icf_conf_no -> {
                     adolescent.consent = IAFConsents.NO
                 }
@@ -292,6 +300,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.residential_status_day -> {
                     adolescent.residentialStatus = ResidentialStatus.DAY
                 }
+
                 R.id.residential_status_boarding -> {
                     adolescent.residentialStatus = ResidentialStatus.BOARDING
                 }
@@ -303,8 +312,21 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.grade_1 -> {
                     adolescent.grade = Grade.YEAR_ONE
                 }
+
                 R.id.grade_2 -> {
                     adolescent.grade = Grade.YEAR_TWO
+                }
+            }
+        }
+
+        binding.checkUpReasonGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.check_up_reason_services_research -> {
+                    adolescent.checkupReason = CheckUpReason.Y_CHECK_SERVICES_AND_RESEARCH
+                }
+
+                R.id.check_up_reason_services_only -> {
+                    adolescent.checkupReason = CheckUpReason.Y_CHECK_SERVICES_ONLY
                 }
             }
         }
@@ -357,6 +379,15 @@ class NewAdolescentActivity : AppCompatActivity() {
             VisitTypes.PILOT_TESTING.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_initial)
             VisitTypes.INITIAL.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_initial)
             VisitTypes.FOLLOW_UP.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_follow_up)
+        }
+
+        // Check-up reason
+        when (adolescent.checkupReason?.uppercase()) {
+            CheckUpReason.Y_CHECK_SERVICES_AND_RESEARCH.uppercase() -> binding.checkUpReasonGroup.check(
+                R.id.check_up_reason_services_research
+            )
+
+            CheckUpReason.Y_CHECK_SERVICES_ONLY.uppercase() -> binding.checkUpReasonGroup.check(R.id.check_up_reason_services_only)
         }
 
         // Gender
@@ -484,22 +515,8 @@ class NewAdolescentActivity : AppCompatActivity() {
         return age in 10..19
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if (adolescent.photoUrl?.isNotEmpty() == true && validateForm(adolescent)) {
-            menuInflater.inflate(R.menu.new_adolescent_activity_menu, menu)
-        }
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_questionnaire -> {
-                val intent = Intent(this@NewAdolescentActivity, QuestionnaireActivity::class.java)
-                intent.putExtra("adolescent", adolescent)
-                startActivity(intent)
-                finish()
-            }
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)

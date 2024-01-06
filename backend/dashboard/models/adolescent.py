@@ -23,6 +23,7 @@ class Adolescent(UpstreamSyncBaseModel):
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
     dob = models.DateTimeField(null=True, blank=True)
     check_up_location = models.CharField(max_length=200)
+    check_up_reason = models.CharField(max_length=200, null=True, blank=True)
     type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
     residential_status = models.CharField(
         max_length=200, null=True, blank=True)

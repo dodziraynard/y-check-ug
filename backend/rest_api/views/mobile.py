@@ -150,6 +150,8 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
                     setattr(adolescent, key, value)
             adolescent.save()
         except Exception as e:
+            logger.error("Error occured while adding/updating adolescent: ", str(e))
+
             error_message = f"Error: {str(e)}"
             if "UNIQUE" in str(e):
                 error_message = "PID already exists."
