@@ -45,8 +45,8 @@
     <string name="secondary">Secondary</string>
     <string name="community">Community</string>
     <string name="initial">Initial</string>
-    <string name="follow_up">Follow-up</string>
-    <string name="select_type_of_visit">Select type of visit.</string>
+    <string name="implementation">Implementation</string>
+    <string name="study_phase">Study Phase</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
     <string name="choose_checkup_location">Choose check-up location</string>
@@ -57,7 +57,7 @@
     <string name="search_result">Search result</string>
     <string name="go">Go</string>
     <string name="no_results_found">No results found.</string>
-    <string name="edit_details">Edit details</string>
+    <string name="edit_details">Edit Details</string>
     <string name="open_camera">Open Camera</string>
     <string name="upload">Upload</string>
     <string name="yes">Yes</string>
@@ -78,7 +78,7 @@
     <string name="adolescent_not_found">Adolescent not found.</string>
     <string name="no_more_questions">You have successfully completed all the questions in this survey.</string>
     <string name="play_game_confirmation">Would you like to take a break by playing a game?</string>
-    <string name="yes_adolescent_consent">Yes adolescent consent</string>
+    <string name="yes_adolescent_consent">Yes adolescent assent</string>
     <string name="yes_adolescent_parent_consent">Yes adolescent and parent consent</string>
     <string name="yes_parental_consent">Yes parental consent</string>
     <string name="confirmation_of_consent_form_received">Confirmation of consent form received</string>
@@ -86,10 +86,9 @@
     <string name="choose_activity">Choose an activity below to begin …</string>
     <string name="what_todo">What would you want to do today?</string>
     <string name="hi">Hi</string>
-    <string name="new_adolescent">New adolescent</string>
     <string name="new_adolescent_instruction">Enroll a new adolescent to complete the screening tests.</string>
-    <string name="search_adolescent">Search adolescent</string>
-    <string name="search_adolescent_instruction">Enter lab assessment results.</string>
+    <string name="search_adolescent">Search Adolescent</string>
+    <string name="search_adolescent_instruction">Search for adolescent and update or enter assessment records.</string>
     <string name="home_screen_background_image">Home screen background image</string>
     <string name="pid_is_required">PID is required.</string>
     <string name="surname_is_required">Surname is required.</string>
@@ -140,4 +139,6 @@
     <string name="pid">PID</string>
     <string name="y_check_services_research"><![CDATA[Y-Check Services & Research]]></string>
     <string name="y_check_services_only">Y-Check Services Only</string>
+    <string name="parental_adolescent_assent_error_message">Parental consent and adolescent assent is required for adolescent under 18 years.</string>
+    <string name="register_adolescent">Register Adolescent</string>
 </resources>

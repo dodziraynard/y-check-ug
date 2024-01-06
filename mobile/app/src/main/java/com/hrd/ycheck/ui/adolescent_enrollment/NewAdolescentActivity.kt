@@ -215,18 +215,14 @@ class NewAdolescentActivity : AppCompatActivity() {
             }
         }
 
-        binding.visitTypeGroup.setOnCheckedChangeListener { _, checkedId ->
+        binding.studyPhaseGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.visit_type_pilot_testing -> {
-                    adolescent.visitType = VisitTypes.PILOT_TESTING
+                R.id.study_phase_pilot -> {
+                    adolescent.studyPhase = StudyPhase.PILOT
                 }
 
-                R.id.visit_type_initial -> {
-                    adolescent.visitType = VisitTypes.INITIAL
-                }
-
-                R.id.visit_type_follow_up -> {
-                    adolescent.visitType = VisitTypes.FOLLOW_UP
+                R.id.study_phase_implementation -> {
+                    adolescent.studyPhase = StudyPhase.IMPLEMENTATION
                 }
             }
         }
@@ -323,7 +319,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
             val age = ((System.currentTimeMillis() - calendar.timeInMillis) / 31556952000).toInt()
-            if (age > 20 || age < 10) {
+            if (age >= 20 || age < 10) {
                 binding.dobError.setTextColor(getColor(R.color.color_warning))
                 binding.dobError.text = "$age-year-olds are not eligible for this exercise."
                 binding.dobError.visibility = View.VISIBLE
@@ -359,11 +355,10 @@ class NewAdolescentActivity : AppCompatActivity() {
             AdolescentTypes.COMMUNITY.uppercase() -> binding.adolescentTypeGroup.check(R.id.adolescent_type_community)
         }
 
-        // Type of visit
-        when (adolescent.visitType.uppercase()) {
-            VisitTypes.PILOT_TESTING.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_initial)
-            VisitTypes.INITIAL.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_initial)
-            VisitTypes.FOLLOW_UP.uppercase() -> binding.visitTypeGroup.check(R.id.visit_type_follow_up)
+        // Study phase
+        when (adolescent.studyPhase.uppercase()) {
+            StudyPhase.PILOT.uppercase() -> binding.studyPhaseGroup.check(R.id.study_phase_pilot)
+            StudyPhase.IMPLEMENTATION.uppercase() -> binding.studyPhaseGroup.check(R.id.study_phase_implementation)
         }
 
         // Check-up reason
@@ -463,7 +458,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         // Visit type
-        if (adolescent.visitType.isEmpty()) {
+        if (adolescent.studyPhase.isEmpty()) {
             binding.visitTypeErrorMessageLabel.visibility = View.VISIBLE
             return false
         } else {
@@ -494,7 +489,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             binding.icfConfErrorMessageLabel.visibility = View.VISIBLE
             if (age < 18) {
                 binding.icfConfErrorMessageLabel.text =
-                    "\"${IAFConsents.ADOLESCENT_PARENT}\" is required."
+                    getString(R.string.parental_adolescent_assent_error_message)
             }
             return false
         } else {

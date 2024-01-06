@@ -88,31 +88,25 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/select_type_of_visit"
+                        android:text="@string/study_phase"
                         android:textStyle="bold" />
 
                     <RadioGroup
-                        android:id="@+id/visit_type_group"
+                        android:id="@+id/study_phase_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <RadioButton
-                            android:id="@+id/visit_type_pilot_testing"
+                            android:id="@+id/study_phase_pilot"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/pilot" />
 
                         <RadioButton
-                            android:id="@+id/visit_type_initial"
+                            android:id="@+id/study_phase_implementation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/initial" />
-
-                        <RadioButton
-                            android:id="@+id/visit_type_follow_up"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/follow_up" />
+                            android:text="@string/implementation" />
                     </RadioGroup>
 
                     <TextView
@@ -144,7 +138,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/select_type_of_visit"
+                        android:text="@string/study_phase"
                         android:textStyle="bold" />
 
                     <RadioGroup

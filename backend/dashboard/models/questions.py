@@ -90,7 +90,7 @@ class Question(UpstreamSyncBaseModel):
     max_numeric_value = models.IntegerField(null=True, blank=True)
 
     # Required adolescent attributes
-    type_of_visit = models.CharField(max_length=100, null=True, blank=True)
+    study_phase = models.CharField(max_length=100, null=True, blank=True)
     min_age = models.IntegerField(null=True, blank=True)
     max_age = models.IntegerField(null=True, blank=True)
     gender = models.CharField(max_length=100, null=True, blank=True)

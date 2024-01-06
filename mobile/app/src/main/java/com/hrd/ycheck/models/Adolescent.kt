@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 data class Adolescent(
     var surname: String,
     @SerializedName("other_names") var otherNames: String,
-    @SerializedName("visit_type") var visitType: String,
+    @SerializedName("study_phase") var studyPhase: String,
     var dob: Long,
     @SerializedName("check_up_location") var checkupLocation: String,
     @SerializedName("check_up_reason") var checkupReason: String?,

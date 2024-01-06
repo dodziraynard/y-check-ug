@@ -34,10 +34,9 @@ object Genders {
     const val FEMALE = "female"
 }
 
-object VisitTypes {
-    const val PILOT_TESTING = "pilot"
-    const val INITIAL = "initial"
-    const val FOLLOW_UP = "follow-up"
+object StudyPhase {
+    const val PILOT = "pilot"
+    const val IMPLEMENTATION = "initial"
 }
 
 object ResidentialStatus {

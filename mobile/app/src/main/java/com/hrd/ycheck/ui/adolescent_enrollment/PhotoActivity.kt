@@ -22,6 +22,7 @@ import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityPhotoBinding
 import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
+import com.hrd.ycheck.utils.QuestionnaireType
 import java.io.File
 
 
@@ -69,21 +70,16 @@ class PhotoActivity : AppCompatActivity() {
             postImageToServer(adolescent, cameraUri)
         }
 
-        viewModel.updatedAdolescent.observe(this) { adoles ->
-            if (adoles != null) {
+        viewModel.updatedAdolescent.observe(this) { adolescent ->
+            if (adolescent != null) {
                 val dialog =
                     AlertDialog.Builder(this).setTitle(getString(R.string.profile_complete))
                         .setCancelable(true)
-                        .setNegativeButton(getString(R.string.no)) { _, _ ->
-                            finish()
-                        }.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                            val intent = Intent(this, QuestionnaireActivity::class.java)
-                            intent.putExtra("adolescent", adolescent)
-                            startActivity(intent)
+                        .setPositiveButton(getString(R.string.ok)) { _, _ ->
                             finish()
                         }
                         .setMessage(
-                            "Adolescent's profile setup is complete. Would you like to continue to the questionnaire?"
+                            "Adolescent's profile setup is complete. You ID is ${adolescent.pid}"
                         )
                 dialog.create()
                 dialog.show()
