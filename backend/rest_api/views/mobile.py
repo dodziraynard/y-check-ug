@@ -304,7 +304,7 @@ class RespondToSurveyQuestion(generics.GenericAPIView):
         current_question_id = request.data.get("question_id")
         adolescent_id = request.data.get("adolescent_id")
         value = request.data.get("value")
-        option_ids = list(map(int, request.data.getlist("option_ids")))
+        option_ids = request.data.getlist("option_ids")
 
         adolescent = Adolescent.objects.filter(id=adolescent_id).first()
         if not adolescent:

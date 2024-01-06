@@ -77,13 +77,23 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     AdolescentSearchResultOptionLayoutBinding.inflate(layoutInflater)
                 bottomSheetDialog.setContentView(dialogBinding.root)
 
-                dialogBinding.editOptionContainer.setOnClickListener {
+                dialogBinding.editOption.setOnClickListener {
                     val intent =
                         Intent(this@SearchAdolescentActivity, NewAdolescentActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     startActivity(intent)
                 }
-                dialogBinding.questionnaireOptionContainer.setOnClickListener {
+                dialogBinding.preScreeningOption.setOnClickListener {
+                    val intent =
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            QuestionnaireActivity::class.java
+                        )
+                    intent.putExtra("question_type", QuestionnaireType.PRE_SCREENING)
+                    intent.putExtra("adolescent", adolescent)
+                    startActivity(intent)
+                }
+                dialogBinding.screeningOption.setOnClickListener {
                     val intent =
                         Intent(
                             this@SearchAdolescentActivity,
@@ -93,11 +103,11 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     intent.putExtra("adolescent", adolescent)
                     startActivity(intent)
                 }
-                dialogBinding.enterOptionContainer.setOnClickListener {
+                dialogBinding.physicalAssessmentOption.setOnClickListener {
                     val intent =
                         Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
-                    intent.putExtra("question_type", QuestionnaireType.ASSESSMENT)
+                    intent.putExtra("question_type", QuestionnaireType.PHYSICAL_ASSESSMENT)
                     startActivity(intent)
                 }
                 bottomSheetDialog.show()

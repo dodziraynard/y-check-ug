@@ -13,89 +13,107 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
+        android:layout_gravity="start"
+        android:gravity="start"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/edit_option_container"
+        <TextView
+            android:id="@+id/pre_screening_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp"
             android:clickable="true"
+            android:drawablePadding="10dp"
             android:foreground="?android:selectableItemBackground"
-            android:padding="15dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/edit"
-                android:src="@drawable/baseline_edit_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/edit"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:padding="15dp"
+            android:text="@string/pre_screening_assessment"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_question_answer_24" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:background="@color/border_color" />
 
-        <LinearLayout
-            android:id="@+id/questionnaire_option_container"
+
+        <TextView
+            android:id="@+id/screening_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp"
             android:clickable="true"
+            android:drawablePadding="10dp"
             android:foreground="?android:selectableItemBackground"
-            android:padding="15dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/screening_test"
-                android:src="@drawable/baseline_question_answer_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/screening_test"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:padding="15dp"
+            android:text="@string/screening_test"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_question_answer_24" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:background="@color/border_color" />
 
-        <LinearLayout
-            android:id="@+id/enter_option_container"
+        <TextView
+            android:id="@+id/physical_assessment_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp"
             android:clickable="true"
+            android:drawablePadding="10dp"
             android:foreground="?android:selectableItemBackground"
-            android:padding="15dp">
+            android:padding="15dp"
+            android:text="@string/enter_assessment_values"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/lap_result"
-                android:src="@drawable/baseline_health_and_safety_24" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/border_color" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/enter_assessment_values"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/lab_assessment_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="15dp"
+            android:text="@string/lab_assessment"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/border_color" />
+
+        <TextView
+            android:id="@+id/clinical_assessment_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="15dp"
+            android:text="@string/clinical_assessment"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/border_color" />
+
+        <TextView
+            android:id="@+id/edit_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="15dp"
+            android:text="@string/edit_details"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/baseline_edit_24" />
 
     </LinearLayout>
 </FrameLayout>

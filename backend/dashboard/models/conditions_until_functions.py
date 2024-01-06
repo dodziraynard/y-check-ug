@@ -38,8 +38,9 @@ def compute_grip_test(adolescent: Adolescent, for_right_arm=False) -> int:
         19: GripTestValue(19.2, 19.3),
     }
 
+    util_function_tag = "right_grip_test" if for_right_arm else "left_grip_test"
     group = QuestionGroup.objects.filter(
-        util_function_tag="right_grip_test").first()
+        util_function_tag=util_function_tag).first()
     if not (group and adolescent and adolescent.gender):
         return 0
     grip_test_result = group.get_group_value(adolescent)

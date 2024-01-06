@@ -20,10 +20,13 @@ object AdolescentTypes {
 }
 
 object QuestionnaireType {
+    const val PRE_SCREENING = "pre_screening"
     const val SURVEY_PRACTICE = "practice"
     const val SURVEY = "survey"
-    const val ASSESSMENT = "assessment"
     const val SURVEY_FEEDBACK = "survey_feedback"
+    const val PHYSICAL_ASSESSMENT = "physical_assessment"
+    const val LAB_ASSESSMENT = "lab_assessment"
+    const val CLINICAL_ASSESSMENT = "clinical_assessment"
 }
 
 object Genders {

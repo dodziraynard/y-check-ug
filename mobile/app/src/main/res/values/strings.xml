@@ -57,14 +57,14 @@
     <string name="search_result">Search result</string>
     <string name="go">Go</string>
     <string name="no_results_found">No results found.</string>
-    <string name="edit">Edit</string>
+    <string name="edit_details">Edit details</string>
     <string name="open_camera">Open Camera</string>
     <string name="upload">Upload</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="profile_complete">Profile complete</string>
     <string name="screening_test">Screening test</string>
-    <string name="enter_assessment_values">Enter physical assessment value.</string>
+    <string name="enter_assessment_values">Physical assessment</string>
     <string name="welcome">Welcome!</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -134,4 +134,7 @@
     <string name="please_read_me">Please read me.</string>
     <string name="next_answered_question">Next answered question.</string>
     <string name="close_test">Close test</string>
+    <string name="lab_assessment">Lab Assessment</string>
+    <string name="clinical_assessment">Clinical Assessment</string>
+    <string name="pre_screening_assessment">Pre-screening assessment</string>
 </resources>
