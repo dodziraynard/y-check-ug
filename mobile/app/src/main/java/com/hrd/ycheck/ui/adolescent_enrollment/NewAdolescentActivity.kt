@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityNewAdolescentBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.*
 import java.util.*
 
@@ -62,7 +64,10 @@ class NewAdolescentActivity : AppCompatActivity() {
 
         viewModel.updatedAdolescent.observe(this) { adolescent ->
             // Choose to update profile photo screen
-            Toast.makeText(this, "Adolescent added successfully.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                getString(R.string.adolescent_added_successfully), Toast.LENGTH_LONG
+            ).show()
             val intent = Intent(this@NewAdolescentActivity, PhotoActivity::class.java)
             intent.putExtra("adolescent", adolescent)
             startActivity(intent)
@@ -191,6 +196,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                     binding.livesInCatchmentContainer.visibility = View.GONE
                     binding.schoolContainer.visibility = View.VISIBLE
                     binding.gradeContainer.visibility = View.VISIBLE
+                    binding.checkUpLocationContainer.visibility = View.GONE
                     viewModel.getSchool(adolescent.type)
                 }
 
@@ -201,6 +207,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                     binding.livesInCatchmentContainer.visibility = View.GONE
                     binding.schoolContainer.visibility = View.VISIBLE
                     binding.gradeContainer.visibility = View.VISIBLE
+                    binding.checkUpLocationContainer.visibility = View.GONE
                     viewModel.getSchool(adolescent.type)
                 }
 
@@ -209,8 +216,9 @@ class NewAdolescentActivity : AppCompatActivity() {
                     viewModel.getCheckupLocations("type:${AdolescentTypes.COMMUNITY}")
                     binding.residentialStatusContainer.visibility = View.GONE
                     binding.livesInCatchmentContainer.visibility = View.VISIBLE
-                    binding.schoolContainer.visibility = View.GONE
+                    binding.schoolContainer.visibility = View.VISIBLE
                     binding.gradeContainer.visibility = View.GONE
+                    binding.checkUpLocationContainer.visibility = View.VISIBLE
                 }
             }
         }
@@ -335,7 +343,10 @@ class NewAdolescentActivity : AppCompatActivity() {
             if (validateForm(adolescent)) {
                 viewModel.postAdolescent(adolescent)
             } else {
-                Toast.makeText(this, "Please check form for errors.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -500,9 +511,27 @@ class NewAdolescentActivity : AppCompatActivity() {
         return age in 10..19
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.new_adolescent_activity_menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
+        }
+        when (item.itemId) {
+            R.id.action_page_registration -> {
+                val intent =
+                    Intent(
+                        this@NewAdolescentActivity,
+                        PagedAdolescentRegistrationActivity::class.java
+                    )
+                intent.putExtra("adolescent", adolescent)
+                startActivity(intent)
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

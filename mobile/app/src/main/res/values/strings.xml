@@ -141,4 +141,9 @@
     <string name="y_check_services_only">Y-Check Services Only</string>
     <string name="parental_adolescent_assent_error_message">Parental consent and adolescent assent is required for adolescent under 18 years.</string>
     <string name="register_adolescent">Register Adolescent</string>
+    <string name="please_check_form_for_errors">Please check form for errors.</string>
+    <string name="checkup_reason">Checkup Reason</string>
+    <string name="adolescent_added_successfully">Adolescent added successfully.</string>
+    <string name="paged_registration">Paged Registration</string>
+    <string name="single_view_registration">Single View Registration</string>
 </resources>

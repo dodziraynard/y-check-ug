@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_single_view_registration"
+        android:contentDescription="@string/single_view_registration"
+        android:icon="@drawable/baseline_width_full_24"
+        android:orderInCategory="1"
+        android:title="@string/single_view_registration"
+        app:iconTint="@color/white"
+        app:showAsAction="ifRoom|collapseActionView" />
+</menu>

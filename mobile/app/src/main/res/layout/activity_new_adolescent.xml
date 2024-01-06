@@ -9,10 +9,8 @@
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="match_parent"
         android:padding="@dimen/screen_horizontal_padding"
-        app:layout_constraintBottom_toTopOf="@id/button_container"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -138,7 +136,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/study_phase"
+                        android:text="@string/checkup_reason"
                         android:textStyle="bold" />
 
                     <RadioGroup
@@ -296,41 +294,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/date_of_birth"
-                        android:textStyle="bold" />
-
-                    <DatePicker
-                        android:id="@+id/dob_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:calendarViewShown="false"
-                        android:datePickerMode="spinner" />
-
-                    <TextView
-                        android:id="@+id/dob_error"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/invalid_age"
-                        android:textColor="@color/color_warning"
-                        android:textSize="@dimen/error_text_size"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:layout_marginVertical="20dp"
-                    android:background="@color/border_color" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/select_type_of_adolescent"
                         android:textStyle="bold" />
 
@@ -369,6 +332,42 @@
                         android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:text="Adolescent type is required."
+                        tools:visibility="visible" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.3dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@color/border_color" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date_of_birth"
+                        android:textStyle="bold" />
+
+                    <DatePicker
+                        android:id="@+id/dob_picker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:calendarViewShown="false"
+                        android:datePickerMode="spinner" />
+
+                    <TextView
+                        android:id="@+id/dob_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invalid_age"
+                        android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
+                        android:visibility="gone"
                         tools:visibility="visible" />
 
                     <View
@@ -646,6 +645,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/check_up_location_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -700,13 +700,14 @@
                             android:visibility="gone"
                             tools:visibility="visible" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.3dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@color/border_color" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:layout_marginVertical="20dp"
-                    android:background="@color/border_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -779,51 +780,50 @@
                     android:visibility="gone"
                     tools:text="Error message"
                     tools:visibility="visible" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/save_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/save_amp_continue"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/button_text_size"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:enabled="false" />
+
+                    <ProgressBar
+                        android:id="@+id/submit_adolescent_loading_process_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/invalid_form_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_is_not_valid"
+                        android:textAlignment="center"
+                        android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/submit_adolescent_loading_process_bar"
+                        tools:visibility="visible" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/save_amp_continue"
-            android:textAllCaps="false"
-            android:textSize="@dimen/button_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:enabled="false" />
-
-        <ProgressBar
-            android:id="@+id/submit_adolescent_loading_process_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/invalid_form_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/form_is_not_valid"
-            android:textAlignment="center"
-            android:textColor="@color/color_warning"
-            android:textSize="@dimen/error_text_size"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/submit_adolescent_loading_process_bar"
-            tools:visibility="visible" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,159 @@
+[
+    {
+        "number": 1,
+        "field": "studyPhase",
+        "label": "Study Phase",
+        "description": "",
+        "type": "radio",
+        "required": true,
+        "options": [
+            "pilot",
+            "implementation"
+        ]
+    },
+    {
+        "number": 2,
+        "field": "checkupReason",
+        "label": "Check-up Reason",
+        "description": "",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Y-Check Services & Research",
+            "Y-Check Services Only"
+        ]
+    },
+    {
+        "number": 3,
+        "field": "pid",
+        "label": "Patient ID (PID)",
+        "required": true,
+        "type": "text"
+    },
+    {
+        "number": 4,
+        "field": "surname",
+        "label": "Surname",
+        "required": true,
+        "type": "text"
+    },
+    {
+        "number": 5,
+        "field": "otherNames",
+        "label": "Other Names",
+        "required": true,
+        "type": "text"
+    },
+    {
+        "number": 6,
+        "field": "type",
+        "label": "Adolescent Type",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Basic",
+            "Secondary",
+            "Community"
+        ]
+    },
+    {
+        "number": 7,
+        "field": "dob",
+        "label": "Date of Birh",
+        "required": true,
+        "type": "date",
+        "errorMessage": "Invalid date",
+        "constraint": [
+            {
+                "minAge": 10,
+                "maxAge": 10
+            }
+        ]
+    },
+    {
+        "number": 8,
+        "field": "livesInCatchment",
+        "label": "Lives in catchement area",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Yes",
+            "No",
+            "N/A"
+        ],
+        "dependecies": [
+            {
+                "field": "type",
+                "value": "Community"
+            }
+        ]
+    },
+    {
+        "number": 9,
+        "field": "gender",
+        "label": "Gender",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Male",
+            "Female"
+        ]
+    },
+    {
+        "number": 10,
+        "field": "residentialStatus",
+        "label": "Residential Status",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Day",
+            "Boarding"
+        ],
+        "dependecies": [
+            {
+                "field": "type",
+                "value": "Community",
+                "reversed": true
+            }
+        ]
+    },
+    {
+        "number": 11,
+        "field": "grade",
+        "label": "Young person's grade",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Year 1",
+            "Year 2"
+        ]
+    },
+    {
+        "number": 12,
+        "field": "school",
+        "label": "Which school does the adolescent attend?",
+        "required": true,
+        "type": "spinner",
+        "data_source_util_function_name": "get_adolescent_schools"
+    },
+    {
+        "number": 13,
+        "field": "checkupReason",
+        "label": "Check-up location",
+        "required": true,
+        "type": "spinner",
+        "data_source_util_function_name": "get_check_location"
+    },
+    {
+        "number": 20,
+        "field": "consent",
+        "label": "Confirmation of consent form received",
+        "required": true,
+        "type": "radio",
+        "options": [
+            "Yes, parental consent",
+            "Yes, adolescent assent",
+            "Both adolescent and parent assent"
+        ]
+    }
+]

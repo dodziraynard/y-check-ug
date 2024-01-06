@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:visibility="gone"
         android:gravity="center_vertical"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
@@ -43,24 +43,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:visibility="gone"
             android:text="@string/search_result"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/search_container" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:visibility="gone"
-            android:background="@color/border_color" />
+            android:background="@color/border_color"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/error_message_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/_30sdp"
             android:text="@string/no_results_found"
             android:textAlignment="center"
-            android:textSize="@dimen/error_text_size"
+            android:textSize="@dimen/text_size"
             app:layout_constraintTop_toBottomOf="@id/search_container" />
 
         <ProgressBar
