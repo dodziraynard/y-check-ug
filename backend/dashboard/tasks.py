@@ -18,37 +18,45 @@ def download_all_setup_data():
 
     config.general_sync_message = "Downloading users"
     config.save()
+    logger.debug("Download triggered by: download_users_from_upstream")
     download_users_from_upstream()
 
     config.general_sync_message = "Downloading questions"
     config.save()
+    logger.debug("Download triggered by: download_questions_from_upstream")
     download_questions_from_upstream()
 
     config.general_sync_message = "Downloading facilities"
     config.save()
-    downloaded_facilities = download_entities_from_upstream(
-        "facility", Facility)
+
+    logger.debug("Downloading facilities")
+    downloaded_facilities = download_entities_from_upstream("facility", Facility)
 
     config.general_sync_message = "Downloading services"
     config.save()
+    logger.debug("Downloading services")
     downloaded_services = download_entities_from_upstream("service", Service)
 
     config.general_sync_message = "Downloading flag label"
     config.save()
+    logger.debug("Downloading labels")
     downloaded_labels = download_entities_from_upstream("flaglabel", FlagLabel)
 
     config.general_sync_message = "Downloading flag colours"
     config.save()
+    logger.debug("Downloading flagcolor")
     downloaded_colours = download_entities_from_upstream(
         "flagcolor", FlagColor)
 
     config.general_sync_message = "Downloading flag conditions"
     config.save()
+    logger.debug("Downloading flagconditions")
     downloaded_conditions = download_entities_from_upstream(
         "flagcondition", FlagCondition)
 
     config.general_sync_message = "Downloading checkup locations"
     config.save()
+    logger.debug("Downloading checkuplocations")
     downloaded_locations = download_entities_from_upstream(
         "checkuplocation", CheckupLocation)
 
@@ -104,6 +112,7 @@ def download_questions_from_upstream():
         logger.info("No host or syncing already in progress.")
         return
 
+    question_groups_donwnloaded = download_entities_from_upstream("groupgroup", QuestionGroup)
     sections_donwnloaded = download_entities_from_upstream("section", Section)
     if not sections_donwnloaded:
         logger.debug("All sections couldn't be downloaded.")
