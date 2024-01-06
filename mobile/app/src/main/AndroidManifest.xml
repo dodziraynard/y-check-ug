@@ -7,7 +7,7 @@
 
     <queries>
         <package android:name="com.hearxgroup.hearwho" />
-        <package android:name="org.peekvision.public.android" />
+        <package android:name="org.who.whoeyes" />
     </queries>
 
     <application

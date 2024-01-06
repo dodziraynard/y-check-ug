@@ -24,7 +24,7 @@ data class Question(
 )
 
 object InputType {
-    const val TEXT_INPUT = "text_input"
+    const val TEXT_INPUT = "text_field"
     const val NUMBER_FIELD = "number_field"
     const val CHECKBOXES = "checkboxes"
     const val RADIO_BUTTON = "radio_button"

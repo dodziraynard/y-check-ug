@@ -1,0 +1,15 @@
+version: 2
+authtoken: 1bPp0yxEIRFYrTCq2aJrv2PvD71_21bLfa37cbooEiruESXSE
+tunnels:
+  httpbackend:
+    proto: http
+    addr: 8000
+  httpfrontend:
+    proto: http
+    addr: 80
+  ssh-access:
+    addr: 22
+    proto: tcp
+    # remote_addr: 1.tcp.ngrok.io:12345
+
+# ngrok start --config /home/ycheckgh/application/ng-config.yml --all 

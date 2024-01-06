@@ -19,6 +19,8 @@ def download_all_setup_data():
     config.general_sync_message = "Downloading users"
     config.save()
     logger.debug("Download triggered by: download_users_from_upstream")
+
+    download_entities_from_upstream("facility", Facility)
     download_users_from_upstream()
 
     config.general_sync_message = "Downloading questions"
@@ -29,34 +31,26 @@ def download_all_setup_data():
     config.general_sync_message = "Downloading facilities"
     config.save()
 
-    logger.debug("Downloading facilities")
-    downloaded_facilities = download_entities_from_upstream("facility", Facility)
-
     config.general_sync_message = "Downloading services"
     config.save()
-    logger.debug("Downloading services")
     downloaded_services = download_entities_from_upstream("service", Service)
 
     config.general_sync_message = "Downloading flag label"
     config.save()
-    logger.debug("Downloading labels")
     downloaded_labels = download_entities_from_upstream("flaglabel", FlagLabel)
 
     config.general_sync_message = "Downloading flag colours"
     config.save()
-    logger.debug("Downloading flagcolor")
     downloaded_colours = download_entities_from_upstream(
         "flagcolor", FlagColor)
 
     config.general_sync_message = "Downloading flag conditions"
     config.save()
-    logger.debug("Downloading flagconditions")
     downloaded_conditions = download_entities_from_upstream(
         "flagcondition", FlagCondition)
 
     config.general_sync_message = "Downloading checkup locations"
     config.save()
-    logger.debug("Downloading checkuplocations")
     downloaded_locations = download_entities_from_upstream(
         "checkuplocation", CheckupLocation)
 
@@ -72,7 +66,7 @@ def download_all_setup_data():
 @shared_task()
 def download_users_from_upstream():
     config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or config.users_download_status == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host:
         logger.info("No host or syncing already in progress.")
         return
     url = config.up_stream_host + "/api/sync/download/user/"
@@ -88,7 +82,11 @@ def download_users_from_upstream():
                     UpstreamSyncBaseModel.deserialise_into_object(
                         User, user_dict)
                 except IntegrityError as e:
-                    print("error", type(e), str(e))
+                    user_id = user_dict.get("surname")
+                    surname = user_dict.get("other_names")
+                    other_names = user_dict.get("id")
+                    print("error", user_id, surname,
+                          other_names, type(e), str(e))
                     continue
                 config.users_download_status_message = f"Downloaded {index}/{total_users}, {int(index/total_users*100)}%"
                 config.save()
@@ -108,11 +106,14 @@ def download_users_from_upstream():
 def download_questions_from_upstream():
     logger.debug("download_questions_from_upstream triggered.")
     config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or config.questions_download_status == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host:
         logger.info("No host or syncing already in progress.")
         return
 
-    question_groups_donwnloaded = download_entities_from_upstream("groupgroup", QuestionGroup)
+    logger.debug("Download questiongroup.")
+    download_entities_from_upstream("questiongroup", QuestionGroup)
+
+    logger.debug("Download section.")
     sections_donwnloaded = download_entities_from_upstream("section", Section)
     if not sections_donwnloaded:
         logger.debug("All sections couldn't be downloaded.")
@@ -141,6 +142,8 @@ def download_questions_from_upstream():
                 config.questions_download_status_message = "Couldn't download all options"
                 config.questions_download_status = SyncStatus.FAILED.value
 
+            download_entities_from_upstream("flaglabel", FlagLabel)
+
             previous_req_donwnloaded = download_entities_from_upstream(
                 "previousresponserequirement", PreviousResponseRequirement)
             if not previous_req_donwnloaded:
@@ -164,6 +167,8 @@ def download_questions_from_upstream():
 
 
 def download_entities_from_upstream(model_name, model):
+    logger.info(f"Tiggered download for {model_name}")
+
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host:
         logger.info("No host or syncing already in progress.")
@@ -213,7 +218,7 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
     logger.debug("Upload all %s entities triggered.", model_name)
 
     config, _ = NodeConfig.objects.get_or_create()
-    if not config.up_stream_host or getattr(config, status_field) == SyncStatus.PROGRESS.value:
+    if not config.up_stream_host:
         logger.debug(
             "No hosts configured or %s upload already in process", model_name)
         return
