@@ -8,7 +8,7 @@ from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
 from django.db.models import Q
-from dashboard.models import Adolescent, FlagLabel, SummaryFlag, Referral, Facility, Service
+from dashboard.models import Adolescent, SummaryFlag, Referral, Facility, Service
 from rest_framework.response import Response
 from django.db.utils import IntegrityError
 from rest_api.serializers import *
