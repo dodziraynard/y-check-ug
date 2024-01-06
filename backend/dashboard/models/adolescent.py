@@ -18,7 +18,7 @@ class Adolescent(UpstreamSyncBaseModel):
     pid = models.CharField(unique=True, max_length=20, db_index=True)
     surname = models.CharField(max_length=50, db_index=True)
     other_names = models.CharField(max_length=50, db_index=True)
-    visit_type = models.CharField(max_length=50, blank=True, null=True)
+    study_phase = models.CharField(max_length=50, blank=True, null=True)
     consent = models.CharField(max_length=100, blank=True, null=True)
     picture = models.ImageField(upload_to='images/', blank=True, null=True)
     dob = models.DateTimeField(null=True, blank=True)
