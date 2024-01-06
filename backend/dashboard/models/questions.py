@@ -3,6 +3,7 @@ from ycheck.utils.constants import COLOR_CHOICES
 from .section import Section
 from ycheck.utils.constants import ResponseInputType
 from .adolescent import Adolescent
+from .flags import SummaryFlag
 from .mixin import UpstreamSyncBaseModel
 
 QUESTION_TYPE = [
@@ -23,7 +24,7 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
     response_is = models.CharField(max_length=100, null=True, blank=True)
     min_integer_value = models.IntegerField(null=True, blank=True)
     dependent_on_flag = models.ForeignKey(
-        "dashboard.FlagColor", on_delete=models.SET_NULL, null=True, blank=True)
+        "dashboard.FlagLabel", on_delete=models.SET_NULL, null=True, blank=True)
     expected_flag_color = models.CharField(
         choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
 
@@ -34,9 +35,13 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
         return f"'{self.question.text}' must be '{self.response_is}'"
 
     def is_previous_response_condition_met(self, adolescent):
-        if (self.dependent_on_flag
+
+        summary = SummaryFlag.objects.filter(
+            label=self.expected_flag_color, adolescent=adolescent).first()
+
+        if (summary
             and self.expected_flag_color
-                and self.dependent_on_flag.color_code != self.expected_flag_color):
+                and summary.get_final_colour() != self.expected_flag_color):
             return False
 
         response = AdolescentResponse.objects.filter(

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
@@ -19,7 +18,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityNewAdolescentBinding
 import com.hrd.ycheck.models.Adolescent
-import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.*
 import java.util.*
 
@@ -44,20 +42,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             binding.editPhotoButton.visibility = View.GONE
             val uuid = UUID.randomUUID().toString()
             adolescent = Adolescent(
-                "",
-                "",
-                "",
-                1694350811258,
-                "",
-                null,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                uuid = uuid
+                "", "", "", 1694350811258, "", null, "", "", "", "", "", "", "", uuid = uuid
             )
         } else {
             adolescent = postedAdolescent
@@ -443,6 +428,8 @@ class NewAdolescentActivity : AppCompatActivity() {
     }
 
     private fun validateForm(adolescent: Adolescent): Boolean {
+        val age = ((System.currentTimeMillis() - adolescent.dob) / 31556952000).toInt()
+
         // PID
         if (adolescent.pid.isEmpty()) {
             binding.pidErrorMessage.visibility = View.VISIBLE
@@ -502,16 +489,19 @@ class NewAdolescentActivity : AppCompatActivity() {
         // Consent location
         val consents =
             listOf(IAFConsents.ADOLESCENT, IAFConsents.PARENT, IAFConsents.ADOLESCENT_PARENT)
-        if (!consents.contains(adolescent.consent)) {
+
+        if (!((consents.contains(adolescent.consent) && age > 18) || (adolescent.consent == IAFConsents.ADOLESCENT_PARENT && age < 18))) {
             binding.icfConfErrorMessageLabel.visibility = View.VISIBLE
+            if (age < 18) {
+                binding.icfConfErrorMessageLabel.text =
+                    "\"${IAFConsents.ADOLESCENT_PARENT}\" is required."
+            }
             return false
         } else {
             binding.icfConfErrorMessageLabel.visibility = View.GONE
         }
 
-
         // Age
-        val age = ((System.currentTimeMillis() - adolescent.dob) / 31556952000).toInt()
         return age in 10..19
     }
 

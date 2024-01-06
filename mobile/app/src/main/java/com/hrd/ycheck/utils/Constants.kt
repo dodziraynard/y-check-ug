@@ -63,7 +63,7 @@ object LivesInCatchment {
 
 object IAFConsents {
     const val PARENT = "Yes parent consent"
-    const val ADOLESCENT = "Yes adolescent consent"
+    const val ADOLESCENT = "Yes adolescent consent/assent"
     const val ADOLESCENT_PARENT = "Yes adolescent and parent consent"
     const val NO = "No"
 }
