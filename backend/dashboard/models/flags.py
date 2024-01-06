@@ -81,7 +81,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
             (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
             ((Q(adolescent_type=None) | (Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False))) |
              (Q(adolescent_type=None) | (~Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=True)))) &
-            (Q(type_of_visit=None) | Q(type_of_visit__iexact=adolescent.visit_type))
+            (Q(study_phase=None) | Q(study_phase__iexact=adolescent.study_phase))
         ).distinct():
             response = question.get_response(adolescent)
             data = {
