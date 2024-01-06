@@ -77,12 +77,6 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     AdolescentSearchResultOptionLayoutBinding.inflate(layoutInflater)
                 bottomSheetDialog.setContentView(dialogBinding.root)
 
-                dialogBinding.editOption.setOnClickListener {
-                    val intent =
-                        Intent(this@SearchAdolescentActivity, NewAdolescentActivity::class.java)
-                    intent.putExtra("adolescent", adolescent)
-                    startActivity(intent)
-                }
                 dialogBinding.preScreeningOption.setOnClickListener {
                     val intent =
                         Intent(
@@ -108,6 +102,26 @@ class SearchAdolescentActivity : AppCompatActivity() {
                         Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.PHYSICAL_ASSESSMENT)
+                    startActivity(intent)
+                }
+                dialogBinding.labAssessmentOption.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("question_type", QuestionnaireType.LAB_ASSESSMENT)
+                    startActivity(intent)
+                }
+                dialogBinding.clinicalAssessmentOption.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("question_type", QuestionnaireType.CLINICAL_ASSESSMENT)
+                    startActivity(intent)
+                }
+                dialogBinding.editOption.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, NewAdolescentActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
                     startActivity(intent)
                 }
                 bottomSheetDialog.show()

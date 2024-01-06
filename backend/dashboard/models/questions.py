@@ -36,7 +36,7 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
     def is_previous_response_condition_met(self, adolescent):
         if (self.dependent_on_flag
             and self.expected_flag_color
-                and self.dependent_on_flag.get_final_colour() != self.expected_flag_color):
+                and self.dependent_on_flag.color_code != self.expected_flag_color):
             return False
 
         response = AdolescentResponse.objects.filter(

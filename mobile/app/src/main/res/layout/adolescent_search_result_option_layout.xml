@@ -27,13 +27,13 @@
             android:padding="15dp"
             android:text="@string/pre_screening_assessment"
             android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_question_answer_24" />
+            app:drawableLeftCompat="@drawable/baseline_commit_24"
+            app:drawableTint="@color/text_color" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:background="@color/border_color" />
-
 
         <TextView
             android:id="@+id/screening_option"
@@ -45,7 +45,8 @@
             android:padding="15dp"
             android:text="@string/screening_test"
             android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_question_answer_24" />
+            app:drawableLeftCompat="@drawable/baseline_question_answer_24"
+            app:drawableTint="@color/text_color" />
 
         <View
             android:layout_width="match_parent"
@@ -62,7 +63,8 @@
             android:padding="15dp"
             android:text="@string/enter_assessment_values"
             android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24" />
+            app:drawableLeftCompat="@drawable/baseline_accessibility_24"
+            app:drawableTint="@color/text_color" />
 
         <View
             android:layout_width="match_parent"
@@ -79,7 +81,8 @@
             android:padding="15dp"
             android:text="@string/lab_assessment"
             android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24" />
+            app:drawableLeftCompat="@drawable/baseline_adjust_24"
+            app:drawableTint="@color/text_color" />
 
         <View
             android:layout_width="match_parent"
@@ -96,7 +99,8 @@
             android:padding="15dp"
             android:text="@string/clinical_assessment"
             android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24" />
+            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24"
+            app:drawableTint="@color/text_color" />
 
         <View
             android:layout_width="match_parent"
@@ -113,7 +117,8 @@
             android:padding="15dp"
             android:text="@string/edit_details"
             android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_edit_24" />
+            app:drawableLeftCompat="@drawable/baseline_edit_24"
+            app:drawableTint="@color/text_color" />
 
     </LinearLayout>
 </FrameLayout>
