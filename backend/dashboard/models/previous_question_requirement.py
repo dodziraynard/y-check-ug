@@ -52,3 +52,4 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
                 matched = all([int(self.min_integer_value) > int(res)
                                for res in response.get_values_as_list(numeric=True)])
             return matched if not self.is_inverted else not matched
+        return True
