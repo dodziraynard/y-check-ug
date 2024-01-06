@@ -161,6 +161,11 @@ class AdolescentResponse(UpstreamSyncBaseModel):
 
     def __str__(self) -> str:
         return str(self.question)
+    
+    def save(self, *args, **kwargs) -> None:
+        if self.text == None:
+            self.text = ""
+        return super().save(*args, **kwargs)
 
     def get_values_as_list(self, numeric=False):
         responses = []

@@ -269,5 +269,4 @@ def upload_adolescents():
     upload_entity_and_update_status(
         Adolescent, "adolescent", "adolescents_upload_status")
 
-    upload_entity_and_update_status(
-        AdolescentResponse, "adolescentresponse", "adolescents_upload_status")
+    upload_entity_and_update_status(AdolescentResponse, "adolescentresponse", "adolescents_upload_status")
