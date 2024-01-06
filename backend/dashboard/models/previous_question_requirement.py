@@ -24,10 +24,10 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
 
     def is_previous_response_condition_met(self, adolescent):
         summary = SummaryFlag.objects.filter(
-            label=self.expected_flag_color, adolescent=adolescent).first()
+            label=self.dependent_on_flag, adolescent=adolescent).first()
 
         if (summary
-            and self.expected_flag_color
+            and self.dependent_on_flag
                 and summary.get_final_colour() != self.expected_flag_color):
             return False
 
