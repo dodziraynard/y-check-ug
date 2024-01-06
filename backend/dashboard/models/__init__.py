@@ -6,3 +6,4 @@ from .referrals import *
 from .service import *
 from .section import *
 from .checkup_location import *
+from .previous_question_requirement import *
