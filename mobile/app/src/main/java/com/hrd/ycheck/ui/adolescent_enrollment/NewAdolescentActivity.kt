@@ -19,9 +19,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityNewAdolescentBinding
 import com.hrd.ycheck.models.Adolescent
-import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
-import com.hrd.ycheck.utils.*
-import java.util.*
+import com.hrd.ycheck.utils.AdolescentTypes
+import com.hrd.ycheck.utils.CheckUpReason
+import com.hrd.ycheck.utils.Genders
+import com.hrd.ycheck.utils.Grade
+import com.hrd.ycheck.utils.IAFConsents
+import com.hrd.ycheck.utils.LivesInCatchment
+import com.hrd.ycheck.utils.ResidentialStatus
+import com.hrd.ycheck.utils.StudyPhase
+import java.util.Calendar
+import java.util.UUID
 
 
 class NewAdolescentActivity : AppCompatActivity() {
@@ -29,6 +36,7 @@ class NewAdolescentActivity : AppCompatActivity() {
     private lateinit var viewModel: AdolescentActivityViewModel
     private val TAG = "NewAdolescentActivity"
     private lateinit var adolescent: Adolescent
+    private var pidPrefix: String = "YC1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +116,13 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         viewModel.schools.observe(this) { schools ->
-            val allSchoolOptions = listOf("Not a student") + schools
+            var allSchoolOptions = listOf("")
+            if (adolescent.type.lowercase() == AdolescentTypes.COMMUNITY.lowercase()) {
+                allSchoolOptions = listOf("Not a student") + schools
+            } else {
+                allSchoolOptions = listOf("Select school") + schools
+            }
+
             val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
                 applicationContext, android.R.layout.simple_dropdown_item_1line, allSchoolOptions
             )
@@ -167,7 +181,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                adolescent.pid = s.toString()
+                adolescent.pid = pidPrefix + s.toString()
             }
         })
 
@@ -190,28 +204,33 @@ class NewAdolescentActivity : AppCompatActivity() {
         binding.adolescentTypeGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.adolescent_type_basic -> {
+                    pidPrefix = "YC1"
                     adolescent.type = AdolescentTypes.BASIC
                     viewModel.getCheckupLocations("type:${AdolescentTypes.BASIC}")
-                    binding.residentialStatusContainer.visibility = View.VISIBLE
+                    binding.residentialStatusContainer.visibility = View.GONE
                     binding.livesInCatchmentContainer.visibility = View.GONE
-                    binding.schoolContainer.visibility = View.VISIBLE
+                    binding.schoolContainer.visibility = View.GONE
                     binding.gradeContainer.visibility = View.VISIBLE
-                    binding.checkUpLocationContainer.visibility = View.GONE
+                    binding.checkUpLocationContainer.visibility = View.VISIBLE
                     viewModel.getSchool(adolescent.type)
                 }
 
                 R.id.adolescent_type_secondary -> {
+                    pidPrefix = "YC2"
+
                     adolescent.type = AdolescentTypes.SECONDARY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.SECONDARY}")
                     binding.residentialStatusContainer.visibility = View.VISIBLE
                     binding.livesInCatchmentContainer.visibility = View.GONE
-                    binding.schoolContainer.visibility = View.VISIBLE
+                    binding.schoolContainer.visibility = View.GONE
                     binding.gradeContainer.visibility = View.VISIBLE
-                    binding.checkUpLocationContainer.visibility = View.GONE
+                    binding.checkUpLocationContainer.visibility = View.VISIBLE
                     viewModel.getSchool(adolescent.type)
                 }
 
                 R.id.adolescent_type_community -> {
+                    pidPrefix = "YC3"
+
                     adolescent.type = AdolescentTypes.COMMUNITY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.COMMUNITY}")
                     binding.residentialStatusContainer.visibility = View.GONE
@@ -221,6 +240,9 @@ class NewAdolescentActivity : AppCompatActivity() {
                     binding.checkUpLocationContainer.visibility = View.VISIBLE
                 }
             }
+
+            binding.idPrefix.text = pidPrefix
+
         }
 
         binding.studyPhaseGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -256,10 +278,6 @@ class NewAdolescentActivity : AppCompatActivity() {
                 R.id.lives_in_catchment_no -> {
                     adolescent.livesInCatchment = LivesInCatchment.NO
                 }
-
-                R.id.lives_in_catchment_na -> {
-                    adolescent.livesInCatchment = LivesInCatchment.NA
-                }
             }
         }
 
@@ -282,7 +300,6 @@ class NewAdolescentActivity : AppCompatActivity() {
                 }
             }
         }
-
 
         binding.residentialStatusGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -352,9 +369,12 @@ class NewAdolescentActivity : AppCompatActivity() {
     }
 
     private fun populateFields(adolescent: Adolescent) {
-        binding.pidLabel.text = adolescent.pid
+        if (adolescent.pid.isNotEmpty()) {
+            binding.idPrefix.text = adolescent.pid.substring(0, 3)
+            binding.pidLabel.text = adolescent.pid
+            binding.pidInput.setText(adolescent.pid.substring(3))
+        }
         binding.surnameInput.setText(adolescent.surname)
-        binding.pidInput.setText(adolescent.pid)
         binding.otherNamesInput.setText(adolescent.otherNames)
         viewModel.getCheckupLocations("type:${adolescent.type}")
         viewModel.getSchool(adolescent.type)
@@ -403,7 +423,6 @@ class NewAdolescentActivity : AppCompatActivity() {
         when (adolescent.livesInCatchment?.uppercase()) {
             LivesInCatchment.YES.uppercase() -> binding.livesInCatchmentGroup.check(R.id.lives_in_catchment_yes)
             LivesInCatchment.NO.uppercase() -> binding.livesInCatchmentGroup.check(R.id.lives_in_catchment_no)
-            LivesInCatchment.NA.uppercase() -> binding.livesInCatchmentGroup.check(R.id.lives_in_catchment_na)
         }
 
         // Consent

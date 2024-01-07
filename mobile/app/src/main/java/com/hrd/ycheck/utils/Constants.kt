@@ -66,3 +66,10 @@ object IAFConsents {
     const val ADOLESCENT_PARENT = "Yes adolescent and parent consent"
     const val NO = "No"
 }
+
+object ModelFieldType {
+    const val RADIO_BUTTON = "radio"
+    const val TEXT_INPUT = "text_field"
+    const val NUMBER_FIELD = "number_field"
+    const val DATE = "date"
+}

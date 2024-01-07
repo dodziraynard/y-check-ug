@@ -157,7 +157,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, db_index=True)
     chosen_options = models.ManyToManyField(Option, blank=True)
-    text = models.CharField(max_length=200, blank=True, default="")
+    text = models.CharField(max_length=200, null=True, blank=True, default="")
 
     def __str__(self) -> str:
         return str(self.question)
@@ -168,6 +168,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
         return super().save(*args, **kwargs)
 
     def get_values_as_list(self, numeric=False):
+        self.text = self.text or ""
         responses = []
         if self.question.input_type in [ResponseInputType.NUMBER_FIELD.value,
                                         ResponseInputType.TEXT_FIELD.value,

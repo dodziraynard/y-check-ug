@@ -41,7 +41,6 @@
 
     </LinearLayout>
 
-
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/questionnaire_ui"
         android:layout_width="match_parent"

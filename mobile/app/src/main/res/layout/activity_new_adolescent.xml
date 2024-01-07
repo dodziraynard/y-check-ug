@@ -169,13 +169,69 @@
                         android:visibility="gone"
                         tools:text="Please choose one"
                         tools:visibility="visible" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.3dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@color/border_color" />
+
                 </LinearLayout>
 
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:layout_marginVertical="20dp"
-                    android:background="@color/border_color" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_type_of_adolescent"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/adolescent_type_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/adolescent_type_basic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/basic" />
+
+                        <RadioButton
+                            android:id="@+id/adolescent_type_secondary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/secondary" />
+
+                        <RadioButton
+                            android:id="@+id/adolescent_type_community"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/community" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/adolescent_type_error_message_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/color_warning"
+                        android:textSize="@dimen/error_text_size"
+                        android:visibility="gone"
+                        tools:text="Adolescent type is required."
+                        tools:visibility="visible" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.3dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@color/border_color" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -189,16 +245,30 @@
                         android:text="@string/pid"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/pid_input"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_rect_shape"
-                        android:drawableLeft="@drawable/baseline_person_24"
-                        android:drawablePadding="10dp"
-                        android:drawableTint="@color/text_color"
-                        android:inputType="textPersonName"
-                        android:padding="@dimen/text_small" />
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_2sdp">
+
+                        <TextView
+                            android:id="@+id/id_prefix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="YC-"
+                            android:textColor="@color/text_color"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/pid_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:drawableTint="@color/text_color"
+                            android:inputType="number"
+                            android:padding="@dimen/text_small" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/pid_error_message"
@@ -294,62 +364,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/select_type_of_adolescent"
-                        android:textStyle="bold" />
-
-                    <RadioGroup
-                        android:id="@+id/adolescent_type_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <RadioButton
-                            android:id="@+id/adolescent_type_basic"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/basic" />
-
-                        <RadioButton
-                            android:id="@+id/adolescent_type_secondary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/secondary" />
-
-                        <RadioButton
-                            android:id="@+id/adolescent_type_community"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/community" />
-
-                    </RadioGroup>
-
-                    <TextView
-                        android:id="@+id/adolescent_type_error_message_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="10dp"
-                        android:textAlignment="textStart"
-                        android:textColor="@color/color_warning"
-                        android:textSize="@dimen/error_text_size"
-                        android:visibility="gone"
-                        tools:text="Adolescent type is required."
-                        tools:visibility="visible" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.3dp"
-                        android:layout_marginVertical="20dp"
-                        android:background="@color/border_color" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/date_of_birth"
                         android:textStyle="bold" />
 
@@ -405,12 +419,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/no" />
-
-                        <RadioButton
-                            android:id="@+id/lives_in_catchment_na"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/n_a" />
                     </RadioGroup>
 
                     <TextView
@@ -594,7 +602,6 @@
                         android:background="@color/border_color" />
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/grade_container"
                     android:layout_width="match_parent"
@@ -761,13 +768,13 @@
                         android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
                         tools:visibility="visible" />
-                </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:layout_marginVertical="20dp"
-                    android:background="@color/border_color" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.3dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@color/border_color" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/error_message_label"
