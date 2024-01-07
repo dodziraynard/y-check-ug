@@ -164,7 +164,7 @@
         "type": "radio",
         "options": [
             "Yes, parental consent",
-            "Yes, adolescent assent",
+            "Yes, adolescent consent/assent",
             "Both adolescent and parent assent"
         ]
     }
