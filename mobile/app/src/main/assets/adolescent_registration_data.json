@@ -3,7 +3,7 @@
         "number": 1,
         "field": "studyPhase",
         "label": "Study Phase",
-        "description": "",
+        "description": "Specify the phase of the study (e.g., pilot or implementation).",
         "type": "radio",
         "required": true,
         "options": [
@@ -15,7 +15,7 @@
         "number": 2,
         "field": "checkupReason",
         "label": "Check-up Reason",
-        "description": "",
+        "description": "Indicate the reason for the check-up (e.g., Y-Check Services & Research or Y-Check Services Only).",
         "required": true,
         "type": "radio",
         "options": [
@@ -27,6 +27,7 @@
         "number": 3,
         "field": "pid",
         "label": "Patient ID (PID)",
+        "description": "Enter the Patient ID (PID) for identification.",
         "required": true,
         "type": "text"
     },
@@ -34,6 +35,7 @@
         "number": 4,
         "field": "surname",
         "label": "Surname",
+        "description": "Provide the surname of the patient.",
         "required": true,
         "type": "text"
     },
@@ -41,6 +43,7 @@
         "number": 5,
         "field": "otherNames",
         "label": "Other Names",
+        "description": "Enter the other names of the patient.",
         "required": true,
         "type": "text"
     },
@@ -48,6 +51,7 @@
         "number": 6,
         "field": "type",
         "label": "Adolescent Type",
+        "description": "Specify the type of adolescent (e.g., Basic, Secondary, Community).",
         "required": true,
         "type": "radio",
         "options": [
@@ -60,13 +64,14 @@
         "number": 7,
         "field": "dob",
         "label": "Date of Birh",
+        "description": "Enter the date of birth of the patient. Must be within a specified age range.",
         "required": true,
         "type": "date",
         "errorMessage": "Invalid date",
         "constraint": [
             {
                 "minAge": 10,
-                "maxAge": 10
+                "maxAge": 19
             }
         ]
     },
@@ -74,6 +79,7 @@
         "number": 8,
         "field": "livesInCatchment",
         "label": "Lives in catchement area",
+        "description": "Indicate whether the adolescent lives in the catchment area (Community type only).",
         "required": true,
         "type": "radio",
         "options": [
@@ -92,6 +98,7 @@
         "number": 9,
         "field": "gender",
         "label": "Gender",
+        "description": "Select the gender of the adolescent (Male or Female).",
         "required": true,
         "type": "radio",
         "options": [
@@ -103,6 +110,7 @@
         "number": 10,
         "field": "residentialStatus",
         "label": "Residential Status",
+        "description": "Specify the residential status of the adolecent for only secondary (Day or Boarding).",
         "required": true,
         "type": "radio",
         "options": [
@@ -121,6 +129,7 @@
         "number": 11,
         "field": "grade",
         "label": "Young person's grade",
+        "description": "Specify the grade of the adolescent for only secondary (e.g., Year 1 or Year 2).",
         "required": true,
         "type": "radio",
         "options": [
@@ -132,6 +141,7 @@
         "number": 12,
         "field": "school",
         "label": "Which school does the adolescent attend?",
+        "description": "Select the school attend by the adolescent.",
         "required": true,
         "type": "spinner",
         "data_source_util_function_name": "get_adolescent_schools"
@@ -140,6 +150,7 @@
         "number": 13,
         "field": "checkupReason",
         "label": "Check-up location",
+        "description": "Select the location for the check-up.",
         "required": true,
         "type": "spinner",
         "data_source_util_function_name": "get_check_location"
@@ -148,11 +159,12 @@
         "number": 20,
         "field": "consent",
         "label": "Confirmation of consent form received",
+        "description": "Specify whether parental consent, adolescent assent, or both consents have been received.",
         "required": true,
         "type": "radio",
         "options": [
             "Yes, parental consent",
-            "Yes, adolescent assent",
+            "Yes, adolescent consent/assent",
             "Both adolescent and parent assent"
         ]
     }
