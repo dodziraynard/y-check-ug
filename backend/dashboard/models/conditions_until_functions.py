@@ -106,5 +106,5 @@ def compute_bmi_sd_function(adolescent: Adolescent) -> int:
     adolescent_age = adolescent.registration_age_in_months()
     index = bisect_left(ages_in_months_array, adolescent_age)
     sds = female_bmi_matrix[index] if adolescent.gender == "female" else male_bmi_matrix[index]
-    sd_index = [-3, -2, 1, 2][bisect_left(sds, bmi)]
+    sd_index = [-3, -2, 1, 2, 3][bisect_left(sds, bmi)]
     return sd_index
