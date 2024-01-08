@@ -100,7 +100,7 @@ class FlagLabel(UpstreamSyncBaseModel):
         return self.name
 
     def get_flag_color(self, adolescent):
-        colors = self.colors.all()
+        colors = self.colors.all().order_by("is_fallback")
         fallback_color = None
         for color in colors:
             if color.is_fallback:
