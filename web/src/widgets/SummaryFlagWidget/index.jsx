@@ -30,6 +30,8 @@ function SummaryFlagWidget() {
     const [flagOverrideId, setFlagOverrideId] = useState(null)
     const [flagOverrideComment, setFlagOverrideComment] = useState(null)
     const [flagOverrideColor, setFlagOverrideColor] = useState(null)
+    const [adolescentResponded, setAdolescentResponded] = useState({})
+
 
     useEffect(() => {
         getFlags()
@@ -52,6 +54,19 @@ function SummaryFlagWidget() {
 
     useEffect(() => {
         if (Boolean(responseData?.summary_flags)) {
+
+            let responseStatus = {}
+            responseData.summary_flags?.map((flag, flagIndex) => {
+                let answered  = false
+
+                flag.responses?.map((response, _) => {
+                    if (Boolean(response.answers?.length)){
+                        answered = true
+                    }
+                })
+                responseStatus[flagIndex] = answered
+            })
+            setAdolescentResponded(responseStatus)
             setFlags(responseData.summary_flags)
         }
     }, [responseData])
@@ -298,7 +313,10 @@ function SummaryFlagWidget() {
                                             <td>
                                                 <div className="d-flex">
                                                     <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
-                                                        <Flag color={flags[index]?.responses?.length > 0 ? flag.computed_color_code : "#808080"} mutable={mutable} onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                        <Flag
+                                                        color={flags[index]?.responses?.length > 0 ? (adolescentResponded[index] ? flag.computed_color_code: "#3c4e77") : "#808080"} 
+                                                        mutable={mutable}
+                                                        onColorChange={(color) => onColorChange(color, flag.id)} />
                                                     </Tooltip>
                                                     <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
                                                         {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}

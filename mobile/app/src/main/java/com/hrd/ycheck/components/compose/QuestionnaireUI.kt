@@ -5,14 +5,37 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.IconButton
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
+import androidx.compose.material.Slider
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,12 +50,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.hrd.ycheck.R
-import com.hrd.ycheck.models.*
+import com.hrd.ycheck.models.InputType
+import com.hrd.ycheck.models.NewAdolescentResponse
+import com.hrd.ycheck.models.Option
+import com.hrd.ycheck.models.Question
+import com.hrd.ycheck.models.SubmittedAdolescentResponse
 import com.hrd.ycheck.utils.AudioPlayer
 
 
@@ -100,28 +126,39 @@ fun QuestionnaireUI(
                         modifier = Modifier.requiredSize(25.dp)
                     )
                 }
-                if (currentQuestion.apkId?.isNotEmpty() == true) IconButton(
-                    onClick = {
-                        val launchIntent: Intent? =
-                            context.packageManager.getLaunchIntentForPackage(currentQuestion.apkId)
-                        if (launchIntent != null) {
-                            context.startActivity(launchIntent)
-                        } else {
-                            // Bring user to the market or let them choose an app?
-                            val intent = Intent(Intent.ACTION_VIEW);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.data = Uri.parse("market://details?id=" + currentQuestion.apkId);
-                            context.startActivity(intent);
+                if (currentQuestion.apkId?.isNotEmpty() == true)
+
+
+                    IconButton(
+                        onClick = {
+                            val launchIntent: Intent? =
+                                context.packageManager.getLaunchIntentForPackage(currentQuestion.apkId)
+                            if (launchIntent != null) {
+                                context.startActivity(launchIntent)
+                            } else {
+                                // Bring user to the market or let them choose an app?
+                                val intent = Intent(Intent.ACTION_VIEW);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.data =
+                                    Uri.parse("market://details?id=" + currentQuestion.apkId);
+                                context.startActivity(intent);
+                            }
+                        },
+                        modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painterResource(R.drawable.baseline_phone_android_24),
+                                contentDescription = null,
+                                modifier = Modifier.requiredSize(25.dp)
+                            )
+                            Text(text = "Open App")
                         }
-                    },
-                    modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
-                ) {
-                    Image(
-                        painterResource(R.drawable.baseline_phone_android_24),
-                        contentDescription = null,
-                        modifier = Modifier.requiredSize(25.dp)
-                    )
-                }
+                    }
+
+
             }
             if (currentQuestion.imageUrl?.isNotEmpty() == true) {
                 GlideImage(
@@ -154,9 +191,11 @@ fun QuestionnaireUI(
                     isNumber = false,
                     id = currentQuestion.questionID
                 )
+
                 InputType.NUMBER_FIELD -> SimpleInputResponse(
                     submittedResponse, newResponse, isNumber = true, currentQuestion.questionID
                 )
+
                 InputType.CHECKBOXES -> currentQuestion.options?.let {
                     MultiSelectionResponse(
                         submittedResponse,
@@ -167,6 +206,7 @@ fun QuestionnaireUI(
                         currentQuestion.hasImageOptions
                     )
                 }
+
                 InputType.RADIO_BUTTON -> currentQuestion.options?.let {
                     SingleSelectionResponse(
                         submittedResponse,
@@ -177,6 +217,7 @@ fun QuestionnaireUI(
                         currentQuestion.hasImageOptions
                     )
                 }
+
                 InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
                     currentQuestion.maxNumericValue?.let { it1 ->
                         RangeSliderSelectionResponse(
