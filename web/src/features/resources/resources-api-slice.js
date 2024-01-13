@@ -211,6 +211,23 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
+            // on spot treatment
+            getOnSpotTreatments: builder.query({
+                query() {
+                    return `/on-spot-treatments/`;
+                },
+            }),
+            
+            putOnSpotTreatments: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/on-spot-treatments/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+
             // Adolescent
             getAllAdolescentTypes: builder.query({
                 query() {
@@ -264,7 +281,11 @@ export const {
     useLazyGetAllAdolescentTypesQuery,
 
     // Patients
-    useDeletePatientsMutation
+    useDeletePatientsMutation,
+
+    // on spot treatments
+    useLazyGetOnSpotTreatmentsQuery,
+    usePutOnSpotTreatmentsMutation,
 
 } = resourceApiSlice;
 

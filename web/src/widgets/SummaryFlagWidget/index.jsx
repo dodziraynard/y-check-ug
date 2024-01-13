@@ -8,6 +8,11 @@ import { useParams } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
 import { Button, Spinner, Text, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
+import {
+    usePutOnSpotTreatmentsMutation,
+} from '../../features/resources/resources-api-slice';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 function SummaryFlagWidget() {
     const profileModalRef = useRef(null);
@@ -19,6 +24,7 @@ function SummaryFlagWidget() {
     const { trigger: getFlags, data: responseData, error, isLoading } = useAxios({ mainUrl: `${BASE_API_URI}/${pid}/summary-flags` });
     const { trigger: getAdolescentProfile, data: adolescentResponseData, adolescentError, isLoadingAdolescent } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-profile/${pid}/` });
     const { trigger: postFlagColorOverride, data: overrideResponse, error: overrideError, isLoading: isLoadinOverride } = useAxios({ method: "POST" });
+    const [putTreatment, { isLoading: isPuttingTreatment, error: errorPuttingTreatment }] = usePutOnSpotTreatmentsMutation()
 
     const [profileModal, setProfileModal] = useState(null);
     const [responseModal, setResponseModal] = useState(null);
@@ -157,8 +163,136 @@ function SummaryFlagWidget() {
 
     }
 
+    ///
+
+    const userInfo = useSelector((state) => state.authentication.user);
+    const [provided_treaments, setProvidedTreaments] = useState('');
+    const [total_service_cost, setTotalServiceCost] = useState('');
+    const [remarks, setRemarks] = useState('');
+    const created_by = userInfo?.id;
+    const adolescent_id = adolescent?.id;
+
+    console.log("adolescent is:",adolescent_id)
+    console.log("user id", created_by)
+
+      
+    const onSpotTreatmentRef = useRef(null);
+    const [treatmentModal, setTreatmentModal] = useState(null);
+
+
+    useEffect(() => {
+        // Set modals
+        if (onSpotTreatmentRef.current !== null && treatmentModal === null) {
+            const modal = new Modal(onSpotTreatmentRef.current)
+            setTreatmentModal(modal)
+        }
+    }, [])
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        const body = { 
+            adolescent_id,
+            created_by,
+            provided_treaments,
+            total_service_cost,
+            remarks
+         };
+    
+        try {
+            const response = await putTreatment(body).unwrap();
+            const treatment = response["treatment"];
+            
+            if (treatment !== undefined) {
+                setTriggerReload((triggerReload) => triggerReload + 1);
+            }
+    
+            treatmentModal?.hide();
+            setProvidedTreaments('');
+            setTotalServiceCost('');
+            setRemarks('');
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    };
+
+
+
     return (
         <Fragment>
+            {/* Add On Spot Treatment Modal */}
+            <div ref={onSpotTreatmentRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-md">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">
+                                Add On Spot Treatment Form
+                            </h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body overflow-scroll">
+                            <form onSubmit={handleFormSubmit}>
+                                <input type="hidden" name="id"
+                                     />
+
+                                <div className="form-group my-3">
+                                    <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
+                                    <textarea className='form-control'
+                                        onChange={(e) => setProvidedTreaments(e.target.value)}
+                                        required
+                                        name="treatment" 
+                                        id="treatment"
+                                        cols="30" rows="4"
+                                        value={provided_treaments}>
+
+                                        </textarea>
+                                </div>
+
+                                <div className="form-group my-3">
+                                    <label htmlFor=''><strong>What's the total cost of the treatment? </strong></label>
+                                    <div className="d-flex align-items-center col-md-4">
+                                        <strong>GHC</strong>
+                                        <input className='form-control'
+                                            type="number" name="total_treatment_cost"
+                                            step={0.01}
+                                            min={0.01}
+                                            required
+                                            onChange={(e) => setTotalServiceCost(e.target.value)}
+                                            value={total_service_cost}
+                                            id="total_treatment_cost" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group my-3">
+                                <label htmlFor=''><strong>Remarks</strong></label>
+                                <textarea className='form-control'
+                                    onChange={(e) => setRemarks(e.target.value)}
+                                    name="treatment" 
+                                    id="treatment"
+                                    cols="30" rows="4"
+                                    value={remarks}>
+
+                                    </textarea>
+                                </div>
+
+                                <div className="mb-3">
+                                    <p className="text-end">
+                                        <button
+                                            className='btn btn-sm btn-primary d-flex align-items-center'
+                                            >
+                                            Submit
+                                        </button>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+
+                            <button type="button"
+                                className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {/* Profile details modal */}
             <div ref={profileModalRef} className="modal fade" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
@@ -338,13 +472,23 @@ function SummaryFlagWidget() {
                     </div>
 
                     <hr />
-                    <div className='d-flex justify-content-end'>
-                        <Link to={"referrals"}>
-                            <Button className="d-flex">
-                                <i className="bi bi-h-circle me-2"></i>
-                                View/create referrals
-                            </Button>
-                        </Link>
+                    <div className='row'>
+                        <div className='col-md-6 d-flex justify-content-right'>
+                                <Button 
+                                 onClick={() => {treatmentModal?.show() }}
+                                className="d-flex">
+                                    <i className="bi bi-h-circle me-2"></i>
+                                    add on spot treatment
+                                </Button>
+                        </div>
+                        <div className=' col-md-6 d-flex justify-content-end'>
+                            <Link to={"referrals"}>
+                                <Button className="d-flex">
+                                    <i className="bi bi-h-circle me-2"></i>
+                                    View/create referrals
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
 
                 </section>

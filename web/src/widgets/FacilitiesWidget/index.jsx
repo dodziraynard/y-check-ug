@@ -44,20 +44,25 @@ function FacilitiesWidget() {
         deleteAlertModal?.hide()
     }
     const handleFormSubmit = async (e) => {
-        e.preventDefault()
-        const body = { name, location }
-        if (selectedFacility) {
-            body['id'] = selectedFacility.id
+        e.preventDefault();
+        const body = { name, location };
+    
+        try {
+            const response = await putFacility(body).unwrap();
+            const facility = response["facility"];
+            
+            if (facility !== undefined) {
+                setTriggerReload((triggerReload) => triggerReload + 1);
+            }
+    
+            facilityModal?.hide();
+            setName('');
+            setLocation('');
+        } catch (error) {
+            console.error("Error submitting form:", error);
         }
-        const response = await putFacility(body).unwrap()
-        const facility = response["facility"]
-        if (facility !== undefined) {
-            setTriggerReload((triggerReload) => triggerReload + 1);
-        }
-        facilityModal?.hide()
-        setName('')
-        setLocation('')
-    }
+    };
+    
 
     // Widget functions
     const showDeleteFacilityModal = (facility) => {
