@@ -253,6 +253,15 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            putUpdateCounseling: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/update-counseling/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
 
 
             ...referrals.getReferralEndpoints(builder)
@@ -310,6 +319,7 @@ export const {
 
     // Counseling
     usePutCounselingMutation,
+    usePutUpdateCounselingMutation,
 
 } = resourceApiSlice;
 

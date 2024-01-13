@@ -6,13 +6,12 @@ import { BASE_API_URI } from '../../utils/constants';
 import { Button, Spinner, Text, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import {
-    usePutUpdateTreatmentMutation,
+    usePutUpdateCounselingMutation,
 } from '../../features/resources/resources-api-slice';
-import { useSelector, useDispatch } from 'react-redux';
 
 function CounselingWidget() {
 
-    const [putTreatment, { isLoading: isPuttingTreatment, error: errorPuttingTreatment }] = usePutUpdateTreatmentMutation()
+    const [putCounseling, { isLoading: isPuttingTreatment, error: errorPuttingTreatment }] = usePutUpdateCounselingMutation()
     const toast = useToast()
     const [triggerReload, setTriggerReload] = useState(0);
 
@@ -50,7 +49,7 @@ function CounselingWidget() {
         }
     
         try {
-            const response = await putTreatment(body).unwrap();
+            const response = await putCounseling(body).unwrap();
             const message = response["message"]
             const errormessage = response["error_message"]
             if (message !== undefined || message !== null) {
@@ -74,10 +73,8 @@ function CounselingWidget() {
             }
             setTriggerReload((triggerReload) => triggerReload + 1);
     
-            treatmentModal?.hide();
-            setProvidedTreaments('');
-            setTotalServiceCost('');
-            setRemarks('');
+            counselingModal?.hide();
+            setCounselingProvided('');
         } catch (error) {
             console.error("Error submitting form:", error);
         }
@@ -109,12 +106,13 @@ function CounselingWidget() {
                                         name="reason" 
                                         id="reason"
                                         cols="30" rows="4"
+                                        readOnly
                                         value={reason}>
 
                                         </textarea>
                                 </div>
                                 <div className="form-group my-3">
-                                    <label htmlFor=''><strong>What is the reason for refering the adolescent for counseling?</strong></label>
+                                    <label htmlFor=''><strong>Enter counseling provided?</strong></label>
                                     <textarea className='form-control'
                                         onChange={(e) => setCounselingProvided(e.target.value)}
                                         required
@@ -147,13 +145,13 @@ function CounselingWidget() {
             </div> 
             {/* Content */}
             <div className="treatments-widget">
-                <BreadCrumb items={[{ "name": "On Spot Treatments", "url": "" }]} />
-                <h4>On Spot Treatments</h4>
+                <BreadCrumb items={[{ "name": "Counseling", "url": "" }]} />
+                <h4>Counseling</h4>
                 <section>
                     <div className="col-md-11 mx-auto">
                         <TableView
-                            responseDataAttribute="treatments"
-                            dataSourceUrl={`${BASE_API_URI}/on-spot-treatments/`}
+                            responseDataAttribute="counselings"
+                            dataSourceUrl={`${BASE_API_URI}/counseling/`}
                             headers={[
                                 {
                                     key: "photo", value: "Photo", textAlign: "center", render: (item) => {
@@ -171,14 +169,12 @@ function CounselingWidget() {
                                     }
                                 },
                                 
+                                
                                 {
-                                    key: "total_service_cost", value: "Service Cost", textAlign: "center",
+                                    key: "reason", value: "Reason for Counseling"
                                 },
                                 {
-                                    key: "remarks", value: "Remarks"
-                                },
-                                {
-                                    key: "provided_treaments", value: "Treatment",
+                                    key: "counseling_provided", value: "Provided Counseling",
                                 },
                                 {
                                     value: "Actions", textAlign: "right", render: (item) => {
