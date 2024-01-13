@@ -227,6 +227,15 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            putUpdateTreatment: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/update-treatments/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
 
             // Adolescent
             getAllAdolescentTypes: builder.query({
@@ -286,6 +295,7 @@ export const {
     // on spot treatments
     useLazyGetOnSpotTreatmentsQuery,
     usePutOnSpotTreatmentsMutation,
+    usePutUpdateTreatmentMutation,
 
 } = resourceApiSlice;
 

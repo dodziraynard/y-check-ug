@@ -198,7 +198,8 @@ function SummaryFlagWidget() {
     
         try {
             const response = await putTreatment(body).unwrap();
-            const treatment = response["treatment"];            
+            const treatment = response["treatment"];  
+            console.log(treatment)          
             if (treatment !== undefined || treatment !== null ) {
                 toast({
                     position: 'top-center',
