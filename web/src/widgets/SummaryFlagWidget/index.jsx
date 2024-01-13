@@ -37,6 +37,7 @@ function SummaryFlagWidget() {
     const [flagOverrideComment, setFlagOverrideComment] = useState(null)
     const [flagOverrideColor, setFlagOverrideColor] = useState(null)
     const [adolescentResponded, setAdolescentResponded] = useState({})
+    const [triggerReload, setTriggerReload] = useState(0);
 
 
     useEffect(() => {
@@ -172,9 +173,6 @@ function SummaryFlagWidget() {
     const created_by = userInfo?.id;
     const adolescent_id = adolescent?.id;
 
-    console.log("adolescent is:",adolescent_id)
-    console.log("user id", created_by)
-
       
     const onSpotTreatmentRef = useRef(null);
     const [treatmentModal, setTreatmentModal] = useState(null);
@@ -200,9 +198,16 @@ function SummaryFlagWidget() {
     
         try {
             const response = await putTreatment(body).unwrap();
-            const treatment = response["treatment"];
-            
-            if (treatment !== undefined) {
+            const treatment = response["treatment"];            
+            if (treatment !== undefined || treatment !== null ) {
+                toast({
+                    position: 'top-center',
+                    title: `Success`,
+                    description: "on spot treatment added successfully",
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true,
+                })
                 setTriggerReload((triggerReload) => triggerReload + 1);
             }
     
@@ -215,7 +220,7 @@ function SummaryFlagWidget() {
         }
     };
 
-
+   
 
     return (
         <Fragment>
