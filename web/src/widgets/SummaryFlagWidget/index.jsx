@@ -10,6 +10,7 @@ import { Button, Spinner, Text, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import {
     usePutOnSpotTreatmentsMutation,
+    usePutCounselingMutation,
 } from '../../features/resources/resources-api-slice';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -25,6 +26,7 @@ function SummaryFlagWidget() {
     const { trigger: getAdolescentProfile, data: adolescentResponseData, adolescentError, isLoadingAdolescent } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-profile/${pid}/` });
     const { trigger: postFlagColorOverride, data: overrideResponse, error: overrideError, isLoading: isLoadinOverride } = useAxios({ method: "POST" });
     const [putTreatment, { isLoading: isPuttingTreatment, error: errorPuttingTreatment }] = usePutOnSpotTreatmentsMutation()
+    const [putCounseling, { isLoading: isPuttingCounseling, error: errorPuttingCounseling }] = usePutCounselingMutation()
 
     const [profileModal, setProfileModal] = useState(null);
     const [responseModal, setResponseModal] = useState(null);
@@ -164,19 +166,16 @@ function SummaryFlagWidget() {
 
     }
 
-    ///
-
+    
+    // on spot treatment start
     const userInfo = useSelector((state) => state.authentication.user);
     const [provided_treaments, setProvidedTreaments] = useState('');
     const [total_service_cost, setTotalServiceCost] = useState('');
     const [remarks, setRemarks] = useState('');
     const created_by = userInfo?.id;
     const adolescent_id = adolescent?.id;
-
-      
     const onSpotTreatmentRef = useRef(null);
     const [treatmentModal, setTreatmentModal] = useState(null);
-
 
     useEffect(() => {
         // Set modals
@@ -185,7 +184,7 @@ function SummaryFlagWidget() {
             setTreatmentModal(modal)
         }
     }, [])
-
+    // submit for on spot treatment
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const body = { 
@@ -221,7 +220,51 @@ function SummaryFlagWidget() {
         }
     };
 
-   
+
+    // refer for counseling  start
+    const [reason, setReason] = useState('');
+    const [counseling, setCounseling] = useState('');
+    const counselingRef = useRef(null);
+    const [counselingModal, setCounselingModal] = useState(null);
+
+    useEffect(() => {
+        // Set modals
+        if (counselingRef.current !== null && counselingModal === null) {
+            const modal = new Modal(counselingRef.current)
+            setCounselingModal(modal)
+        }
+    }, [])
+
+    const handleCounselingFormSubmit = async (e) => {
+        e.preventDefault();
+        const body = { 
+            adolescent_id,
+            created_by,
+            reason,
+         };
+    
+        try {
+            const response = await putCounseling(body).unwrap();
+            const counseling = response["counseling"];  
+            if (counseling !== undefined || counseling !== null ) {
+                toast({
+                    position: 'top-center',
+                    title: `Success`,
+                    description: "Adolescent Referred for counseling completed",
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true,
+                })
+                setTriggerReload((triggerReload) => triggerReload + 1);
+            }
+    
+            counselingModal?.hide();
+            setReason('');
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    };
+
 
     return (
         <Fragment>
@@ -278,6 +321,54 @@ function SummaryFlagWidget() {
                                     value={remarks}>
 
                                     </textarea>
+                                </div>
+
+                                <div className="mb-3">
+                                    <p className="text-end">
+                                        <button
+                                            className='btn btn-sm btn-primary d-flex align-items-center'
+                                            >
+                                            Submit
+                                        </button>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+
+                            <button type="button"
+                                className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Counseling modal */}
+            <div ref={counselingRef} className="modal fade" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-md">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">
+                                Counseling  Form
+                            </h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body overflow-scroll">
+                            <form onSubmit={handleCounselingFormSubmit}>
+                                <input type="hidden" name="id"
+                                     />
+
+                                <div className="form-group my-3">
+                                    <label htmlFor=''><strong>What is the reason for refering the adolescent for counseling?</strong></label>
+                                    <textarea className='form-control'
+                                        onChange={(e) => setReason(e.target.value)}
+                                        required
+                                        name="reason" 
+                                        id="reason"
+                                        cols="30" rows="4"
+                                        value={reason}>
+
+                                        </textarea>
                                 </div>
 
                                 <div className="mb-3">
@@ -431,9 +522,19 @@ function SummaryFlagWidget() {
                             </Fragment>
                             : ""}
                     </h4>
-                </section>
-                {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
+                </section>
+                    
+                {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
+                <div className='d-flex justify-content-end'>
+                    <Button 
+                        onClick={() => {counselingModal?.show() }}
+                        className="d-flex">
+                        <i className="bi bi-h-circle me-2"></i>
+                        Refer for counseling
+                    </Button>
+                </div>
+                    
                 <section className='my-5'>
                     <div className="col-md-10 mx-auto">
                         <table className='table'>
@@ -483,7 +584,7 @@ function SummaryFlagWidget() {
                                 <Button 
                                  onClick={() => {treatmentModal?.show() }}
                                 className="d-flex">
-                                    <i className="bi bi-h-circle me-2"></i>
+                                    <i className="bi bi-capsule me-2"></i>
                                     add on spot treatment
                                 </Button>
                         </div>
