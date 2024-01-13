@@ -8,8 +8,9 @@ class FacilityForm(forms.ModelForm):
 
     class Meta:
         model = Facility
-        exclude = [
-            "id",
+        fields = [
+            "name",
+            "location"
         ]
 
 

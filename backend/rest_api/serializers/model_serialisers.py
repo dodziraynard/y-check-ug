@@ -345,6 +345,12 @@ class TreatmentSerializer(serializers.ModelSerializer):
         model = Treatment
         fields = "__all__"
         
+class OnSpotTreatmentSerializer(serializers.ModelSerializer):
+    adolescent = AdolescentSerializer()
+    class Meta:
+        model = OnSpotTreatment
+        fields = "__all__"
+        
         
         
 

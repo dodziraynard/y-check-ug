@@ -31,3 +31,18 @@ class Treatment(UpstreamSyncBaseModel):
         queries = [models.Q(**{f"{key}__icontains": query})
                    for key in ["adolescent__pid", "adolescent__surname", "adolescent__other_names"]]
         return reduce(lambda x, y: x | y, queries)
+
+
+
+class OnSpotTreatment(UpstreamSyncBaseModel):
+    adolescent_id = models.ForeignKey(Adolescent, on_delete=models.CASCADE)
+    created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
+    provided_treaments = models.TextField(null=True, blank=True)
+    total_service_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    remarks = models.TextField(null=True, blank=True)
+    date_of_service = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return str(self.adolescent_id.surname)

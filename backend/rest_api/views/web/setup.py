@@ -7,7 +7,7 @@ from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
-from dashboard.models import Facility, Service, FlagLabel,Adolescent
+from dashboard.models import Facility, Service, FlagLabel,Adolescent,OnSpotTreatment
 from ycheck.utils.functions import relevant_permission_objects
 from rest_framework import generics
 from django.contrib.auth import authenticate
@@ -307,5 +307,30 @@ class AllNodeAPI(SimpleCrudMixin):
     model_class = NodeConfig
     response_data_label = "nodeconfig"
     response_data_label_plural = "nodeconfigs"
+    
+    
+class OnSpotTreatmentsAPI(SimpleCrudMixin):
+    """
+    Permform CRUD on treatment object.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    required_permissions = ["setup.access_all_patients"]
+
+    serializer_class = OnSpotTreatmentSerializer
+    model_class = OnSpotTreatment
+    response_data_label = "treatment"
+    response_data_label_plural = "treatments"
+    
+    def get(self, request):
+        treatments = OnSpotTreatment.objects.all()
+        response_data = {
+            self.response_data_label_plural:
+            self.serializer_class(treatments,
+                                    context={
+                                        "request": request
+                                    },
+                                    many=True).data,
+        }
+        return Response(response_data)
 
   
