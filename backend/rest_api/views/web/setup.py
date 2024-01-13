@@ -321,18 +321,6 @@ class OnSpotTreatmentsAPI(SimpleCrudMixin):
     response_data_label = "treatment"
     response_data_label_plural = "treatments"
 
-    def get(self, request):
-        services = OnSpotTreatment.objects.all()
-        response_data = {
-            self.response_data_label_plural:
-            self.serializer_class(services,
-                                  context={
-                                      "request": request
-                                  },
-                                  many=True).data,
-        }
-        return Response(response_data)
-
 
 class UpdateTreatment(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
