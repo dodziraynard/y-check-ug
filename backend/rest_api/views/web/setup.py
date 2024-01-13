@@ -343,7 +343,19 @@ class UpdateTreatment(generics.GenericAPIView):
         })
             
 
-            
+
+class CounselingAPI(SimpleCrudMixin):
+    """
+    Permform CRUD on treatment object.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    required_permissions = ["setup.manage_service"]
+
+    serializer_class = CounselingSerializer
+    model_class = Counseling
+    form_class = CounselingForm
+    response_data_label = "counseling"
+    response_data_label_plural = "counselings"
 
     
     

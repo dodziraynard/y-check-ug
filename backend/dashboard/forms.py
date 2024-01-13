@@ -55,6 +55,7 @@ class ServiceForm(forms.ModelForm):
             'name',
             'related_flag_labels',
         ]
+        
 class OnSpotTreatmentForm(forms.ModelForm):
 
     class Meta:
@@ -65,4 +66,15 @@ class OnSpotTreatmentForm(forms.ModelForm):
             'provided_treaments',
             'total_service_cost',
             'remarks',
+        ]
+
+class CounselingForm(forms.ModelForm):
+
+    class Meta:
+        model = Counseling
+        fields = [
+            'adolescent_id',
+            'created_by',
+            'reason',
+            'counseling_provided',
         ]

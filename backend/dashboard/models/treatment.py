@@ -46,3 +46,17 @@ class OnSpotTreatment(UpstreamSyncBaseModel):
     
     def __str__(self) -> str:
         return str(self.adolescent_id.pid + " " + self.adolescent_id.surname + " " + self.adolescent_id.other_names)
+    
+    
+    
+class Counseling(UpstreamSyncBaseModel):
+    adolescent_id = models.ForeignKey(Adolescent, on_delete=models.CASCADE)
+    created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
+    reason = models.TextField(null=True, blank=True)
+    counseling_provided = models.TextField(null=True, blank=True)
+    date_of_service = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return str(self.adolescent_id.pid + " " + self.adolescent_id.surname + " " + self.adolescent_id.other_names)
