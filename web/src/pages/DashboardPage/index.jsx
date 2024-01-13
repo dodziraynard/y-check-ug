@@ -145,6 +145,16 @@ function DashboardPage() {
                     : ""
                 }
 
+                {userPermissions.has(Permissions.ACCESS_TREATMENTS) ?
+                    <NavLink to="/counseling">
+                        <div className="menu-item" id="action_center">
+                            <i className='icon bi bi-person-hearts'></i>
+                            <span className="label">Counseling</span>
+                        </div>
+                    </NavLink>
+                    : ""
+                }
+
                 {userPermissions.has(Permissions.MANAGE_SETUP) ?
                     <>
                         <hr />

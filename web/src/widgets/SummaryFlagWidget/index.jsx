@@ -530,8 +530,8 @@ function SummaryFlagWidget() {
                     <Button 
                         onClick={() => {counselingModal?.show() }}
                         className="d-flex">
-                        <i className="bi bi-h-circle me-2"></i>
-                        Refer for counseling
+                        <i className="bi bi-person-hearts me-2"></i>
+                        Referral for counseling
                     </Button>
                 </div>
                     
