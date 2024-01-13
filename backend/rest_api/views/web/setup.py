@@ -356,6 +356,25 @@ class CounselingAPI(SimpleCrudMixin):
     form_class = CounselingForm
     response_data_label = "counseling"
     response_data_label_plural = "counselings"
+    
+    
+class UpdateCounseling(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    def post(self, request,*args, **kwargs):
+        id = request.data.get('id')
+        
+        counseling = Counseling.objects.filter(id=id).first()
+        if  counseling:
+            counseling.counseling_provided = request.data.get('counseling_provided')
+            counseling.save()
+            return Response({
+                "message":
+                f" Counseling  Added successfully",
+                
+            })
+        return Response({
+            "error_message": "Counseling  Could not be Added successfully",
+        })
 
     
     

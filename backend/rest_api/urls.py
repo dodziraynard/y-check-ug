@@ -56,6 +56,7 @@ urlpatterns = [
     
     # counseling
     path("counseling/", views.CounselingAPI.as_view()),
+    path("update-counseling/", views.UpdateCounseling.as_view()),
     
     # Syncing
     path("sync/download/<str:model_name>/", views.DownStreamSyncModelView.as_view()),
