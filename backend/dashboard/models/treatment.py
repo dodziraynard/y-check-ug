@@ -45,4 +45,4 @@ class OnSpotTreatment(UpstreamSyncBaseModel):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self) -> str:
-        return str(self.adolescent_id.surname)
+        return str(self.adolescent_id.pid + " " + self.adolescent_id.surname + " " + self.adolescent_id.other_names)

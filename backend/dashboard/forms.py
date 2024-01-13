@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from accounts.models import User
-from dashboard.models import Facility,Service
+from dashboard.models import *
 
 
 class FacilityForm(forms.ModelForm):
@@ -54,4 +54,15 @@ class ServiceForm(forms.ModelForm):
         fields = [
             'name',
             'related_flag_labels',
+        ]
+class OnSpotTreatmentForm(forms.ModelForm):
+
+    class Meta:
+        model = OnSpotTreatment
+        fields = [
+            'adolescent_id',
+            'created_by',
+            'provided_treaments',
+            'total_service_cost',
+            'remarks',
         ]

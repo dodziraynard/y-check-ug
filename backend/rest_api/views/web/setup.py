@@ -258,7 +258,6 @@ class UploadPictureAPI(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         user_id = request.data.get("id")
         picture = request.data.get("picture")
-        print(picture)
         user =User.objects.filter(id=user_id).first() 
         if user:
             user.photo = picture
@@ -314,23 +313,50 @@ class OnSpotTreatmentsAPI(SimpleCrudMixin):
     Permform CRUD on treatment object.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    required_permissions = ["setup.access_all_patients"]
+    required_permissions = ["setup.manage_service"]
 
     serializer_class = OnSpotTreatmentSerializer
     model_class = OnSpotTreatment
+    form_class = OnSpotTreatmentForm
     response_data_label = "treatment"
     response_data_label_plural = "treatments"
-    
+
     def get(self, request):
-        treatments = OnSpotTreatment.objects.all()
+        services = OnSpotTreatment.objects.all()
         response_data = {
             self.response_data_label_plural:
-            self.serializer_class(treatments,
-                                    context={
-                                        "request": request
-                                    },
-                                    many=True).data,
+            self.serializer_class(services,
+                                  context={
+                                      "request": request
+                                  },
+                                  many=True).data,
         }
         return Response(response_data)
 
+
+class UpdateTreatment(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    def post(self, request,*args, **kwargs):
+        id = request.data.get('id')
+        
+        treatment = OnSpotTreatment.objects.filter(id=id).first()
+        if treatment:
+            treatment.provided_treaments = request.data.get('provided_treaments')
+            treatment.total_service_cost = request.data.get('total_service_cost')
+            treatment.remarks = request.data.get('remarks')
+            treatment.save()
+            return Response({
+                "message":
+                f" Treatment  Updated successfully",
+                
+            })
+        return Response({
+            "error_message": "Treatment  Could not be Updated successfully",
+        })
+            
+
+            
+
+    
+    
   

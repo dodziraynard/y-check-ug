@@ -28,6 +28,7 @@ urlpatterns = [
     path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view()),
     path("referrals/<str:referral_id>/treatment-feedback/", views.ReferralTreatment.as_view()),
     path("treatments/", views.TreatmentsAPI.as_view()),
+    path("on-spot-treatments/", views.OnSpotTreatmentsAPI.as_view()),
     path("my-referrals/", views.MyReferrals.as_view()),
 
     # Facilities

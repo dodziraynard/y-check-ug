@@ -72,4 +72,5 @@ admin.site.register(Referral)
 admin.site.register(QuestionGroup)
 admin.site.register(MobileConfig)
 admin.site.register(NodeConfig)
+admin.site.register(OnSpotTreatment)
 
