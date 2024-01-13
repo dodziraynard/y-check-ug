@@ -126,6 +126,16 @@ function DashboardPage() {
                 }
 
                 {userPermissions.has(Permissions.ACCESS_TREATMENTS) ?
+                    <NavLink to="/on-spot-treatments">
+                        <div className="menu-item" id="action_center">
+                            <i className='icon bi bi-capsule'></i>
+                            <span className="label">On Spot Treatments</span>
+                        </div>
+                    </NavLink>
+                    : ""
+                }
+
+                {userPermissions.has(Permissions.ACCESS_TREATMENTS) ?
                     <NavLink to="/treatments">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-hospital'></i>
