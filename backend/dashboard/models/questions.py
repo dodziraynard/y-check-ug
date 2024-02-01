@@ -1,4 +1,6 @@
 from django.db import models
+
+from backend.ycheck.utils.functions import isnumber
 from .section import Section
 from ycheck.utils.constants import ResponseInputType
 from .adolescent import Adolescent
@@ -173,16 +175,16 @@ class AdolescentResponse(UpstreamSyncBaseModel):
         if self.question.input_type in [ResponseInputType.NUMBER_FIELD.value,
                                         ResponseInputType.TEXT_FIELD.value,
                                         ResponseInputType.RANGER_SLIDER.value]:
-            if numeric and self.text.isdigit():
-                responses.append(int(self.text.strip()))
+            if numeric and isnumber(self.text.strip()) :
+                responses.append(float(self.text.strip()))
             elif not numeric:
                 responses.append(self.text.strip().lower())
 
         elif self.question.input_type in [ResponseInputType.RADIO_BUTTON.value,
                                           ResponseInputType.CHECKBOXES.value]:
             for option in self.chosen_options.all():
-                if numeric and (option.numeric_value != None or self.text.strip().isdigit()):
-                    value = option.numeric_value if option.numeric_value != None else int(
+                if numeric and (option.numeric_value != None or isnumber(self.text.strip())):
+                    value = option.numeric_value if option.numeric_value != None else float(
                         self.text.strip())
                     responses.append(value)
                 elif not numeric:
