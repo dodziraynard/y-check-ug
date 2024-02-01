@@ -146,4 +146,5 @@
     <string name="adolescent_added_successfully">Adolescent added successfully.</string>
     <string name="paged_registration">Paged Registration</string>
     <string name="single_view_registration">Single View Registration</string>
+    <string name="age">Age</string>
 </resources>

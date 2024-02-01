@@ -374,6 +374,19 @@
                         android:calendarViewShown="false"
                         android:datePickerMode="spinner" />
 
+                    <EditText
+                        android:id="@+id/age_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_rect_shape"
+                        android:drawableStart="@drawable/baseline_calendar_month_24"
+                        android:drawableLeft="@drawable/baseline_calendar_month_24"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="@color/text_color"
+                        android:hint="@string/age"
+                        android:inputType="number"
+                        android:padding="10dp" />
+
                     <TextView
                         android:id="@+id/dob_error"
                         android:layout_width="wrap_content"

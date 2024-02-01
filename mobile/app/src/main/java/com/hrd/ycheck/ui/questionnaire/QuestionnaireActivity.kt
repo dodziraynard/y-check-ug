@@ -297,8 +297,11 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showInvalidValueDialog(value: String, question: Question) {
-        val message =
-            "$value is not between ${question.minNumericValue} and ${question.maxNumericValue}."
+        var message = "$value is not a valid number"
+        if(question.minNumericValue != null || question.maxNumericValue != null){
+            message += " between ${question.minNumericValue} and ${question.maxNumericValue}."
+        }
+
         val dialog = AlertDialog.Builder(this)
             .setTitle("Invalid Input").setCancelable(false)
             .setPositiveButton(getString(R.string.ok)) { _, _ -> }
@@ -313,7 +316,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     ): Boolean {
         val minNumericValue = question.minNumericValue
         val maxNumericValue = question.maxNumericValue
-        if (question.inputType == InputType.NUMBER_FIELD && !value.isDigitsOnly()) return false
+        if (question.inputType == InputType.NUMBER_FIELD && !value.matches(Regex("\\d+(\\.\\d+)?"))) return false
         if (minNumericValue != null && value.toInt() < minNumericValue) return false
         if (maxNumericValue != null && value.toInt() > maxNumericValue) return false
         return true

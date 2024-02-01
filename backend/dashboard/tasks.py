@@ -13,6 +13,31 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task()
+def download_flags_services_location():
+    config, _ = NodeConfig.objects.get_or_create()
+
+    config.general_sync_message = "Downloading flag label"
+    config.save()
+    download_entities_from_upstream("flaglabel", FlagLabel)
+
+    config.general_sync_message = "Downloading flag colours"
+    config.save()
+    download_entities_from_upstream("flagcolor", FlagColor)
+
+    config.general_sync_message = "Downloading flag conditions"
+    config.save()
+    download_entities_from_upstream("flagcondition", FlagCondition)
+    
+    config.general_sync_message = "Downloading services"
+    config.save()
+    download_entities_from_upstream("service", Service)
+
+    config.general_sync_message = "Downloading checkup locations"
+    config.save()
+    download_entities_from_upstream(
+        "checkuplocation", CheckupLocation)
+
+@shared_task()
 def download_all_setup_data():
     config, _ = NodeConfig.objects.get_or_create()
 
@@ -21,47 +46,14 @@ def download_all_setup_data():
     logger.debug("Download triggered by: download_users_from_upstream")
 
     download_entities_from_upstream("facility", Facility)
+    config.general_sync_message = "Downloading facilities"
+    config.save()
     download_users_from_upstream()
 
     config.general_sync_message = "Downloading questions"
     config.save()
     logger.debug("Download triggered by: download_questions_from_upstream")
     download_questions_from_upstream()
-
-    config.general_sync_message = "Downloading facilities"
-    config.save()
-
-    config.general_sync_message = "Downloading services"
-    config.save()
-    downloaded_services = download_entities_from_upstream("service", Service)
-
-    config.general_sync_message = "Downloading flag label"
-    config.save()
-    downloaded_labels = download_entities_from_upstream("flaglabel", FlagLabel)
-
-    config.general_sync_message = "Downloading flag colours"
-    config.save()
-    downloaded_colours = download_entities_from_upstream(
-        "flagcolor", FlagColor)
-
-    config.general_sync_message = "Downloading flag conditions"
-    config.save()
-    downloaded_conditions = download_entities_from_upstream(
-        "flagcondition", FlagCondition)
-
-    config.general_sync_message = "Downloading checkup locations"
-    config.save()
-    downloaded_locations = download_entities_from_upstream(
-        "checkuplocation", CheckupLocation)
-
-    if all([downloaded_services,
-            downloaded_labels, downloaded_colours, downloaded_conditions, downloaded_locations]):
-        config.general_sync_message = "Setup entities downloaded"
-    else:
-        config.general_sync_message = "Some setup entities couldn't be downloaded"
-
-    config.save()
-
 
 @shared_task()
 def download_users_from_upstream():
@@ -269,4 +261,5 @@ def upload_adolescents():
     upload_entity_and_update_status(
         Adolescent, "adolescent", "adolescents_upload_status")
 
-    upload_entity_and_update_status(AdolescentResponse, "adolescentresponse", "adolescents_upload_status")
+    upload_entity_and_update_status(
+        AdolescentResponse, "adolescentresponse", "adolescents_upload_status")

@@ -185,6 +185,22 @@ class NewAdolescentActivity : AppCompatActivity() {
             }
         })
 
+        binding.ageInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val age = if (count > 0) s.toString().toInt() else 0
+
+                val calendar = Calendar.getInstance()
+                calendar.add(Calendar.YEAR, -age)
+                binding.dobPicker.updateDate(
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+                )
+            }
+        })
+
         binding.surnameInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -344,6 +360,8 @@ class NewAdolescentActivity : AppCompatActivity() {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
             val age = ((System.currentTimeMillis() - calendar.timeInMillis) / 31556952000).toInt()
+            binding.ageInput.hint = age.toString()
+
             if (age >= 20 || age < 10) {
                 binding.dobError.setTextColor(getColor(R.color.color_warning))
                 binding.dobError.text = "$age-year-olds are not eligible for this exercise."

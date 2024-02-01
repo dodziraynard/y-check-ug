@@ -247,7 +247,7 @@ fun SimpleInputResponse(
         modifier = Modifier.fillMaxWidth(),
         singleLine = isNumber,
         colors = TextFieldDefaults.textFieldColors(textColor = colorResource(R.color.text_color)),
-        keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Number else KeyboardType.Text),
+        keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Decimal else KeyboardType.Text),
         onValueChange = { textState.value = it })
 }
 
