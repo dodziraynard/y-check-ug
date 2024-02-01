@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Fragment, useRef } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
+import DropDownContainer from '../../components/DropDownContainer';
 import './style.scss';
-import { BASE_API_URI } from '../../utils/constants';
+import { BASE_API_URI, FLAG_RED } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import Flag from '../../components/Flag';
 import { useParams } from "react-router-dom";
@@ -24,6 +25,8 @@ function SummaryFlagWidget() {
     const [responseModal, setResponseModal] = useState(null);
     const [flagOverrideModal, setFlagOverrideModal] = useState(null);
     const [flags, setFlags] = useState([])
+    const [problematicFlags, setProblematicFlags] = useState([])
+    const [otherFlags, setOtherFlags] = useState([])
     const [adolescent, setAdolescent] = useState(null)
     const [selectedResponse, setSelectedResponse] = useState(null)
 
@@ -56,15 +59,15 @@ function SummaryFlagWidget() {
         if (Boolean(responseData?.summary_flags)) {
 
             let responseStatus = {}
-            responseData.summary_flags?.map((flag, flagIndex) => {
-                let answered  = false
+            responseData.summary_flags?.map((flag) => {
+                let answered = false
 
                 flag.responses?.map((response, _) => {
-                    if (Boolean(response.answers?.length)){
+                    if (Boolean(response.answers?.length)) {
                         answered = true
                     }
                 })
-                responseStatus[flagIndex] = answered
+                responseStatus[flag.id] = answered
             })
             setAdolescentResponded(responseStatus)
             setFlags(responseData.summary_flags)
@@ -127,6 +130,11 @@ function SummaryFlagWidget() {
         return date.toLocaleDateString()
     }
 
+    function getAgeFromDateInMills(timeInMills) {
+        var date = new Date() - new Date(timeInMills);
+        return (date / 31556952000).toFixed(0)
+    }
+
     function showResponses(flagIndex) {
         setSelectedResponse(flags[flagIndex].responses)
         responseModal?.show()
@@ -157,6 +165,20 @@ function SummaryFlagWidget() {
 
     }
 
+    useEffect(() => {
+        const probFlags = []
+        const othFlags = []
+        flags.forEach((flag) => {
+            if ((flag.updated_color_code === FLAG_RED) || (flag.updated_color_code === null && flag.computed_color_code === FLAG_RED && adolescentResponded[flag.id])) {
+                probFlags.push(flag)
+            } else{
+                othFlags.push(flag)
+            }
+        })
+        setProblematicFlags(probFlags)
+        setOtherFlags(othFlags)
+    }, [flags])
+
     return (
         <Fragment>
             {/* Profile details modal */}
@@ -177,7 +199,7 @@ function SummaryFlagWidget() {
                                 <section className="col-md-9">
                                     <div className="d-flex align-items-center">
                                         <h3>{adolescent?.fullname}</h3>
-                                        <p className='m-0 text-muted mx-4'> <i className="bi bi-geo-alt"></i> {adolescent?.check_up_location}</p>
+                                        <p className='ms-2 text-muted'> <i className="bi bi-geo-alt"></i> {adolescent?.check_up_location}</p>
                                     </div>
                                     <h5 className='text-muted mt-4'>About</h5>
                                     <div className="row align-items-center">
@@ -206,7 +228,7 @@ function SummaryFlagWidget() {
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-4 text-muted">DoB</h6>
-                                        <strong className="col-md-8 text">{getDateFromMills(adolescent?.dob)}</strong>
+                                        <strong className="col-md-8 text">{getDateFromMills(adolescent?.dob)} ({getAgeFromDateInMills(adolescent?.dob)} years)</strong>
                                     </div>
                                 </section>
                             </div>
@@ -295,47 +317,93 @@ function SummaryFlagWidget() {
                 {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
                 <section className='my-5'>
-                    <div className="col-md-10 mx-auto">
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th>Parameter</th>
-                                    <th>Flag</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Boolean(flags?.length) ?
-                                    flags?.map((flag, index) => {
-                                        const mutable = !Boolean(flag.updated_color_code);
-                                        return <tr key={index}>
-                                            <td>{flag.name}</td>
-                                            <td>
-                                                <div className="d-flex">
-                                                    <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
-                                                        <Flag
-                                                        color={flags[index]?.responses?.length > 0 ? (adolescentResponded[index] ? flag.computed_color_code: "#3c4e77") : "#808080"} 
-                                                        mutable={mutable}
-                                                        onColorChange={(color) => onColorChange(color, flag.id)} />
-                                                    </Tooltip>
-                                                    <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
-                                                        {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
-                                                    </Tooltip>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <Button size={"sm"} onClick={() => showResponses(index)}>View responses</Button>
-                                            </td>
-                                        </tr>
-                                    })
-                                    :
+                    <DropDownContainer header={"Problematic Flags"} isOpen={true}>
+                        <div className="col-md-10 mx-auto">
+                            <table className='table'>
+                                <thead>
                                     <tr>
-                                        <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
+                                        <th>Parameter</th>
+                                        <th>Flag</th>
+                                        <th></th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {Boolean(problematicFlags?.length) ?
+                                        problematicFlags?.map((flag, index) => {
+                                            const mutable = !Boolean(flag.updated_color_code);
+                                            return <tr key={index}>
+                                                <td>{flag.name}</td>
+                                                <td>
+                                                    <div className="d-flex">
+                                                        <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
+                                                            <Flag
+                                                                color={flags[index]?.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
+                                                                mutable={mutable}
+                                                                onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                        </Tooltip>
+                                                        <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
+                                                            {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
+                                                        </Tooltip>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <Button size={"sm"} onClick={() => showResponses(index)}>View responses</Button>
+                                                </td>
+                                            </tr>
+                                        })
+                                        :
+                                        <tr>
+                                            <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </DropDownContainer>
+
+                    <DropDownContainer header={"Other Flags"} isOpen={false}>
+                        <div className="col-md-10 mx-auto">
+                            <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Flag</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Boolean(otherFlags?.length) ?
+                                        otherFlags?.map((flag, index) => {
+                                            const mutable = !Boolean(flag.updated_color_code);
+                                            return <tr key={index}>
+                                                <td>{flag.name}</td>
+                                                <td>
+                                                    <div className="d-flex">
+                                                        <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
+                                                            <Flag
+                                                                color={otherFlags[index]?.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
+                                                                mutable={mutable}
+                                                                onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                        </Tooltip>
+                                                        <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
+                                                            {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
+                                                        </Tooltip>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <Button size={"sm"} onClick={() => showResponses(index)}>View responses</Button>
+                                                </td>
+                                            </tr>
+                                        })
+                                        :
+                                        <tr>
+                                            <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </DropDownContainer>
 
                     <hr />
                     <div className='d-flex justify-content-end'>
@@ -346,7 +414,6 @@ function SummaryFlagWidget() {
                             </Button>
                         </Link>
                     </div>
-
                 </section>
             </div >
         </Fragment>

@@ -7,3 +7,9 @@ if (base_api?.includes("http") == true) {
 } else if (process.env.NODE_ENV === 'production') {
     BASE_API_URI = 'http://167.71.140.136:8000/api'
 }
+
+
+export const FLAG_GREY = "#808080"
+export const FLAG_RED = "#ff0000"
+export const FLAG_ORANGE = "#ffa500"
+export const FLAG_GREEN = "#00ff00"
