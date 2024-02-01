@@ -10,7 +10,7 @@ from dashboard.models import *
 from django.utils.timezone import make_aware
 
 
-logger = logging.getLogger("app")
+logger = logging.getLogger(__name__)
 
 
 class MobileConfigSerializer(serializers.ModelSerializer):
@@ -132,6 +132,11 @@ class OptionSerlializer(serializers.ModelSerializer):
 
     def get_audio_url(self, option):
         request = self.context.get("request")
+        lang_iso = self.context.get("lang_iso")
+        match lang_iso:
+            case "fat":
+                if option.audio_file_fat and request:
+                    return request.build_absolute_uri(option.audio_file_fat.url)
         if option.audio_file and request:
             return request.build_absolute_uri(option.audio_file.url)
         return ""
@@ -168,6 +173,11 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def get_audio_url(self, question):
         request = self.context.get("request")
+        lang_iso = self.context.get("lang_iso")
+        match lang_iso:
+            case "fat":
+                if question.audio_file_fat and request:
+                    return request.build_absolute_uri(question.audio_file_fat.url)
         if question.audio_file and request:
             return request.build_absolute_uri(question.audio_file.url)
         return ""
@@ -344,9 +354,7 @@ class TreatmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Treatment
         fields = "__all__"
-        
-        
-        
+
 
 class NodeConfigSerializer(serializers.ModelSerializer):
     class Meta:
