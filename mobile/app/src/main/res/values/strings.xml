@@ -147,4 +147,5 @@
     <string name="paged_registration">Paged Registration</string>
     <string name="single_view_registration">Single View Registration</string>
     <string name="age">Age</string>
+    <string name="thank_you">Thank you.</string>
 </resources>

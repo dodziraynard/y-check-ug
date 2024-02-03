@@ -267,7 +267,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showCompletionDialog() {
-        val dialog = AlertDialog.Builder(this).setTitle("Thank you.").setCancelable(false)
+        val dialog = AlertDialog.Builder(this).setTitle(getString(R.string.thank_you)).setCancelable(false)
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
                 when (questionnaireType) {
                     QuestionnaireType.SURVEY -> {

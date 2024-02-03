@@ -29,7 +29,7 @@ LOGGING = {
     },
     "loggers": {
         logger_name: {
-            "level": "WARNING",
+            "level": "DEBUG",
             "propagate": True,
         } for logger_name in ("django", "django.request", "django.db.backends", "django.template", "ycheck")
     },
