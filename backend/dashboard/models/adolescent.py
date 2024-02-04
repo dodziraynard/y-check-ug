@@ -75,7 +75,7 @@ class Adolescent(UpstreamSyncBaseModel):
         thumbnail = PillowImage.open(self.picture)
         thumbnail = ImageOps.exif_transpose(thumbnail)
 
-        thumbnail.thumbnail((height, width), PillowImage.ANTIALIAS)
+        thumbnail.thumbnail((height, width), PillowImage.LANCZOS)
         thumb_io = BytesIO()
         thumbnail = thumbnail.convert('RGB')
         thumbnail.save(thumb_io, "jpeg", quality=80)
