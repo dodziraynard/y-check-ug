@@ -10,6 +10,7 @@ class FacilityForm(forms.ModelForm):
         model = Facility
         exclude = [
             "id",
+            "uuid",
         ]
 
 

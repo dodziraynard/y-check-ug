@@ -29,8 +29,9 @@ LOGGING = {
     },
     "loggers": {
         logger_name: {
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
+            "handlers": ["console", "file"],
         } for logger_name in ("django", "django.request", "django.db.backends", "django.template", "ycheck")
     },
     "root": {

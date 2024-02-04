@@ -30,7 +30,7 @@ function FacilitiesWidget() {
     const handleDeleteFacility = async () => {
         const response = await deleteFacility({ id: selectedFacility.id }).unwrap()
         const errorMessage = response["error_message"]
-        if (errorMessage !== undefined || errorMessage !== null) {
+        if (errorMessage === undefined) {
             toast({
                 position: 'top-center',
                 title: `Success`,
@@ -50,6 +50,17 @@ function FacilitiesWidget() {
             body['id'] = selectedFacility.id
         }
         const response = await putFacility(body).unwrap()
+        const errorMessage = response["error_message"]
+        if (errorMessage !== undefined) {
+            toast({
+                position: 'top-center',
+                title: `Error`,
+                description: errorMessage,
+                status: 'error',
+                duration: 2000,
+                isClosable: true,
+            })
+        }
         const facility = response["facility"]
         if (facility !== undefined) {
             setTriggerReload((triggerReload) => triggerReload + 1);

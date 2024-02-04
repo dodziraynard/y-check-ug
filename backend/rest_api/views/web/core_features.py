@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from django.db.utils import IntegrityError
 from rest_api.serializers import *
 
-logger = logging.getLogger("app")
+logger = logging.getLogger(__name__)
 
 
 class AdolescentsAPI(SimpleCrudMixin):
