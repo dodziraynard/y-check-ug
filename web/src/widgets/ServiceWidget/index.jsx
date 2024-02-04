@@ -42,10 +42,10 @@ function ServiceWidget() {
         const flagId = event.target.value;
         if (event.target.checked) {
             // If checkbox is checked, add the flag to the selectedFlags array
-            setSelectedFlags([...selectedFlags, parseInt(flagId)]);
+            setSelectedFlags([...selectedFlags, flagId]);
         } else {
             // If checkbox is unchecked, remove the flag from the selectedFlags array
-            setSelectedFlags([...selectedFlags.filter((id) => id !== parseInt(flagId))]);
+            setSelectedFlags([...selectedFlags.filter((id) => id !== flagId)]);
         }
     };
 
