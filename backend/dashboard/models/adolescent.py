@@ -3,6 +3,12 @@ from django.db import models
 from functools import reduce
 from django.utils.timezone import make_aware
 from .mixin import UpstreamSyncBaseModel
+from io import BytesIO
+from PIL import Image as PillowImage, ImageOps
+from django.core.files import File
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Adolescent(UpstreamSyncBaseModel):
@@ -60,3 +66,22 @@ class Adolescent(UpstreamSyncBaseModel):
         queries = [models.Q(**{f"{key}__icontains": query})
                    for key in ["pid", "surname", "other_names", "gender"]]
         return reduce(lambda x, y: x | y, queries)
+
+    def _compress_picture(self, height=500, width=500):
+        logger.info("Compressing picture")
+
+        adolescent_name = f"{self.surname.lower()}_{self.other_names.lower()}"
+
+        thumbnail = PillowImage.open(self.picture)
+        thumbnail = ImageOps.exif_transpose(thumbnail)
+
+        thumbnail.thumbnail((height, width), PillowImage.ANTIALIAS)
+        thumb_io = BytesIO()
+        thumbnail = thumbnail.convert('RGB')
+        thumbnail.save(thumb_io, "jpeg", quality=80)
+        self.picture = File(
+            thumb_io, name=adolescent_name.split(".")[0] + ".jpg")
+
+    def save(self, *args, **kwargs) -> None:
+        self._compress_picture()
+        return super().save(*args, **kwargs)
