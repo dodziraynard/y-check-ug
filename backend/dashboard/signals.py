@@ -3,11 +3,11 @@ import os
 from django.db import models
 from django.dispatch import receiver
 
-from dashboard.models import Question, Option
+from dashboard.models import Question, Option, Adolescent
 
 
 @receiver(models.signals.pre_save, sender=Question)
-def audo_delete_redundant_audios_images_for_questions(sender, instance, **kwargs):
+def auto_delete_redundant_audios_images_for_questions(sender, instance, **kwargs):
     if not instance.id:
         return False
     try:
@@ -34,7 +34,7 @@ def audo_delete_redundant_audios_images_for_questions(sender, instance, **kwargs
 
 
 @receiver(models.signals.pre_save, sender=Option)
-def audo_delete_redundant_audios_images_for_questions(sender, instance, **kwargs):
+def auto_delete_redundant_audios_images_for_questions(sender, instance, **kwargs):
     if not instance.id:
         return False
     try:
@@ -58,3 +58,21 @@ def audo_delete_redundant_audios_images_for_questions(sender, instance, **kwargs
     if not old_audio == new_audio and old_audio:
         if os.path.isfile(old_audio.path):
             os.remove(old_audio.path)
+
+
+@receiver(models.signals.pre_save, sender=Adolescent)
+def auto_delete_redundant_images_for_adolescent(sender, instance, **kwargs):
+    if not instance.id:
+        return False
+    try:
+        old_image = Adolescent.objects.get(
+            pk=instance.id).picture
+
+    except Adolescent.DoesNotExist:
+        return False
+
+    # Delete old image
+    new_image = instance.picture
+    if not old_image == new_image and old_image:
+        if os.path.isfile(old_image.path):
+            os.remove(old_image.path)
