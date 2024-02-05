@@ -181,8 +181,7 @@ class FlagCondition(UpstreamSyncBaseModel):
                                        on_delete=models.CASCADE, null=True, blank=True)
 
     expected_value = models.CharField(max_length=100, null=True, blank=True)
-    expected_integer_value = models.IntegerField(null=True, blank=True)
-
+    expected_integer_value = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=20)
     operator = models.CharField(max_length=100, choices=OPERATORS)
 
     invert_operator_evaluation = models.BooleanField(default=False)
