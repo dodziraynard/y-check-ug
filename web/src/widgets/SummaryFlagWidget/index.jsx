@@ -337,7 +337,7 @@ function SummaryFlagWidget() {
                                                     <div className="d-flex">
                                                         <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
                                                             <Flag
-                                                                color={flags[index]?.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
+                                                                color={flag.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
                                                                 mutable={mutable}
                                                                 onColorChange={(color) => onColorChange(color, flag.id)} />
                                                         </Tooltip>
@@ -381,7 +381,7 @@ function SummaryFlagWidget() {
                                                     <div className="d-flex">
                                                         <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
                                                             <Flag
-                                                                color={otherFlags[index]?.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
+                                                                color={flag.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
                                                                 mutable={mutable}
                                                                 onColorChange={(color) => onColorChange(color, flag.id)} />
                                                         </Tooltip>
@@ -391,7 +391,7 @@ function SummaryFlagWidget() {
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <Button size={"sm"} onClick={() => showResponses(index)}>View responses</Button>
+                                                    <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
                                                 </td>
                                             </tr>
                                         })
