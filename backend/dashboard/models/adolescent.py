@@ -68,6 +68,9 @@ class Adolescent(UpstreamSyncBaseModel):
         return reduce(lambda x, y: x | y, queries)
 
     def _compress_picture(self, height=500, width=500):
+        if not self.picture:
+            return
+        
         logger.info("Compressing picture")
 
         adolescent_name = f"{self.surname.lower()}_{self.other_names.lower()}"
