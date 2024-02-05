@@ -255,7 +255,7 @@ class FlagCondition(UpstreamSyncBaseModel):
                 matched = bool(self.expected_value) and bool(response1) and self.expected_value.strip().lower() in list(
                     map(str, response1.get_values_as_list()))
             case "less_than_expected_integer_value":
-                matched = self.expected_integer_value != None and bool(response1) and all([int(self.expected_integer_value) > int(res)
+                matched = self.expected_integer_value != None and bool(response1) and all([float(self.expected_integer_value) > round(float(res), 2)
                                                                                            for res in response1.get_values_as_list(numeric=True)])
             case "min_age":
                 matched = self.expected_integer_value != None and self.expected_integer_value <= adolescent.get_age()
@@ -271,10 +271,10 @@ class FlagCondition(UpstreamSyncBaseModel):
                 diff = self._process_diff_value(response1, response2)
                 matched = diff != None and self.expected_integer_value != None and diff < self.expected_integer_value
             case "compute_right_grip_test":
-                test_result = compute_grip_test(adolescent, for_right_arm=True)
+                test_result = round(compute_grip_test(adolescent, for_right_arm=True), 2)
                 matched = self.expected_integer_value == test_result
             case "compute_left_grip_test":
-                test_result = compute_grip_test(adolescent, for_right_arm=False)
+                test_result = round(compute_grip_test(adolescent, for_right_arm=False), 2)
                 matched = self.expected_integer_value == test_result
 
         if matched != None:
