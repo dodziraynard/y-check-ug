@@ -135,8 +135,8 @@ function SummaryFlagWidget() {
         return (date / 31556952000).toFixed(0)
     }
 
-    function showResponses(flagIndex) {
-        setSelectedResponse(flags[flagIndex].responses)
+    function showResponses(flag) {
+        setSelectedResponse(flag.responses)
         responseModal?.show()
     }
 
@@ -347,7 +347,7 @@ function SummaryFlagWidget() {
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <Button size={"sm"} onClick={() => showResponses(index)}>View responses</Button>
+                                                    <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
                                                 </td>
                                             </tr>
                                         })
