@@ -134,11 +134,11 @@ class OptionSerlializer(serializers.ModelSerializer):
         request = self.context.get("request")
         lang_iso = self.context.get("lang_iso")
         match lang_iso:
-            case "fat":
-                if option.audio_file_fat and request:
-                    return request.build_absolute_uri(option.audio_file_fat.url)
-        if option.audio_file and request:
-            return request.build_absolute_uri(option.audio_file.url)
+            case "en":
+                if option.audio_file and request:
+                    return request.build_absolute_uri(option.audio_file.url)
+        if option.audio_file_fat and request:
+            return request.build_absolute_uri(option.audio_file_fat.url)
         return ""
 
     def get_value(self, obj):
@@ -175,11 +175,11 @@ class QuestionSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         lang_iso = self.context.get("lang_iso")
         match lang_iso:
-            case "fat":
-                if question.audio_file_fat and request:
-                    return request.build_absolute_uri(question.audio_file_fat.url)
-        if question.audio_file and request:
-            return request.build_absolute_uri(question.audio_file.url)
+            case "en":
+                if question.audio_file and request:
+                    return request.build_absolute_uri(question.audio_file.url)
+        if question.audio_file_fat and request:
+            return request.build_absolute_uri(question.audio_file_fat.url)
         return ""
 
     def get_options(self, question):
