@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -44,6 +45,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -160,6 +163,15 @@ fun QuestionnaireUI(
 
 
             }
+
+            currentQuestion.relatedResponse?.let {
+                Text(
+                    modifier = Modifier.padding(vertical = 20.dp),
+                    style = TextStyle(fontStyle = FontStyle.Italic),
+                    text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
+                )
+            }
+
             if (currentQuestion.imageUrl?.isNotEmpty() == true) {
                 GlideImage(
                     model = currentQuestion.imageUrl,
@@ -289,6 +301,7 @@ fun SingleSelectionResponse(
                     .selectable(selected = (option.value == selectedOption?.value), onClick = {
                         onOptionSelected(option)
                     })
+                    .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
                     .width((columnWidth).dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -332,6 +345,7 @@ fun SingleSelectionResponse(
                     }
                 }
             }
+            Divider(color = colorResource(R.color.text_color), thickness = 0.29.dp)
         }
     }
 }
@@ -368,6 +382,7 @@ fun MultiSelectionResponse(
         options.forEach { option ->
             Column(
                 modifier = Modifier
+                    .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
                     .width(columnWidth.dp),
                 horizontalAlignment = if (hasImage == true) Alignment.CenterHorizontally else Alignment.Start
             ) {
@@ -410,6 +425,7 @@ fun MultiSelectionResponse(
                     }
                 }
             }
+            Divider(color = colorResource(R.color.text_color), thickness = 1.dp)
         }
     }
 }

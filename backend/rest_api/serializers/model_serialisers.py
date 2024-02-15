@@ -158,6 +158,19 @@ class QuestionSerializer(serializers.ModelSerializer):
     options = serializers.SerializerMethodField()
     audio_url = serializers.SerializerMethodField()
     has_image_options = serializers.SerializerMethodField()
+    related_response = serializers.SerializerMethodField()
+
+    def get_related_response(self, question):
+        if not question.show_response_for:
+            return {}
+
+        adolescent = self.context.get("adolescent")
+        response = AdolescentResponse.objects.filter(
+            adolescent=adolescent, question=question.show_response_for).first()
+        return {
+            "question": question.show_response_for.text,
+            "responses": response.get_values_as_list()
+        }
 
     def get_has_image_options(self, question):
         if hasattr(question, "options"):
@@ -215,6 +228,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             "to_be_confirmed",
             "audio_url",
             "has_image_options",
+            "related_response",
         ]
 
 

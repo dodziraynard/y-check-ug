@@ -85,7 +85,8 @@ class Question(UpstreamSyncBaseModel):
     apk_id = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
-    audio_file_fat = models.FileField(upload_to='audios/', blank=True, null=True)
+    audio_file_fat = models.FileField(
+        upload_to='audios/', blank=True, null=True)
     to_be_confirmed = models.BooleanField(default=False)
 
     # Useful if input_type is range slider
@@ -113,6 +114,8 @@ class Question(UpstreamSyncBaseModel):
 
     util_function_tag = models.CharField(
         max_length=100, choices=UNTIL_FUNCTION_TAG_CHOICES, null=True, blank=True)
+    show_response_for = models.ForeignKey(
+        "Question", on_delete=models.SET_NULL, null=True, blank=True)
 
     def are_previous_response_conditions_met(self, adolescent):
         if self.previous_question_group:
@@ -143,7 +146,8 @@ class Option(UpstreamSyncBaseModel):
         Question, related_name="options", on_delete=models.CASCADE, db_index=True)
     value = models.CharField(max_length=200)
     audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
-    audio_file_fat = models.FileField(upload_to='audios/', blank=True, null=True)
+    audio_file_fat = models.FileField(
+        upload_to='audios/', blank=True, null=True)
     context = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     numeric_value = models.IntegerField(null=True, blank=True)
@@ -165,7 +169,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
 
     def __str__(self) -> str:
         return str(self.question)
-    
+
     def save(self, *args, **kwargs) -> None:
         if self.text == None:
             self.text = ""
@@ -177,7 +181,7 @@ class AdolescentResponse(UpstreamSyncBaseModel):
         if self.question.input_type in [ResponseInputType.NUMBER_FIELD.value,
                                         ResponseInputType.TEXT_FIELD.value,
                                         ResponseInputType.RANGER_SLIDER.value]:
-            if numeric and isnumber(self.text.strip()) :
+            if numeric and isnumber(self.text.strip()):
                 responses.append(float(self.text.strip()))
             elif not numeric:
                 responses.append(self.text.strip().lower())

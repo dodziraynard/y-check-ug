@@ -286,7 +286,7 @@ class GetSurveyQuestions(generics.GenericAPIView):
             total_sessions = min(total_sessions, 10)
 
         response_data = {
-            "question": QuestionSerializer(question, context={"request": request}).data if question else None,
+            "question": QuestionSerializer(question, context={"request": request, "adolescent": adolescent}).data if question else None,
             "new_section": SectionSerializer(new_section).data if new_section and action == "next" else None,
             "current_session_number": current_session_number,
             "total_sessions": total_sessions,

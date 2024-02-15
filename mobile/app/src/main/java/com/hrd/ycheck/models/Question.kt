@@ -4,6 +4,11 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
+data class RelatedResponse(
+    @SerializedName("question") val question: String? = null,
+    @SerializedName("responses") val responses: List<String>? = null
+)
+
 data class Question(
     @PrimaryKey val id: String = "0",
     @SerializedName("question_id") val questionID: String? = null,
@@ -20,7 +25,8 @@ data class Question(
     @SerializedName("audio_url") val audioUrl: String? = null,
     @SerializedName("has_image_options") val hasImageOptions: Boolean? = false,
     @SerializedName("apk_id") val apkId: String? = null,
-    @SerializedName("to_be_confirmed") val toBeConfirmed: Boolean? = false
+    @SerializedName("to_be_confirmed") val toBeConfirmed: Boolean? = false,
+    @SerializedName("related_response") val relatedResponse: RelatedResponse? = null
 )
 
 object InputType {
