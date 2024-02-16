@@ -70,6 +70,7 @@ class Question(UpstreamSyncBaseModel):
         ('bmi_weight', 'bmi_weight'),
     ]
     admins_comment = models.TextField(null=True, blank=True)
+    variable_name = models.CharField(max_length=100, null=True, blank=True)
     group = models.ForeignKey(QuestionGroup, related_name="questions",
                               on_delete=models.SET_NULL, null=True, blank=True)
     caption = models.CharField(

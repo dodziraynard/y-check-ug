@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -113,7 +114,11 @@ fun QuestionnaireUI(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                    .background(colorResource(R.color.white))
+                    .padding(
+                        vertical = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp,
+                        horizontal = dimensionResource(id = R.dimen._5sdp).value.dp
+                    ),
                 textAlign = TextAlign.Justify
             )
             Row(modifier = Modifier.align(Alignment.End)) {
@@ -160,16 +165,16 @@ fun QuestionnaireUI(
                             Text(text = "Open App")
                         }
                     }
-
-
             }
 
-            currentQuestion.relatedResponse?.let {
-                Text(
-                    modifier = Modifier.padding(vertical = 20.dp),
-                    style = TextStyle(fontStyle = FontStyle.Italic),
-                    text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
-                )
+            if (currentQuestion.relatedResponse?.question != null) {
+                currentQuestion.relatedResponse.let {
+                    Text(
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        style = TextStyle(fontStyle = FontStyle.Italic),
+                        text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
+                    )
+                }
             }
 
             if (currentQuestion.imageUrl?.isNotEmpty() == true) {
@@ -256,7 +261,8 @@ fun SimpleInputResponse(
     newResponse.value = textState.value.text
 
     TextField(value = textState.value,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .background(colorResource(R.color.white)),
         singleLine = isNumber,
         colors = TextFieldDefaults.textFieldColors(textColor = colorResource(R.color.text_color)),
         keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Decimal else KeyboardType.Text),
@@ -285,7 +291,9 @@ fun SingleSelectionResponse(
     }
 
     FlowRow(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .background(colorResource(R.color.white)),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalArrangement = Arrangement.Top,
         maxItemsInEachRow = 3,
@@ -374,7 +382,9 @@ fun MultiSelectionResponse(
     }
 
     FlowRow(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .background(colorResource(R.color.white)),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalArrangement = Arrangement.Top,
         maxItemsInEachRow = 3,

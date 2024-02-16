@@ -29,7 +29,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
             models.UniqueConstraint(
                 fields=['adolescent', 'label'], name='Adolescent flag')
         ]
-    
+
     @classmethod
     def compute_flag_color(cls, adolescent: Adolescent):
         flag_lables = FlagLabel.objects.all()
@@ -181,7 +181,8 @@ class FlagCondition(UpstreamSyncBaseModel):
                                        on_delete=models.CASCADE, null=True, blank=True)
 
     expected_value = models.CharField(max_length=100, null=True, blank=True)
-    expected_integer_value = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=20)
+    expected_integer_value = models.DecimalField(
+        null=True, blank=True, decimal_places=2, max_digits=20)
     operator = models.CharField(max_length=100, choices=OPERATORS)
 
     invert_operator_evaluation = models.BooleanField(default=False)
@@ -189,6 +190,7 @@ class FlagCondition(UpstreamSyncBaseModel):
     is_required = models.BooleanField(default=False, db_index=True)
 
     priority = models.IntegerField(default=1)
+    adolescent_type = models.CharField(max_length=100, null=True, blank=True)
 
     min_age = models.IntegerField(null=True, blank=True)
     max_age = models.IntegerField(null=True, blank=True)
@@ -238,6 +240,9 @@ class FlagCondition(UpstreamSyncBaseModel):
         if self.question2 and not response2:
             return True
 
+        if self.adolescent_type and self.adolescent_type != adolescent.type:
+            return False
+
         matched = None
         match self.operator:
             case "group_value_between":
@@ -271,10 +276,12 @@ class FlagCondition(UpstreamSyncBaseModel):
                 diff = self._process_diff_value(response1, response2)
                 matched = diff != None and self.expected_integer_value != None and diff < self.expected_integer_value
             case "compute_right_grip_test":
-                test_result = round(compute_grip_test(adolescent, for_right_arm=True), 2)
+                test_result = round(compute_grip_test(
+                    adolescent, for_right_arm=True), 2)
                 matched = self.expected_integer_value == test_result
             case "compute_left_grip_test":
-                test_result = round(compute_grip_test(adolescent, for_right_arm=False), 2)
+                test_result = round(compute_grip_test(
+                    adolescent, for_right_arm=False), 2)
                 matched = self.expected_integer_value == test_result
 
         if matched != None:

@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/board"
+    android:backgroundTint="#FF7700"
+    android:backgroundTintMode="multiply"
     tools:context=".ui.adolescent_enrollment.AdolescentIntroductionActivity">
 
     <ScrollView
@@ -24,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:text="@string/hello_person"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/text_size_title"
                 android:textStyle="bold" />
 
