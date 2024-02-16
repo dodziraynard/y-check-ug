@@ -1,5 +1,5 @@
 import "./style.scss"
-import { Fragment, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import useAxios from '../../app/hooks/useAxios';
 import { useSearchParams } from "react-router-dom";
 

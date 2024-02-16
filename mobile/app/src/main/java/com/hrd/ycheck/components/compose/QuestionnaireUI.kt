@@ -92,7 +92,6 @@ fun QuestionnaireUI(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth()
         )
-
         LinearProgressIndicator(
             progress = (currentSectionNumber).toFloat() / totalSectionCount.toFloat(),
             color = accentAmber,
@@ -105,6 +104,7 @@ fun QuestionnaireUI(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
+                .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
                 .weight(weight = 1f, fill = false)
         ) {
             Text(
@@ -135,8 +135,6 @@ fun QuestionnaireUI(
                     )
                 }
                 if (currentQuestion.apkId?.isNotEmpty() == true)
-
-
                     IconButton(
                         onClick = {
                             val launchIntent: Intent? =
@@ -144,7 +142,7 @@ fun QuestionnaireUI(
                             if (launchIntent != null) {
                                 context.startActivity(launchIntent)
                             } else {
-                                // Bring user to the market or let them choose an app?
+                                // Bring user to the market or let them choose an app
                                 val intent = Intent(Intent.ACTION_VIEW);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.data =
@@ -183,8 +181,8 @@ fun QuestionnaireUI(
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height((screenHeight / 2).dp)
-                        .padding(10.dp),
+                        .height(dimensionResource(id = R.dimen._200sdp).value.dp)
+                        .padding(dimensionResource(id = R.dimen._5sdp).value.dp),
                     alignment = Alignment.Center,
                     failure = placeholder(ColorDrawable(R.drawable.placeholder)),
                     loading = placeholder(ColorDrawable(R.drawable.placeholder))
@@ -261,7 +259,8 @@ fun SimpleInputResponse(
     newResponse.value = textState.value.text
 
     TextField(value = textState.value,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .background(colorResource(R.color.white)),
         singleLine = isNumber,
         colors = TextFieldDefaults.textFieldColors(textColor = colorResource(R.color.text_color)),

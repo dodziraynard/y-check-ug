@@ -13,10 +13,13 @@ import { Button, Spinner, Badge, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import { monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastErrorMessage } from '../../utils/functions';
 import TagInput from '../../components/TagInput';
+import { useSearchParams } from "react-router-dom";
 
 function AdolescentReferralsWidget() {
     const { pid } = useParams()
     const newReferralModalRef = useRef(null);
+    const [searchParams] = useSearchParams();
+    const createNewReferal = searchParams.get('new') === "true"
     const toast = useToast(null);
     const deleteReferralModalRef = useRef(null);
     const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetReferralsQuery()
@@ -124,6 +127,12 @@ function AdolescentReferralsWidget() {
     monitorShowErrorReduxHttpError(errorPuttingReferrals, isPuttingReferrals)
     monitorShowErrorReduxHttpError(errorDeletingReferral, errorDeletingReferral)
 
+    useEffect(() => {
+        if (createNewReferal) {
+            newReferralModal?.show()
+        }
+    }, [newReferralModal, createNewReferal])
+
     return (
         <Fragment>
             {/* Modals */}
@@ -172,7 +181,7 @@ function AdolescentReferralsWidget() {
                                             onChange={(event) => setFacilityId(event.target.value)}
                                             name='facility_id' id='facility_id' required>
                                             <option value="">Choose facility</option>
-                                            {facilities?.map(facility => <option value={facility.id} selected={facilityId === facility.id}>{facility.name}</option>)}
+                                            {facilities?.map((facility, index) => <option key={index} value={facility.id} defaultValue={facility.id}>{facility.name}</option>)}
                                         </select>
                                     }
                                 </div>
@@ -180,7 +189,7 @@ function AdolescentReferralsWidget() {
                                 <div className="form-group my-4">
                                     <label htmlFor="service_type"><strong>Type of initiating service</strong></label>
                                     <input type="text" className="form-control"
-                                        value={serviceType}
+                                        value={serviceType || ""}
                                         onChange={(event) => setServiceType(event.target.value)}
                                         name='service_type' id='service_type' required />
                                 </div>
@@ -194,7 +203,7 @@ function AdolescentReferralsWidget() {
                                     <label htmlFor="referral_reason"><strong>Reason for referral</strong></label>
                                     <textarea className='form-control'
                                         onChange={(event) => setReferralReason(event.target.value)}
-                                        value={referralReason}
+                                        value={referralReason || ""}
                                         name="referral_reason" id="referral_reason" cols="30" rows="5" required></textarea>
                                 </div>
 
@@ -238,8 +247,8 @@ function AdolescentReferralsWidget() {
                                         return <tr key={index}>
                                             <td>{referral.facility_name}</td>
                                             <td>
-                                                {referral?.services?.map((service, _) => {
-                                                    return <Badge variant='outline' colorScheme='blue'>
+                                                {referral?.services?.map((service, index) => {
+                                                    return <Badge key={index} variant='outline' colorScheme='blue'>
                                                         {service.name}
                                                     </Badge>
                                                 })}

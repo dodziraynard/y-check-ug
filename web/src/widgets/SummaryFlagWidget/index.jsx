@@ -171,7 +171,7 @@ function SummaryFlagWidget() {
         flags.forEach((flag) => {
             if ((flag.updated_color_code === FLAG_RED) || (flag.updated_color_code === null && flag.computed_color_code === FLAG_RED && adolescentResponded[flag.id])) {
                 probFlags.push(flag)
-            } else{
+            } else {
                 othFlags.push(flag)
             }
         })
@@ -407,10 +407,17 @@ function SummaryFlagWidget() {
 
                     <hr />
                     <div className='d-flex justify-content-end'>
+                        <Link to={"referrals?new=true"}>
+                            <Button className="d-flex mx-2" >
+                                <i className="bi bi-plus me-2"></i>
+                                New Referral
+                            </Button>
+                        </Link>
+
                         <Link to={"referrals"}>
                             <Button className="d-flex">
                                 <i className="bi bi-h-circle me-2"></i>
-                                View/create referrals
+                                View referrals
                             </Button>
                         </Link>
                     </div>
