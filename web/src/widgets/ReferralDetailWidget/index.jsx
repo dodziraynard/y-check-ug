@@ -6,17 +6,11 @@ import { Button, Spinner, Badge, useToast } from '@chakra-ui/react';
 import { getDateFromMills, monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastSuccessMessage } from '../../utils/functions';
 import { useParams } from "react-router-dom";
 import { Modal } from 'bootstrap';
-import { useSearchParams } from "react-router-dom";
 
 function ReferralDetailWidget() {
     const responseModalRef = useRef(null);
     const feedbackModalRef = useRef(null);
     const toast = useToast()
-    const [searchParams] = useSearchParams();
-    const createNewReferal = searchParams.get('new') === "true"
-
-    console.log("createNewReferal", createNewReferal)
-
     const { referralId } = useParams()
     const [getFacilities, { data: facilitiesResponse = [], isLoading: isLoadingFacilities, error: errorLoadingFacilities }] = resourceApiSlice.useLazyGetAllFacilitiesQuery()
     const [getReferralDetail, { data: referralResponse = [], isLoading: isLoadingReferral, error: referralError }] = resourceApiSlice.useLazyGetReferralQuery()
