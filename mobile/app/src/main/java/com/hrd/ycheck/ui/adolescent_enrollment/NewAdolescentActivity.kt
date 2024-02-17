@@ -362,9 +362,30 @@ class NewAdolescentActivity : AppCompatActivity() {
             val age = ((System.currentTimeMillis() - calendar.timeInMillis) / 31556952000).toInt()
             binding.ageInput.hint = age.toString()
 
-            if (age >= 20 || age < 10) {
+            var minAge = 0
+            var maxAge = 0
+
+            when (adolescent.type.lowercase()) {
+                AdolescentTypes.BASIC.lowercase() -> {
+                    minAge = 10
+                    maxAge = 12
+                }
+
+                AdolescentTypes.SECONDARY.lowercase() -> {
+                    minAge = 13
+                    maxAge = 16
+                }
+
+                AdolescentTypes.COMMUNITY.lowercase() -> {
+                    minAge = 17
+                    maxAge = 19
+                }
+            }
+
+            if (age >= maxAge || age < minAge) {
                 binding.dobError.setTextColor(getColor(R.color.color_warning))
-                binding.dobError.text = "$age-year-olds are not eligible for this exercise."
+                binding.dobError.text =
+                    "$age-year-old ${adolescent.type} adolescents are not eligible for this exercise."
                 binding.dobError.visibility = View.VISIBLE
             } else {
                 binding.dobError.text = "$age-year-olds are eligible for this exercise."
