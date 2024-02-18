@@ -135,7 +135,7 @@
     <string name="close_test">Close test</string>
     <string name="lab_assessment">STATION 2: Laboratory Test</string>
     <string name="clinical_assessment">STATION 4B: Clinical Assessment</string>
-    <string name="pre_screening_assessment">STATION 1: Pre-screening Assessment</string>
+    <string name="pre_screening_assessment">STATION 3A: Pre-screening Assessment</string>
     <string name="pid">PID</string>
     <string name="y_check_services_research"><![CDATA[Y-Check Services & Research]]></string>
     <string name="y_check_services_only">Y-Check Services Only</string>

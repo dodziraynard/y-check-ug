@@ -27,17 +27,6 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
             finish()
         }
 
-        val activityTag = ActivityTags.ADOLESCENT_SURVEY_START
-        if (activityTag.isNotEmpty() && adolescent?.id != null) {
-            val dialogFragment =
-                TimeInputDialogFragment(
-                    activityTag,
-                    adolescent!!.id
-                )
-            dialogFragment.isCancelable = false
-            dialogFragment.show(supportFragmentManager, "TimeInputDialogFragment")
-        }
-
         binding.helloText.text = getString(R.string.hello_person, adolescent!!.otherNames)
         binding.helloText.text = getString(R.string.hello_person, adolescent!!.otherNames)
 

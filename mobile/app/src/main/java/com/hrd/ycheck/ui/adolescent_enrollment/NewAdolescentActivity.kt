@@ -129,12 +129,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         viewModel.schools.observe(this) { schools ->
-            var allSchoolOptions = listOf("")
-            if (adolescent.type.lowercase() == AdolescentTypes.COMMUNITY.lowercase()) {
-                allSchoolOptions = listOf("Not a student") + schools
-            } else {
-                allSchoolOptions = listOf("Select school") + schools
-            }
+            val allSchoolOptions: List<String> = listOf("Not a student") + schools
 
             val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
                 applicationContext, android.R.layout.simple_dropdown_item_1line, allSchoolOptions
@@ -149,7 +144,6 @@ class NewAdolescentActivity : AppCompatActivity() {
                         adolescent.school = allSchoolOptions[position]
                     }
                 }
-
             // Update school spinner
             binding.schoolSpinner.setSelection(allSchoolOptions.indexOf(adolescent.school))
         }
@@ -395,7 +389,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 }
             }
 
-            if (age >= maxAge || age < minAge) {
+            if (age > maxAge || age < minAge) {
                 binding.dobError.setTextColor(getColor(R.color.color_warning))
                 binding.dobError.text =
                     "$age-year-old ${adolescent.type} adolescents are not eligible for this exercise."
