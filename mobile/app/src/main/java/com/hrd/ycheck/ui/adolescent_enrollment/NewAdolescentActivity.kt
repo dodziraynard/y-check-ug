@@ -392,10 +392,15 @@ class NewAdolescentActivity : AppCompatActivity() {
             if (age > maxAge || age < minAge) {
                 binding.dobError.setTextColor(getColor(R.color.color_warning))
                 binding.dobError.text =
-                    "$age-year-old ${adolescent.type} adolescents are not eligible for this exercise."
+                    getString(
+                        R.string.year_old_adolescents_are_not_eligible_for_this_exercise,
+                        age,
+                        adolescent.type
+                    )
                 binding.dobError.visibility = View.VISIBLE
             } else {
-                binding.dobError.text = "$age-year-olds are eligible for this exercise."
+                binding.dobError.text =
+                    getString(R.string.year_olds_are_eligible_for_this_exercise, age)
                 binding.dobError.setTextColor(getColor(R.color.color_success))
                 binding.dobError.visibility = View.VISIBLE
                 adolescent.dob = calendar.timeInMillis
