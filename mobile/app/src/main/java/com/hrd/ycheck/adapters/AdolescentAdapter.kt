@@ -49,7 +49,6 @@ class AdolescentAdapter(private val context: Context) :
                 cardView.setOnClickListener {
                     listener?.itemClickListener(adolescent)
                 }
-
             }
         }
     }
