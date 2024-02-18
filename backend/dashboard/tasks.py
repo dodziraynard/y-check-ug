@@ -27,7 +27,7 @@ def download_flags_services_location():
     config.general_sync_message = "Downloading flag conditions"
     config.save()
     download_entities_from_upstream("flagcondition", FlagCondition)
-    
+
     config.general_sync_message = "Downloading services"
     config.save()
     download_entities_from_upstream("service", Service)
@@ -36,6 +36,7 @@ def download_flags_services_location():
     config.save()
     download_entities_from_upstream(
         "checkuplocation", CheckupLocation)
+
 
 @shared_task()
 def download_all_setup_data():
@@ -54,6 +55,7 @@ def download_all_setup_data():
     config.save()
     logger.debug("Download triggered by: download_questions_from_upstream")
     download_questions_from_upstream()
+
 
 @shared_task()
 def download_users_from_upstream():
@@ -263,3 +265,9 @@ def upload_adolescents():
 
     upload_entity_and_update_status(
         AdolescentResponse, "adolescentresponse", "adolescents_upload_status")
+
+    upload_entity_and_update_status(
+        SummaryFlag, "summaryflag", "summary_flag")
+
+    upload_entity_and_update_status(
+        AdolescentActivityTime, "adolescentactivitytime", "summary_flag")
