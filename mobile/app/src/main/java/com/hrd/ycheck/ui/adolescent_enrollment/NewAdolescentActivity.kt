@@ -44,7 +44,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewAdolescentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        title = "New Adolescent"
+        title = getString(R.string.new_adolescent)
         viewModel = ViewModelProvider(this)[AdolescentActivityViewModel::class.java]
         // Show back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

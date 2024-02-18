@@ -163,4 +163,5 @@
     <string name="adolescent_s_profile_setup_is_complete_your_id_is">Adolescent\'s profile setup is complete. Adolescent ID is %1$s</string>
     <string name="year_old_adolescents_are_not_eligible_for_this_exercise">%1$d-year-old %2$s adolescents are not eligible for this exercise.</string>
     <string name="year_olds_are_eligible_for_this_exercise">%1$d-year-olds are eligible for this exercise.</string>
+    <string name="new_adolescent">New Adolescent</string>
 </resources>
