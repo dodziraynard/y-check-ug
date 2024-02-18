@@ -19,6 +19,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityNewAdolescentBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.common.TimeInputDialogFragment
+import com.hrd.ycheck.utils.ActivityTags
 import com.hrd.ycheck.utils.AdolescentTypes
 import com.hrd.ycheck.utils.CheckUpReason
 import com.hrd.ycheck.utils.Genders
@@ -71,15 +73,26 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         viewModel.updatedAdolescent.observe(this) { adolescent ->
-            // Choose to update profile photo screen
-            Toast.makeText(
-                this,
-                getString(R.string.adolescent_added_successfully), Toast.LENGTH_LONG
-            ).show()
-            val intent = Intent(this@NewAdolescentActivity, PhotoActivity::class.java)
-            intent.putExtra("adolescent", adolescent)
-            startActivity(intent)
-            finish()
+            // Record time of registration.
+            val dialogFragment =
+                TimeInputDialogFragment(ActivityTags.ADOLESCENT_REGISTRATION_START, adolescent.id)
+            dialogFragment.isCancelable = false
+            dialogFragment.show(supportFragmentManager, "TimeInputDialogFragment")
+
+            dialogFragment.setOnDismissListener(object : TimeInputDialogFragment.OnDismissListener {
+                override fun dismissListener() {
+                    // Choose to update profile photo screen
+                    Toast.makeText(
+                        this@NewAdolescentActivity,
+                        getString(R.string.adolescent_added_successfully),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    val intent = Intent(this@NewAdolescentActivity, PhotoActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
+                    startActivity(intent)
+                    this@NewAdolescentActivity.finish()
+                }
+            })
         }
 
         val dialog = AlertDialog.Builder(this).setMessage("Saving...").setCancelable(false).create()
@@ -400,8 +413,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 viewModel.postAdolescent(adolescent)
             } else {
                 Toast.makeText(
-                    this,
-                    getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
+                    this, getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
                 ).show()
             }
         }
@@ -581,11 +593,9 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
         when (item.itemId) {
             R.id.action_page_registration -> {
-                val intent =
-                    Intent(
-                        this@NewAdolescentActivity,
-                        PagedAdolescentRegistrationActivity::class.java
-                    )
+                val intent = Intent(
+                    this@NewAdolescentActivity, PagedAdolescentRegistrationActivity::class.java
+                )
                 intent.putExtra("adolescent", adolescent)
                 startActivity(intent)
                 finish()

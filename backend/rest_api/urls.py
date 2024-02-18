@@ -57,3 +57,9 @@ urlpatterns = [
     path("sync/upload/<str:model_name>/", views.UpstreamSyncModelView.as_view()),
     path("sync/upload-file/<str:model_name>/<str:instance_id>", views.UpstreamFileUpload.as_view()),
 ]
+
+
+# Misc URLs
+urlpatterns += [
+    path("record-activity-time/", views.RecordAdolescentActivityTime.as_view()),
+]

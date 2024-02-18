@@ -126,7 +126,9 @@ fun QuestionnaireUI(
                     onClick = {
                         audioPlayer?.playAudio(currentQuestion.audioUrl)
                     },
-                    modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                    modifier = Modifier
+                        .background(colorResource(R.color.white))
+                        .padding(all = dimensionResource(id = R.dimen._10sdp).value.dp),
                 ) {
                     Image(
                         painterResource(R.drawable.outline_volume_up_24),
@@ -352,7 +354,8 @@ fun SingleSelectionResponse(
                     }
                 }
             }
-            Divider(color = colorResource(R.color.text_color), thickness = 0.29.dp)
+            if (hasImage != true)
+                Divider(color = colorResource(R.color.text_color), thickness = 0.5.dp)
         }
     }
 }
@@ -434,7 +437,8 @@ fun MultiSelectionResponse(
                     }
                 }
             }
-            Divider(color = colorResource(R.color.text_color), thickness = 1.dp)
+            if (hasImage != true)
+                Divider(color = colorResource(R.color.text_color), thickness = 0.5.dp)
         }
     }
 }

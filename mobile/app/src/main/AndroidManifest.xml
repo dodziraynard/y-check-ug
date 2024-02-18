@@ -41,6 +41,7 @@
             android:theme="@style/Theme.YCheck.NoActionBar" />
         <activity
             android:name=".ui.adolescent_enrollment.SurveyFeedbackActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".ui.questionnaire.QuestionnaireActivity"

@@ -1,9 +1,23 @@
 package com.hrd.ycheck.network
 
-import com.hrd.ycheck.network.response_models.*
+import com.hrd.ycheck.network.response_models.AdolescentResponse
+import com.hrd.ycheck.network.response_models.AuthenticationResponse
+import com.hrd.ycheck.network.response_models.CheckupLocationResponse
+import com.hrd.ycheck.network.response_models.GetSurveyQuestionResponse
+import com.hrd.ycheck.network.response_models.MobileConfigResponse
+import com.hrd.ycheck.network.response_models.PostAdolescentActivityTimeResponse
+import com.hrd.ycheck.network.response_models.PostSurveyResponseResponse
+import com.hrd.ycheck.network.response_models.SchoolResponse
+import com.hrd.ycheck.network.response_models.SearchAdolescentResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Query
 
 
 interface ApiService {
@@ -82,5 +96,13 @@ interface ApiService {
     fun getSchools(
         @Query("type") filters: String? = ""
     ): Call<SchoolResponse?>?
+
+    @FormUrlEncoded
+    @POST("record-activity-time/")
+    fun postAdolescentActivityTime(
+        @Field("adolescent_id") adolescentId: String,
+        @Field("activity_tag") activityTag: String,
+        @Field("timestamp") timestamp: Long,
+    ): Call<PostAdolescentActivityTimeResponse?>?
 
 }

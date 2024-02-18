@@ -12,7 +12,12 @@ from rest_framework.response import Response
 from ycheck.utils.constants import ResponseInputType
 from dashboard.models import Question, Section
 from ycheck.utils.functions import apply_filters
-from dashboard.models import Adolescent, CheckupLocation, AdolescentResponse, Option
+from dashboard.models import (
+    Adolescent,
+    CheckupLocation,
+    AdolescentResponse,
+    Option,
+    AdolescentActivityTime)
 
 from rest_api.serializers import (CheckupLocationSerializer,
                                   AdolescentSerializer,
@@ -150,7 +155,8 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
                     setattr(adolescent, key, value)
             adolescent.save()
         except Exception as e:
-            logger.error("Error occured while adding/updating adolescent: ", str(e))
+            logger.error(
+                "Error occured while adding/updating adolescent: ", str(e))
 
             error_message = f"Error: {str(e)}"
             if "UNIQUE" in str(e):
@@ -241,7 +247,8 @@ class GetSurveyQuestions(generics.GenericAPIView):
         current_section = current_question.section if current_question else None
         if current_question:
             if action == "next_answered":
-                target_questions = target_questions.exclude(adolescentresponse__adolescent=adolescent)
+                target_questions = target_questions.exclude(
+                    adolescentresponse__adolescent=adolescent)
 
             if action in ["next", "next_answered"]:
                 target_questions = target_questions.filter(
@@ -369,5 +376,45 @@ class GetSchoolsAPI(generics.GenericAPIView):
 
         response_data = {
             "schools": schools,
+        }
+        return Response(response_data)
+
+
+class RecordAdolescentActivityTime(generics.GenericAPIView):
+    """
+    Record the time an adolescent reaches a station.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        adolescent_id = request.data.get("adolescent_id")
+        timestamp = request.data.get("timestamp")
+        activity_tag = request.data.get("activity_tag")
+
+        timestamp = make_aware(datetime.datetime.fromtimestamp(float(timestamp)/1000.0))
+
+        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+        if not adolescent:
+            return Response({"error_message": "Adolescent not found."})
+
+        if not (activity_tag and timestamp):
+            return Response({"error_message": "activity_tag and timestamp are required."})
+
+        activity_record = AdolescentActivityTime.objects.filter(
+            adolescent=adolescent,
+            activity_tag=activity_tag
+        ).first()
+        if not activity_record:
+            AdolescentActivityTime.objects.create(
+                adolescent=adolescent,
+                timestamp=timestamp,
+                activity_tag=activity_tag
+            )
+        else:
+            activity_record.timestamp = timestamp
+            activity_record.save()
+
+        response_data = {
+            "message": "Time recorded"
         }
         return Response(response_data)

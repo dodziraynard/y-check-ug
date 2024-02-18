@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/please_read_me"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/text_size_title"
+                android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
 
             <TextView

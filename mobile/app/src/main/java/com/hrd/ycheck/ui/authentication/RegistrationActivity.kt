@@ -20,7 +20,7 @@ class RegistrationActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        title = "Register"
+        title = getString(R.string.register)
 
         viewModel = ViewModelProvider(this)[AuthenticationActivityViewModel::class.java]
 

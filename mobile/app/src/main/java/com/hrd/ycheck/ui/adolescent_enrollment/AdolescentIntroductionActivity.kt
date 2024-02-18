@@ -21,7 +21,7 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
         adolescent = intent.getParcelableExtra("adolescent")
 
         if (adolescent == null) {
-            Toast.makeText(this, "No adolescent found.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.no_adolescent_found), Toast.LENGTH_LONG).show()
             finish()
         }
 

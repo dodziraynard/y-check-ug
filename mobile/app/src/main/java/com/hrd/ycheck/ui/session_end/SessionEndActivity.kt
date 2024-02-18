@@ -23,7 +23,7 @@ class SessionEndActivity : AppCompatActivity() {
 
         playSoundEffect()
         val superlatives =
-            listOf("Congratulations!", "Perfect!", "Wonderful!", "Keep it up!", "Good Job!")
+            listOf("Congratulations!", "Perfect!", "Well done!", "Keep it up!", "Good Job!")
 
         val currentQuestionId = intent.getStringExtra("current_question_id") ?: "-1"
         val questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY

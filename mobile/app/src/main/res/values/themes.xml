@@ -21,4 +21,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.YCheck.TimeInput" parent="Theme.YCheck">
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="colorSecondary">@color/color_500</item>
+    </style>
+
 </resources>

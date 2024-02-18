@@ -15,7 +15,12 @@ import com.hrd.ycheck.game.GameActivity
 import com.hrd.ycheck.models.User
 import com.hrd.ycheck.ui.adolescent_enrollment.NewAdolescentActivity
 import com.hrd.ycheck.ui.adolescent_enrollment.SearchAdolescentActivity
-import com.hrd.ycheck.ui.authentication.*
+import com.hrd.ycheck.ui.authentication.AuthenticationActivityViewModel
+import com.hrd.ycheck.ui.authentication.ConfigurationActivity
+import com.hrd.ycheck.ui.authentication.LoginActivity
+import com.hrd.ycheck.ui.authentication.ProfileActivity
+import com.hrd.ycheck.ui.authentication.SecurityQuestionActivity
+import com.hrd.ycheck.ui.common.TimeInputDialogFragment
 import com.hrd.ycheck.utils.Constants
 import com.hrd.ycheck.utils.Constants.SHARED_PREFS_FILE
 
@@ -32,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[AuthenticationActivityViewModel::class.java]
         preferences = getSharedPreferences(SHARED_PREFS_FILE, MODE_PRIVATE)
-
+        
         // If new user, redirect to login
         val prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         val isNew = prefs.getBoolean(Constants.IS_NEW_USER, true)

@@ -26,8 +26,26 @@
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
             android:text="@string/pre_screening_assessment"
-            android:textStyle="bold"
+            android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_commit_24"
+            app:drawableTint="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/border_color" />
+
+        <TextView
+            android:id="@+id/lab_assessment_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="15dp"
+            android:text="@string/lab_assessment"
+            android:textSize="@dimen/text_small"
+            app:drawableLeftCompat="@drawable/baseline_adjust_24"
             app:drawableTint="@color/text_color" />
 
         <View
@@ -44,7 +62,7 @@
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
             android:text="@string/screening_test"
-            android:textStyle="bold"
+            android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_question_answer_24"
             app:drawableTint="@color/text_color" />
 
@@ -62,26 +80,8 @@
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
             android:text="@string/enter_assessment_values"
-            android:textStyle="bold"
+            android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_accessibility_24"
-            app:drawableTint="@color/text_color" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.2dp"
-            android:background="@color/border_color" />
-
-        <TextView
-            android:id="@+id/lab_assessment_option"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:drawablePadding="10dp"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="15dp"
-            android:text="@string/lab_assessment"
-            android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/baseline_adjust_24"
             app:drawableTint="@color/text_color" />
 
         <View
@@ -98,7 +98,7 @@
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
             android:text="@string/clinical_assessment"
-            android:textStyle="bold"
+            android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_health_and_safety_24"
             app:drawableTint="@color/text_color" />
 
@@ -116,7 +116,7 @@
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
             android:text="@string/edit_details"
-            android:textStyle="bold"
+            android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_edit_24"
             app:drawableTint="@color/text_color" />
 

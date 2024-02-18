@@ -70,7 +70,7 @@ class Adolescent(UpstreamSyncBaseModel):
     def _compress_picture(self, height=500, width=500):
         if not self.picture:
             return
-        
+
         logger.info("Compressing picture")
 
         adolescent_name = f"{self.surname.lower()}_{self.other_names.lower()}"
@@ -88,3 +88,12 @@ class Adolescent(UpstreamSyncBaseModel):
     def save(self, *args, **kwargs) -> None:
         self._compress_picture()
         return super().save(*args, **kwargs)
+
+
+class AdolescentActivityTime(UpstreamSyncBaseModel):
+    timestamp = models.DateTimeField()
+    activity_tag = models.CharField(max_length=100, db_index=True)
+    adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE, db_index=True)
+
+    def __str__(self) -> str:
+        return f"{self.adolescent.get_name()} - {self.activity_tag}"

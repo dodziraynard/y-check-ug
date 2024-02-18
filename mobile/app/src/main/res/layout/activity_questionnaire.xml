@@ -21,11 +21,12 @@
             android:id="@+id/next_answered_question_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:backgroundTint="@android:color/transparent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_2sdp"
+            android:backgroundTint="@android:color/white"
             android:contentDescription="@string/next_answered_question"
             android:foreground="?android:selectableItemBackgroundBorderless"
-            android:padding="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
             android:src="@drawable/baseline_fast_forward_24"
             app:tint="@color/color_success" />
 
@@ -33,11 +34,12 @@
             android:id="@+id/close_quiz_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:backgroundTint="@android:color/transparent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_2sdp"
+            android:backgroundTint="@android:color/white"
             android:contentDescription="@string/close_test"
             android:foreground="?android:selectableItemBackgroundBorderless"
-            android:padding="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
             android:src="@drawable/baseline_close_24"
             app:tint="@color/color_warning" />
 

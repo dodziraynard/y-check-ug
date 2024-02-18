@@ -73,3 +73,11 @@ object ModelFieldType {
     const val NUMBER_FIELD = "number_field"
     const val DATE = "date"
 }
+
+object ActivityTags {
+    const val ADOLESCENT_SURVEY_START = "adolescent_survey_start"
+    const val ADOLESCENT_REGISTRATION_START = "adolescent_registration_start"
+    const val ADOLESCENT_PHYSICAL_ASSESSMENT_START = "adolescent_physical_assessment_start"
+    const val ADOLESCENT_LAB_ASSESSMENT_START = "adolescent_lab_assessment_start"
+    const val ADOLESCENT_CLINICAL_ASSESSMENT_START = "adolescent_clinical_assessment_start"
+}

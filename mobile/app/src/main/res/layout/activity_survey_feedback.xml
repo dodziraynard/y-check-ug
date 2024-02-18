@@ -27,12 +27,14 @@
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/text_size_title" />
 
-            <ImageView
-                android:layout_width="@dimen/_150sdp"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/_150sdp"
                 android:layout_gravity="center"
-                android:src="@drawable/baseline_auto_awesome_24"
-                app:tint="@color/color_500" />
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/congratulation" />
 
             <TextView
                 android:layout_width="match_parent"

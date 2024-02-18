@@ -22,9 +22,9 @@
             android:id="@+id/section_name_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size"
+            android:textColor="@color/text_color"
             android:textStyle="bold"
-            tools:text="Access Feedback Form" />
+            android:text="@string/access_feedback_form" />
 
         <LinearLayout
             android:layout_width="match_parent"

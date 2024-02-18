@@ -56,7 +56,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
-                            android:hint="@string/e_g_http_232_43_22_33_8000"
+                            android:hint="@string/live_base_api_url"
                             android:padding="15dp"
                             android:textSize="@dimen/text_size" />
 

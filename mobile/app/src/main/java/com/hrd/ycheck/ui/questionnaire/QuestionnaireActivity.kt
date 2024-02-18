@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,9 +17,16 @@ import com.hrd.ycheck.components.compose.YCheckTheme
 import com.hrd.ycheck.databinding.ActivityQuestionnaireBinding
 import com.hrd.ycheck.databinding.SectionInstructionBottomSheetLayoutBinding
 import com.hrd.ycheck.game.GameActivity
-import com.hrd.ycheck.models.*
+import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.models.InputType
+import com.hrd.ycheck.models.NewAdolescentResponse
+import com.hrd.ycheck.models.Question
+import com.hrd.ycheck.models.Section
+import com.hrd.ycheck.models.SubmittedAdolescentResponse
 import com.hrd.ycheck.ui.adolescent_enrollment.SurveyFeedbackActivity
+import com.hrd.ycheck.ui.common.TimeInputDialogFragment
 import com.hrd.ycheck.ui.session_end.SessionEndActivity
+import com.hrd.ycheck.utils.ActivityTags
 import com.hrd.ycheck.utils.AudioPlayer
 import com.hrd.ycheck.utils.QuestionnaireType
 import com.hrd.ycheck.utils.QuestionnaireType.SURVEY_PRACTICE
@@ -57,6 +63,29 @@ class QuestionnaireActivity : AppCompatActivity() {
 
         if (questionnaireType == SURVEY_PRACTICE) {
             showPracticeTourText()
+        }
+
+        // Record the time adolescent arrives at a station.
+        var activityTag: String = ""
+        when (questionnaireType.lowercase()) {
+            SURVEY_PRACTICE -> activityTag = ActivityTags.ADOLESCENT_SURVEY_START
+            QuestionnaireType.PHYSICAL_ASSESSMENT -> activityTag =
+                ActivityTags.ADOLESCENT_PHYSICAL_ASSESSMENT_START
+            QuestionnaireType.LAB_ASSESSMENT -> activityTag =
+                ActivityTags.ADOLESCENT_LAB_ASSESSMENT_START
+
+            QuestionnaireType.CLINICAL_ASSESSMENT -> activityTag =
+                ActivityTags.ADOLESCENT_CLINICAL_ASSESSMENT_START
+        }
+
+        if (activityTag.isNotEmpty() && adolescent?.id != null && congratulatedFor == -1L) {
+            val dialogFragment =
+                TimeInputDialogFragment(
+                    activityTag,
+                    adolescent!!.id
+                )
+            dialogFragment.isCancelable = false
+            dialogFragment.show(supportFragmentManager, "TimeInputDialogFragment")
         }
 
         val adolescentId = adolescent!!.id
@@ -139,7 +168,7 @@ class QuestionnaireActivity : AppCompatActivity() {
                     )
                 } else if (questionnaireType == SURVEY_PRACTICE) {
                     val message =
-                        "Excellent, ${adolescent?.otherNames}! You've completed the practice questions. Now let's start the actual survey."
+                        "Well done, ${adolescent?.otherNames}! You've completed the practice questions. Now let's start the actual survey."
                     showSessionEndScreen(message, QuestionnaireType.SURVEY, -1L)
                 } else {
                     showCompletionDialog()
@@ -169,7 +198,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         } else if (currentQuestionAnswered) {
             saveAndLoadNextQuestion(adolescentId, action)
         } else {
-            Toast.makeText(this, "Please respond to continue.", Toast.LENGTH_LONG)
+            Toast.makeText(this, getString(R.string.please_respond_to_continue), Toast.LENGTH_LONG)
                 .show();
         }
     }
@@ -194,7 +223,8 @@ class QuestionnaireActivity : AppCompatActivity() {
         totalSessions: Int,
         section: Section
     ) {
-        val dialog = AlertDialog.Builder(this).setTitle("Game Available").setCancelable(false)
+        val dialog = AlertDialog.Builder(this).setTitle(getString(R.string.game_available))
+            .setCancelable(false)
             .setNegativeButton(getString(R.string.no)) { _, _ ->
                 renderNewSectionInstructionAndQuestion(
                     adolescent,
@@ -267,43 +297,48 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showCompletionDialog() {
-        val dialog = AlertDialog.Builder(this).setTitle(getString(R.string.thank_you)).setCancelable(false)
-            .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                when (questionnaireType) {
-                    QuestionnaireType.SURVEY -> {
-                        val intent =
-                            Intent(this@QuestionnaireActivity, SurveyFeedbackActivity::class.java)
-                        intent.putExtra("adolescent", adolescent)
-                        startActivity(intent)
-                        finish()
+        val dialog =
+            AlertDialog.Builder(this).setTitle(getString(R.string.thank_you)).setCancelable(false)
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                    when (questionnaireType) {
+                        QuestionnaireType.SURVEY -> {
+                            val intent =
+                                Intent(
+                                    this@QuestionnaireActivity,
+                                    SurveyFeedbackActivity::class.java
+                                )
+                            intent.putExtra("adolescent", adolescent)
+                            startActivity(intent)
+                            finish()
+                        }
                     }
-                }
-                finish()
-            }.setMessage(
-                getString(R.string.no_more_questions)
-            )
+                    finish()
+                }.setMessage(
+                    getString(R.string.no_more_questions)
+                )
         dialog.create()
         dialog.show()
     }
 
     private fun showExitDialog() {
-        val dialog = AlertDialog.Builder(this).setTitle("Exit").setCancelable(false)
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
-            .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                finish()
-            }.setMessage(getString(R.string.end_survey))
+        val dialog =
+            AlertDialog.Builder(this).setTitle(getString(R.string.exit)).setCancelable(false)
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    finish()
+                }.setMessage(getString(R.string.end_survey))
         dialog.create()
         dialog.show()
     }
 
     private fun showInvalidValueDialog(value: String, question: Question) {
         var message = "$value is not a valid number"
-        if(question.minNumericValue != null || question.maxNumericValue != null){
+        if (question.minNumericValue != null || question.maxNumericValue != null) {
             message += " between ${question.minNumericValue} and ${question.maxNumericValue}."
         }
 
         val dialog = AlertDialog.Builder(this)
-            .setTitle("Invalid Input").setCancelable(false)
+            .setTitle(getString(R.string.invalid_input)).setCancelable(false)
             .setPositiveButton(getString(R.string.ok)) { _, _ -> }
             .setMessage(message)
         dialog.create()
@@ -323,11 +358,11 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showSessionEndScreen(
-        message: String, question_type: String, currentSessionNumber: Long
+        message: String, questionType: String, currentSessionNumber: Long
     ) {
         val intent = Intent(this, SessionEndActivity::class.java)
         intent.putExtra("current_question_id", currentQuestionId)
-        intent.putExtra("question_type", question_type)
+        intent.putExtra("question_type", questionType)
         intent.putExtra("congratulated_for_session_number", currentSessionNumber)
         intent.putExtra("adolescent", adolescent)
         intent.putExtra("message", message)

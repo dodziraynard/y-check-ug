@@ -63,8 +63,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="profile_complete">Profile complete</string>
-    <string name="screening_test">Screening Test</string>
-    <string name="enter_assessment_values">Physical Assessment</string>
+    <string name="screening_test">STATION 3A: Psychosocial Screening</string>
+    <string name="enter_assessment_values">STATION 3B: Physical Examination</string>
     <string name="welcome">Welcome!</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -127,15 +127,15 @@
     <string name="total_session_hint">Welcome to Y-Check! This screening tool has 11 parts, each of which takes about 2 minutes. There will be a short break after part 5 and we will play a small game together. Your answers will be kept confidential and your name will not be written anywhere on this screening test. \n\nTap continue to begin.</string>
     <string name="sex">Sex</string>
     <string name="please_choose_one">Please choose one.</string>
-    <string name="_3_navigate_questions_using_previous_or_next_buttons">3. Navigate questions using previous or next buttons.</string>
+    <string name="_3_navigate_questions_using_previous_or_next_buttons">3. Navigate questions using the previous or next buttons.</string>
     <string name="_2_tap_the_speaker_icon_next_to_the_question_or_option_to_hear_a_friendly_lady_read_the_text_aloud">2. Tap the speaker icon next to the question or option to hear a friendly lady read the text aloud.</string>
     <string name="_1_pick_the_options_that_fit_you_for_each_question_they_re_multiple_choice">1. Pick the options that fit you for each question—they\'re multiple choice!</string>
-    <string name="please_read_me">Please read me.</string>
+    <string name="please_read_me">Please read me</string>
     <string name="next_answered_question">Next answered question.</string>
     <string name="close_test">Close test</string>
-    <string name="lab_assessment">Lab Assessment</string>
-    <string name="clinical_assessment">Clinical Assessment</string>
-    <string name="pre_screening_assessment">Pre-screening Assessment</string>
+    <string name="lab_assessment">STATION 2: Laboratory Test</string>
+    <string name="clinical_assessment">STATION 4B: Clinical Assessment</string>
+    <string name="pre_screening_assessment">STATION 1: Pre-screening Assessment</string>
     <string name="pid">PID</string>
     <string name="y_check_services_research"><![CDATA[Y-Check Services & Research]]></string>
     <string name="y_check_services_only">Y-Check Services Only</string>
@@ -148,4 +148,12 @@
     <string name="single_view_registration">Single View Registration</string>
     <string name="age">Age</string>
     <string name="thank_you">Thank you.</string>
+    <string name="access_feedback_form">Access Feedback Form</string>
+    <string name="no_adolescent_found">No adolescent found.</string>
+    <string name="please_respond_to_continue">Please respond to continue.</string>
+    <string name="game_available">Game Available</string>
+    <string name="exit">Exit</string>
+    <string name="invalid_input">Invalid Input</string>
+    <string name="enter_adolescent_arrival_time">Please enter the time the adolescent arrived at this station.</string>
+    <string name="cancel">Cancel</string>
 </resources>

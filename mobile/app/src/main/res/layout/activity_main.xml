@@ -51,9 +51,9 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_200sdp"
+                android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginVertical="@dimen/item_vertical_spacing"
+                android:layout_marginVertical="10dp"
                 android:contentDescription="@string/picture_of_adolescent_playing"
                 android:src="@drawable/adolescent_playing" />
 
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_padding"
-                    android:layout_marginVertical="@dimen/item_vertical_spacing"
+                    android:layout_marginVertical="20dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:selectableItemBackground"
