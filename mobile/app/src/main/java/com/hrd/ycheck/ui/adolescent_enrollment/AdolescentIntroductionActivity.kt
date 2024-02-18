@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityAdolescentIntroductionBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.common.TimeInputDialogFragment
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
+import com.hrd.ycheck.utils.ActivityTags
 import com.hrd.ycheck.utils.QuestionnaireType
 
 class AdolescentIntroductionActivity : AppCompatActivity() {
@@ -23,6 +25,17 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
         if (adolescent == null) {
             Toast.makeText(this, getString(R.string.no_adolescent_found), Toast.LENGTH_LONG).show()
             finish()
+        }
+
+        val activityTag = ActivityTags.ADOLESCENT_SURVEY_START
+        if (activityTag.isNotEmpty() && adolescent?.id != null) {
+            val dialogFragment =
+                TimeInputDialogFragment(
+                    activityTag,
+                    adolescent!!.id
+                )
+            dialogFragment.isCancelable = false
+            dialogFragment.show(supportFragmentManager, "TimeInputDialogFragment")
         }
 
         binding.helloText.text = getString(R.string.hello_person, adolescent!!.otherNames)

@@ -68,9 +68,9 @@ class QuestionnaireActivity : AppCompatActivity() {
         // Record the time adolescent arrives at a station.
         var activityTag: String = ""
         when (questionnaireType.lowercase()) {
-            SURVEY_PRACTICE -> activityTag = ActivityTags.ADOLESCENT_SURVEY_START
             QuestionnaireType.PHYSICAL_ASSESSMENT -> activityTag =
                 ActivityTags.ADOLESCENT_PHYSICAL_ASSESSMENT_START
+
             QuestionnaireType.LAB_ASSESSMENT -> activityTag =
                 ActivityTags.ADOLESCENT_LAB_ASSESSMENT_START
 

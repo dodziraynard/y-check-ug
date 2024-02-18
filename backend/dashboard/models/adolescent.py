@@ -96,4 +96,4 @@ class AdolescentActivityTime(UpstreamSyncBaseModel):
     adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE, db_index=True)
 
     def __str__(self) -> str:
-        return f"{self.adolescent.get_name()} - {self.activity_tag}"
+        return f"{self.adolescent.get_name()} - {self.activity_tag}: {self.timestamp.strftime('%m/%d/%Y, %H:%M:%S')}"
