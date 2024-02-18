@@ -328,6 +328,7 @@ fun SingleSelectionResponse(
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = if (hasImage == true) Arrangement.Center else Arrangement.Start,
                     modifier = Modifier
                         .fillMaxWidth()
 
