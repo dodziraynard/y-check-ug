@@ -21,8 +21,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityPhotoBinding
 import com.hrd.ycheck.models.Adolescent
-import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
-import com.hrd.ycheck.utils.QuestionnaireType
 import java.io.File
 
 
@@ -70,8 +68,8 @@ class PhotoActivity : AppCompatActivity() {
             postImageToServer(adolescent, cameraUri)
         }
 
-        viewModel.updatedAdolescent.observe(this) { adolescent ->
-            if (adolescent != null) {
+        viewModel.updatedAdolescent.observe(this) { adoles ->
+            if (adoles != null) {
                 val dialog =
                     AlertDialog.Builder(this).setTitle(getString(R.string.profile_complete))
                         .setCancelable(true)
@@ -79,7 +77,10 @@ class PhotoActivity : AppCompatActivity() {
                             finish()
                         }
                         .setMessage(
-                            "Adolescent's profile setup is complete. You ID is ${adolescent.pid}"
+                            getString(
+                                R.string.adolescent_s_profile_setup_is_complete_your_id_is,
+                                adoles.pid
+                            )
                         )
                 dialog.create()
                 dialog.show()
@@ -99,8 +100,8 @@ class PhotoActivity : AppCompatActivity() {
 
     private fun pickCamera() {
         val values = ContentValues()
-        values.put(MediaStore.Images.Media.TITLE, "New Picture")
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera")
+        values.put(MediaStore.Images.Media.TITLE, getString(R.string.new_picture))
+        values.put(MediaStore.Images.Media.DESCRIPTION, getString(R.string.from_camera))
         cameraUri =
             this.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
 
@@ -117,7 +118,8 @@ class PhotoActivity : AppCompatActivity() {
             val file = File(filePath)
             viewModel.uploadAdolescentPhoto(adolescent?.uuid, file)
         } else {
-            Toast.makeText(this@PhotoActivity, "Invalid image", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@PhotoActivity, getString(R.string.invalid_image), Toast.LENGTH_LONG)
+                .show()
         }
     }
 

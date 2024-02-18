@@ -26,6 +26,9 @@ import ReferralDetailWidget from "./widgets/ReferralDetailWidget";
 import TreatmentsWidget from "./widgets/TreatmentsWidget";
 import TreatmentDetailWidget from "./widgets/TreatmentDetailWidget";
 import NodeWidget from "./widgets/NodeWidget";
+import ReportsWidget from "./widgets/ReportsWidget";
+
+
 function App() {
   return (
     <Router>
@@ -42,6 +45,7 @@ function App() {
           <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
           <Route path="/referrals" element={<ReferralsWidget />} />
           <Route path="/treatments" element={<TreatmentsWidget />} />
+          <Route path="/reports" element={<ReportsWidget />} />
           <Route path="/treatments/:referralId/details" element={<TreatmentDetailWidget />} />
           <Route path="/referrals/:referralId/details" element={<ReferralDetailWidget />} />
 

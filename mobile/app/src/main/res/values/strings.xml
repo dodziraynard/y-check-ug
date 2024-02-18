@@ -1,5 +1,5 @@
 <resources>
-    <string name="couldnt_connect_to_server">Communication with the server failed.</string>
+    <string name="couldnt_connect_to_server">Server communication failed.</string>
     <string name="app_logo" translatable="false">App logo</string>
     <string name="host">Host</string>
     <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
@@ -36,7 +36,7 @@
     <string name="enter_your_other_names">Enter your other names</string>
     <string name="other_names">Other Names</string>
     <string name="surname">Surname</string>
-    <string name="enter_host_name_with_protocol">Enter host name with protocol.</string>
+    <string name="enter_host_name_with_protocol">Enter host address with protocol.</string>
     <string name="e_g_http_232_43_22_33_8000">e.g., http://232.43.22.33:8000</string>
     <string name="change_password">Change Password</string>
     <string name="submit">Submit</string>
@@ -156,4 +156,9 @@
     <string name="invalid_input">Invalid Input</string>
     <string name="enter_adolescent_arrival_time">Please enter the time the adolescent arrived at this station.</string>
     <string name="cancel">Cancel</string>
+    <string name="please_select_your_station_or_edit_adolescent_details">Please select your station or edit adolescent details.</string>
+    <string name="new_picture">New Picture</string>
+    <string name="from_camera">From Camera</string>
+    <string name="invalid_image">Invalid image</string>
+    <string name="adolescent_s_profile_setup_is_complete_your_id_is">Adolescent\'s profile setup is complete. Adolescent ID is %1$s</string>
 </resources>

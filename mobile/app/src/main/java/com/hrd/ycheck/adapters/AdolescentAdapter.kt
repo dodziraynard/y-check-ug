@@ -40,7 +40,7 @@ class AdolescentAdapter(private val context: Context) :
                 if (adolescent.photoUrl?.isNotEmpty() == true) {
                     val imageUrl = adolescent.photoUrl
                     val options: RequestOptions =
-                        RequestOptions().fitCenter().placeholder(R.drawable.placeholder)
+                        RequestOptions().fitCenter().placeholder(R.drawable.profile_avatar)
                             .error(R.drawable.placeholder)
                     Glide.with(context).load(imageUrl).apply(options)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(imageView)

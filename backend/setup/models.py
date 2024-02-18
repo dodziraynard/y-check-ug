@@ -61,6 +61,7 @@ class SetupPerm(models.Model):
             ("access_all_referrals", "Can access all referrals"),
             ("access_all_patients", "Can access all patients"),
             ("access_treatments", "Can access all treatment records"),
+            ("access_reports", "Can generate/access reports menu"),
 
             # User
             ("view_user", "Can view user"),

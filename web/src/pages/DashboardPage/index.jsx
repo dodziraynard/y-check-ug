@@ -135,6 +135,16 @@ function DashboardPage() {
                     : ""
                 }
 
+                {userPermissions.has(Permissions.ACCESS_REPORTS) ?
+                    <NavLink to="/reports">
+                        <div className="menu-item" id="action_center">
+                            <i className='icon bi bi-file-spreadsheet'></i>
+                            <span className="label">Reports</span>
+                        </div>
+                    </NavLink>
+                    : ""
+                }
+
                 {userPermissions.has(Permissions.MANAGE_SETUP) ?
                     <>
                         <hr />

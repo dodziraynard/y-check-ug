@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/item_vertical_spacing"
                 android:text="@string/configure_the_host_address_of_the_server"
-                android:textSize="@dimen/text_size_title" />
+                android:textSize="@dimen/text_size" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,7 +55,6 @@
                             android:id="@+id/host_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
                             android:hint="@string/live_base_api_url"
                             android:padding="15dp"
                             android:textSize="@dimen/text_size" />
