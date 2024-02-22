@@ -164,4 +164,7 @@
     <string name="year_old_adolescents_are_not_eligible_for_this_exercise">%1$d-year-old %2$s adolescents are not eligible for this exercise.</string>
     <string name="year_olds_are_eligible_for_this_exercise">%1$d-year-olds are eligible for this exercise.</string>
     <string name="new_adolescent">New Adolescent</string>
+    <string name="saving">Saving...</string>
+    <string name="choose_location">Choose location</string>
+    <string name="counsellor_assessment">STATION 4B: Counsellor Assessment</string>
 </resources>

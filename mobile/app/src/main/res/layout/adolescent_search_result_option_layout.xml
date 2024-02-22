@@ -42,6 +42,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
+            android:layout_marginVertical="5dp"
             android:background="@color/border_color" />
 
 
@@ -61,6 +62,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
+            android:layout_marginVertical="5dp"
             android:background="@color/border_color" />
 
         <TextView
@@ -79,6 +81,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
+            android:layout_marginVertical="5dp"
             android:background="@color/border_color" />
 
         <TextView
@@ -97,6 +100,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
+            android:layout_marginVertical="5dp"
             android:background="@color/border_color" />
 
         <TextView
@@ -114,7 +118,27 @@
 
         <View
             android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/border_color" />
+
+        <TextView
+            android:id="@+id/counsellor_assessment_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="15dp"
+            android:text="@string/counsellor_assessment"
+            android:textSize="@dimen/text_small"
+            app:drawableLeftCompat="@drawable/baseline_health_and_safety_24"
+            app:drawableTint="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
             android:layout_height="3dp"
+            android:layout_marginVertical="5dp"
             android:background="@color/border_color" />
 
         <TextView

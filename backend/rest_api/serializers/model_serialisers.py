@@ -124,13 +124,13 @@ class OptionSerlializer(serializers.ModelSerializer):
     audio_url = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
 
-    def get_image_url(self, option):
+    def get_image_url(self, option: Option):
         request = self.context.get("request")
         if option.image and request:
             return request.build_absolute_uri(option.image.url)
         return ""
 
-    def get_audio_url(self, option):
+    def get_audio_url(self, option: Option):
         request = self.context.get("request")
         lang_iso = self.context.get("lang_iso")
         match lang_iso:
@@ -141,7 +141,7 @@ class OptionSerlializer(serializers.ModelSerializer):
             return request.build_absolute_uri(option.audio_file_fat.url)
         return ""
 
-    def get_value(self, obj):
+    def get_value(self, obj: Option):
         value = f"{obj.value}"
         if obj.context:
             value += f" {obj.context}"
@@ -160,7 +160,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     has_image_options = serializers.SerializerMethodField()
     related_response = serializers.SerializerMethodField()
 
-    def get_related_response(self, question):
+    def get_related_response(self, question: Question):
         if not question.show_response_for:
             return {}
 
@@ -182,7 +182,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         return False
 
     def get_text(self, question):
-        return f"({question.question_id}). {question.text}"
+        return f"{question.text}"
 
     def get_audio_url(self, question):
         request = self.context.get("request")

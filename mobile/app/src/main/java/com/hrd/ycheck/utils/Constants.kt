@@ -27,6 +27,7 @@ object QuestionnaireType {
     const val PHYSICAL_ASSESSMENT = "physical_assessment"
     const val LAB_ASSESSMENT = "lab_assessment"
     const val CLINICAL_ASSESSMENT = "clinical_assessment"
+    const val COUNSELLOR_ASSESSMENT = "counsellor_assessment"
 }
 
 object Genders {

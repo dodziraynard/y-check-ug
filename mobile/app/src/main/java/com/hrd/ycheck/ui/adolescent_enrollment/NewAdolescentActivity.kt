@@ -95,7 +95,7 @@ class NewAdolescentActivity : AppCompatActivity() {
             })
         }
 
-        val dialog = AlertDialog.Builder(this).setMessage("Saving...").setCancelable(false).create()
+        val dialog = AlertDialog.Builder(this).setMessage(getString(R.string.saving)).setCancelable(false).create()
         viewModel.isLoadingAdolescent.observe(this) { value ->
             if (value) {
                 binding.saveButton.isEnabled = false
@@ -109,7 +109,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         viewModel.checkupLocations.observe(this) { locs ->
-            val locations = listOf("Choose location") + locs.map { it.name }
+            val locations = listOf(getString(R.string.choose_location)) + locs.map { it.name }
             val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
                 applicationContext, android.R.layout.simple_dropdown_item_1line, locations
             )

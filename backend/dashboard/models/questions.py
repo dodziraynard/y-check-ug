@@ -14,6 +14,9 @@ QUESTION_TYPE = [
     ('physical_assessment', 'physical_assessment'),
     ('lab_assessment', 'lab_assessment'),
     ('clinical_assessment', 'clinical_assessment'),
+    ('counsellor_assessment', 'counsellor_assessment'),
+    ('evaluation', 'evaluation'),
+    ('exit_interview', 'exit_interview'),
 ]
 
 

@@ -86,8 +86,7 @@ fun QuestionnaireUI(
             .padding(10.dp)
     ) {
         Text(
-            text = "Section $currentSectionNumber/$totalSectionCount",
-            fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
+            text = "Section $currentSectionNumber of $totalSectionCount",
             color = colorResource(R.color.text_color),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth()
@@ -96,150 +95,176 @@ fun QuestionnaireUI(
             progress = (currentSectionNumber).toFloat() / totalSectionCount.toFloat(),
             color = accentAmber,
             modifier = Modifier
-                .height(dimensionResource(id = R.dimen._10sdp))
+                .height(dimensionResource(id = R.dimen._5sdp))
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp)),
             backgroundColor = lightGrey
         )
+
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
+                .fillMaxWidth()
                 .weight(weight = 1f, fill = false)
         ) {
-            Text(
-                text = currentQuestion.text,
-                fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
-                color = colorResource(R.color.text_color),
-                fontWeight = FontWeight.Bold,
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(colorResource(R.color.white))
-                    .padding(
-                        vertical = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp,
-                        horizontal = dimensionResource(id = R.dimen._5sdp).value.dp
-                    ),
-                textAlign = TextAlign.Justify
-            )
-            Row(modifier = Modifier.align(Alignment.End)) {
-                if (currentQuestion.audioUrl?.isNotEmpty() == true) IconButton(
-                    onClick = {
-                        audioPlayer?.playAudio(currentQuestion.audioUrl)
-                    },
+                    .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
+            ) {
+                Row(
                     modifier = Modifier
-                        .background(colorResource(R.color.white))
-                        .padding(all = dimensionResource(id = R.dimen._10sdp).value.dp),
-                ) {
-                    Image(
-                        painterResource(R.drawable.outline_volume_up_24),
-                        contentDescription = null,
-                        modifier = Modifier.requiredSize(25.dp)
-                    )
-                }
-                if (currentQuestion.apkId?.isNotEmpty() == true)
-                    IconButton(
-                        onClick = {
-                            val launchIntent: Intent? =
-                                context.packageManager.getLaunchIntentForPackage(currentQuestion.apkId)
-                            if (launchIntent != null) {
-                                context.startActivity(launchIntent)
-                            } else {
-                                // Bring user to the market or let them choose an app
-                                val intent = Intent(Intent.ACTION_VIEW);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.data =
-                                    Uri.parse("market://details?id=" + currentQuestion.apkId);
-                                context.startActivity(intent);
-                            }
-                        },
-                        modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painterResource(R.drawable.baseline_phone_android_24),
-                                contentDescription = null,
-                                modifier = Modifier.requiredSize(25.dp)
-                            )
-                            Text(text = "Open App")
-                        }
-                    }
-            }
-
-            if (currentQuestion.relatedResponse?.question != null) {
-                currentQuestion.relatedResponse.let {
-                    Text(
-                        modifier = Modifier.padding(vertical = 20.dp),
-                        style = TextStyle(fontStyle = FontStyle.Italic),
-                        text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
-                    )
-                }
-            }
-
-            if (currentQuestion.imageUrl?.isNotEmpty() == true) {
-                GlideImage(
-                    model = currentQuestion.imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(dimensionResource(id = R.dimen._200sdp).value.dp)
-                        .padding(dimensionResource(id = R.dimen._5sdp).value.dp),
-                    alignment = Alignment.Center,
-                    failure = placeholder(ColorDrawable(R.drawable.placeholder)),
-                    loading = placeholder(ColorDrawable(R.drawable.placeholder))
-                )
-            }
-            if (currentQuestion.answerPreamble?.isNotEmpty() == true) {
-                Text(
-                    text = currentQuestion.answerPreamble,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
-                    fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
-                    color = colorResource(R.color.text_color),
-                    textAlign = TextAlign.Center
-                )
-            }
-            when (currentQuestion.inputType) {
-                InputType.TEXT_INPUT -> SimpleInputResponse(
-                    submittedResponse,
-                    newResponse,
-                    isNumber = false,
-                    id = currentQuestion.questionID
-                )
-
-                InputType.NUMBER_FIELD -> SimpleInputResponse(
-                    submittedResponse, newResponse, isNumber = true, currentQuestion.questionID
-                )
-
-                InputType.CHECKBOXES -> currentQuestion.options?.let {
-                    MultiSelectionResponse(
-                        submittedResponse,
-                        it,
-                        newResponse,
-                        audioPlayer,
-                        currentQuestion.questionID,
-                        currentQuestion.hasImageOptions
-                    )
-                }
-
-                InputType.RADIO_BUTTON -> currentQuestion.options?.let {
-                    SingleSelectionResponse(
-                        submittedResponse,
-                        it,
-                        newResponse,
-                        audioPlayer,
-                        currentQuestion.questionID,
-                        currentQuestion.hasImageOptions
-                    )
-                }
-
-                InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
-                    currentQuestion.maxNumericValue?.let { it1 ->
-                        RangeSliderSelectionResponse(
-                            submittedResponse, newResponse, it, it1
+                        .background(colorResource(R.color.color_700))
+                        .padding(
+                            all = dimensionResource(id = R.dimen._2sdp).value.dp
                         )
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = currentQuestion.questionID!!,
+                        color = colorResource(R.color.white),
+                    )
+                }
+                Text(
+                    text = currentQuestion.text,
+                    fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
+                    color = colorResource(R.color.text_color),
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(colorResource(R.color.white))
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen._5sdp).value.dp,
+                            horizontal = dimensionResource(id = R.dimen._5sdp).value.dp
+                        )
+                )
+                Row(modifier = Modifier.align(Alignment.End)) {
+                    if (currentQuestion.audioUrl?.isNotEmpty() == true) IconButton(
+                        onClick = {
+                            audioPlayer?.playAudio(currentQuestion.audioUrl)
+                        },
+                        modifier = Modifier
+                            .background(colorResource(R.color.white))
+                            .padding(all = dimensionResource(id = R.dimen._10sdp).value.dp),
+                    ) {
+                        Image(
+                            painterResource(R.drawable.outline_volume_up_24),
+                            contentDescription = null,
+                            modifier = Modifier.requiredSize(25.dp)
+                        )
+                    }
+                    if (currentQuestion.apkId?.isNotEmpty() == true)
+                        IconButton(
+                            onClick = {
+                                val launchIntent: Intent? =
+                                    context.packageManager.getLaunchIntentForPackage(
+                                        currentQuestion.apkId
+                                    )
+                                if (launchIntent != null) {
+                                    context.startActivity(launchIntent)
+                                } else {
+                                    // Bring user to the market or let them choose an app
+                                    val intent = Intent(Intent.ACTION_VIEW);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.data =
+                                        Uri.parse("market://details?id=" + currentQuestion.apkId);
+                                    context.startActivity(intent);
+                                }
+                            },
+                            modifier = Modifier
+                                .background(colorResource(R.color.white))
+                                .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    painterResource(R.drawable.baseline_phone_android_24),
+                                    contentDescription = null,
+                                    modifier = Modifier.requiredSize(25.dp)
+                                )
+                                Text(text = "Open App")
+                            }
+                        }
+                }
+
+                if (currentQuestion.relatedResponse?.question != null) {
+                    currentQuestion.relatedResponse.let {
+                        Text(
+                            modifier = Modifier.padding(vertical = 20.dp),
+                            style = TextStyle(fontStyle = FontStyle.Italic),
+                            text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
+                        )
+                    }
+                }
+
+                if (currentQuestion.imageUrl?.isNotEmpty() == true) {
+                    GlideImage(
+                        model = currentQuestion.imageUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(dimensionResource(id = R.dimen._200sdp).value.dp)
+                            .padding(dimensionResource(id = R.dimen._5sdp).value.dp),
+                        alignment = Alignment.Center,
+                        failure = placeholder(ColorDrawable(R.drawable.placeholder)),
+                        loading = placeholder(ColorDrawable(R.drawable.placeholder))
+                    )
+                }
+                if (currentQuestion.answerPreamble?.isNotEmpty() == true) {
+                    Text(
+                        text = currentQuestion.answerPreamble,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 5.dp),
+                        fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
+                        color = colorResource(R.color.text_color),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                when (currentQuestion.inputType) {
+                    InputType.TEXT_INPUT -> SimpleInputResponse(
+                        submittedResponse,
+                        newResponse,
+                        isNumber = false,
+                        id = currentQuestion.questionID
+                    )
+
+                    InputType.NUMBER_FIELD -> SimpleInputResponse(
+                        submittedResponse,
+                        newResponse,
+                        isNumber = true,
+                        currentQuestion.questionID
+                    )
+
+                    InputType.CHECKBOXES -> currentQuestion.options?.let {
+                        MultiSelectionResponse(
+                            submittedResponse,
+                            it,
+                            newResponse,
+                            audioPlayer,
+                            currentQuestion.questionID,
+                            currentQuestion.hasImageOptions
+                        )
+                    }
+
+                    InputType.RADIO_BUTTON -> currentQuestion.options?.let {
+                        SingleSelectionResponse(
+                            submittedResponse,
+                            it,
+                            newResponse,
+                            audioPlayer,
+                            currentQuestion.questionID,
+                            currentQuestion.hasImageOptions
+                        )
+                    }
+
+                    InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
+                        currentQuestion.maxNumericValue?.let { it1 ->
+                            RangeSliderSelectionResponse(
+                                submittedResponse, newResponse, it, it1
+                            )
+                        }
                     }
                 }
             }
