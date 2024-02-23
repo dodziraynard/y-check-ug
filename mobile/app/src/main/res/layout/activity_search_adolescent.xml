@@ -57,23 +57,21 @@
             android:id="@+id/error_message_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_30sdp"
             android:text="@string/no_results_found"
             android:textAlignment="center"
-            android:textSize="@dimen/text_size"
             app:layout_constraintTop_toBottomOf="@id/search_container" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/search_info"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            android:maxWidth="150dp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:text="@string/adolescent_searching_hint"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/search_container" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/search_adolescent_loading_process_bar"
@@ -92,4 +90,17 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/results_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/search_result" />
 </androidx.constraintlayout.widget.ConstraintLayout>

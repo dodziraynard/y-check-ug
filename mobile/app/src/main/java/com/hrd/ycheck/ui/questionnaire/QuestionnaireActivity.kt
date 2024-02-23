@@ -68,8 +68,6 @@ class QuestionnaireActivity : AppCompatActivity() {
         // Record the time adolescent arrives at a station.
         var activityTag: String = ""
         when (questionnaireType.lowercase()) {
-            SURVEY_PRACTICE -> activityTag = ActivityTags.ADOLESCENT_SURVEY_START
-
             QuestionnaireType.PHYSICAL_ASSESSMENT -> activityTag =
                 ActivityTags.ADOLESCENT_PHYSICAL_ASSESSMENT_START
 
@@ -170,7 +168,10 @@ class QuestionnaireActivity : AppCompatActivity() {
                     )
                 } else if (questionnaireType == SURVEY_PRACTICE) {
                     val message =
-                        "Well done, ${adolescent?.otherNames}! You've completed the practice questions. Now let's start the actual survey."
+                        getString(
+                            R.string.well_done_you_ve_completed_the_practice_questions_now_let_s_start_the_actual_survey,
+                            adolescent?.otherNames
+                        )
                     showSessionEndScreen(message, QuestionnaireType.SURVEY, -1L)
                 } else {
                     showCompletionDialog()
@@ -299,8 +300,14 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showCompletionDialog() {
+        val message =
+            if (currentQuestionId == "-1") getString(R.string.no_revelant_question) else getString(
+                R.string.no_more_questions
+            )
         val dialog =
-            AlertDialog.Builder(this).setTitle(getString(R.string.thank_you)).setCancelable(false)
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.thank_you))
+                .setCancelable(false)
                 .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     when (questionnaireType) {
                         QuestionnaireType.SURVEY -> {
@@ -315,9 +322,7 @@ class QuestionnaireActivity : AppCompatActivity() {
                         }
                     }
                     finish()
-                }.setMessage(
-                    getString(R.string.no_more_questions)
-                )
+                }.setMessage(message)
         dialog.create()
         dialog.show()
     }
@@ -334,7 +339,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     }
 
     private fun showInvalidValueDialog(value: String, question: Question) {
-        var message = "$value is not a valid number"
+        var message = getString(R.string.is_not_a_valid_number, value)
         if (question.minNumericValue != null || question.maxNumericValue != null) {
             message += " between ${question.minNumericValue} and ${question.maxNumericValue}."
         }

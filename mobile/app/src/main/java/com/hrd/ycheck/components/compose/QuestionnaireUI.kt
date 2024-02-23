@@ -68,7 +68,6 @@ import com.hrd.ycheck.models.SubmittedAdolescentResponse
 import com.hrd.ycheck.utils.AudioPlayer
 
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun QuestionnaireUI(
     currentQuestion: Question,
@@ -128,7 +127,6 @@ private fun RenderQuestion(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
-//            .weight(weight = 1f, fill = false)
     ) {
         Column(
             modifier = Modifier
@@ -136,7 +134,7 @@ private fun RenderQuestion(
         ) {
             Row(
                 modifier = Modifier
-                    .background(colorResource(R.color.color_700))
+                    .background(colorResource(R.color.color_500))
                     .padding(
                         all = dimensionResource(id = R.dimen._2sdp).value.dp
                     )

@@ -47,8 +47,10 @@ class SearchAdolescentActivity : AppCompatActivity() {
             if (message.isNotEmpty()) {
                 binding.errorMessageLabel.text = message
                 binding.errorMessageLabel.visibility = View.VISIBLE
+                binding.searchInfo.visibility = View.VISIBLE
             } else {
                 binding.errorMessageLabel.visibility = View.GONE
+                binding.searchInfo.visibility = View.GONE
             }
         }
 
@@ -58,8 +60,13 @@ class SearchAdolescentActivity : AppCompatActivity() {
 
         viewModel.adolescents.observe(this) { adolescents ->
             if (adolescents.isEmpty()) {
+                binding.searchInfo.visibility = View.VISIBLE
                 binding.errorMessageLabel.visibility = View.VISIBLE
+                binding.resultsAnimation.visibility = View.VISIBLE
                 binding.errorMessageLabel.text = getString(R.string.no_results_found)
+            } else {
+                binding.resultsAnimation.visibility = View.GONE
+                binding.searchInfo.visibility = View.GONE
             }
             adapter.setData(adolescents)
         }
@@ -125,6 +132,20 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     intent.putExtra("question_type", QuestionnaireType.COUNSELLOR_ASSESSMENT)
                     startActivity(intent)
                 }
+                dialogBinding.evaluation.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("question_type", QuestionnaireType.EVALUATION)
+                    startActivity(intent)
+                }
+                dialogBinding.exitInterview.setOnClickListener {
+                    val intent =
+                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                    intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("question_type", QuestionnaireType.EXIT_INTERVIEW)
+                    startActivity(intent)
+                }
                 dialogBinding.editOption.setOnClickListener {
                     val intent =
                         Intent(this@SearchAdolescentActivity, NewAdolescentActivity::class.java)
@@ -152,13 +173,10 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 }
                 return true
             }
-
             override fun onQueryTextChange(p0: String?): Boolean {
-
                 return true;
             }
         })
-
         return true
     }
 

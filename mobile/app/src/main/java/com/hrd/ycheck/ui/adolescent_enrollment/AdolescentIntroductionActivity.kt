@@ -28,7 +28,6 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
         }
 
         binding.helloText.text = getString(R.string.hello_person, adolescent!!.otherNames)
-        binding.helloText.text = getString(R.string.hello_person, adolescent!!.otherNames)
 
         binding.continueButton.setOnClickListener {
             val intent = Intent(this, QuestionnaireActivity::class.java)
@@ -37,5 +36,15 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val activityTag = ActivityTags.ADOLESCENT_SURVEY_START
+        val dialogFragment =
+            TimeInputDialogFragment(
+                activityTag,
+                adolescent!!.id
+            )
+        dialogFragment.isCancelable = false
+        dialogFragment.show(supportFragmentManager, "TimeInputDialogFragment")
+
     }
 }
