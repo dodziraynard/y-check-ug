@@ -64,7 +64,6 @@
             app:layout_constraintTop_toBottomOf="@id/search_container" />
 
         <ProgressBar
-            android:id="@+id/search_adolescent_loading_process_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -74,6 +73,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/search_adolescent_loading_process_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/searching"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView

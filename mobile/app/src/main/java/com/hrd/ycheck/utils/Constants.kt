@@ -28,6 +28,8 @@ object QuestionnaireType {
     const val LAB_ASSESSMENT = "lab_assessment"
     const val CLINICAL_ASSESSMENT = "clinical_assessment"
     const val COUNSELLOR_ASSESSMENT = "counsellor_assessment"
+    const val EVALUATION = "evaluation"
+    const val EXIT_INTERVIEW = "exit_interview"
 }
 
 object Genders {

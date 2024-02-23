@@ -167,4 +167,6 @@
     <string name="saving">Saving...</string>
     <string name="choose_location">Choose location</string>
     <string name="counsellor_assessment">STATION 4B: Counsellor Assessment</string>
+    <string name="exit_interview">Exit Interview</string>
+    <string name="evaluation">Evaluation</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.hrd.ycheck.components.compose
 
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -62,6 +63,7 @@ import com.hrd.ycheck.models.InputType
 import com.hrd.ycheck.models.NewAdolescentResponse
 import com.hrd.ycheck.models.Option
 import com.hrd.ycheck.models.Question
+import com.hrd.ycheck.models.RelatedResponse
 import com.hrd.ycheck.models.SubmittedAdolescentResponse
 import com.hrd.ycheck.utils.AudioPlayer
 
@@ -101,170 +103,190 @@ fun QuestionnaireUI(
             backgroundColor = lightGrey
         )
 
+        RenderQuestion(
+            currentQuestion,
+            audioPlayer,
+            context,
+            currentQuestion.relatedResponse,
+            submittedResponse,
+            newResponse
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalGlideComposeApi::class)
+private fun RenderQuestion(
+    currentQuestion: Question,
+    audioPlayer: AudioPlayer?,
+    context: Context,
+    relatedResponse: RelatedResponse?,
+    submittedResponse: SubmittedAdolescentResponse?,
+    newResponse: NewAdolescentResponse
+) {
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
+//            .weight(weight = 1f, fill = false)
+    ) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-                .weight(weight = 1f, fill = false)
+                .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
         ) {
-            Column(
+            Row(
                 modifier = Modifier
-                    .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
+                    .background(colorResource(R.color.color_700))
+                    .padding(
+                        all = dimensionResource(id = R.dimen._2sdp).value.dp
+                    )
+                    .fillMaxWidth()
             ) {
-                Row(
+                Text(
+                    text = currentQuestion.questionID!!,
+                    color = colorResource(R.color.white),
+                )
+            }
+            Text(
+                text = currentQuestion.text,
+                fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
+                color = colorResource(R.color.text_color),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colorResource(R.color.white))
+                    .padding(
+                        vertical = dimensionResource(id = R.dimen._5sdp).value.dp,
+                        horizontal = dimensionResource(id = R.dimen._5sdp).value.dp
+                    )
+            )
+            Row(modifier = Modifier.align(Alignment.End)) {
+                if (currentQuestion.audioUrl?.isNotEmpty() == true) IconButton(
+                    onClick = {
+                        audioPlayer?.playAudio(currentQuestion.audioUrl)
+                    },
                     modifier = Modifier
-                        .background(colorResource(R.color.color_700))
-                        .padding(
-                            all = dimensionResource(id = R.dimen._2sdp).value.dp
-                        )
-                        .fillMaxWidth()
+                        .background(colorResource(R.color.white))
+                        .padding(all = dimensionResource(id = R.dimen._10sdp).value.dp),
                 ) {
-                    Text(
-                        text = currentQuestion.questionID!!,
-                        color = colorResource(R.color.white),
+                    Image(
+                        painterResource(R.drawable.outline_volume_up_24),
+                        contentDescription = null,
+                        modifier = Modifier.requiredSize(25.dp)
                     )
                 }
-                Text(
-                    text = currentQuestion.text,
-                    fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
-                    color = colorResource(R.color.text_color),
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(colorResource(R.color.white))
-                        .padding(
-                            vertical = dimensionResource(id = R.dimen._5sdp).value.dp,
-                            horizontal = dimensionResource(id = R.dimen._5sdp).value.dp
-                        )
-                )
-                Row(modifier = Modifier.align(Alignment.End)) {
-                    if (currentQuestion.audioUrl?.isNotEmpty() == true) IconButton(
+                if (currentQuestion.apkId?.isNotEmpty() == true)
+                    IconButton(
                         onClick = {
-                            audioPlayer?.playAudio(currentQuestion.audioUrl)
+                            val launchIntent: Intent? =
+                                context.packageManager.getLaunchIntentForPackage(
+                                    currentQuestion.apkId
+                                )
+                            if (launchIntent != null) {
+                                context.startActivity(launchIntent)
+                            } else {
+                                // Bring user to the market or let them choose an app
+                                val intent = Intent(Intent.ACTION_VIEW);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.data =
+                                    Uri.parse("market://details?id=" + currentQuestion.apkId);
+                                context.startActivity(intent);
+                            }
                         },
                         modifier = Modifier
                             .background(colorResource(R.color.white))
-                            .padding(all = dimensionResource(id = R.dimen._10sdp).value.dp),
+                            .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
                     ) {
-                        Image(
-                            painterResource(R.drawable.outline_volume_up_24),
-                            contentDescription = null,
-                            modifier = Modifier.requiredSize(25.dp)
-                        )
-                    }
-                    if (currentQuestion.apkId?.isNotEmpty() == true)
-                        IconButton(
-                            onClick = {
-                                val launchIntent: Intent? =
-                                    context.packageManager.getLaunchIntentForPackage(
-                                        currentQuestion.apkId
-                                    )
-                                if (launchIntent != null) {
-                                    context.startActivity(launchIntent)
-                                } else {
-                                    // Bring user to the market or let them choose an app
-                                    val intent = Intent(Intent.ACTION_VIEW);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    intent.data =
-                                        Uri.parse("market://details?id=" + currentQuestion.apkId);
-                                    context.startActivity(intent);
-                                }
-                            },
-                            modifier = Modifier
-                                .background(colorResource(R.color.white))
-                                .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Image(
-                                    painterResource(R.drawable.baseline_phone_android_24),
-                                    contentDescription = null,
-                                    modifier = Modifier.requiredSize(25.dp)
-                                )
-                                Text(text = "Open App")
-                            }
-                        }
-                }
-
-                if (currentQuestion.relatedResponse?.question != null) {
-                    currentQuestion.relatedResponse.let {
-                        Text(
-                            modifier = Modifier.padding(vertical = 20.dp),
-                            style = TextStyle(fontStyle = FontStyle.Italic),
-                            text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
-                        )
-                    }
-                }
-
-                if (currentQuestion.imageUrl?.isNotEmpty() == true) {
-                    GlideImage(
-                        model = currentQuestion.imageUrl,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(dimensionResource(id = R.dimen._200sdp).value.dp)
-                            .padding(dimensionResource(id = R.dimen._5sdp).value.dp),
-                        alignment = Alignment.Center,
-                        failure = placeholder(ColorDrawable(R.drawable.placeholder)),
-                        loading = placeholder(ColorDrawable(R.drawable.placeholder))
-                    )
-                }
-                if (currentQuestion.answerPreamble?.isNotEmpty() == true) {
-                    Text(
-                        text = currentQuestion.answerPreamble,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp),
-                        fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
-                        color = colorResource(R.color.text_color),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                when (currentQuestion.inputType) {
-                    InputType.TEXT_INPUT -> SimpleInputResponse(
-                        submittedResponse,
-                        newResponse,
-                        isNumber = false,
-                        id = currentQuestion.questionID
-                    )
-
-                    InputType.NUMBER_FIELD -> SimpleInputResponse(
-                        submittedResponse,
-                        newResponse,
-                        isNumber = true,
-                        currentQuestion.questionID
-                    )
-
-                    InputType.CHECKBOXES -> currentQuestion.options?.let {
-                        MultiSelectionResponse(
-                            submittedResponse,
-                            it,
-                            newResponse,
-                            audioPlayer,
-                            currentQuestion.questionID,
-                            currentQuestion.hasImageOptions
-                        )
-                    }
-
-                    InputType.RADIO_BUTTON -> currentQuestion.options?.let {
-                        SingleSelectionResponse(
-                            submittedResponse,
-                            it,
-                            newResponse,
-                            audioPlayer,
-                            currentQuestion.questionID,
-                            currentQuestion.hasImageOptions
-                        )
-                    }
-
-                    InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
-                        currentQuestion.maxNumericValue?.let { it1 ->
-                            RangeSliderSelectionResponse(
-                                submittedResponse, newResponse, it, it1
+                            Image(
+                                painterResource(R.drawable.baseline_phone_android_24),
+                                contentDescription = null,
+                                modifier = Modifier.requiredSize(25.dp)
                             )
+                            Text(text = "Open App")
                         }
+                    }
+            }
+
+            if (currentQuestion.relatedResponse?.question != null) {
+                relatedResponse?.let {
+                    Text(
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        style = TextStyle(fontStyle = FontStyle.Italic),
+                        text = "Related Ques.-> ${it.question} : ${it.responses.toString()}"
+                    )
+                }
+            }
+
+            if (currentQuestion.imageUrl?.isNotEmpty() == true) {
+                GlideImage(
+                    model = currentQuestion.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(dimensionResource(id = R.dimen._200sdp).value.dp)
+                        .padding(dimensionResource(id = R.dimen._5sdp).value.dp),
+                    alignment = Alignment.Center,
+                    failure = placeholder(ColorDrawable(R.drawable.placeholder)),
+                    loading = placeholder(ColorDrawable(R.drawable.placeholder))
+                )
+            }
+            if (currentQuestion.answerPreamble?.isNotEmpty() == true) {
+                Text(
+                    text = currentQuestion.answerPreamble,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp),
+                    fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
+                    color = colorResource(R.color.text_color),
+                    textAlign = TextAlign.Center
+                )
+            }
+            when (currentQuestion.inputType) {
+                InputType.TEXT_INPUT -> SimpleInputResponse(
+                    submittedResponse,
+                    newResponse,
+                    isNumber = false,
+                    id = currentQuestion.questionID
+                )
+
+                InputType.NUMBER_FIELD -> SimpleInputResponse(
+                    submittedResponse,
+                    newResponse,
+                    isNumber = true,
+                    currentQuestion.questionID
+                )
+
+                InputType.CHECKBOXES -> currentQuestion.options?.let {
+                    MultiSelectionResponse(
+                        submittedResponse,
+                        it,
+                        newResponse,
+                        audioPlayer,
+                        currentQuestion.questionID,
+                        currentQuestion.hasImageOptions
+                    )
+                }
+
+                InputType.RADIO_BUTTON -> currentQuestion.options?.let {
+                    SingleSelectionResponse(
+                        submittedResponse,
+                        it,
+                        newResponse,
+                        audioPlayer,
+                        currentQuestion.questionID,
+                        currentQuestion.hasImageOptions
+                    )
+                }
+
+                InputType.RANGE_SLIDER -> currentQuestion.minNumericValue?.let {
+                    currentQuestion.maxNumericValue?.let { it1 ->
+                        RangeSliderSelectionResponse(
+                            submittedResponse, newResponse, it, it1
+                        )
                     }
                 }
             }
