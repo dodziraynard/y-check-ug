@@ -5,19 +5,7 @@ from .section import Section
 from ycheck.utils.constants import ResponseInputType
 from .adolescent import Adolescent
 from .mixin import UpstreamSyncBaseModel
-
-QUESTION_TYPE = [
-    ('pre_screening', 'pre_screening'),
-    ('practice', 'practice'),
-    ('survey', 'survey'),
-    ('survey_feedback', 'survey_feedback'),
-    ('physical_assessment', 'physical_assessment'),
-    ('lab_assessment', 'lab_assessment'),
-    ('clinical_assessment', 'clinical_assessment'),
-    ('counsellor_assessment', 'counsellor_assessment'),
-    ('evaluation', 'evaluation'),
-    ('exit_interview', 'exit_interview'),
-]
+from .constant import QUESTION_TYPE
 
 
 class QuestionGroup(UpstreamSyncBaseModel):

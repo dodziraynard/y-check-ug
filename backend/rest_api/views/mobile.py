@@ -302,6 +302,111 @@ class GetSurveyQuestions(generics.GenericAPIView):
         return Response(response_data)
 
 
+class GetNextAvailableQuestions(generics.GenericAPIView):
+    """
+    Returns the list of questions whose dependency conditions are already satisfied.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = QuestionSerializer
+
+    def get(self, request, *args, **kwargs):
+        current_question_id = request.GET.get("current_question_id")
+        adolescent_id = request.GET.get("adolescent_id")
+        max_questions = int(request.GET.get("max_questions", 10))
+        action = request.GET.get("action", "next")
+        question_type = request.GET.get("question_type", "survey")
+
+        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+        if not adolescent:
+            return Response({"error_message": "Adolescent not found."})
+
+        # All available questions for this questionnaire type
+        target_questions = Question.objects.filter(question_type=question_type)
+
+        # Filter questions for adolescent attributes
+        target_questions = target_questions.filter(
+            (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
+            (
+                # Adolescent type is not required
+                Q(adolescent_type=None) |
+
+                # OR
+                (
+                    # Or required type is set and not invertted
+                    Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False) |
+
+                    # Or required type is set and invertted
+                    ~Q(adolescent_type__iexact=adolescent.type) & Q(
+                        invert_adolescent_attribute_requirements=True)
+                )
+            ) &
+            (Q(study_phase=None) | Q(study_phase__iexact=adolescent.study_phase))
+        )
+
+        current_question = target_questions.filter(
+            id=current_question_id).first()
+
+        current_section: Section = current_question.section if current_question else None
+        if current_question:
+            if action == "next_answered":
+                target_questions = target_questions.exclude(
+                    adolescentresponse__adolescent=adolescent)
+
+            if action in ["next", "next_answered"]:
+                target_questions = target_questions.filter(
+                    number__gt=current_question.number).order_by("number")
+            else:
+                target_questions = target_questions.filter(
+                    number__lt=current_question.number).order_by("-number")
+        else:
+            target_questions = target_questions.order_by("number")
+
+        # Filter out questions not meeting depenpency requirements.
+        invalid_questions_ids = []
+        for question in target_questions:
+            if not question.are_previous_response_conditions_met(
+                    adolescent):
+                invalid_questions_ids.append(question.id)
+
+            # Check age requirements
+            if question.min_age and adolescent.get_age() < question.min_age:
+                invalid_questions_ids.append(question.id)
+            if question.max_age and adolescent.get_age() > question.max_age:
+                invalid_questions_ids.append(question.id)
+
+        questions = target_questions.exclude(
+            id__in=invalid_questions_ids)
+        new_section = None
+        if question := questions.first() and question.section != current_section:
+            new_section = question.section
+
+        # Only show questions from same section at once.
+        questions = questions.filter(section=new_section or current_section)[:max_questions]
+
+        responses = AdolescentResponse.objects.filter(
+            question__in=questions, adolescent=adolescent).first()
+
+        current_section_number = Section.objects.filter(
+            question_type=question_type,
+            number__lte=question.section.number).count() if question else 0
+
+        total_sessions = Section.objects.filter(
+            question_type=question_type).count()
+
+        # Community adolescents have only 10 sesions.
+        if adolescent.type == "community":
+            total_sessions = min(total_sessions, 10)
+
+        response_data = {
+            "question": QuestionSerializer(question, context={"request": request, "adolescent": adolescent}).data if question else None,
+            "new_section": SectionSerializer(new_section).data if new_section and action == "next" else None,
+            "current_section_number": current_section_number,
+            "total_sessions": total_sessions,
+            "current_response": AdolescentResponseSerialiser(response, context={"request": request}).data if response else None,
+        }
+        return Response(response_data)
+
+
 class RespondToSurveyQuestion(generics.GenericAPIView):
     """
     Retrieve a list of checkup locations.
@@ -391,7 +496,8 @@ class RecordAdolescentActivityTime(generics.GenericAPIView):
         timestamp = request.data.get("timestamp")
         activity_tag = request.data.get("activity_tag")
 
-        timestamp = make_aware(datetime.datetime.fromtimestamp(float(timestamp)/1000.0))
+        timestamp = make_aware(
+            datetime.datetime.fromtimestamp(float(timestamp)/1000.0))
 
         adolescent = Adolescent.objects.filter(id=adolescent_id).first()
         if not adolescent:

@@ -1,12 +1,6 @@
 from django.db import models
 from .mixin import UpstreamSyncBaseModel
-
-QUESTION_TYPE = [
-    ('survey', 'survey'),
-    ('assessment', 'assessment'),
-    ('survey_feedback', 'survey_feedback'),
-    ('practice', 'practice'),
-]
+from .constant import QUESTION_TYPE
 
 
 class Section(UpstreamSyncBaseModel):

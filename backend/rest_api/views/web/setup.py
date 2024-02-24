@@ -11,7 +11,6 @@ from dashboard.models import Facility, Service, FlagLabel,Adolescent
 from ycheck.utils.functions import relevant_permission_objects
 from rest_framework import generics
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
 
 
 class GroupsAPI(SimpleCrudMixin):

@@ -18,10 +18,10 @@
       </SelectionState>
       <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-02-23T09:29:36.666134Z">
+        <DropdownSelection timestamp="2024-02-23T20:51:32.122700Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=R8YW5060W5Z" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/speechdata/.android/avd/YCheck_Tab_API_33.avd" />
             </handle>
           </Target>
         </DropdownSelection>
