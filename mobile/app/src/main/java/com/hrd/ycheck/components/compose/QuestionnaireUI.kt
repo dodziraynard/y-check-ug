@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,6 +48,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -75,7 +77,8 @@ fun QuestionnaireUI(
     submittedResponse: SubmittedAdolescentResponse? = null,
     currentSectionNumber: Int = 1,
     totalSectionCount: Int = 8,
-    audioPlayer: AudioPlayer? = null
+    audioPlayer: AudioPlayer? = null,
+    showError: Boolean = true,
 ) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
@@ -101,36 +104,42 @@ fun QuestionnaireUI(
                 .clip(RoundedCornerShape(16.dp)),
             backgroundColor = lightGrey
         )
-
-        RenderQuestion(
-            currentQuestion,
-            audioPlayer,
-            context,
-            currentQuestion.relatedResponse,
-            submittedResponse,
-            newResponse
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            RenderQuestion(
+                currentQuestion,
+                audioPlayer,
+                context,
+                currentQuestion.relatedResponse,
+                submittedResponse,
+                newResponse,
+                showError
+            )
+            Spacer(Modifier.height(30.dp))
+        }
     }
 }
 
 @Composable
 @OptIn(ExperimentalGlideComposeApi::class)
-private fun RenderQuestion(
+fun RenderQuestion(
     currentQuestion: Question,
     audioPlayer: AudioPlayer?,
     context: Context,
     relatedResponse: RelatedResponse?,
     submittedResponse: SubmittedAdolescentResponse?,
-    newResponse: NewAdolescentResponse
+    newResponse: NewAdolescentResponse,
+    showError: Boolean = false,
 ) {
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
             .fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier
-                .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
+            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -174,39 +183,37 @@ private fun RenderQuestion(
                         modifier = Modifier.requiredSize(25.dp)
                     )
                 }
-                if (currentQuestion.apkId?.isNotEmpty() == true)
-                    IconButton(
-                        onClick = {
-                            val launchIntent: Intent? =
-                                context.packageManager.getLaunchIntentForPackage(
-                                    currentQuestion.apkId
-                                )
-                            if (launchIntent != null) {
-                                context.startActivity(launchIntent)
-                            } else {
-                                // Bring user to the market or let them choose an app
-                                val intent = Intent(Intent.ACTION_VIEW);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.data =
-                                    Uri.parse("market://details?id=" + currentQuestion.apkId);
-                                context.startActivity(intent);
-                            }
-                        },
-                        modifier = Modifier
-                            .background(colorResource(R.color.white))
-                            .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painterResource(R.drawable.baseline_phone_android_24),
-                                contentDescription = null,
-                                modifier = Modifier.requiredSize(25.dp)
+                if (currentQuestion.apkId?.isNotEmpty() == true) IconButton(
+                    onClick = {
+                        val launchIntent: Intent? =
+                            context.packageManager.getLaunchIntentForPackage(
+                                currentQuestion.apkId
                             )
-                            Text(text = "Open App")
+                        if (launchIntent != null) {
+                            context.startActivity(launchIntent)
+                        } else {
+                            // Bring user to the market or let them choose an app
+                            val intent = Intent(Intent.ACTION_VIEW);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.data = Uri.parse("market://details?id=" + currentQuestion.apkId);
+                            context.startActivity(intent);
                         }
+                    },
+                    modifier = Modifier
+                        .background(colorResource(R.color.white))
+                        .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painterResource(R.drawable.baseline_phone_android_24),
+                            contentDescription = null,
+                            modifier = Modifier.requiredSize(25.dp)
+                        )
+                        Text(text = stringResource(R.string.open_app))
                     }
+                }
             }
 
             if (currentQuestion.relatedResponse?.question != null) {
@@ -245,38 +252,44 @@ private fun RenderQuestion(
             }
             when (currentQuestion.inputType) {
                 InputType.TEXT_INPUT -> SimpleInputResponse(
+                    currentQuestion,
                     submittedResponse,
                     newResponse,
                     isNumber = false,
-                    id = currentQuestion.questionID
+                    id = currentQuestion.questionID,
+                    showError
                 )
 
                 InputType.NUMBER_FIELD -> SimpleInputResponse(
+                    currentQuestion,
                     submittedResponse,
                     newResponse,
                     isNumber = true,
-                    currentQuestion.questionID
+                    currentQuestion.questionID,
+                    showError
                 )
 
-                InputType.CHECKBOXES -> currentQuestion.options?.let {
+                InputType.CHECKBOXES -> currentQuestion.options?.let { options ->
                     MultiSelectionResponse(
                         submittedResponse,
-                        it,
+                        options,
                         newResponse,
                         audioPlayer,
                         currentQuestion.questionID,
-                        currentQuestion.hasImageOptions
+                        currentQuestion.hasImageOptions,
+                        showError
                     )
                 }
 
-                InputType.RADIO_BUTTON -> currentQuestion.options?.let {
+                InputType.RADIO_BUTTON -> currentQuestion.options?.let { options ->
                     SingleSelectionResponse(
                         submittedResponse,
-                        it,
+                        options,
                         newResponse,
                         audioPlayer,
                         currentQuestion.questionID,
-                        currentQuestion.hasImageOptions
+                        currentQuestion.hasImageOptions,
+                        showError
                     )
                 }
 
@@ -292,18 +305,56 @@ private fun RenderQuestion(
     }
 }
 
+private fun isNumericResponseValid(
+    question: Question,
+    value: String
+): Boolean {
+    val minNumericValue = question.minNumericValue
+    val maxNumericValue = question.maxNumericValue
+    if (question.inputType == InputType.NUMBER_FIELD && !value.matches(Regex("\\d+(\\.\\d+)?"))) return false
+    if (minNumericValue != null && value.toInt() < minNumericValue) return false
+    if (maxNumericValue != null && value.toInt() > maxNumericValue) return false
+    return true
+}
+
+
 @Composable
 fun SimpleInputResponse(
+    currentQuestion: Question,
     currentResponse: SubmittedAdolescentResponse?,
     newResponse: NewAdolescentResponse,
     isNumber: Boolean = false,
     id: String?,
+    showError: Boolean = false,
 ) {
     val currentValue: String = currentResponse?.text ?: ""
     val textState = remember(id) { mutableStateOf(TextFieldValue(currentValue)) }
+    val confirmTextState = remember(id) { mutableStateOf(TextFieldValue(currentValue)) }
+    val errorMessage = remember(id) { mutableStateOf(TextFieldValue("Enter enter correct value.")) }
 
     // Update response
     newResponse.value = textState.value.text
+
+    val currentQuestionAnswered =
+        newResponse.value.isNotEmpty() || newResponse.chosenOptions.isNotEmpty()
+
+    if (!currentQuestionAnswered) {
+        errorMessage.value = TextFieldValue("Enter enter correct value.")
+        newResponse.value = ""
+    } else if (currentQuestion.toBeConfirmed == true && textState.value.text.isNotEmpty() && textState.value.text != confirmTextState.value.text) {
+        errorMessage.value = TextFieldValue("Values do not match.")
+        newResponse.value = ""
+    } else if (!isNumericResponseValid(currentQuestion, textState.value.text)) {
+        var message = stringResource(R.string.is_not_a_valid_number, textState.value.text)
+        if (currentQuestion.minNumericValue != null || currentQuestion.maxNumericValue != null
+        ) {
+            message += " between ${currentQuestion.minNumericValue} and ${currentQuestion.maxNumericValue}."
+        }
+        errorMessage.value = TextFieldValue(message)
+        newResponse.value = ""
+    } else {
+        errorMessage.value = TextFieldValue("")
+    }
 
     TextField(value = textState.value,
         modifier = Modifier
@@ -313,6 +364,38 @@ fun SimpleInputResponse(
         colors = TextFieldDefaults.textFieldColors(textColor = colorResource(R.color.text_color)),
         keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Decimal else KeyboardType.Text),
         onValueChange = { textState.value = it })
+
+    if (currentQuestion.toBeConfirmed == true) {
+        Text(
+            text = "Please enter value again to confirm:",
+            modifier = Modifier
+                .background(colorResource(R.color.white))
+                .fillMaxWidth()
+        )
+        Spacer(Modifier.height(10.dp))
+        TextField(value = confirmTextState.value,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorResource(R.color.white)),
+            singleLine = isNumber,
+            colors = TextFieldDefaults.textFieldColors(textColor = colorResource(R.color.text_color)),
+            keyboardOptions = KeyboardOptions(keyboardType = if (isNumber) KeyboardType.Decimal else KeyboardType.Text),
+            onValueChange = { confirmTextState.value = it })
+    }
+
+    if (showError && errorMessage.value.text.isNotEmpty()) {
+        newResponse.value = ""
+        Text(
+            text = errorMessage.value.text,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorResource(R.color.white))
+                .padding(vertical = 5.dp),
+            fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
+            color = colorResource(R.color.color_warning),
+            textAlign = TextAlign.Center
+        )
+    }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalLayoutApi::class)
@@ -324,6 +407,7 @@ fun SingleSelectionResponse(
     audioPlayer: AudioPlayer? = null,
     id: String?,
     hasImage: Boolean? = false,
+    showError: Boolean = false
 ) {
     val chosenOptions = currentResponse?.chosenOptions
     val currentValue = if ((chosenOptions?.size ?: 0) > 0) chosenOptions?.get(0) else null
@@ -335,6 +419,9 @@ fun SingleSelectionResponse(
     if (selectedOption != null) {
         newResponse.chosenOptions = listOf(selectedOption)
     }
+
+    val currentQuestionAnswered =
+        newResponse.value.isNotEmpty() || newResponse.chosenOptions.isNotEmpty()
 
     FlowRow(
         modifier = Modifier
@@ -356,8 +443,7 @@ fun SingleSelectionResponse(
                         onOptionSelected(option)
                     })
                     .padding(vertical = dimensionResource(id = R.dimen._5sdp).value.dp)
-                    .width((columnWidth).dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .width((columnWidth).dp), horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (option.imageUrl?.isNotEmpty() == true) {
                     GlideImage(
@@ -374,8 +460,7 @@ fun SingleSelectionResponse(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = if (hasImage == true) Arrangement.Center else Arrangement.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
 
                 ) {
                     RadioButton(selected = (option.value == selectedOption?.value), onClick = {
@@ -400,10 +485,23 @@ fun SingleSelectionResponse(
                     }
                 }
             }
-            if (hasImage != true)
-                Divider(color = colorResource(R.color.text_color), thickness = 0.5.dp)
+            if (hasImage != true) Divider(
+                color = colorResource(R.color.text_color),
+                thickness = 0.5.dp
+            )
         }
     }
+
+    if (showError && !currentQuestionAnswered) Text(
+        text = "Please choose an option.",
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorResource(R.color.white))
+            .padding(vertical = 5.dp),
+        fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
+        color = colorResource(R.color.color_warning),
+        textAlign = TextAlign.Center
+    )
 }
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalGlideComposeApi::class)
@@ -415,11 +513,11 @@ fun MultiSelectionResponse(
     audioPlayer: AudioPlayer? = null,
     id: String?,
     hasImage: Boolean? = false,
+    showError: Boolean = false
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
-    val columnWidth: Double =
-        if (hasImage == true) screenWidth / 2.2 else screenWidth.toDouble()
+    val columnWidth: Double = if (hasImage == true) screenWidth / 2.2 else screenWidth.toDouble()
 
     val currentValue = currentResponse?.chosenOptions ?: mutableListOf()
     val selectedOptions = remember(id) { currentValue.toMutableStateList() }
@@ -428,6 +526,9 @@ fun MultiSelectionResponse(
     if (selectedOptions.toList().isNotEmpty()) {
         newResponse.chosenOptions = selectedOptions.toList()
     }
+
+    val currentQuestionAnswered =
+        newResponse.value.isNotEmpty() || newResponse.chosenOptions.isNotEmpty()
 
     FlowRow(
         modifier = Modifier
@@ -483,12 +584,24 @@ fun MultiSelectionResponse(
                     }
                 }
             }
-            if (hasImage != true)
-                Divider(color = colorResource(R.color.text_color), thickness = 0.5.dp)
+            if (hasImage != true) Divider(
+                color = colorResource(R.color.text_color),
+                thickness = 0.5.dp
+            )
         }
     }
-}
 
+    if (showError && !currentQuestionAnswered) Text(
+        text = "Please select all that apply.",
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorResource(R.color.white))
+            .padding(vertical = 5.dp),
+        fontSize = dimensionResource(id = R.dimen.text_small).value.sp,
+        color = colorResource(R.color.color_warning),
+        textAlign = TextAlign.Center
+    )
+}
 
 @Composable
 fun RangeSliderSelectionResponse(

@@ -6,14 +6,16 @@ import android.util.Log
 import java.io.IOException
 
 
-class AudioPlayer() {
+class AudioPlayer {
     val TAG = "AudioPlayer"
     private var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     fun playAudio(uri: String) {
         if (uri.startsWith("http")) {
             mediaPlayer?.setAudioAttributes(
-                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+                AudioAttributes
+                    .Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
             )
         }
         if (mediaPlayer == null) {

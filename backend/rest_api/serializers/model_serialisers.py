@@ -169,7 +169,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             adolescent=adolescent, question=question.show_response_for).first()
         return {
             "question": question.show_response_for.text,
-            "responses": response.get_values_as_list()
+            "responses": response.get_values_as_list() if response else []
         }
 
     def get_has_image_options(self, question):
@@ -197,8 +197,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def get_options(self, question):
         if hasattr(question, "options"):
-            if not hasattr(self, "options"):
-                self.options = question.options.all()
+            self.options = question.options.all()
             return OptionSerlializer(self.options, context=self.context, many=True).data
         return None
 

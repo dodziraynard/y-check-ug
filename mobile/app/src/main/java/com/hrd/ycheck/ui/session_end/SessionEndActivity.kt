@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.hrd.ycheck.databinding.ActivitySessionEndBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.ui.questionnaire.MultipleQuestionnaireActivity
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 import kotlin.random.Random
@@ -37,7 +38,7 @@ class SessionEndActivity : AppCompatActivity() {
         binding.congratulationLabel.text = superlatives[Random.nextInt(0, superlatives.size)]
 
         binding.continueButton.setOnClickListener {
-            val intent = Intent(this@SessionEndActivity, QuestionnaireActivity::class.java)
+            val intent = Intent(this@SessionEndActivity, MultipleQuestionnaireActivity::class.java)
             intent.putExtra("current_question_id", currentQuestionId)
             intent.putExtra("question_type", questionnaireType)
             intent.putExtra("congratulated_for_session_number", congratulatedFor)

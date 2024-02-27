@@ -15,7 +15,7 @@ import com.hrd.ycheck.adapters.AdolescentAdapter
 import com.hrd.ycheck.databinding.ActivitySearchAdolescentBinding
 import com.hrd.ycheck.databinding.AdolescentSearchResultOptionLayoutBinding
 import com.hrd.ycheck.models.Adolescent
-import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
+import com.hrd.ycheck.ui.questionnaire.MultipleQuestionnaireActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 
 class SearchAdolescentActivity : AppCompatActivity() {
@@ -88,7 +88,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                     val intent =
                         Intent(
                             this@SearchAdolescentActivity,
-                            QuestionnaireActivity::class.java
+                            MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("question_type", QuestionnaireType.PRE_SCREENING)
                     intent.putExtra("adolescent", adolescent)
@@ -106,42 +106,42 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 }
                 dialogBinding.physicalAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.PHYSICAL_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.labAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.LAB_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.clinicalAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.CLINICAL_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.counsellorAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.COUNSELLOR_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.evaluation.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.EVALUATION)
                     startActivity(intent)
                 }
                 dialogBinding.exitInterview.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, QuestionnaireActivity::class.java)
+                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.EXIT_INTERVIEW)
                     startActivity(intent)

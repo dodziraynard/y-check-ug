@@ -27,3 +27,24 @@ class GetSurveyQuestionResponse : Parcelable {
     @SerializedName("total_sessions")
     val totalSessions: Int = 10
 }
+
+@Parcelize
+class GetMultipleQuestionsResponse : Parcelable {
+    @SerializedName("questions")
+    val questions: List<Question>? = null
+
+    @SerializedName("current_responses")
+    val currentResponses: List<SubmittedAdolescentResponse>? = null
+
+    @SerializedName("new_section")
+    val newSection: Section? = null
+
+    @SerializedName("error_message")
+    val errorMessage: String? = null
+
+    @SerializedName("current_session_number")
+    val currentSessionNumber: Int = 0
+
+    @SerializedName("total_sessions")
+    val totalSessions: Int = 10
+}

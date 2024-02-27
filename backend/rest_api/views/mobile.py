@@ -1,6 +1,7 @@
 import datetime
 import json
 import logging
+import sys
 from django.utils.timezone import make_aware
 
 from django.contrib.auth import authenticate
@@ -246,11 +247,11 @@ class GetSurveyQuestions(generics.GenericAPIView):
 
         current_section = current_question.section if current_question else None
         if current_question:
-            if action == "next_answered":
+            if action == "next_unanswered":
                 target_questions = target_questions.exclude(
                     adolescentresponse__adolescent=adolescent)
 
-            if action in ["next", "next_answered"]:
+            if action in ["next", "next_unanswered"]:
                 target_questions = target_questions.filter(
                     number__gt=current_question.number).order_by("number")
             else:
@@ -348,11 +349,11 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
 
         current_section: Section = current_question.section if current_question else None
         if current_question:
-            if action == "next_answered":
+            if action == "next_unanswered":
                 target_questions = target_questions.exclude(
                     adolescentresponse__adolescent=adolescent)
 
-            if action in ["next", "next_answered"]:
+            if action in ["next", "next_unanswered"]:
                 target_questions = target_questions.filter(
                     number__gt=current_question.number).order_by("number")
             else:
@@ -362,33 +363,48 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
             target_questions = target_questions.order_by("number")
 
         # Filter out questions not meeting depenpency requirements.
-        invalid_questions_ids = []
-        for question in target_questions:
-            if not question.are_previous_response_conditions_met(
-                    adolescent):
-                invalid_questions_ids.append(question.id)
-
+        invalid_questions_ids = set()
+        last_invalid_question_number = sys.maxsize
+        for index, question in enumerate(target_questions):
             # Check age requirements
             if question.min_age and adolescent.get_age() < question.min_age:
-                invalid_questions_ids.append(question.id)
+                invalid_questions_ids.add(question.id)
+                continue
             if question.max_age and adolescent.get_age() > question.max_age:
-                invalid_questions_ids.append(question.id)
+                invalid_questions_ids.add(question.id)
+                continue
 
-        questions = target_questions.exclude(
-            id__in=invalid_questions_ids)
+            if not question.are_previous_response_conditions_met(
+                    adolescent):
+                
+                # If we have questions to answer i.e., index > len(invalid_questions_ids)
+                # and 'question' is not eligible, 
+
+                if index > len(invalid_questions_ids) and action in ["next", "next_unanswered"]:
+                    last_invalid_question_number = question.number
+                    # stop and answer those eligible questions.
+                    break
+                invalid_questions_ids.add(question.id)
+
+
+        questions = target_questions.exclude(Q(id__in=invalid_questions_ids) | Q(number__gte=last_invalid_question_number))
         new_section = None
-        if question := questions.first() and question.section != current_section:
-            new_section = question.section
+        first_question = questions.first()
+        if  first_question and first_question.section != current_section:
+            new_section = first_question.section
 
         # Only show questions from same section at once.
         questions = questions.filter(section=new_section or current_section)[:max_questions]
+        if questions.exists():
+            responses = AdolescentResponse.objects.filter(question__in=questions,
+                                                          adolescent=adolescent)
 
-        responses = AdolescentResponse.objects.filter(
-            question__in=questions, adolescent=adolescent).first()
-
-        current_section_number = Section.objects.filter(
-            question_type=question_type,
-            number__lte=question.section.number).count() if question else 0
+            current_section_number = Section.objects.filter(
+                question_type=question_type,
+                number__lte=questions.first().section.number).count() if question else 0
+        else:
+            current_section_number = 0
+            responses = AdolescentResponse.objects.none()
 
         total_sessions = Section.objects.filter(
             question_type=question_type).count()
@@ -398,11 +414,11 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
             total_sessions = min(total_sessions, 10)
 
         response_data = {
-            "question": QuestionSerializer(question, context={"request": request, "adolescent": adolescent}).data if question else None,
+            "questions": QuestionSerializer(questions, context={"request": request, "adolescent": adolescent}, many=True).data if questions else None,
             "new_section": SectionSerializer(new_section).data if new_section and action == "next" else None,
             "current_section_number": current_section_number,
             "total_sessions": total_sessions,
-            "current_response": AdolescentResponseSerialiser(response, context={"request": request}).data if response else None,
+            "current_responses": AdolescentResponseSerialiser(responses, context={"request": request}, many=True).data if responses else None,
         }
         return Response(response_data)
 
@@ -459,6 +475,68 @@ class RespondToSurveyQuestion(generics.GenericAPIView):
             "message": "Saved successfully",
             "success": True,
             "current_response": AdolescentResponseSerialiser(response).data,
+        }
+        return Response(response_data)
+
+
+class PostMutipleResponses(generics.GenericAPIView):
+    """
+    Post responses to multiple questions.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ResponseSerialiser
+
+    def post(self, request, *args, **kwargs):
+        adolescent_id = request.data.get("adolescent_id")
+        question_responses_json = request.data.get("question_responses_json")
+        last_answered_question = None
+        for current_question_id, responses in json.loads(question_responses_json).items():
+            value = responses.get("first")
+            option_ids = responses.get("second")
+
+            adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+            if not adolescent:
+                return Response({"error_message": "Adolescent not found."})
+
+            current_question = Question.objects.filter(
+                id=current_question_id).first()
+            if not current_question:
+                return Response({"error_message": "Question not found."})
+            elif not last_answered_question:
+                last_answered_question = current_question
+            elif last_answered_question.number < current_question.number:
+                last_answered_question = current_question
+
+            try:
+                response, _ = AdolescentResponse.objects.get_or_create(
+                    question=current_question, adolescent=adolescent)
+            except AdolescentResponse.MultipleObjectsReturned:
+                AdolescentResponse.objects.filter(
+                    question=current_question, adolescent=adolescent).delete()
+                response = AdolescentResponse.objects.create(
+                    question=current_question, adolescent=adolescent)
+
+            if current_question.input_type in [ResponseInputType.TEXT_FIELD.value,
+                                               ResponseInputType.NUMBER_FIELD.value,
+                                               ResponseInputType.RANGER_SLIDER.value]:
+                if not value:
+                    return Response({"error_message": "Simple value field is required."})
+                response.text = value
+
+            elif current_question.input_type in [ResponseInputType.CHECKBOXES.value,
+                                                 ResponseInputType.RADIO_BUTTON.value]:
+                if not option_ids:
+                    return Response({"error_message": "Valid option ids are required."})
+
+                options = Option.objects.filter(
+                    question=current_question, id__in=option_ids)
+                response.chosen_options.set(options, clear=True)
+            response.save()
+
+        response_data = {
+            "message": "Saved successfully",
+            "success": True,
+            "last_answered_question_id": last_answered_question.id if last_answered_question else "-1",
         }
         return Response(response_data)
 

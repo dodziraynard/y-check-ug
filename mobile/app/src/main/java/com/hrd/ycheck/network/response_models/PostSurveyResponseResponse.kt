@@ -11,4 +11,8 @@ class PostSurveyResponseResponse {
 
     @SerializedName("success")
     val success: Boolean? = null
+
+    @SerializedName("last_answered_question_id")
+    val lastAnsweredQuestionID: String? = null
+
 }

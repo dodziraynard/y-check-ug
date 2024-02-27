@@ -8,6 +8,7 @@ import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityAdolescentIntroductionBinding
 import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.ui.common.TimeInputDialogFragment
+import com.hrd.ycheck.ui.questionnaire.MultipleQuestionnaireActivity
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.ActivityTags
 import com.hrd.ycheck.utils.QuestionnaireType
@@ -30,7 +31,7 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
         binding.helloText.text = getString(R.string.hello_person, adolescent!!.otherNames)
 
         binding.continueButton.setOnClickListener {
-            val intent = Intent(this, QuestionnaireActivity::class.java)
+            val intent = Intent(this, MultipleQuestionnaireActivity::class.java)
             intent.putExtra("question_type", QuestionnaireType.SURVEY_PRACTICE)
             intent.putExtra("adolescent", adolescent)
             startActivity(intent)

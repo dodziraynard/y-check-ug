@@ -3,6 +3,7 @@ package com.hrd.ycheck.network
 import com.hrd.ycheck.network.response_models.AdolescentResponse
 import com.hrd.ycheck.network.response_models.AuthenticationResponse
 import com.hrd.ycheck.network.response_models.CheckupLocationResponse
+import com.hrd.ycheck.network.response_models.GetMultipleQuestionsResponse
 import com.hrd.ycheck.network.response_models.GetSurveyQuestionResponse
 import com.hrd.ycheck.network.response_models.MobileConfigResponse
 import com.hrd.ycheck.network.response_models.PostAdolescentActivityTimeResponse
@@ -83,14 +84,30 @@ interface ApiService {
         @Query("question_type") questionType: String? = "survey",
     ): Call<GetSurveyQuestionResponse?>?
 
+    @GET("get-multiple-questions/")
+    fun getMultipleQuestion(
+        @Query("adolescent_id") adolescentId: String,
+        @Query("current_question_id") currentQuestionId: String,
+        @Query("action") action: String? = "next",
+        @Query("question_type") questionType: String? = "survey",
+    ): Call<GetMultipleQuestionsResponse?>?
+
     @FormUrlEncoded
     @POST("post-survey-response/")
     fun postSurveyResponse(
         @Field("adolescent_id") adolescentId: String,
         @Field("question_id") questionId: String,
         @Field("value") value: String? = null,
-        @Field("option_ids") optionIds: List<Long>? = null,
+        @Field("option_ids") optionIds: List<String>? = null,
     ): Call<PostSurveyResponseResponse?>?
+
+    @FormUrlEncoded
+    @POST("post-multiple-responses/")
+    fun postMultipleResponses(
+        @Field("adolescent_id") adolescentId: String,
+        @Field("question_responses_json") questionResponsesJson: String
+    ): Call<PostSurveyResponseResponse?>?
+
 
     @GET("get-schools/")
     fun getSchools(

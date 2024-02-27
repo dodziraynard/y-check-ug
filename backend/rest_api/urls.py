@@ -15,18 +15,22 @@ urlpatterns = [
     path("adolescents/", views.MobileAdolescentsAPI.as_view()),
     path("upload-adolescent-photo/", views.UploadAdolescentPhoto.as_view()),
     path("get-survey-questions/", views.GetSurveyQuestions.as_view()),
+    path("get-multiple-questions/", views.GetNextAvailableQuestions.as_view()),
     path("post-survey-response/", views.RespondToSurveyQuestion.as_view()),
+    path("post-multiple-responses/", views.PostMutipleResponses.as_view()),
 
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
     path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view()),
-    path("<str:pid>/recommended-services/", views.GetRecommendedServices.as_view()),
+    path("<str:pid>/recommended-services/",
+         views.GetRecommendedServices.as_view()),
     path("web-adolescents-types/", views.getAdolescentType.as_view()),
 
     path("<str:pid>/referrals/", views.AdolescentReferrals.as_view()),
     path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view()),
-    path("referrals/<str:referral_id>/treatment-feedback/", views.ReferralTreatment.as_view()),
+    path("referrals/<str:referral_id>/treatment-feedback/",
+         views.ReferralTreatment.as_view()),
     path("treatments/", views.TreatmentsAPI.as_view()),
     path("my-referrals/", views.MyReferrals.as_view()),
 
@@ -34,28 +38,31 @@ urlpatterns = [
     path("facilities/", views.FacilitiesAPI.as_view()),
     path("all/facilities/", views.AllFacilitiesAPI.as_view()),
     path("all-nodes/", views.AllNodeAPI.as_view()),
-    
+
     # Groups
     path("groups/", views.GroupsAPI.as_view()),
-    
+
     # Permissions
     path("permissions/group/<int:group_id>/", views.PermissionsAPI.as_view()),
-    
+
     # Users
     path("users/", views.UsersAPI.as_view()),
     path("user/bio/data/", views.UpdateUserBioAPI.as_view()),
     path("user/change/password/", views.ChangePasswordAPI.as_view()),
     path("user/upload/picture/", views.UploadPictureAPI.as_view()),
-   
+
     # services
     path("services/", views.ServicesAPI.as_view()),
     path("get-flags/", views.FlagsAPI.as_view()),
     path("get-schools/", views.GetSchoolsAPI.as_view()),
 
     # Syncing
-    path("sync/download/<str:model_name>/", views.DownStreamSyncModelView.as_view()),
-    path("sync/upload/<str:model_name>/", views.UpstreamSyncModelView.as_view()),
-    path("sync/upload-file/<str:model_name>/<str:instance_id>", views.UpstreamFileUpload.as_view()),
+    path("sync/download/<str:model_name>/",
+         views.DownStreamSyncModelView.as_view()),
+    path("sync/upload/<str:model_name>/",
+         views.UpstreamSyncModelView.as_view()),
+    path("sync/upload-file/<str:model_name>/<str:instance_id>",
+         views.UpstreamFileUpload.as_view()),
 ]
 
 

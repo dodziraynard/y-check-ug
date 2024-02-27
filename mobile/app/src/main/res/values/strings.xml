@@ -173,4 +173,7 @@
     <string name="is_not_a_valid_number">%1$s is not a valid number</string>
     <string name="no_revelant_question">There are no relevant questions for you in this section at the moment.</string>
     <string name="adolescent_searching_hint">Please search for adolescents using their PID, surname, or other names. Partial matches are permitted.</string>
+    <string name="open_app">Open App</string>
+    <string name="please_check_your_responses">Please check your responses.</string>
+    <string name="section">Section %1$d: %2$s</string>
 </resources>

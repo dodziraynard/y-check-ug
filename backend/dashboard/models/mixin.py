@@ -8,11 +8,17 @@ import requests
 from PIL import Image as PillowImage
 from django.core import files
 from django.core.files.base import ContentFile
+from django.contrib.auth.base_user import BaseUserManager
 
 from setup.models import NodeConfig
 
 
 logger = logging.getLogger(__name__)
+
+
+class UpstreamSyncManager(BaseUserManager):
+    def get_queryset(self) -> models.QuerySet:
+        return super().get_queryset()
 
 
 class UpstreamSyncBaseModel(models.Model):
@@ -23,6 +29,8 @@ class UpstreamSyncBaseModel(models.Model):
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = UpstreamSyncManager()
 
     class Meta:
         abstract = True
