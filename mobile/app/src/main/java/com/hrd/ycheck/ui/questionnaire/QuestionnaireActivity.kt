@@ -132,7 +132,7 @@ class QuestionnaireActivity : AppCompatActivity() {
                 currentQuestion = response.question
                 val section = response.newSection
                 val submittedResponse = response.currentResponse
-                val currentSessionNumber = response.currentSessionNumber
+                val currentSessionNumber = response.currentSectionNumber
                 val totalSessions = response.totalSessions
 
                 if (section != null && currentQuestion != null && adolescent != null) {

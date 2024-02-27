@@ -155,7 +155,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
                 val section = response.newSection
                 val submittedResponses = response.currentResponses
-                currentSessionNumber = response.currentSessionNumber
+                currentSessionNumber = response.currentSectionNumber
                 totalSessions = response.totalSessions
 
                 // Create a map of question id to NewAdolescentResponse

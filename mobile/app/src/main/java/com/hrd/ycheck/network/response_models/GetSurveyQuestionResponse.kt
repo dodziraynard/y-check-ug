@@ -21,8 +21,8 @@ class GetSurveyQuestionResponse : Parcelable {
     @SerializedName("error_message")
     val errorMessage: String? = null
 
-    @SerializedName("current_session_number")
-    val currentSessionNumber: Int = 0
+    @SerializedName("current_section_number")
+    val currentSectionNumber: Int = 0
 
     @SerializedName("total_sessions")
     val totalSessions: Int = 10
@@ -42,8 +42,8 @@ class GetMultipleQuestionsResponse : Parcelable {
     @SerializedName("error_message")
     val errorMessage: String? = null
 
-    @SerializedName("current_session_number")
-    val currentSessionNumber: Int = 0
+    @SerializedName("current_section_number")
+    val currentSectionNumber: Int = 0
 
     @SerializedName("total_sessions")
     val totalSessions: Int = 10
