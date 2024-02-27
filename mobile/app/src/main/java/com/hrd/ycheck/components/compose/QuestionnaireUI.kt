@@ -8,11 +8,13 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -169,51 +172,70 @@ fun RenderQuestion(
                     )
             )
             Row(modifier = Modifier.align(Alignment.End)) {
-                if (currentQuestion.audioUrl?.isNotEmpty() == true) IconButton(
-                    onClick = {
-                        audioPlayer?.playAudio(currentQuestion.audioUrl)
-                    },
-                    modifier = Modifier
-                        .background(colorResource(R.color.white))
-                        .padding(all = dimensionResource(id = R.dimen._10sdp).value.dp),
-                ) {
-                    Image(
-                        painterResource(R.drawable.outline_volume_up_24),
-                        contentDescription = null,
-                        modifier = Modifier.requiredSize(25.dp)
-                    )
-                }
-                if (currentQuestion.apkId?.isNotEmpty() == true) IconButton(
-                    onClick = {
-                        val launchIntent: Intent? =
-                            context.packageManager.getLaunchIntentForPackage(
-                                currentQuestion.apkId
-                            )
-                        if (launchIntent != null) {
-                            context.startActivity(launchIntent)
-                        } else {
-                            // Bring user to the market or let them choose an app
-                            val intent = Intent(Intent.ACTION_VIEW);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.data = Uri.parse("market://details?id=" + currentQuestion.apkId);
-                            context.startActivity(intent);
-                        }
-                    },
-                    modifier = Modifier
-                        .background(colorResource(R.color.white))
-                        .padding(bottom = dimensionResource(id = R.dimen.item_vertical_spacing).value.dp),
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                if (currentQuestion.audioUrl?.isNotEmpty() == true)
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .height(60.dp)
+                            .width(60.dp)
+                            .aspectRatio(1f)
+                            .background(colorResource(R.color.white), shape = CircleShape),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            painterResource(R.drawable.baseline_phone_android_24),
-                            contentDescription = null,
-                            modifier = Modifier.requiredSize(25.dp)
-                        )
-                        Text(text = stringResource(R.string.open_app))
+
+                        IconButton(
+                            onClick = {
+                                audioPlayer?.playAudio("currentQuestion.audioUrl")
+                            },
+                        ) {
+                            Image(
+                                painterResource(R.drawable.outline_volume_up_24),
+                                contentDescription = null,
+                                modifier = Modifier.requiredSize(25.dp)
+                            )
+                        }
                     }
-                }
+                if (currentQuestion.apkId?.isNotEmpty() == true)
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .height(60.dp)
+                            .width(60.dp)
+                            .aspectRatio(1f)
+                            .background(colorResource(R.color.white), shape = CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        IconButton(
+                            onClick = {
+                                val launchIntent: Intent? =
+                                    context.packageManager.getLaunchIntentForPackage(
+                                        currentQuestion.apkId
+                                    )
+                                if (launchIntent != null) {
+                                    context.startActivity(launchIntent)
+                                } else {
+                                    // Bring user to the market or let them choose an app
+                                    val intent = Intent(Intent.ACTION_VIEW);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.data =
+                                        Uri.parse("market://details?id=" + currentQuestion.apkId);
+                                    context.startActivity(intent);
+                                }
+                            },
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Image(
+                                    painterResource(R.drawable.baseline_phone_android_24),
+                                    contentDescription = null,
+                                    modifier = Modifier.requiredSize(25.dp)
+                                )
+                            }
+                        }
+                    }
             }
 
             if (currentQuestion.relatedResponse?.question != null) {
