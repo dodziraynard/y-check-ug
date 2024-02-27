@@ -103,10 +103,11 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
         viewModel.postMultipleResponseResult.observe(this) { response ->
             if (response?.success == true && response.lastAnsweredQuestionID != null) {
+                currentQuestionId = response.lastAnsweredQuestionID
                 // Load next questions
                 viewModel.getMultipleQuestion(
                     adolescentId,
-                    response.lastAnsweredQuestionID,
+                    currentQuestionId,
                     viewModel.action.value,
                     questionnaireType
                 )

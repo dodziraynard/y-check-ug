@@ -398,10 +398,9 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
         if questions.exists():
             responses = AdolescentResponse.objects.filter(question__in=questions,
                                                           adolescent=adolescent)
-
             current_section_number = Section.objects.filter(
                 question_type=question_type,
-                number__lte=questions.first().section.number).count() if question else 0
+                number__lte=first_question.section.number).count() if question else 0
         else:
             current_section_number = 0
             responses = AdolescentResponse.objects.none()
@@ -532,7 +531,6 @@ class PostMutipleResponses(generics.GenericAPIView):
                     question=current_question, id__in=option_ids)
                 response.chosen_options.set(options, clear=True)
             response.save()
-
         response_data = {
             "message": "Saved successfully",
             "success": True,
