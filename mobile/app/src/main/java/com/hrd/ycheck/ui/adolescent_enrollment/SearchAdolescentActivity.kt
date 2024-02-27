@@ -37,9 +37,11 @@ class SearchAdolescentActivity : AppCompatActivity() {
             if (searching) {
                 binding.searchButton.isEnabled = false
                 binding.searchAdolescentLoadingProcessBar.visibility = View.VISIBLE
+                binding.searchInfo.visibility = View.GONE
             } else {
                 binding.searchButton.isEnabled = true
                 binding.searchAdolescentLoadingProcessBar.visibility = View.GONE
+                binding.searchInfo.visibility = View.VISIBLE
             }
         }
 
