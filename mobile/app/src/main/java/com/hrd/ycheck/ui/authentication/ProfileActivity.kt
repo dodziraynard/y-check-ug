@@ -100,6 +100,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun populateFields(user: User) {
+        binding.usernameInput.text = user.username
         binding.surnameInput.setText(user.surname)
         binding.otherNamesInput.setText(user.otherNames)
     }

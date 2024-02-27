@@ -160,7 +160,7 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
                 "Error occured while adding/updating adolescent: ", str(e))
 
             error_message = f"Error: {str(e)}"
-            if "UNIQUE" in str(e):
+            if "UNIQUE" in str(e).upper():
                 error_message = "PID already exists."
             response_data = {
                 "error_message": error_message,
@@ -358,7 +358,7 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
                     number__gt=current_question.number).order_by("number")
             else:
                 target_questions = target_questions.filter(
-                    number__lt=current_question.number).order_by("-number")
+                    number__lt=current_question.number).order_by("number")
         else:
             target_questions = target_questions.order_by("number")
 

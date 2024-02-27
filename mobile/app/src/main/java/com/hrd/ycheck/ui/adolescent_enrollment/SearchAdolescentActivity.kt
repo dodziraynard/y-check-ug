@@ -30,7 +30,6 @@ class SearchAdolescentActivity : AppCompatActivity() {
 
         // Show back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         viewModel = ViewModelProvider(this)[AdolescentActivityViewModel::class.java]
 
         viewModel.isSearchingAdolescent.observe(this) { searching ->
@@ -41,7 +40,6 @@ class SearchAdolescentActivity : AppCompatActivity() {
             } else {
                 binding.searchButton.isEnabled = true
                 binding.searchAdolescentLoadingProcessBar.visibility = View.GONE
-                binding.searchInfo.visibility = View.VISIBLE
             }
         }
 

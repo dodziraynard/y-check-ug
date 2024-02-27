@@ -20,9 +20,9 @@ import com.hrd.ycheck.ui.authentication.ConfigurationActivity
 import com.hrd.ycheck.ui.authentication.LoginActivity
 import com.hrd.ycheck.ui.authentication.ProfileActivity
 import com.hrd.ycheck.ui.authentication.SecurityQuestionActivity
-import com.hrd.ycheck.ui.common.TimeInputDialogFragment
 import com.hrd.ycheck.utils.Constants
 import com.hrd.ycheck.utils.Constants.SHARED_PREFS_FILE
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: AuthenticationActivityViewModel
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[AuthenticationActivityViewModel::class.java]
         preferences = getSharedPreferences(SHARED_PREFS_FILE, MODE_PRIVATE)
-        
+
         // If new user, redirect to login
         val prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         val isNew = prefs.getBoolean(Constants.IS_NEW_USER, true)
@@ -65,7 +65,17 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this, ProfileActivity::class.java))
                         finish()
                     }
-                    title = "Hi ${user?.username},"
+
+                    val cal: Calendar = Calendar.getInstance()
+                    val hour: Int = cal.get(Calendar.HOUR_OF_DAY)
+                    val greeting = if (hour < 12) {
+                        getString(R.string.good_morning)
+                    } else if (hour < 18) {
+                        getString(R.string.good_afternoon)
+                    } else {
+                        getString(R.string.good_evening)
+                    }
+                    title = "$greeting, ${user?.otherNames ?: user?.username}";
                 } else {
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()

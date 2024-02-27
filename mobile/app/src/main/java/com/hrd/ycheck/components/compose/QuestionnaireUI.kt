@@ -83,8 +83,6 @@ fun QuestionnaireUI(
     audioPlayer: AudioPlayer? = null,
     showError: Boolean = true,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
     val context = LocalContext.current
 
     Column(
@@ -162,7 +160,7 @@ fun RenderQuestion(
                 fontSize = dimensionResource(id = R.dimen.text_size).value.sp,
                 color = colorResource(R.color.text_color),
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Justify,
+                textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(colorResource(R.color.white))
@@ -185,7 +183,7 @@ fun RenderQuestion(
 
                         IconButton(
                             onClick = {
-                                audioPlayer?.playAudio("currentQuestion.audioUrl")
+                                audioPlayer?.playAudio(currentQuestion.audioUrl)
                             },
                         ) {
                             Image(
@@ -205,7 +203,6 @@ fun RenderQuestion(
                             .background(colorResource(R.color.white), shape = CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-
                         IconButton(
                             onClick = {
                                 val launchIntent: Intent? =
@@ -334,8 +331,8 @@ private fun isNumericResponseValid(
     val minNumericValue = question.minNumericValue
     val maxNumericValue = question.maxNumericValue
     if (question.inputType == InputType.NUMBER_FIELD && !value.matches(Regex("\\d+(\\.\\d+)?"))) return false
-    if (minNumericValue != null && value.toInt() < minNumericValue) return false
-    if (maxNumericValue != null && value.toInt() > maxNumericValue) return false
+    if (minNumericValue != null && value.toFloat() < minNumericValue) return false
+    if (maxNumericValue != null && value.toFloat() > maxNumericValue) return false
     return true
 }
 
@@ -361,7 +358,7 @@ fun SimpleInputResponse(
         newResponse.value.isNotEmpty() || newResponse.chosenOptions.isNotEmpty()
 
     if (!currentQuestionAnswered) {
-        errorMessage.value = TextFieldValue("Enter enter correct value.")
+        errorMessage.value = TextFieldValue("Please enter a valid value here.")
         newResponse.value = ""
     } else if (currentQuestion.toBeConfirmed == true && textState.value.text.isNotEmpty() && textState.value.text != confirmTextState.value.text) {
         errorMessage.value = TextFieldValue("Values do not match.")
@@ -388,13 +385,14 @@ fun SimpleInputResponse(
         onValueChange = { textState.value = it })
 
     if (currentQuestion.toBeConfirmed == true) {
+        Spacer(Modifier.height(10.dp))
+
         Text(
             text = "Please enter value again to confirm:",
             modifier = Modifier
                 .background(colorResource(R.color.white))
                 .fillMaxWidth()
         )
-        Spacer(Modifier.height(10.dp))
         TextField(value = confirmTextState.value,
             modifier = Modifier
                 .fillMaxWidth()
