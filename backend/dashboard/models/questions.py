@@ -123,9 +123,8 @@ class Question(UpstreamSyncBaseModel):
             conditions_met.append(
                 response.is_previous_response_condition_met(adolescent))
         
-        # TODO: At least one conditions is required.
         # Ensure at least one of the conditions is met.
-        return all(conditions_met)
+        return any(conditions_met) or len(conditions_met) == 0
 
     def __str__(self):
         return f"{self.question_id} ({self.number}). {self.text}"
