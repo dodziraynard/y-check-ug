@@ -28,7 +28,7 @@ import TreatmentsWidget from "./widgets/TreatmentsWidget";
 import TreatmentDetailWidget from "./widgets/TreatmentDetailWidget";
 import NodeWidget from "./widgets/NodeWidget";
 import ReportsWidget from "./widgets/ReportsWidget";
-
+import ApkWidget from "./widgets/ApkWidget";
 
 function App() {
   return (
@@ -62,6 +62,7 @@ function App() {
             <Route path="facilities" element={<FacilitiesWidget />} />
             <Route path="services" element={<ServiceWidget />} />
             <Route path="roles" element={<RolesWidget />} />
+            <Route path="apk" element={<ApkWidget />} />
             <Route path="nodes" element={<NodeWidget />} />
           </Route>
 
