@@ -12,26 +12,23 @@ function HomePage() {
     return (
         <div className="home-page">
             <div className="content col-11 col-md-8 mx-auto">
-                <h1 className='text-center h1'>UG SPEECH DATA</h1>
+                <h1 className='text-center h1'>Y-CHECK-GHANA</h1>
                 <div className='col-md-8 mx-auto'>
                     <h3 className="h3 text-center my-3">PROJECT AIM</h3>
                     <p className='my-3'>
                         <i className="bi bi-arrow-right me-3"></i>
-                        To generate parallel datasets of transcribed audio
-                        data and parallel text for Neural Machine Translation
-                        in five Ghanaian languages (Akan,
-                        Ewe,
-                        Ikposo,
-                        Dagaare and Dagbani)
+                        The goal is to identify key contextual information on adolescent health,
+                        determine specific components of the health check-up intervention 
+                        that are feasible and acceptable to adolescents, parents, 
+                        and other stakeholders, and develop a theoretical framework 
+                        for the health check-up intervention 
                     </p>
                     <p className='my-3'>
                         <i className="bi bi-arrow-right me-3"></i>
-                        To
-                        analyze
-                        and determine the most suitable
-                        techniques to scale up data collection in 100
-                        languages by the end of 2023 in an African low
-                        resource context
+                        The ultimate objective is 
+                        to improve adolescent health outcomes by providing
+                        accessible and effective health check-ups tailored 
+                        to the needs of adolescents in Ghana
                     </p>
 
                 </div>

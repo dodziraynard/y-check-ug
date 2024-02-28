@@ -106,7 +106,7 @@ function DashboardPage() {
                 </NavLink>
 
                 {userPermissions.has(Permissions.ACCESS_PATIENTS) ?
-                    <NavLink to="/patients">
+                    <NavLink to="/dashboard/patients">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-file-medical'></i>
                             <span className="label">Patients</span>
@@ -116,7 +116,7 @@ function DashboardPage() {
                 }
 
                 {userPermissions.has(Permissions.ACCESS_REFERRALS) ?
-                    <NavLink to="/referrals">
+                    <NavLink to="/dashboard/referrals">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-h-circle'></i>
                             <span className="label">Referrals</span>
@@ -126,7 +126,7 @@ function DashboardPage() {
                 }
 
                 {userPermissions.has(Permissions.ACCESS_TREATMENTS) ?
-                    <NavLink to="/treatments">
+                    <NavLink to="/dashboard/treatments">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-hospital'></i>
                             <span className="label">Treatments</span>
@@ -136,7 +136,7 @@ function DashboardPage() {
                 }
 
                 {userPermissions.has(Permissions.ACCESS_REPORTS) ?
-                    <NavLink to="/reports">
+                    <NavLink to="/dashboard/reports">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-file-spreadsheet'></i>
                             <span className="label">Reports</span>
@@ -149,14 +149,14 @@ function DashboardPage() {
                     <>
                         <hr />
                         <h6 className="header mt-4">SYSTEM</h6>
-                        <NavLink to="/users">
+                        <NavLink to="/dashboard/users">
                             <div className="menu-item" id="users">
                                 <i className='icon bi bi-user'></i>
                                 <span className="label">Users</span>
                             </div>
                         </NavLink>
 
-                        <NavLink to="/setup">
+                        <NavLink to="/dashboard/setup">
                             <div className="menu-item" id="setup">
                                 <i className='icon bi bi-cog'></i>
                                 <span className="label">Setup</span>
@@ -197,7 +197,7 @@ function DashboardPage() {
 
                         {isDropdownOpen && (
                             <div className="drop-down mt-1 profile">
-                                <Link to="/user/profile" className="drop-down-item d-block">
+                                <Link to="/dashboard/user/profile" className="drop-down-item d-block">
                                     <i className="bi bi-person mx-2"></i> Profile
                                 </Link>
                             </div>

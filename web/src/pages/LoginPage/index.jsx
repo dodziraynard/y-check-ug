@@ -74,7 +74,7 @@ function LoginScreen() {
     return (
         <Fragment>
             {user && (
-                <Navigate to="/" replace={true} />
+                <Navigate to="/dashboard" replace={true} />
             )}
 
             <span className='close-id-config' onClick={() => setShowIpConfig(!showIpConfig)}>
