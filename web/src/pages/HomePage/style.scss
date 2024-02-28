@@ -1,0 +1,13 @@
+.home-page {
+    height: 100vh;
+    background: linear-gradient(-45deg, #000 0%, #16034a 100%);
+    color: white;
+  
+    .content{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  

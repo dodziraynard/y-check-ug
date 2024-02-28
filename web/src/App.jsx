@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import Permissions from "./utils/permissions";
 import DashboardPage from "./pages/DashboardPage";
+import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Error404Screen from "./pages/ErrorPages/Error404";
 import ProtectedRoute from "./components/Common/ProtectedRoute";
@@ -33,25 +34,26 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="" element={
+        <Route path="/dashboard" element={
           <ProtectedRoute permissions={[Permissions.VIEW_DASHBOARD]}>
             <DashboardPage />
           </ProtectedRoute>
         }>
           <Route path="" element={<DashboardWidget />} />
-          <Route path="/patients" element={<PatientsWidget />} />
-          <Route path="/patients/:pid/summary" element={<SummaryFlagWidget />} />
-          <Route path="/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
-          <Route path="/referrals" element={<ReferralsWidget />} />
-          <Route path="/treatments" element={<TreatmentsWidget />} />
-          <Route path="/reports" element={<ReportsWidget />} />
-          <Route path="/treatments/:referralId/details" element={<TreatmentDetailWidget />} />
-          <Route path="/referrals/:referralId/details" element={<ReferralDetailWidget />} />
+          <Route path="/dashboard/patients" element={<PatientsWidget />} />
+          <Route path="/dashboard/patients/:pid/summary" element={<SummaryFlagWidget />} />
+          <Route path="/dashboard/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
+          <Route path="/dashboard/referrals" element={<ReferralsWidget />} />
+          <Route path="/dashboard/treatments" element={<TreatmentsWidget />} />
+          <Route path="/dashboard/reports" element={<ReportsWidget />} />
+          <Route path="/dashboard/treatments/:referralId/details" element={<TreatmentDetailWidget />} />
+          <Route path="/dashboard/referrals/:referralId/details" element={<ReferralDetailWidget />} />
 
-          <Route path="/users" element={<UsersWidget />} />
+          <Route path="/dashboard/users" element={<UsersWidget />} />
 
-          <Route path="/setup" element={
+          <Route path="/dashboard/setup" element={
             <ProtectedRoute permissions={[Permissions.MANAGE_SETUP]}>
               <SetupWidget />
             </ProtectedRoute>
@@ -63,7 +65,7 @@ function App() {
             <Route path="nodes" element={<NodeWidget />} />
           </Route>
 
-          <Route path="/user/profile" element={
+          <Route path="/dashboard/user/profile" element={
             <ProtectedRoute>
               <UserProfileWidget />
             </ProtectedRoute>
