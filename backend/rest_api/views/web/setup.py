@@ -326,7 +326,7 @@ class UploadApkAPI(generics.GenericAPIView):
             })
             
             
-class AppConfigurations(generics.GenericAPIView):
+class GetApk(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):

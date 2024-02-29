@@ -1,10 +1,11 @@
 import { Fragment, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {Spinner, useToast } from '@chakra-ui/react';
-
+import { usePutApkUploadFileMutation } from '../../features/resources/resources-api-slice';
 function ApkWidget() {
     const toast = useToast()
     const [selectedFile, setSelectedFile] = useState(null);
+    const [putAkpUploadFile, { isLoading: isPuttingApkUpload, error: errorPuttingFile }] = usePutApkUploadFileMutation()
 
 
     // HANDLE FILE CASE
@@ -34,7 +35,7 @@ function ApkWidget() {
         formData.append('file', selectedFile);
     
         try {
-            //const response = await putUploadPicture(formData).unwrap();
+            const response = await putAkpUploadFile(formData).unwrap();
             const message = response["message"];
             const errormessage = response["error_message"];
     
@@ -47,6 +48,7 @@ function ApkWidget() {
                     duration: 2000,
                     isClosable: true,
                 });
+                setSelectedFile(null)
             } else if (errormessage !== undefined && errormessage !== null) {
                 toast({
                     position: 'top-center',
@@ -71,7 +73,7 @@ function ApkWidget() {
                 <div className="mb-3 col-md-12">
                     <label htmlFor="formFile" className="form-label">Upload apk file</label>
                     <input className="form-control" type="file" id="formFile"
-                        name="picture"
+                        name="file"
                         onChange={handleFileChange}
                         required
                     />
@@ -81,7 +83,8 @@ function ApkWidget() {
                 </div>
                 <div className="mb-3 col-md-12">
                    <button className='btn btn-sm btn-primary d-flex align-items-center'
-                    >
+                    disabled={isPuttingApkUpload}>
+                    {isPuttingApkUpload && <Spinner />}
                    Upload</button>
                 </div>
                 

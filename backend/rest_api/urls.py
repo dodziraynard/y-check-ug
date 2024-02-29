@@ -66,6 +66,7 @@ urlpatterns = [
     
     #apk
      path("upload-apk/", views.UploadApkAPI.as_view()),
+     path("get-apk/", views.GetApk.as_view()),
 
 ]
 

@@ -11,3 +11,6 @@ class AppConfiguration(UpstreamSyncBaseModel):
             version = self.android_apk.file.name.split("v")[-1].split("-")[0]
             self.current_apk_versions  = version
             return super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return str(f'App-Version - {self.current_apk_versions}')
