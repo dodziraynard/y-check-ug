@@ -2,10 +2,15 @@ import { Fragment, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {Spinner, useToast } from '@chakra-ui/react';
 import { usePutApkUploadFileMutation } from '../../features/resources/resources-api-slice';
+import { BASE_API_URI } from '../../utils/constants';
+import useAxios from '../../app/hooks/useAxios';
+
 function ApkWidget() {
     const toast = useToast()
     const [selectedFile, setSelectedFile] = useState(null);
     const [putAkpUploadFile, { isLoading: isPuttingApkUpload, error: errorPuttingFile }] = usePutApkUploadFileMutation()
+    const { trigger: getWebConfigurations, data: responseData, error, isLoading } = useAxios({ mainUrl: `${BASE_API_URI}/get-apk`, useAuthorisation: false });
+    const [webConfigurations, setWebConfigurations] = useState(null);
 
 
     // HANDLE FILE CASE
@@ -64,12 +69,23 @@ function ApkWidget() {
         }
     };
     
-    
+    useEffect(() => {
+        getWebConfigurations();
+    }, []);
 
+    useEffect(() => {
+        if (responseData?.configurations) {
+            setWebConfigurations(responseData.configurations);
+        }
+    }, [responseData]);
+    
     return (
         <Fragment>
             <form className="row bio-data p-3" onSubmit={handleFormSubmit}>
                
+            {webConfigurations?.version
+                && <p><a className='badge bg-primary'>App Current Version: {webConfigurations.version}</a></p>
+            }
                 <div className="mb-3 col-md-12">
                     <label htmlFor="formFile" className="form-label">Upload apk file</label>
                     <input className="form-control" type="file" id="formFile"

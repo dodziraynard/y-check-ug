@@ -330,7 +330,7 @@ class GetApk(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
-        config = AppConfiguration.objects.first()
+        config = AppConfiguration.objects.last()
         if config:
             return Response({
                 "message": "Web app configurations",
@@ -338,6 +338,7 @@ class GetApk(generics.GenericAPIView):
                     "android_apk_url":
                     request.build_absolute_uri(config.android_apk.url)
                     if config.android_apk else "",
+                    "version":config.current_apk_versions,
                 }
             })
         return Response({}, 404)
