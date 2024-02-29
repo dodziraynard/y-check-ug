@@ -63,6 +63,10 @@ urlpatterns = [
          views.UpstreamSyncModelView.as_view()),
     path("sync/upload-file/<str:model_name>/<str:instance_id>",
          views.UpstreamFileUpload.as_view()),
+    
+    #apk
+     path("upload-apk/", views.UploadApkAPI.as_view()),
+
 ]
 
 

@@ -7,7 +7,7 @@ from rest_api.views.mixins import SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
-from dashboard.models import Facility, Service, FlagLabel,Adolescent
+from dashboard.models import *
 from ycheck.utils.functions import relevant_permission_objects
 from rest_framework import generics
 from django.contrib.auth import authenticate
@@ -257,7 +257,6 @@ class UploadPictureAPI(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         user_id = request.data.get("id")
         picture = request.data.get("picture")
-        print(picture)
         user =User.objects.filter(id=user_id).first() 
         if user:
             user.photo = picture
@@ -307,4 +306,38 @@ class AllNodeAPI(SimpleCrudMixin):
     response_data_label = "nodeconfig"
     response_data_label_plural = "nodeconfigs"
 
-  
+
+class UploadApkAPI(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+    
+    def post(self, request, *args, **kwargs):
+        file = request.data.get("file")
+
+        if file:
+            apk = AppConfiguration(android_apk=file)
+            apk.save()
+
+            return Response({
+                "message": "APK file uploaded successfully",
+            })
+        else:
+            return Response({
+                "error_message": "APK file could not be uploaded",
+            })
+            
+            
+class AppConfigurations(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        config = AppConfiguration.objects.first()
+        if config:
+            return Response({
+                "message": "Web app configurations",
+                "configurations": {
+                    "android_apk_url":
+                    request.build_absolute_uri(config.android_apk.url)
+                    if config.android_apk else "",
+                }
+            })
+        return Response({}, 404)
