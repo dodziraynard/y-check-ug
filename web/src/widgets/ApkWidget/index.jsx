@@ -86,6 +86,11 @@ function ApkWidget() {
             {webConfigurations?.version
                 && <p><a className='badge bg-primary'>App Current Version: {webConfigurations.version}</a></p>
             }
+
+            <small>The APK File can be downloaded by clicking on the link below.</small>
+            {webConfigurations?.android_apk_url
+                && <p><a className='badge bg-primary' href={webConfigurations.android_apk_url}>{webConfigurations.android_apk_url}</a></p>
+            }
                 <div className="mb-3 col-md-12">
                     <label htmlFor="formFile" className="form-label">Upload apk file</label>
                     <input className="form-control" type="file" id="formFile"
