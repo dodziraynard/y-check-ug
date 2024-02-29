@@ -286,10 +286,46 @@ class getAdolescentType(generics.GenericAPIView):
         community_serializer = AdolescentSerializer(community,many=True)
         community_count = len(community_serializer.data) 
         
+        # TOTAL ADOLESCENTS
+        total_adolescent = Adolescent.objects.all()
+        total_adolescent_serializer = AdolescentSerializer(total_adolescent,many=True)
+        total_adolescent_count = len(total_adolescent_serializer.data) 
+        
+        # TOTAL USERS
+        users = User.objects.all()
+        users_serializer = UserSerializer(users, many=True)
+        total_user_count = len(users_serializer.data) 
+        
+        # TOTAL TREATMENTS
+        treatments = Treatment.objects.all()
+        treatments_serializer = TreatmentSerializer(treatments, many=True)
+        total_treatment_count = len(treatments_serializer.data) 
+
+        # TOTAL REFERRALS
+        referrals = Referral.objects.all()
+        referrals_serializer = ReferralSerializer(referrals, many=True)
+        total_referral_count = len(referrals_serializer.data) 
+        
+        # TOTAL SERVICES
+        services = Service.objects.all()
+        services_serializer = ServiceSerializer(services, many=True)
+        total_service_count = len(services_serializer.data) 
+        
+        # TOTAL FACILITIES
+        facilities = Facility.objects.all()
+        facilities_serializer = FacilitySerializer(facilities, many=True)
+        total_facility_count = len(facilities_serializer.data)
+         
         return Response({
             "basic": basic_count,
             "secondary":secondary_count,
-            "community":community_count
+            "community":community_count,
+            "total_adolescent":total_adolescent_count,
+            "total_user":total_user_count,
+            "total_referal":total_referral_count,
+            "total_treatment":total_treatment_count,
+            "total_service":total_service_count,
+            "total_facility":total_facility_count,
         })
 
         
