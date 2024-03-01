@@ -1,14 +1,16 @@
 import { Fragment, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {Spinner, useToast } from '@chakra-ui/react';
-import { usePutUserUploadPictureMutation } from '../../features/resources/resources-api-slice';
+import { usePutApkUploadFileMutation } from '../../features/resources/resources-api-slice';
+import { BASE_API_URI } from '../../utils/constants';
+import useAxios from '../../app/hooks/useAxios';
 
-function ProfilePictureWidget() {
+function ApkWidget() {
     const toast = useToast()
-    const userInfo = useSelector((state) => state.authentication.user);
-    const [putUploadPicture, { isLoading: isPuttingPictureUpload, error: errorPuttingBiodata }] = usePutUserUploadPictureMutation()
     const [selectedFile, setSelectedFile] = useState(null);
-    const [previewURL, setPreviewURL] = useState(null); // Add state for preview URL
+    const [putAkpUploadFile, { isLoading: isPuttingApkUpload, error: errorPuttingFile }] = usePutApkUploadFileMutation()
+    const { trigger: getWebConfigurations, data: responseData, error, isLoading } = useAxios({ mainUrl: `${BASE_API_URI}/get-apk`, useAuthorisation: false });
+    const [webConfigurations, setWebConfigurations] = useState(null);
 
 
     // HANDLE FILE CASE
@@ -16,15 +18,7 @@ function ProfilePictureWidget() {
         const file = event.target.files[0];
         setSelectedFile(file);
 
-        // Generate preview URL
-        setPreviewURL(file ? URL.createObjectURL(file) : null);
     };
-
-
-    const [user, setUser] = useState({
-        id:userInfo?.id,
-        
-    })
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -43,11 +37,10 @@ function ProfilePictureWidget() {
         }
     
         const formData = new FormData();
-        formData.append('id', user.id);
-        formData.append('picture', selectedFile);
+        formData.append('file', selectedFile);
     
         try {
-            const response = await putUploadPicture(formData).unwrap();
+            const response = await putAkpUploadFile(formData).unwrap();
             const message = response["message"];
             const errormessage = response["error_message"];
     
@@ -60,6 +53,7 @@ function ProfilePictureWidget() {
                     duration: 2000,
                     isClosable: true,
                 });
+                setSelectedFile(null)
             } else if (errormessage !== undefined && errormessage !== null) {
                 toast({
                     position: 'top-center',
@@ -75,33 +69,44 @@ function ProfilePictureWidget() {
         }
     };
     
-    
+    useEffect(() => {
+        getWebConfigurations();
+    }, []);
 
+    useEffect(() => {
+        if (responseData?.configurations) {
+            setWebConfigurations(responseData.configurations);
+        }
+    }, [responseData]);
+    
     return (
         <Fragment>
             <form className="row bio-data p-3" onSubmit={handleFormSubmit}>
                
+            {webConfigurations?.version
+                && <p><a className='badge bg-primary'>App Current Version: {webConfigurations.version}</a></p>
+            }
+
+            <small>The APK File can be downloaded by clicking on the link below.</small>
+            {webConfigurations?.android_apk_url
+                && <p><a className='badge bg-primary' href={webConfigurations.android_apk_url}>{webConfigurations.android_apk_url}</a></p>
+            }
                 <div className="mb-3 col-md-12">
-                    <label htmlFor="formFile" className="form-label">Upload Picture</label>
+                    <label htmlFor="formFile" className="form-label">Upload apk file</label>
                     <input className="form-control" type="file" id="formFile"
-                        name="picture"
+                        name="file"
                         onChange={handleFileChange}
                         required
                     />
                 </div>
-                {previewURL && (
-                    <div className="mb-3 col-md-12">
-                        <img src={previewURL} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-                    </div>
-                )}
-
+                
                 <div className="mb-3 col-md-12">
                 </div>
                 <div className="mb-3 col-md-12">
                    <button className='btn btn-sm btn-primary d-flex align-items-center'
-                    disabled={isPuttingPictureUpload}>
-                    {isPuttingPictureUpload && <Spinner />}
-                   Save</button>
+                    disabled={isPuttingApkUpload}>
+                    {isPuttingApkUpload && <Spinner />}
+                   Upload</button>
                 </div>
                 
 
@@ -109,4 +114,4 @@ function ProfilePictureWidget() {
         </Fragment>);
 }
 
-export default ProfilePictureWidget;
+export default ApkWidget;

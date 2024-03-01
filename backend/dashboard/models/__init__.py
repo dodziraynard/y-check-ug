@@ -8,3 +8,4 @@ from .section import *
 from .questions import *
 from .checkup_location import *
 from .previous_question_requirement import *
+from .app_configuration import *

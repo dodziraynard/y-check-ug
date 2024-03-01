@@ -13,7 +13,7 @@ function PieChart() {
     getAdolescentTypes(); 
   }, [getAdolescentTypes]);
 
-
+  console.log(response)
   const basicCount = response?.basic || 0;
   const secondaryCount = response?.secondary || 0;
   const communityCount = response?.community || 0;

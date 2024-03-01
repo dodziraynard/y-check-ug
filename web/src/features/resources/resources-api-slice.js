@@ -217,6 +217,17 @@ export const resourceApiSlice = createApi({
                     return `/web-adolescents-types/`;
                 },
             }),
+            // apk
+            putApkUploadFile: builder.mutation({
+                query(body) {
+                    return {
+                        url: `upload-apk/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+
 
             ...referrals.getReferralEndpoints(builder)
         };
@@ -264,7 +275,11 @@ export const {
     useLazyGetAllAdolescentTypesQuery,
 
     // Patients
-    useDeletePatientsMutation
+    useDeletePatientsMutation,
+
+    // apk
+    usePutApkUploadFileMutation,
+
 
 } = resourceApiSlice;
 
