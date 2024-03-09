@@ -291,7 +291,7 @@ class FlagCondition(UpstreamSyncBaseModel):
             case "compute_anaemia_status":
                 anaemia_status = compute_anaemia_status(adolescent)
                 matched = bool(
-                    self.expected_value) and anaemia_status and self.expected_value.strip() == str(anaemia_status.value()).lower()
+                    self.expected_value) and anaemia_status and self.expected_value.strip() == str(anaemia_status.value).lower()
 
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched
