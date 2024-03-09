@@ -7,9 +7,9 @@ from dashboard.models.conditions_until_functions import (
 )
 from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
-from .adolescent import Adolescent
-from .questions import Question, QuestionGroup, AdolescentResponse
-from .mixin import UpstreamSyncBaseModel
+from dashboard.models.adolescent import Adolescent
+from dashboard.models.questions import Question, QuestionGroup, AdolescentResponse
+from dashboard.models.mixin import UpstreamSyncBaseModel
 
 
 class SummaryFlag(UpstreamSyncBaseModel):
@@ -104,7 +104,7 @@ class FlagLabel(UpstreamSyncBaseModel):
         return self.name
 
     def get_flag_color(self, adolescent):
-        colors = self.colors.all().order_by("is_fallback", "-color_name")
+        colors = self.colors.all().order_by("-priority", "is_fallback", "-color_name")
         fallback_color = None
         for color in colors:
             if color.is_fallback:
@@ -146,6 +146,7 @@ class FlagColor(UpstreamSyncBaseModel):
         max_length=20, choices=color_name_choices, null=True, blank=True)
     color_code = models.CharField(max_length=10, choices=COLOR_CHOICES)
     is_fallback = models.BooleanField(default=False)
+    priority = models.IntegerField(default=1)
 
     def __str__(self) -> str:
         return f"{self.flag_label.name}-{self.color_code} ({self.color_name})"
