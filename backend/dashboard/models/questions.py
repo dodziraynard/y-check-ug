@@ -155,7 +155,7 @@ class Option(UpstreamSyncBaseModel):
 
 class AdolescentResponse(UpstreamSyncBaseModel):
     adolescent = models.ForeignKey(
-        Adolescent, on_delete=models.CASCADE, db_index=True)
+        Adolescent, related_name="responses", on_delete=models.CASCADE, db_index=True)
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, db_index=True)
     chosen_options = models.ManyToManyField(Option, blank=True)

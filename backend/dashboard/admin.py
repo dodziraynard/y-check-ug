@@ -37,6 +37,8 @@ class FlagLabelAdmin(admin.ModelAdmin):
 
 
 class FlagColorAdmin(admin.ModelAdmin):
+    search_fields = ["id", 'flag_label__name__icontains',
+                     'color_name__icontains', 'color_code__icontains']
     inlines = [
         FlagConditionInline
     ]
