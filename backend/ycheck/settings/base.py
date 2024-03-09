@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dashboard',
     'rest_api.apps.RestApiConfig',
+    'pdf_processor.apps.PdfProcessorConfig',
     "django_celery_beat",
 ]
 

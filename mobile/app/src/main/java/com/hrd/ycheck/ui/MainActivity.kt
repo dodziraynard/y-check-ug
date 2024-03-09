@@ -39,47 +39,40 @@ class MainActivity : AppCompatActivity() {
         preferences = getSharedPreferences(SHARED_PREFS_FILE, MODE_PRIVATE)
 
         // If new user, redirect to login
-        val prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
-        val isNew = prefs.getBoolean(Constants.IS_NEW_USER, true)
-        val token = prefs.getString(Constants.USER_TOKEN, "")
-        if (isNew || token.isNullOrEmpty()) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        } else {
-            viewModel.user?.observe(this) {
-                user = it
-                if (user != null) {
-                    // Ensure the user has answered the security questions.
-                    if (user?.securityAnswer1?.isEmpty() != false || user?.securityAnswer2?.isEmpty() != false) {
-                        startActivity(Intent(this, SecurityQuestionActivity::class.java))
-                        finish()
-                    }
 
-                    // Ensure the user has updated their profile.
-                    if (user?.surname?.isEmpty() != false || user?.otherNames?.isEmpty() != false) {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.update_profile_instruction),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        startActivity(Intent(this, ProfileActivity::class.java))
-                        finish()
-                    }
-
-                    val cal: Calendar = Calendar.getInstance()
-                    val hour: Int = cal.get(Calendar.HOUR_OF_DAY)
-                    val greeting = if (hour < 12) {
-                        getString(R.string.good_morning)
-                    } else if (hour < 18) {
-                        getString(R.string.good_afternoon)
-                    } else {
-                        getString(R.string.good_evening)
-                    }
-                    title = "$greeting, ${user?.otherNames ?: user?.username}";
-                } else {
-                    startActivity(Intent(this, LoginActivity::class.java))
+        viewModel.user?.observe(this) {
+            user = it
+            if (user != null) {
+                // Ensure the user has answered the security questions.
+                if (user?.securityAnswer1?.isEmpty() != false || user?.securityAnswer2?.isEmpty() != false) {
+                    startActivity(Intent(this, SecurityQuestionActivity::class.java))
                     finish()
                 }
+
+                // Ensure the user has updated their profile.
+                if (user?.surname?.isEmpty() != false || user?.otherNames?.isEmpty() != false) {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.update_profile_instruction),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    finish()
+                }
+
+                val cal: Calendar = Calendar.getInstance()
+                val hour: Int = cal.get(Calendar.HOUR_OF_DAY)
+                val greeting = if (hour < 12) {
+                    getString(R.string.good_morning)
+                } else if (hour < 18) {
+                    getString(R.string.good_afternoon)
+                } else {
+                    getString(R.string.good_evening)
+                }
+                title = "$greeting, ${user?.otherNames ?: user?.username}";
+            } else {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
         }
 
@@ -100,6 +93,17 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main_activity_menu, menu)
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        val isNew = prefs.getBoolean(Constants.IS_NEW_USER, true)
+        val token = prefs.getString(Constants.USER_TOKEN, "")
+        if (isNew || token.isNullOrEmpty()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

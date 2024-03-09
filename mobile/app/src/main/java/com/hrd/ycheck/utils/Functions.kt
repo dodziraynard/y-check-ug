@@ -18,6 +18,12 @@ class Functions {
             prefs.edit().remove(USER_ID).apply()
         }
 
+        fun hasToken(context: Context): Boolean {
+            val prefs: SharedPreferences =
+                context.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+            return prefs.getString(USER_TOKEN, null) is String
+        }
+
         fun getUserToken(context: Context): String? {
             val prefs: SharedPreferences =
                 context.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)

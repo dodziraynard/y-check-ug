@@ -95,7 +95,9 @@ class NewAdolescentActivity : AppCompatActivity() {
             })
         }
 
-        val dialog = AlertDialog.Builder(this).setMessage(getString(R.string.saving)).setCancelable(false).create()
+        val dialog =
+            AlertDialog.Builder(this).setMessage(getString(R.string.saving)).setCancelable(false)
+                .create()
         viewModel.isLoadingAdolescent.observe(this) { value ->
             if (value) {
                 binding.saveButton.isEnabled = false
@@ -121,6 +123,9 @@ class NewAdolescentActivity : AppCompatActivity() {
                         parent: AdapterView<*>?, view: View?, position: Int, id: Long
                     ) {
                         adolescent.checkupLocation = locations[position]
+                        if (binding.schoolContainer.visibility == View.GONE) {
+                            adolescent.school = locations[position]
+                        }
                     }
                 }
 
@@ -375,17 +380,17 @@ class NewAdolescentActivity : AppCompatActivity() {
             when (adolescent.type.lowercase()) {
                 AdolescentTypes.BASIC.lowercase() -> {
                     minAge = 10
-                    maxAge = 12
+                    maxAge = 14
                 }
 
                 AdolescentTypes.SECONDARY.lowercase() -> {
-                    minAge = 13
-                    maxAge = 16
+                    minAge = 15
+                    maxAge = 19
                 }
 
                 AdolescentTypes.COMMUNITY.lowercase() -> {
-                    minAge = 17
-                    maxAge = 19
+                    minAge = 15
+                    maxAge = 17
                 }
             }
 
