@@ -59,6 +59,7 @@ class Question(UpstreamSyncBaseModel):
     UNTIL_FUNCTION_TAG_CHOICES = [
         ('bmi_height', 'bmi_height'),
         ('bmi_weight', 'bmi_weight'),
+        ('anaemia', 'anaemia'),
     ]
     admins_comment = models.TextField(null=True, blank=True)
     variable_name = models.CharField(max_length=100, null=True, blank=True)

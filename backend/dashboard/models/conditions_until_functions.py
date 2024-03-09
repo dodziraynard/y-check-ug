@@ -1,8 +1,15 @@
 import sys
+import enum
 from bisect import bisect_left
 from collections import namedtuple
 from .adolescent import Adolescent
 from .questions import Question, QuestionGroup
+
+
+class AnaemiaStatus(enum.Enum):
+    NORMAL = "normal"
+    MODERATE = "moderate"
+    SEVERE = "severe"
 
 
 def compute_grip_test(adolescent: Adolescent, for_right_arm=False) -> int:
@@ -110,3 +117,74 @@ def compute_bmi_sd_function(adolescent: Adolescent) -> int:
     sds = female_bmi_matrix[index] if adolescent.gender == "female" else male_bmi_matrix[index]
     sd_index = [-3, -2, 1, 2, 3][bisect_left(sds, bmi)]
     return sd_index
+
+
+def compute_anaemia_status(adolescent: Adolescent) -> AnaemiaStatus:
+    anaemia_question = Question.objects.filter(
+        util_function_tag="anaemia").first()
+    if not anaemia_question:
+        return AnaemiaStatus.NORMAL
+
+    value = anaemia_question.get_response(adolescent, numeric=True)  # in g/dL
+    gender = adolescent.gender
+    age = adolescent.get_age()
+
+    # TODO: Get preganancy status from response
+    pregnant = False
+
+    if gender == "female" and pregnant:  # Pregnant
+        if gender == "female" and age >= 15:
+            if value >= 11.0:
+                return AnaemiaStatus.NORMAL
+            elif value < 11.0:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
+        else:
+            # Handle unexpected conditions or return a default status
+            return AnaemiaStatus.NORMAL  # or some other default status
+    elif age <= 11:
+        if gender == "female":
+            if value >= 11.5:
+                return AnaemiaStatus.NORMAL
+            elif 8.0 <= value < 11.5:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
+        else:  # Male
+            if value >= 11.5:
+                return AnaemiaStatus.NORMAL
+            elif 8.0 <= value < 11.5:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
+    elif 12 <= age <= 14:
+        if gender == "female":
+            if value >= 12.0:
+                return AnaemiaStatus.NORMAL
+            elif 8.0 <= value < 12.0:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
+        else:  # Male
+            if value >= 12.0:
+                return AnaemiaStatus.NORMAL
+            elif 8.0 <= value < 12.0:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
+    elif age >= 15:
+        if gender == "female":
+            if value >= 12.0:
+                return AnaemiaStatus.NORMAL
+            elif 8.0 <= value < 12.0:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
+        else:  # Male
+            if value >= 13.0:
+                return AnaemiaStatus.NORMAL
+            elif 8.0 <= value < 13.0:
+                return AnaemiaStatus.MODERATE
+            else:
+                return AnaemiaStatus.SEVERE
