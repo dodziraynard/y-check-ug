@@ -124,8 +124,11 @@ def compute_anaemia_status(adolescent: Adolescent) -> AnaemiaStatus:
         util_function_tag="anaemia").first()
     if not anaemia_question:
         return AnaemiaStatus.NORMAL
-
     value = anaemia_question.get_response(adolescent, numeric=True)  # in g/dL
+    if not value:
+        return AnaemiaStatus.NORMAL
+
+    value = value[0]
     gender = adolescent.gender
     age = adolescent.get_age()
 
