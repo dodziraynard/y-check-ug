@@ -5,7 +5,7 @@ from ycheck.utils.constants import Colors
 from dashboard.models import *
 
 
-class SleepFlaggingTestCase(TestCase):
+class FriendsFlaggingTestCase(TestCase):
     fixtures = ['dashboard/fixtures/initial_data.json']
 
     def setUp(self) -> None:
@@ -15,18 +15,18 @@ class SleepFlaggingTestCase(TestCase):
             timedelta(days=round(17 * 365.25))
         return super().setUp()
 
-    def test_sleep_questions_exists(self):
-        questions_ids = ["Q402a", "Q403"]
+    def test_friends_questions_exists(self):
+        questions_ids = ["Q407", "Q408"]
         assert Question.objects.filter(
             question_id__in=questions_ids).count() == len(questions_ids)
 
-    def test_sleep_red_flag1(self):
-        """Test that if sleeping for less than 8; sleep is flagged red."""
+    def test_friends_red_flag1(self):
+        """Test that FRIENDS is flagged red if Q407 is 'Bad'"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q402a", "Q403"]
-        responses = ["9", "4"]
+        questions_ids = ["Q407"]
+        responses = ["Bad"]
 
         # WHEN:
         # Respond
@@ -45,15 +45,15 @@ class SleepFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SLEEP").first().get_final_colour() == Colors.RED.value
+            label__name="FRIENDS").first().get_final_colour() == Colors.RED.value
 
-    def test_sleep_red_flag2(self):
-        """Test that if sleeping for less than 8; sleep is flagged red."""
+    def test_friends_red_flag2(self):
+        """Test that FRIENDS is flagged red if Q408 is 'Often'"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q402a", "Q403"]
-        responses = ["11", "5"]
+        questions_ids = ["Q408"]
+        responses = ["Often"]
 
         # WHEN:
         # Respond
@@ -72,15 +72,15 @@ class SleepFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SLEEP").first().get_final_colour() == Colors.RED.value
+            label__name="FRIENDS").first().get_final_colour() == Colors.RED.value
 
-    def test_sleep_green_flag1(self):
-        """Test that if sleeping for more than 8; sleep is flagged green."""
+    def test_friends_red_flag3(self):
+        """Test that FRIENDS is flagged red if Q408 is 'Always'"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q402a", "Q403"]
-        responses = ["8", "5"]
+        questions_ids = ["Q408"]
+        responses = ["Always"]
 
         # WHEN:
         # Respond
@@ -99,15 +99,15 @@ class SleepFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SLEEP").first().get_final_colour() == Colors.GREEN.value
+            label__name="FRIENDS").first().get_final_colour() == Colors.RED.value
 
-    def test_sleep_green_flag2(self):
-        """Test that if sleeping for more than 8; sleep is flagged green."""
+    def test_friends_green_flag3(self):
+        """Test that FRIENDS is flagged green if Q408 is 'Never'"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q402a", "Q403"]
-        responses = ["11", "7"]
+        questions_ids = ["Q408"]
+        responses = ["Never"]
 
         # WHEN:
         # Respond
@@ -126,4 +126,4 @@ class SleepFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SLEEP").first().get_final_colour() == Colors.GREEN.value
+            label__name="FRIENDS").first().get_final_colour() == Colors.GREEN.value

@@ -199,6 +199,7 @@ class FlagCondition(UpstreamSyncBaseModel):
 
     priority = models.IntegerField(default=1)
     adolescent_type = models.CharField(max_length=100, null=True, blank=True)
+    gender = models.CharField(max_length=100, null=True, blank=True)
 
     min_age = models.IntegerField(null=True, blank=True)
     max_age = models.IntegerField(null=True, blank=True)
@@ -245,6 +246,9 @@ class FlagCondition(UpstreamSyncBaseModel):
             question=self.question2, adolescent=adolescent).first() if self.question2 else None
 
         if self.adolescent_type and self.adolescent_type != adolescent.type:
+            return False
+        
+        if self.gender and self.gender != adolescent.gender:
             return False
 
         matched = None

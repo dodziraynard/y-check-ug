@@ -209,5 +209,4 @@ def compute_time_difference(adolescent: Adolescent, question1: Question, questio
     else:
         # In this case, the second time is on the next day
         hours_spent = 24 - value1 + value2
-
     return hours_spent
