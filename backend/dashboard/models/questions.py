@@ -109,6 +109,8 @@ class Question(UpstreamSyncBaseModel):
         max_length=100, choices=UNTIL_FUNCTION_TAG_CHOICES, null=True, blank=True)
     show_response_for = models.ForeignKey(
         "Question", on_delete=models.SET_NULL, null=True, blank=True)
+    response_regex = models.CharField(max_length=200, blank=True, null=True)
+    regex_error_message = models.CharField(max_length=200, blank=True, null=True)
 
     def are_previous_response_conditions_met(self, adolescent):
         if self.previous_question_group:
@@ -121,8 +123,9 @@ class Question(UpstreamSyncBaseModel):
 
         conditions_met = []
         for response in self.previous_response_requirements.all():
-            conditions_met.append(response.is_previous_response_condition_met(adolescent))
-        
+            conditions_met.append(
+                response.is_previous_response_condition_met(adolescent))
+
         # Ensure at least one of the conditions is met.
         return any(conditions_met) or len(conditions_met) == 0
 

@@ -228,6 +228,8 @@ class QuestionSerializer(serializers.ModelSerializer):
             "audio_url",
             "has_image_options",
             "related_response",
+            "response_regex",
+            "regex_error_message",
         ]
 
 
