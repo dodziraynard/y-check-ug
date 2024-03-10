@@ -4,7 +4,8 @@ from dashboard.models.conditions_until_functions import (
     compute_bmi_sd_function,
     compute_grip_test,
     compute_anaemia_status,
-    compute_time_difference
+    compute_time_difference,
+    compute_vision_status,
 )
 from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
@@ -175,6 +176,7 @@ class FlagCondition(UpstreamSyncBaseModel):
         ("compute_right_grip_test", "compute_right_grip_test"),
         ("compute_left_grip_test", "compute_left_grip_test"),
         ("compute_anaemia_status", "compute_anaemia_status"),
+        ("compute_vision_status", "compute_vision_status"),
     ]
     name = models.CharField(max_length=100, null=True, blank=True)
 
@@ -247,7 +249,7 @@ class FlagCondition(UpstreamSyncBaseModel):
 
         if self.adolescent_type and self.adolescent_type != adolescent.type:
             return False
-        
+
         if self.gender and adolescent.gender and self.gender.lower() != adolescent.gender.lower():
             return False
 
@@ -305,7 +307,11 @@ class FlagCondition(UpstreamSyncBaseModel):
                 hours_spent = compute_time_difference(
                     adolescent, self.question1, self.question2)
                 matched = self.range_min <= hours_spent <= self.range_max
-
+            case "compute_vision_status":
+                vision_status = compute_vision_status(
+                    adolescent, self.question1, self.question2)
+                matched = bool(
+                    self.expected_value) and vision_status and self.expected_value.strip() == str(vision_status.value).lower()
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched
         return matched

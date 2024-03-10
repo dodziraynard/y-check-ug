@@ -210,3 +210,28 @@ def compute_time_difference(adolescent: Adolescent, question1: Question, questio
         # In this case, the second time is on the next day
         hours_spent = 24 - value1 + value2
     return hours_spent
+
+
+def compute_vision_status(adolescent: Adolescent, question1: Question, question2: Question) -> str:
+    value1 = question1.get_response(
+        adolescent, numeric=True)
+    value2 = question2.get_response(
+        adolescent, numeric=True)
+
+    if not (value1 and value2):
+        return -1
+    dist_lef, dist_rig = value1[0], value2[0]
+
+    # Vision status determination based on provided criteria
+    if (dist_lef == 6 and dist_rig in [3, 3.8, 4.8, 6, 7.5, 9.5]) or (dist_rig == 6 and dist_lef in [3, 3.8, 4.8, 6, 7.5, 9.5]):
+        return "Normal"
+    elif (dist_lef in [12, 15, 18]) or (dist_rig in [12, 15, 18]):
+        return "Mild"
+    elif (dist_lef in [19, 24, 30, 38, 48, 60]) or (dist_rig in [19, 24, 30, 38, 48, 60]):
+        return "Moderate"
+    elif (dist_lef in [60, 120, 240, 600] and dist_rig == 6) or (dist_rig in [60, 120, 240, 600] and dist_lef == 6) or (dist_lef == 3 and dist_rig == 60) or (dist_rig == 3 and dist_lef == 60):
+        return "Severe"
+    elif (dist_lef == 3 and dist_rig == 60) or (dist_lef == 3 and dist_rig == "*"):
+        return "Blindness"
+    else:
+        return "Unknown"
