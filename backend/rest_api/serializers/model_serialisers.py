@@ -197,7 +197,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def get_options(self, question):
         if hasattr(question, "options"):
-            self.options = question.options.all()
+            self.options = question.options.all().order_by("numeric_value", "value")
             return OptionSerlializer(self.options, context=self.context, many=True).data
         return None
 

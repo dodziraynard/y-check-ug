@@ -3,7 +3,8 @@ from django.db import models
 from dashboard.models.conditions_until_functions import (
     compute_bmi_sd_function,
     compute_grip_test,
-    compute_anaemia_status
+    compute_anaemia_status,
+    compute_time_difference
 )
 from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
@@ -167,6 +168,7 @@ class FlagCondition(UpstreamSyncBaseModel):
          "q1_q2_difference_is_less_than_expected_integer_value"),
         ("min_age", "min_age"),
         ("range_sum_between", "range_sum_between"),
+        ("time_difference_between", "time_difference_between"),
         ("gender_is", "gender_is"),
         ("invoke_bmi_sd_function", "invoke_bmi_sd_function"),
         ("group_value_between", "group_value_between"),
@@ -260,13 +262,16 @@ class FlagCondition(UpstreamSyncBaseModel):
                 matched = self.range_min <= adolescent_bmi_sd <= self.range_max
             case "equal_expected_value":
                 # Use "0" as default value for no-response.
-                response_values = list(map(str, response1.get_values_as_list())) if bool(response1) else ["0"]
-                matched = bool(self.expected_value) and self.expected_value.strip().lower() in response_values
+                response_values = list(map(str, response1.get_values_as_list())) if bool(
+                    response1) else ["0"]
+                matched = bool(self.expected_value) and self.expected_value.strip(
+                ).lower() in response_values
             case "less_than_expected_integer_value":
                 # Use 0 as default value for no-response
-                response_values = response1.get_values_as_list(numeric=True) if bool(response1) else [0]
+                response_values = response1.get_values_as_list(
+                    numeric=True) if bool(response1) else [0]
                 matched = self.expected_integer_value != None and all([float(self.expected_integer_value) > round(float(res), 2)
-                                                                                           for res in response_values])
+                                                                       for res in response_values])
             case "min_age":
                 matched = self.expected_integer_value != None and self.expected_integer_value <= adolescent.get_age()
             case "gender_is":
@@ -292,6 +297,10 @@ class FlagCondition(UpstreamSyncBaseModel):
                 anaemia_status = compute_anaemia_status(adolescent)
                 matched = bool(
                     self.expected_value) and anaemia_status and self.expected_value.strip() == str(anaemia_status.value).lower()
+            case "time_difference_between":
+                hours_spent = compute_time_difference(
+                    adolescent, self.question1, self.question2)
+                matched = self.range_min <= hours_spent <= self.range_max
 
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched

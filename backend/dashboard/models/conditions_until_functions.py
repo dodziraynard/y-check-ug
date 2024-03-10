@@ -191,3 +191,23 @@ def compute_anaemia_status(adolescent: Adolescent) -> AnaemiaStatus:
                 return AnaemiaStatus.MODERATE
             else:
                 return AnaemiaStatus.SEVERE
+
+
+def compute_time_difference(adolescent: Adolescent, question1: Question, question2: Question) -> int:
+    value1 = question1.get_response(
+        adolescent, numeric=True)  # e.g., 20 for 8pm
+    value2 = question2.get_response(
+        adolescent, numeric=True)  # e.g., 4 for 4am
+
+    if not (value1 and value2):
+        return -1
+    value1, value2 = value1[0], value2[0]
+
+    # Assuming value1 is always smaller than value2
+    if value1 <= value2:
+        hours_spent = value2 - value1
+    else:
+        # In this case, the second time is on the next day
+        hours_spent = 24 - value1 + value2
+
+    return hours_spent
