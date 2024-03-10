@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.db import models
 from functools import reduce
 from django.utils.timezone import make_aware
@@ -52,7 +51,7 @@ class Adolescent(UpstreamSyncBaseModel):
 
     def get_age(self):
         # Calculate age at the time of registration
-        return int((self.created_at-self.dob).days / 365.25)
+        return round((self.created_at-self.dob).days / 365.25)
 
     def registration_age_in_months(self):
         if self.dob:

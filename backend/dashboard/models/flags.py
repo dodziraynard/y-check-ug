@@ -213,7 +213,7 @@ class FlagCondition(UpstreamSyncBaseModel):
         return super().save(*arg, **kwargs)
 
     def _handle_range_sum_operator(self, adolescent):
-        if not (self.range_min and self.range_max and self.question1 and self.question2):
+        if not (self.range_min != None and self.range_max != None and self.question1 and self.question2):
             return True
         responses = AdolescentResponse.objects.filter(
             question__number__gte=self.question1.number,
@@ -241,10 +241,6 @@ class FlagCondition(UpstreamSyncBaseModel):
             question=self.question1, adolescent=adolescent).first()
         response2 = AdolescentResponse.objects.filter(
             question=self.question2, adolescent=adolescent).first() if self.question2 else None
-        if self.question1 and not response1:
-            return True
-        if self.question2 and not response2:
-            return True
 
         if self.adolescent_type and self.adolescent_type != adolescent.type:
             return False
@@ -263,11 +259,14 @@ class FlagCondition(UpstreamSyncBaseModel):
                     return True
                 matched = self.range_min <= adolescent_bmi_sd <= self.range_max
             case "equal_expected_value":
-                matched = bool(self.expected_value) and bool(response1) and self.expected_value.strip().lower() in list(
-                    map(str, response1.get_values_as_list()))
+                # Use "0" as default value for no-response.
+                response_values = list(map(str, response1.get_values_as_list())) if bool(response1) else ["0"]
+                matched = bool(self.expected_value) and self.expected_value.strip().lower() in response_values
             case "less_than_expected_integer_value":
-                matched = self.expected_integer_value != None and bool(response1) and all([float(self.expected_integer_value) > round(float(res), 2)
-                                                                                           for res in response1.get_values_as_list(numeric=True)])
+                # Use 0 as default value for no-response
+                response_values = response1.get_values_as_list(numeric=True) if bool(response1) else [0]
+                matched = self.expected_integer_value != None and all([float(self.expected_integer_value) > round(float(res), 2)
+                                                                                           for res in response_values])
             case "min_age":
                 matched = self.expected_integer_value != None and self.expected_integer_value <= adolescent.get_age()
             case "gender_is":
