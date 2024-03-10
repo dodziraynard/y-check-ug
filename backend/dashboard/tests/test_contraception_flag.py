@@ -5,7 +5,7 @@ from ycheck.utils.constants import Colors
 from dashboard.models import *
 
 
-class SexualFlaggingTestCase(TestCase):
+class ContraceptionFlaggingTestCase(TestCase):
     fixtures = ['dashboard/fixtures/initial_data.json']
 
     def setUp(self) -> None:
@@ -15,18 +15,18 @@ class SexualFlaggingTestCase(TestCase):
             timedelta(days=round(17 * 365.25))
         return super().setUp()
 
-    def test_sexual_questions_exists(self):
-        questions_ids = ["Q604", "Q605", "Q601"]
+    def test_contraception_questions_exists(self):
+        questions_ids = ["Q606", "Q607", "Q608"]
         assert Question.objects.filter(
             question_id__in=questions_ids).count() == len(questions_ids)
 
-    def test_sexual_red_flag1(self):
-        """Test that SEXUAL RISK is flagged red if Q604 >= 2"""
+    def test_contraception_red_flag1(self):
+        """Test that CONTRACEPTION is flagged red if Q606 is no"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q604"]
-        responses = ["Two people"]
+        questions_ids = ["Q606"]
+        responses = ["No"]
 
         # WHEN:
         # Respond
@@ -45,15 +45,16 @@ class SexualFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_red_flag2(self):
-        """Test that SEXUAL RISK is flagged red if Q604 >= 2"""
+    def test_contraception_red_flag2(self):
+        """Test that CONTRACEPTION is flagged red if Q607 is Rhythm method/Safe days (avoiding sex on days I am fertile)"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q604"]
-        responses = ["More than two people"]
+        questions_ids = ["Q607"]
+        responses = [
+            "Rhythm method/Safe days (avoiding sex on days I am fertile)"]
 
         # WHEN:
         # Respond
@@ -72,15 +73,16 @@ class SexualFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_red_flag3(self):
-        """Test that SEXUAL RISK is flagged red if Q605 is 'sometimes’, ‘rarely’ or ‘never’"""
+    def test_contraception_red_flag3(self):
+        """Test that CONTRACEPTION is flagged red if Q607 is Withdrawal method (partner withdraws before ejaculation)"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q605"]
-        responses = ["Sometimes’"]
+        questions_ids = ["Q607"]
+        responses = [
+            "Withdrawal method (partner withdraws before ejaculation)"]
 
         # WHEN:
         # Respond
@@ -99,15 +101,16 @@ class SexualFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_red_flag4(self):
-        """Test that SEXUAL RISK is flagged red if Q605 is 'sometimes’, ‘rarely’ or ‘never’"""
+    def test_contraception_red_flag4(self):
+        """Test that CONTRACEPTION is flagged red if Q607 is Emergency contraception (or “morning after pill”)"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q605"]
-        responses = ["Rarely"]
+        questions_ids = ["Q607"]
+        responses = [
+            "Emergency contraception (or “morning after pill”)"]
 
         # WHEN:
         # Respond
@@ -126,15 +129,15 @@ class SexualFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_red_flag5(self):
-        """Test that SEXUAL RISK is flagged red if Q605 is 'sometimes’, ‘rarely’ or ‘never’"""
+    def test_contraception_red_flag5(self):
+        """Test that CONTRACEPTION is flagged red if Q607 is Herbal/traditional products"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q605"]
-        responses = ["Never"]
+        questions_ids = ["Q607"]
+        responses = ["Herbal/traditional products"]
 
         # WHEN:
         # Respond
@@ -153,17 +156,15 @@ class SexualFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_red_flag6(self):
-        """Test that SEXUAL RISK is flagged red if Sex is ‘Male’ and Q601 is ‘Boys/men’"""
+    def test_contraception_red_flag6(self):
+        """Test that CONTRACEPTION is flagged red if Q608 >= 1"""
 
         # GIVEN:
         adolescent = self.adolescent
-        adolescent.gender = "male"
-        adolescent.save()
-        questions_ids = ["Q601"]
-        responses = ["Boys/men"]
+        questions_ids = ["Q608"]
+        responses = ["2"]
 
         # WHEN:
         # Respond
@@ -175,23 +176,22 @@ class SexualFlaggingTestCase(TestCase):
                 question=question,
             )
             response.chosen_options.set(
-                question.options.filter(value__icontains=response_value))
+                question.options.filter(value=response_value))
 
         SummaryFlag.compute_flag_color(adolescent)
 
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_green_flag1(self):
-        """Test that SEXUAL RISK is flagged green if Sex is Female and Q601 is ‘Boys/men’"""
+    def test_contraception_red_flag7(self):
+        """Test that CONTRACEPTION is flagged red if Q608 >= 1"""
 
         # GIVEN:
         adolescent = self.adolescent
-        adolescent.gender = "Female"
-        questions_ids = ["Q601"]
-        responses = ["Boys/men"]
+        questions_ids = ["Q608"]
+        responses = ["1"]
 
         # WHEN:
         # Respond
@@ -203,22 +203,23 @@ class SexualFlaggingTestCase(TestCase):
                 question=question,
             )
             response.chosen_options.set(
-                question.options.filter(value__icontains=response_value))
+                question.options.filter(value=response_value))
 
         SummaryFlag.compute_flag_color(adolescent)
 
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.GREEN.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.RED.value
 
-    def test_sexual_green_flag1(self):
-        """Test that SEXUAL RISK is flagged green if Sex is Female and Q601 is ‘Boys/men’"""
+
+    def test_contraception_red_flag8(self):
+        """Test that CONTRACEPTION is flagged red if Q608 >= 1"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q604"]
-        responses = ["No one"]
+        questions_ids = ["Q608"]
+        responses = ["0"]
 
         # WHEN:
         # Respond
@@ -230,11 +231,11 @@ class SexualFlaggingTestCase(TestCase):
                 question=question,
             )
             response.chosen_options.set(
-                question.options.filter(value__icontains=response_value))
+                question.options.filter(value=response_value))
 
         SummaryFlag.compute_flag_color(adolescent)
 
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.GREEN.value
+            label__name="CONTRACEPTION").first().get_final_colour() == Colors.GREEN.value

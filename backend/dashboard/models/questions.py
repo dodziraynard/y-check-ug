@@ -121,8 +121,7 @@ class Question(UpstreamSyncBaseModel):
 
         conditions_met = []
         for response in self.previous_response_requirements.all():
-            conditions_met.append(
-                response.is_previous_response_condition_met(adolescent))
+            conditions_met.append(response.is_previous_response_condition_met(adolescent))
         
         # Ensure at least one of the conditions is met.
         return any(conditions_met) or len(conditions_met) == 0

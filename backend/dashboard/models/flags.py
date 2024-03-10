@@ -248,7 +248,7 @@ class FlagCondition(UpstreamSyncBaseModel):
         if self.adolescent_type and self.adolescent_type != adolescent.type:
             return False
         
-        if self.gender and self.gender != adolescent.gender:
+        if self.gender and adolescent.gender and self.gender.lower() != adolescent.gender.lower():
             return False
 
         matched = None
