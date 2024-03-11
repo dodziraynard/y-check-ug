@@ -308,8 +308,7 @@ class FlagCondition(UpstreamSyncBaseModel):
                     adolescent, self.question1, self.question2)
                 matched = self.range_min <= hours_spent <= self.range_max
             case "compute_vision_status":
-                vision_status = compute_vision_status(
-                    adolescent, self.question1, self.question2)
+                vision_status = compute_vision_status(adolescent, self.question1)
                 matched = bool(
                     self.expected_value) and vision_status and self.expected_value.strip() == str(vision_status.value).lower()
         if matched != None:

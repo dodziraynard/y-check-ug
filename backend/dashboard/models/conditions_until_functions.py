@@ -1,9 +1,12 @@
 import sys
 import enum
+import re
 from bisect import bisect_left
 from collections import namedtuple
 from .adolescent import Adolescent
 from .questions import Question, QuestionGroup
+
+EYE_TEST_VALUE_REGEX = r"(\d+(\.\d+)?)/(\d+(\.\d+)?)"
 
 
 class AnaemiaStatus(enum.Enum):
@@ -212,15 +215,22 @@ def compute_time_difference(adolescent: Adolescent, question1: Question, questio
     return hours_spent
 
 
-def compute_vision_status(adolescent: Adolescent, question1: Question, question2: Question) -> str:
-    value1 = question1.get_response(
-        adolescent, numeric=True)
-    value2 = question2.get_response(
-        adolescent, numeric=True)
+def _extract_eye_measurement_parts(input_string):
+    match = re.match(EYE_TEST_VALUE_REGEX, input_string)
+    if match:
+        first_part = match.group(1)
+        second_part = match.group(3)
+        return first_part, second_part
+    else:
+        return None, None
 
-    if not (value1 and value2):
+
+def compute_vision_status(adolescent: Adolescent, question: Question) -> str:
+    value = question.get_response(adolescent)
+    if not value:
         return -1
-    dist_lef, dist_rig = value1[0], value2[0]
+
+    dist_lef, dist_rig = _extract_eye_measurement_parts(value[0])
 
     # Vision status determination based on provided criteria
     if (dist_lef == 6 and dist_rig in [3, 3.8, 4.8, 6, 7.5, 9.5]) or (dist_rig == 6 and dist_lef in [3, 3.8, 4.8, 6, 7.5, 9.5]):
