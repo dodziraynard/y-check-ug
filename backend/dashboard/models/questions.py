@@ -38,9 +38,9 @@ class QuestionGroup(UpstreamSyncBaseModel):
             numeric=True)]
 
         if self.group_effect == "highest_value":
-            return max(values)
+            return max(values, default=-1)
         if self.group_effect == "lowest_value":
-            return min(values)
+            return min(values, default=-1)
 
 
 class Question(UpstreamSyncBaseModel):
@@ -110,7 +110,8 @@ class Question(UpstreamSyncBaseModel):
     show_response_for = models.ForeignKey(
         "Question", on_delete=models.SET_NULL, null=True, blank=True)
     response_regex = models.CharField(max_length=200, blank=True, null=True)
-    regex_error_message = models.CharField(max_length=200, blank=True, null=True)
+    regex_error_message = models.CharField(
+        max_length=200, blank=True, null=True)
 
     def are_previous_response_conditions_met(self, adolescent):
         if self.previous_question_group:

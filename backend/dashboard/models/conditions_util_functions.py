@@ -65,8 +65,8 @@ def compute_grip_test(adolescent: Adolescent, for_right_arm=False) -> int:
         case "female":
             recommended_value = females_age_min_value.get(age)
     if recommended_value and recommended_value[for_right_arm] > grip_test_result:
-        return 1
-    return -1
+        return -1
+    return 1
 
 
 def compute_bmi_sd_function(adolescent: Adolescent) -> int:
