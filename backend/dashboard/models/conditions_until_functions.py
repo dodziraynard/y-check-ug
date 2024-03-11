@@ -215,12 +215,12 @@ def compute_time_difference(adolescent: Adolescent, question1: Question, questio
     return hours_spent
 
 
-def _extract_eye_measurement_parts(input_string):
+def extract_eye_measurement_parts(input_string):
     match = re.match(EYE_TEST_VALUE_REGEX, input_string)
     if match:
         first_part = match.group(1)
         second_part = match.group(3)
-        return first_part, second_part
+        return float(first_part), float(second_part)
     else:
         return None, None
 
@@ -228,20 +228,20 @@ def _extract_eye_measurement_parts(input_string):
 def compute_vision_status(adolescent: Adolescent, question: Question) -> str:
     value = question.get_response(adolescent)
     if not value:
-        return -1
+        return "Unknown"
 
-    dist_lef, dist_rig = _extract_eye_measurement_parts(value[0])
+    dist_numerator, dist_denominator = extract_eye_measurement_parts(value[0])
 
     # Vision status determination based on provided criteria
-    if (dist_lef == 6 and dist_rig in [3, 3.8, 4.8, 6, 7.5, 9.5]) or (dist_rig == 6 and dist_lef in [3, 3.8, 4.8, 6, 7.5, 9.5]):
+    if (dist_numerator == 6 and dist_denominator in [3, 3.8, 4.8, 6, 7.5, 9.5]) or (dist_denominator == 6 and dist_numerator in [3, 3.8, 4.8, 6, 7.5, 9.5]):
         return "Normal"
-    elif (dist_lef in [12, 15, 18]) or (dist_rig in [12, 15, 18]):
+    elif (dist_numerator in [12, 15, 18]) or (dist_denominator in [12, 15, 18]):
         return "Mild"
-    elif (dist_lef in [19, 24, 30, 38, 48, 60]) or (dist_rig in [19, 24, 30, 38, 48, 60]):
+    elif (dist_numerator in [19, 24, 30, 38, 48, 60]) or (dist_denominator in [19, 24, 30, 38, 48, 60]):
         return "Moderate"
-    elif (dist_lef in [60, 120, 240, 600] and dist_rig == 6) or (dist_rig in [60, 120, 240, 600] and dist_lef == 6) or (dist_lef == 3 and dist_rig == 60) or (dist_rig == 3 and dist_lef == 60):
+    elif (dist_numerator in [60, 120, 240, 600] and dist_denominator == 6) or (dist_denominator in [60, 120, 240, 600] and dist_numerator == 6) or (dist_numerator == 3 and dist_denominator == 60) or (dist_denominator == 3 and dist_numerator == 60):
         return "Severe"
-    elif (dist_lef == 3 and dist_rig == 60) or (dist_lef == 3 and dist_rig == "*"):
+    elif (dist_numerator == 3 and dist_denominator == 60) or (dist_numerator == 3 and dist_denominator == "*"):
         return "Blindness"
     else:
         return "Unknown"

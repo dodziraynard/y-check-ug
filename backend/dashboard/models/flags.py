@@ -302,7 +302,7 @@ class FlagCondition(UpstreamSyncBaseModel):
             case "compute_anaemia_status":
                 anaemia_status = compute_anaemia_status(adolescent)
                 matched = bool(
-                    self.expected_value) and anaemia_status and self.expected_value.strip() == str(anaemia_status.value).lower()
+                    self.expected_value) and anaemia_status and self.expected_value.lower().strip() == str(anaemia_status.value).lower()
             case "time_difference_between":
                 hours_spent = compute_time_difference(
                     adolescent, self.question1, self.question2)
@@ -310,7 +310,7 @@ class FlagCondition(UpstreamSyncBaseModel):
             case "compute_vision_status":
                 vision_status = compute_vision_status(adolescent, self.question1)
                 matched = bool(
-                    self.expected_value) and vision_status and self.expected_value.strip() == str(vision_status.value).lower()
+                    self.expected_value) and vision_status and self.expected_value.lower().strip() == vision_status.lower()
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched
         return matched
