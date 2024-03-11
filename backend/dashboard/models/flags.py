@@ -1,6 +1,6 @@
 import sys
 from django.db import models
-from dashboard.models.conditions_until_functions import (
+from backend.dashboard.models.conditions_util_functions import (
     compute_bmi_sd_function,
     compute_grip_test,
     compute_anaemia_status,
