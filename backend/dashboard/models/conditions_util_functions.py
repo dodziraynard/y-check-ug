@@ -73,6 +73,7 @@ def compute_bmi_sd_function(adolescent: Adolescent) -> int:
     ages_in_months_array = [10*12 + 6, 11*12 + 6, 12*12 + 6, 13 *
                             12 + 6, 14*12 + 6, 15*12 + 6, 16*12 + 6, 17*12 + 6, 18*12 + 6]
     female_bmi_matrix = [
+     #   -3     -2    1     2  
         [12.5, 13.7, 19.4, 23.1],
         [12.9, 14.1, 20.3, 24.3],
         [13.4, 14.7, 21.3, 25.6],
@@ -86,6 +87,7 @@ def compute_bmi_sd_function(adolescent: Adolescent) -> int:
     ]
 
     male_bmi_matrix = [
+     #   -3     -2    1     2  
         [12.9, 13.9, 18.8, 21.9],
         [13.2, 14.2, 19.5, 23.0],
         [13.6, 14.7, 20.4, 24.2],

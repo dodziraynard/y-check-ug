@@ -22,12 +22,12 @@ class SchoolFlaggingTestCase(TestCase):
             question_id__in=self.questions_ids).count() == len(self.questions_ids)
 
     def test_school_green_flag1(self):
-        """Test that if Q203a is "Often not dangerous", school is flagged green."""
+        """Test that if Q203a is "Often dangerous", school is flagged green."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203a"]
-        responses = ["Often not dangerous"]
+        responses = ["Often dangerous"]
 
         # WHEN:
         # Respond
@@ -48,13 +48,13 @@ class SchoolFlaggingTestCase(TestCase):
             adolescent=self.adolescent,
             label__name="SCHOOL").first().get_final_colour() == Colors.GREEN.value
 
-    def test_school_green_flag2(self):
-        """Test that if Q203a is "Always not dangerous", school is flagged green."""
+    def test_school_red_flag2(self):
+        """Test that if Q203a is "Always dangerous", school is flagged red."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203a"]
-        responses = ["Always not dangerous"]
+        responses = ["Always dangerous"]
 
         # WHEN:
         # Respond
@@ -73,15 +73,15 @@ class SchoolFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SCHOOL").first().get_final_colour() == Colors.GREEN.value
+            label__name="SCHOOL").first().get_final_colour() == Colors.RED.value
 
     def test_school_orange_flag1(self):
-        """Test that if Q203a is "Sometimes not dangerous", school is flagged orange."""
+        """Test that if Q203a is "Sometimes dangerous", school is flagged orange."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203a"]
-        responses = ["Sometimes not dangerous"]
+        responses = ["Sometimes dangerous"]
 
         # WHEN:
         # Respond
@@ -102,13 +102,13 @@ class SchoolFlaggingTestCase(TestCase):
             adolescent=self.adolescent,
             label__name="SCHOOL").first().get_final_colour() == Colors.ORANGE.value
 
-    def test_school_red_flag1(self):
-        """Test that if Q203a is "Never", school is flagged red."""
+    def test_school_green_flag1(self):
+        """Test that if Q203a is "Not dangerous", school is flagged green."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203a"]
-        responses = ["Never"]
+        responses = ["Not dangerous"]
 
         # WHEN:
         # Respond
@@ -127,7 +127,7 @@ class SchoolFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SCHOOL").first().get_final_colour() == Colors.RED.value
+            label__name="SCHOOL").first().get_final_colour() == Colors.GREEN.value
 
     def test_school_red_flag2(self):
         """Test that if Q204 is "No", school is flagged red."""

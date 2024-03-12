@@ -22,12 +22,12 @@ class BodyFlaggingTestCase(TestCase):
             question_id__in=self.questions_ids).count() == len(self.questions_ids)
 
     def test_body_red_flag1(self):
-        """Test that if Q301 is "Angry", body is flagged red."""
+        """Test that if Q301 is "Bad", body is flagged red."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q301"]
-        responses = ["Angry"]
+        responses = ["Bad"]
 
         # WHEN:
         # Respond

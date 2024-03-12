@@ -22,12 +22,12 @@ class WorkFlaggingTestCase(TestCase):
             question_id__in=self.questions_ids).count() == len(self.questions_ids)
 
     def test_work_green_flag1(self):
-        """Test that if Q203b is "Often not dangerous", work is flagged green."""
+        """Test that if Q203b is "Often dangerous", work is flagged green."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203b"]
-        responses = ["Often not dangerous"]
+        responses = ["Often dangerous"]
 
         # WHEN:
         # Respond
@@ -48,13 +48,13 @@ class WorkFlaggingTestCase(TestCase):
             adolescent=self.adolescent,
             label__name="WORK").first().get_final_colour() == Colors.GREEN.value
 
-    def test_work_green_flag2(self):
-        """Test that if Q203b is "Always not dangerous", work is flagged green."""
+    def test_work_red_flag2(self):
+        """Test that if Q203b is "Always dangerous", work is flagged red."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203b"]
-        responses = ["Always not dangerous"]
+        responses = ["Always dangerous"]
 
         # WHEN:
         # Respond
@@ -73,15 +73,15 @@ class WorkFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="WORK").first().get_final_colour() == Colors.GREEN.value
+            label__name="WORK").first().get_final_colour() == Colors.RED.value
 
     def test_work_orange_flag1(self):
-        """Test that if Q203b is "Sometimes not dangerous", work is flagged orange."""
+        """Test that if Q203b is "Sometimes dangerous", work is flagged orange."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203b"]
-        responses = ["Sometimes not dangerous"]
+        responses = ["Sometimes dangerous"]
 
         # WHEN:
         # Respond
@@ -102,13 +102,13 @@ class WorkFlaggingTestCase(TestCase):
             adolescent=self.adolescent,
             label__name="WORK").first().get_final_colour() == Colors.ORANGE.value
 
-    def test_work_red_flag1(self):
-        """Test that if Q203b is "Never", work is flagged red."""
+    def test_work_green_flag1(self):
+        """Test that if Q203b is "Not dangerous", work is flagged green."""
 
         # GIVEN:
         adolescent = self.adolescent
         questions_ids = ["Q203b"]
-        responses = ["Never"]
+        responses = ["Not dangerous"]
 
         # WHEN:
         # Respond
@@ -127,7 +127,7 @@ class WorkFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="WORK").first().get_final_colour() == Colors.RED.value
+            label__name="WORK").first().get_final_colour() == Colors.GREEN.value
 
     def test_work_red_flag2(self):
         """Test that if Q204b is "No", work is flagged red."""

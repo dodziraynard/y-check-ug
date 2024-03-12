@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -373,7 +374,7 @@ fun SimpleInputResponse(
         newResponse.value = ""
     } else if (currentQuestion.responseRegex?.isNotEmpty() == true) {
         val message = currentQuestion.regexErrorMessage ?: "Please enter a valid value here."
-        if (!textState.value.text.matches(Regex(currentQuestion.responseRegex))) {
+        if (!(Regex("\\d+(\\.\\d+)?/\\d+(\\.\\d+)?").matches(textState.value.text))) {
             errorMessage.value = TextFieldValue(message)
             newResponse.value = ""
         }
