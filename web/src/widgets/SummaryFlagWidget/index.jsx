@@ -397,7 +397,7 @@ function SummaryFlagWidget() {
                                             otherFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
                                                 return <tr key={index}>
-                                                    <td style={{verticalAlign:"middle"}}>{flag.name}</td>
+                                                    <td style={{ verticalAlign: "middle" }}>{flag.name} <p className="text-muted">{flag.context}</p> </td>
                                                     <td style={{verticalAlign:"middle"}}>
                                                         <div className="d-flex">
                                                             <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
