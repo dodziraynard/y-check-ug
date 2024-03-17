@@ -8,7 +8,7 @@ function UserProfileWidget() {
     return (
         <Fragment>
             <BreadCrumb items={[{ "name": "User Profile", "url": "" }]} />
-            <div className="user-profile-widget row">
+            <div className="page-user-profile user-profile-widget row">
                 <section className="col-md-4 menu">
                     <NavLink className="profile-menu-item" to="bio/data"><i className="bi bi-person"></i> Bio Data 
                     <span  className="d-flex text-black">Update your Personal Info</span>

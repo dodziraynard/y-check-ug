@@ -4,7 +4,7 @@ import './style.scss';
 import { BASE_API_URI } from '../../utils/constants';
 import Flag from '../../components/Flag';
 import useAxios from '../../app/hooks/useAxios';
-import { Button, Spinner } from '@chakra-ui/react';
+import { Spinner } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 
 function TreatmentWidget() {

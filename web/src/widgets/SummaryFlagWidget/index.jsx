@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
 import { Button, Spinner, Text, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
+import SummaryFlagLegend from '../../components/SummaryFlagLegend';
 
 function SummaryFlagWidget() {
     const profileModalRef = useRef(null);
@@ -304,123 +305,144 @@ function SummaryFlagWidget() {
 
             <div className="patients-widget">
                 <BreadCrumb items={[{ "name": "Patients", "url": "/patients" }, { "name": "Summary", "url": "" }]} />
-                <section className="d-flex align-items-center">
-                    <h4> Summary Flags for:
+
+                <section className="page-summary">
+
+                    <section className="d-flex">
+                        <h4> Summary Flags for </h4>
                         {Boolean(adolescent) ?
-                            <Fragment>
-                                <Text className='tex-primary mx-3'>{adolescent.fullname}</Text>
+                            <div className='d-flex'>
+                                <h4 className='h4 text-primary mx-3'><strong>{adolescent.fullname}</strong></h4>
                                 <Button size='sm' onClick={() => profileModal?.show()}>View Profile</Button>
-                            </Fragment>
+                            </div>
                             : ""}
-                    </h4>
-                </section>
-                {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
+                    </section>
 
-                <section className='my-5'>
-                    <DropDownContainer header={"Problematic Flags"} isOpen={true}>
-                        <div className="col-md-10 mx-auto">
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th>Parameter</th>
-                                        <th>Flag</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {Boolean(problematicFlags?.length) ?
-                                        problematicFlags?.map((flag, index) => {
-                                            const mutable = !Boolean(flag.updated_color_code);
-                                            return <tr key={index}>
-                                                <td>{flag.name}</td>
-                                                <td>
-                                                    <div className="d-flex">
-                                                        <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
-                                                            <Flag
-                                                                color={flag.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
-                                                                mutable={mutable}
-                                                                onColorChange={(color) => onColorChange(color, flag.id)} />
-                                                        </Tooltip>
-                                                        <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
-                                                            {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
-                                                        </Tooltip>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
-                                                </td>
-                                            </tr>
-                                        })
-                                        :
-                                        <tr>
-                                            <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </DropDownContainer>
-
-                    <DropDownContainer header={"Other Flags"} isOpen={false}>
-                        <div className="col-md-10 mx-auto">
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th>Parameter</th>
-                                        <th>Flag</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {Boolean(otherFlags?.length) ?
-                                        otherFlags?.map((flag, index) => {
-                                            const mutable = !Boolean(flag.updated_color_code);
-                                            return <tr key={index}>
-                                                <td>{flag.name}</td>
-                                                <td>
-                                                    <div className="d-flex">
-                                                        <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
-                                                            <Flag
-                                                                color={flag.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
-                                                                mutable={mutable}
-                                                                onColorChange={(color) => onColorChange(color, flag.id)} />
-                                                        </Tooltip>
-                                                        <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
-                                                            {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
-                                                        </Tooltip>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
-                                                </td>
-                                            </tr>
-                                        })
-                                        :
-                                        <tr>
-                                            <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </DropDownContainer>
-
-                    <hr />
-                    <div className='d-flex justify-content-end'>
-                        <Link to={"referrals?new=true"}>
-                            <Button className="d-flex mx-2" >
-                                <i className="bi bi-plus me-2"></i>
-                                New Referral
-                            </Button>
-                        </Link>
-
-                        <Link to={"referrals"}>
-                            <Button className="d-flex">
-                                <i className="bi bi-h-circle me-2"></i>
-                                View referrals
-                            </Button>
-                        </Link>
+                    <div>
+                        <p>The flags have been grouped into two categories:
+                            <strong className='mx-1'>Flagged Conditions</strong> and
+                            <strong className='mx-1'>Unflagged Conditions</strong></p>
                     </div>
+
+                    <div className='my-3'>
+                        <strong>Legend</strong>
+                        <div className="d-flex my-2">
+                            <SummaryFlagLegend className="mx-2" colour={"#ff0000"} label={"Vulnerable"} />
+                            <SummaryFlagLegend className="mx-2" colour={"#ffa500"} label={"Moderate"} />
+                            <SummaryFlagLegend className="mx-2" colour={"#00ff00"} label={"Good"} />
+                            <SummaryFlagLegend className="mx-2" colour={"#3c4e77"} label={"No responses"} />
+                            <SummaryFlagLegend className="mx-2" colour={"#808080"} label={"Not applicable"} />
+                        </div>
+                    </div>
+
+                    {isLoading ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
+
+                    <section className='mb-5'>
+                        <DropDownContainer header={"Flagged Conditions"} isOpen={true}>
+                            <div className="col-md-10 mx-auto">
+                                <table className='table'>
+                                    <thead>
+                                        <tr>
+                                            <th>Parameter</th>
+                                            <th>Flag</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Boolean(problematicFlags?.length) ?
+                                            problematicFlags?.map((flag, index) => {
+                                                const mutable = !Boolean(flag.updated_color_code);
+                                                return <tr key={index}>
+                                                    <td>{flag.name}</td>
+                                                    <td>
+                                                        <div className="d-flex">
+                                                            <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
+                                                                <Flag
+                                                                    color={flag.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
+                                                                    mutable={mutable}
+                                                                    onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                            </Tooltip>
+                                                            <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
+                                                                {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
+                                                            </Tooltip>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
+                                                    </td>
+                                                </tr>
+                                            })
+                                            :
+                                            <tr>
+                                                <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </DropDownContainer>
+
+                        <DropDownContainer header={"Unflagged Conditions"} isOpen={false}>
+                            <div className="col-md-10 mx-auto">
+                                <table className='table'>
+                                    <thead>
+                                        <tr>
+                                            <th>Parameter</th>
+                                            <th>Flag</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Boolean(otherFlags?.length) ?
+                                            otherFlags?.map((flag, index) => {
+                                                const mutable = !Boolean(flag.updated_color_code);
+                                                return <tr key={index}>
+                                                    <td>{flag.name}</td>
+                                                    <td>
+                                                        <div className="d-flex">
+                                                            <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
+                                                                <Flag
+                                                                    color={flag.responses?.length > 0 ? (adolescentResponded[flag.id] ? flag.computed_color_code : "#3c4e77") : "#808080"}
+                                                                    mutable={mutable}
+                                                                    onColorChange={(color) => onColorChange(color, flag.id)} />
+                                                            </Tooltip>
+                                                            <Tooltip hasArrow label={flag.comment} bg='gray.600' color='white'>
+                                                                {Boolean(flag.updated_color_code) ? <Flag color={flag.updated_color_code} onColorChange={(color) => onColorChange(color, flag.id)} /> : ""}
+                                                            </Tooltip>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
+                                                    </td>
+                                                </tr>
+                                            })
+                                            :
+                                            <tr>
+                                                <td colSpan={3}><p className="d-block text-center text-warning">No data found.</p></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </DropDownContainer>
+
+                        <hr />
+                        <div className='d-flex justify-content-end'>
+                            <Link to={"referrals?new=true"}>
+                                <Button className="d-flex mx-2" >
+                                    <i className="bi bi-plus me-2"></i>
+                                    New Referral
+                                </Button>
+                            </Link>
+
+                            <Link to={"referrals"}>
+                                <Button className="d-flex">
+                                    <i className="bi bi-h-circle me-2"></i>
+                                    View referrals
+                                </Button>
+                            </Link>
+                        </div>
+                    </section>
                 </section>
             </div >
         </Fragment>

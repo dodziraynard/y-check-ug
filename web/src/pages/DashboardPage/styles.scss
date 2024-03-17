@@ -120,6 +120,7 @@
     padding-inline: 2em;
     padding-top: 1em;
     min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.1);
 
     // Navbar
     .nav {
@@ -184,7 +185,7 @@
                 height: calc(#{$nav-height} - 1.5em);
             }
         }
-        .profile{
+        .profile {
             background-color: $background-light;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             padding: 0.5em 1em;
@@ -192,10 +193,9 @@
             &:hover {
                 background-color: rgba(0, 0, 0, 0.1);
             }
-    
         }
     }
-   
+
     .breadcrumb {
         background-color: rgba($primary-color, 0.9);
         color: $white;

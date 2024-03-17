@@ -1,10 +1,11 @@
+import './style.scss';
 import {
     useLazyGetGroupsQuery,
     usePutUsersMutation,
     useDeleteUsersMutation,
     useLazyGetAllFacilitiesQuery,
 } from '../../features/resources/resources-api-slice';
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     setGroups as setStoreGroups,
 } from '../../features/global/global-slice';
@@ -389,7 +390,7 @@ function UsersWidget() {
                 </div>
             </div>
 
-            <div className="">
+            <div className="page-users">
                 <div className="d-flex justify-content-between" style={{ "position": "sticky", "top": "0em", "zIndex": "1", "background": "white" }}>
                     <p>USERS</p>
                     <div className="d-flex justify-content-end">

@@ -8,7 +8,7 @@ function SetupWidget() {
     return (
         <Fragment>
             <BreadCrumb items={[{ "name": "Setup", "url": "" }]} />
-            <div className="setup-widget row">
+            <div className="page-setup setup-widget row">
                 <section className="col-md-2 menu">
                     <NavLink className="setup-menu-item" to="facilities"><i className="bi bi-h-circle"></i> Facilities</NavLink>
                     <NavLink className="setup-menu-item" to="services"><i className="bi bi-gear"></i> Services</NavLink>

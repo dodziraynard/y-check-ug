@@ -98,7 +98,7 @@ function DashboardPage() {
 
                 <h6 className="header mt-4">HOME</h6>
 
-                <NavLink to="/dashboard">
+                <NavLink to="/dashboard" end>
                     <div className="menu-item" id="dashboard">
                         <i className='icon bi bi-app'></i>
                         <span className="label">Dashboard</span>

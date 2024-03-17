@@ -2,7 +2,8 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css");
 @import "./theme-variables.scss";
 
-body, * {
+body,
+* {
   margin: 0;
   font-family: "Helvetica", "Arial", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -55,4 +56,10 @@ a {
   height: 2.5em;
   width: 2.5em;
   border-radius: 100%;
+}
+
+[class*="page-"] {
+  background-color: white;
+  padding: 1em;
+  border-radius: 0.4em;
 }

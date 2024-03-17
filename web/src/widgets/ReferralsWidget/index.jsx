@@ -12,8 +12,8 @@ function ReferralsWidget() {
             {/* Content */}
             <div className="patients-widget">
                 <BreadCrumb items={[{ "name": "Referrals", "url": "" }]} />
-                <h4>Referrals</h4>
-                <section>
+                <section className='page-referrals'>
+                    <h4>Referrals</h4>
                     <div className="col-md-11 mx-auto">
                         <TableView
                             responseDataAttribute="referrals"

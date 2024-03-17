@@ -11,8 +11,9 @@ function TreatmentsWidget() {
             {/* Content */}
             <div className="treatments-widget">
                 <BreadCrumb items={[{ "name": "Treatments", "url": "" }]} />
-                <h4>Treatments</h4>
-                <section>
+                
+                <section className='page-treatments '>
+                    <h4>Treatments</h4>
                     <div className="col-md-11 mx-auto">
                         <TableView
                             responseDataAttribute="treatments"

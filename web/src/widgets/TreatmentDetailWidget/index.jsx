@@ -84,8 +84,7 @@ function TreatmentDetailWidget() {
         <div className="referral-detail-widget">
             <BreadCrumb items={[{ "name": "Treatment", "url": "/treatments" }, { "name": referral?.facility_name, "url": "/treatments" }, { "name": referral?.adolescent?.fullname, "url": `/patients/${referral?.adolescent?.pid}/summary` }]} />
             <h4>Treatment Detail</h4>
-            <section className='col-md-8 mx-auto'>
-
+            <section className='page-treatment-detail  col-md-8 mx-auto'>
                 <div className='d-flex justify-content-center'>
                     <img src={adolescent?.photo_url} alt="Adolescent's photo" style={{ height: "250px" }} />
                 </div>
