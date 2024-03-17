@@ -29,6 +29,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
         "accounts.User", null=True, blank=True, on_delete=models.CASCADE)
+    context = models.TextField(null=True, blank=True)
 
     class Meta:
         constraints = [
@@ -308,7 +309,8 @@ class FlagCondition(UpstreamSyncBaseModel):
                     adolescent, self.question1, self.question2)
                 matched = self.range_min <= hours_spent <= self.range_max
             case "compute_vision_status":
-                vision_status = compute_vision_status(adolescent, self.question1)
+                vision_status = compute_vision_status(
+                    adolescent, self.question1)
                 matched = bool(
                     self.expected_value) and vision_status and self.expected_value.lower().strip() == vision_status.lower()
         if matched != None:

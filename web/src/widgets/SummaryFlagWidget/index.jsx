@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import Flag from '../../components/Flag';
 import { useParams } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
-import { Button, Spinner, Text, useToast, Tooltip } from '@chakra-ui/react';
+import { Button, Spinner, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import SummaryFlagLegend from '../../components/SummaryFlagLegend';
 
@@ -353,8 +353,8 @@ function SummaryFlagWidget() {
                                             problematicFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
                                                 return <tr key={index}>
-                                                    <td>{flag.name}</td>
-                                                    <td>
+                                                    <td style={{ verticalAlign: "middle" }}>{flag.name} <p className="text-muted">{flag.context}</p> </td>
+                                                    <td style={{ verticalAlign: "middle" }}>
                                                         <div className="d-flex">
                                                             <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
                                                                 <Flag
@@ -367,7 +367,7 @@ function SummaryFlagWidget() {
                                                             </Tooltip>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td style={{ verticalAlign: "middle" }}>
                                                         <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
                                                     </td>
                                                 </tr>
@@ -397,8 +397,8 @@ function SummaryFlagWidget() {
                                             otherFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
                                                 return <tr key={index}>
-                                                    <td>{flag.name}</td>
-                                                    <td>
+                                                    <td style={{verticalAlign:"middle"}}>{flag.name}</td>
+                                                    <td style={{verticalAlign:"middle"}}>
                                                         <div className="d-flex">
                                                             <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
                                                                 <Flag
@@ -411,7 +411,7 @@ function SummaryFlagWidget() {
                                                             </Tooltip>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td style={{verticalAlign:"middle"}}>
                                                         <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
                                                     </td>
                                                 </tr>
