@@ -36,6 +36,8 @@ function SummaryFlagWidget() {
     const [flagOverrideColor, setFlagOverrideColor] = useState(null)
     const [adolescentResponded, setAdolescentResponded] = useState({})
 
+    const [searchParam, setSearchParam] = useState("")
+    const [orignalFlagsResults, setOrignalFlagsResults] = useState([])
 
     useEffect(() => {
         getFlags()
@@ -58,20 +60,8 @@ function SummaryFlagWidget() {
 
     useEffect(() => {
         if (Boolean(responseData?.summary_flags)) {
-
-            let responseStatus = {}
-            responseData.summary_flags?.map((flag) => {
-                let answered = false
-
-                flag.responses?.map((response, _) => {
-                    if (Boolean(response.answers?.length)) {
-                        answered = true
-                    }
-                })
-                responseStatus[flag.id] = answered
-            })
-            setAdolescentResponded(responseStatus)
             setFlags(responseData.summary_flags)
+            setOrignalFlagsResults(responseData.summary_flags)
         }
     }, [responseData])
 
@@ -167,9 +157,34 @@ function SummaryFlagWidget() {
     }
 
     useEffect(() => {
+        if (searchParam?.length) {
+            let newFlags = orignalFlagsResults.filter(flag => flag.name?.toLowerCase()?.includes(searchParam?.toLowerCase()) === true)
+            setFlags(newFlags)
+        } else {
+            setFlags(orignalFlagsResults)
+        }
+    }, [searchParam, setSearchParam, orignalFlagsResults])
+
+
+    useEffect(() => {
+        if (flags) {
+            let responseStatus = {}
+            flags?.forEach((flag) => {
+                let answered = false
+                flag.responses?.forEach((response, _) => {
+                    if (Boolean(response.answers?.length)) {
+                        answered = true
+                    }
+                })
+                responseStatus[flag.id] = answered
+            })
+            setAdolescentResponded(responseStatus)
+        }
+
+        //  Separate flags
         const probFlags = []
         const othFlags = []
-        flags.forEach((flag) => {
+        flags?.forEach((flag) => {
             if ((flag.updated_color_code === FLAG_RED) || (flag.updated_color_code === null && flag.computed_color_code === FLAG_RED && adolescentResponded[flag.id])) {
                 probFlags.push(flag)
             } else {
@@ -178,7 +193,7 @@ function SummaryFlagWidget() {
         })
         setProblematicFlags(probFlags)
         setOtherFlags(othFlags)
-    }, [flags])
+    }, [flags, adolescentResponded])
 
     return (
         <Fragment>
@@ -328,14 +343,20 @@ function SummaryFlagWidget() {
                                 <strong className='mx-1'>Unflagged Conditions</strong></p>
                         </div>
 
-                        <div className='my-3'>
-                            <strong>Legend</strong>
-                            <div className="d-flex flex-wrap my-2">
-                                <SummaryFlagLegend className="mx-2" colour={"#ff0000"} label={"Vulnerable"} />
-                                <SummaryFlagLegend className="mx-2" colour={"#ffa500"} label={"Moderate"} />
-                                <SummaryFlagLegend className="mx-2" colour={"#00ff00"} label={"Good"} />
-                                <SummaryFlagLegend className="mx-2" colour={"#3c4e77"} label={"No responses"} />
-                                <SummaryFlagLegend className="mx-2" colour={"#808080"} label={"Not applicable"} />
+                        <div className='my-3 d-flex flex-wrap justify-content-between'>
+                            <div>
+                                <strong>Legend</strong>
+                                <div className="d-flex flex-wrap my-2">
+                                    <SummaryFlagLegend className="mx-2" colour={"#ff0000"} label={"Vulnerable"} />
+                                    <SummaryFlagLegend className="mx-2" colour={"#ffa500"} label={"Moderate"} />
+                                    <SummaryFlagLegend className="mx-2" colour={"#00ff00"} label={"Good"} />
+                                    <SummaryFlagLegend className="mx-2" colour={"#3c4e77"} label={"No responses"} />
+                                    <SummaryFlagLegend className="mx-2" colour={"#808080"} label={"Not applicable"} />
+                                </div>
+                            </div>
+                            <div>
+                                <strong>Search</strong>
+                                <input type="search" placeholder='Parameter name ...' value={searchParam} onChange={(event) => setSearchParam(event.target.value)} className='form-control' />
                             </div>
                         </div>
                     </div>
@@ -357,7 +378,7 @@ function SummaryFlagWidget() {
                                         {Boolean(problematicFlags?.length) ?
                                             problematicFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
-                                                return <tr key={index}>
+                                                return <tr key={`${index}-${flag.name}`}>
                                                     <td style={{ verticalAlign: "middle" }}>{flag.name} <p className="text-muted">{flag.context}</p> </td>
                                                     <td style={{ verticalAlign: "middle" }}>
                                                         <div className="d-flex">
@@ -401,7 +422,7 @@ function SummaryFlagWidget() {
                                         {Boolean(otherFlags?.length) ?
                                             otherFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
-                                                return <tr key={index}>
+                                                return <tr key={`${index}-${flag.name}`}>
                                                     <td style={{ verticalAlign: "middle" }}>{flag.name} <p className="text-muted">{flag.context}</p> </td>
                                                     <td style={{ verticalAlign: "middle" }}>
                                                         <div className="d-flex">
