@@ -374,9 +374,12 @@ fun SimpleInputResponse(
         newResponse.value = ""
     } else if (currentQuestion.responseRegex?.isNotEmpty() == true) {
         val message = currentQuestion.regexErrorMessage ?: "Please enter a valid value here."
-        if (!(Regex("\\d+(\\.\\d+)?/\\d+(\\.\\d+)?").matches(textState.value.text))) {
+        val pattern = currentQuestion.responseRegex.toRegex()
+        if (!(pattern.matches(textState.value.text))) {
             errorMessage.value = TextFieldValue(message)
             newResponse.value = ""
+        } else {
+            errorMessage.value = TextFieldValue("")
         }
     } else {
         errorMessage.value = TextFieldValue("")

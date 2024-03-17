@@ -98,14 +98,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        val input1 = "6/4"
-        val pat = "\\d+(\\.\\d+)?/\\d+(\\.\\d+)?"
-        val regex = Regex(pat)
-        Log.d("REGEX", "Input 1 matches: ${regex.matches(input1)}")
-
-
-
         val prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         val isNew = prefs.getBoolean(Constants.IS_NEW_USER, true)
         val token = prefs.getString(Constants.USER_TOKEN, "")

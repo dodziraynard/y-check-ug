@@ -1,5 +1,6 @@
 import logging
 import math
+from typing import List
 from rest_framework import permissions
 from ycheck.utils.functions import apply_filters
 from dashboard.forms import FacilityForm
@@ -61,7 +62,7 @@ class GetSummaryFlags(generics.GenericAPIView):
 
         # Compute flags
         SummaryFlag.compute_flag_color(adolescent=adolescent)
-        
+
         # Retrieve all flags
         flags = SummaryFlag.objects.filter(
             adolescent=adolescent).order_by("label__name")
@@ -138,12 +139,17 @@ class TreatmentsAPI(SimpleCrudMixin):
     Permform CRUD on treatment object.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
-    required_permissions = ["setup.access_all_patients"]
+    required_permissions = ["setup.access_treatments"]
 
     serializer_class = TreatmentSerializer
     model_class = Treatment
     response_data_label = "treatment"
     response_data_label_plural = "treatments"
+
+    def modify_response_data(self, treatments: List[Treatment], request=None):
+        if not (request and request.user.has_perm("setup.access_all_treatments")):
+            treatments = treatments.filter(created_by=request.user)
+        return treatments
 
 
 class AdolescentReferrals(generics.GenericAPIView):
@@ -159,6 +165,9 @@ class AdolescentReferrals(generics.GenericAPIView):
             return Response({"error_message": f"{pid} not found."})
 
         referrals = Referral.objects.filter(adolescent=adolescent)
+        if not request.user.has_perm("setup.access_all_referrals"):
+            referrals = referrals.filter(facility=request.user.facility)
+
         referrals = self.serializer_class(referrals, many=True).data
         repsonse_data = {
             "referrals": referrals,
@@ -216,7 +225,7 @@ class MyReferrals(generics.GenericAPIView):
         query = request.GET.get("query") or request.GET.get("q")
         filters = request.GET.getlist("filters")
         if not request.user.has_perm("setup.access_all_referrals"):
-            referrals.filter(facility=request.user.facility)
+            referrals = referrals.filter(facility=request.user.facility)
 
         if query and hasattr(Referral, "generate_query"):  # type: ignore
             referrals = referrals.filter(
@@ -265,7 +274,11 @@ class ReferralDetail(generics.GenericAPIView):
     serializer_class = ReferralSerializer
 
     def get(self, request, referral_id, *args, **kwargs):
-        referral = Referral.objects.filter(id=referral_id).first()
+        referrals = Referral.objects.all()
+        if not request.user.has_perm("setup.access_all_referrals"):
+            referrals = referrals.filter(facility=request.user.facility)
+
+        referral = referrals.filter(id=referral_id).first()
         if not referral:
             return Response({"error_message": f"Referral not found."})
         if referral.status == ReferralStatus.NEW.value:
@@ -301,7 +314,11 @@ class ReferralTreatment(generics.GenericAPIView):
     serializer_class = TreatmentSerializer
 
     def get(self, request, referral_id, *args, **kwargs):
-        referral = Referral.objects.filter(id=referral_id).first()
+        referrals = Referral.objects.all()
+        if not request.user.has_perm("setup.access_all_referrals"):
+            referrals = referrals.filter(facility=request.user.facility)
+
+        referral = referrals.filter(id=referral_id).first()
         if not referral:
             return Response({"error_message": f"Referral not found."})
 

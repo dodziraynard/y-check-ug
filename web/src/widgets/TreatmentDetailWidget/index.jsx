@@ -224,7 +224,7 @@ function TreatmentDetailWidget() {
                     </div>
 
                     <div className="form-group my-3">
-                        <Link to='/treatments'><Button>Back</Button></Link>
+                        <Link to='/dashboard/treatments'><Button>Back</Button></Link>
                     </div>
                 </div>
             </section>

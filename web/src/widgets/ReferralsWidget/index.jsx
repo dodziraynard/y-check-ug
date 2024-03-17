@@ -19,7 +19,7 @@ function ReferralsWidget() {
                             responseDataAttribute="referrals"
                             dataSourceUrl={`${BASE_API_URI}/my-referrals/`}
                             filters={[
-                                { key: `status:new`, value: `New` },
+                                { key: `status:new`, value: `New`, defaultValue: true },
                                 { key: `status:review`, value: `Review` },
                                 { key: `status:completed`, value: `Completed` },
                             ]}

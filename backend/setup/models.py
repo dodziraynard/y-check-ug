@@ -59,8 +59,10 @@ class SetupPerm(models.Model):
             ('view_dashboard', 'Can view dashboard'),
             ('view_system_configuration', 'Can view system configuration'),
             ("access_all_referrals", "Can access all referrals"),
+            ("access_referrals", "Can access referrals menu"),
             ("access_all_patients", "Can access all patients"),
-            ("access_treatments", "Can access all treatment records"),
+            ("access_all_treatments", "Can access all treatment records"),
+            ("access_treatments", "Can access treatments menu"),
             ("access_reports", "Can generate/access reports menu"),
 
             # User
