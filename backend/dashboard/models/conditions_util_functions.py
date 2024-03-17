@@ -128,7 +128,7 @@ def compute_bmi_sd_function(adolescent: Adolescent) -> int:
     # Add BMI interpretation to summary
     # flag context
     context = f"""
-        Computed BMI: {bmi}; {interpretation}
+        Computed BMI: {bmi}kg/m², {interpretation}
     """
     from dashboard.models.flags import SummaryFlag # Avoid ciruclar import
     summary_flag = SummaryFlag.objects.filter(

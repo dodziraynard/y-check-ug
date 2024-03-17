@@ -216,8 +216,12 @@ function SummaryFlagWidget() {
                                         <strong className="col-md-8 text">{adolescent?.other_names}</strong>
                                     </div>
                                     <div className="row align-items-center">
-                                        <h6 className="col-md-4 text-muted">VISIT TYPE</h6>
-                                        <strong className="col-md-8 text">{adolescent?.visit_type}</strong>
+                                        <h6 className="col-md-4 text-muted">STUDY PHASE</h6>
+                                        <strong className="col-md-8 text">{adolescent?.study_phase}</strong>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <h6 className="col-md-4 text-muted">CHECK-UP REASON</h6>
+                                        <strong className="col-md-8 text">{adolescent?.check_up_reason}</strong>
                                     </div>
                                     <div className="row align-items-center">
                                         <h6 className="col-md-4 text-muted">ADOLESCENT TYPE</h6>
@@ -307,31 +311,32 @@ function SummaryFlagWidget() {
                 <BreadCrumb items={[{ "name": "Patients", "url": "/patients" }, { "name": "Summary", "url": "" }]} />
 
                 <section className="page-summary">
+                    <div className='py-3' style={{ position: "sticky", top: "4em", background: "white", zIndex: "3" }}>
+                        <section className="d-flex flex-wrap">
+                            <h4> Summary Flags for </h4>
+                            {Boolean(adolescent) ?
+                                <div className='d-flex'>
+                                    <h4 className='h4 text-primary mx-3'><strong>{adolescent.fullname}</strong></h4>
+                                    <Button size='sm' onClick={() => profileModal?.show()}>View Profile</Button>
+                                </div>
+                                : ""}
+                        </section>
 
-                    <section className="d-flex">
-                        <h4> Summary Flags for </h4>
-                        {Boolean(adolescent) ?
-                            <div className='d-flex'>
-                                <h4 className='h4 text-primary mx-3'><strong>{adolescent.fullname}</strong></h4>
-                                <Button size='sm' onClick={() => profileModal?.show()}>View Profile</Button>
+                        <div>
+                            <p>The flags have been grouped into two categories:
+                                <strong className='mx-1'>Flagged Conditions</strong> and
+                                <strong className='mx-1'>Unflagged Conditions</strong></p>
+                        </div>
+
+                        <div className='my-3'>
+                            <strong>Legend</strong>
+                            <div className="d-flex flex-wrap my-2">
+                                <SummaryFlagLegend className="mx-2" colour={"#ff0000"} label={"Vulnerable"} />
+                                <SummaryFlagLegend className="mx-2" colour={"#ffa500"} label={"Moderate"} />
+                                <SummaryFlagLegend className="mx-2" colour={"#00ff00"} label={"Good"} />
+                                <SummaryFlagLegend className="mx-2" colour={"#3c4e77"} label={"No responses"} />
+                                <SummaryFlagLegend className="mx-2" colour={"#808080"} label={"Not applicable"} />
                             </div>
-                            : ""}
-                    </section>
-
-                    <div>
-                        <p>The flags have been grouped into two categories:
-                            <strong className='mx-1'>Flagged Conditions</strong> and
-                            <strong className='mx-1'>Unflagged Conditions</strong></p>
-                    </div>
-
-                    <div className='my-3'>
-                        <strong>Legend</strong>
-                        <div className="d-flex my-2">
-                            <SummaryFlagLegend className="mx-2" colour={"#ff0000"} label={"Vulnerable"} />
-                            <SummaryFlagLegend className="mx-2" colour={"#ffa500"} label={"Moderate"} />
-                            <SummaryFlagLegend className="mx-2" colour={"#00ff00"} label={"Good"} />
-                            <SummaryFlagLegend className="mx-2" colour={"#3c4e77"} label={"No responses"} />
-                            <SummaryFlagLegend className="mx-2" colour={"#808080"} label={"Not applicable"} />
                         </div>
                     </div>
 
@@ -398,7 +403,7 @@ function SummaryFlagWidget() {
                                                 const mutable = !Boolean(flag.updated_color_code);
                                                 return <tr key={index}>
                                                     <td style={{ verticalAlign: "middle" }}>{flag.name} <p className="text-muted">{flag.context}</p> </td>
-                                                    <td style={{verticalAlign:"middle"}}>
+                                                    <td style={{ verticalAlign: "middle" }}>
                                                         <div className="d-flex">
                                                             <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>
                                                                 <Flag
@@ -411,7 +416,7 @@ function SummaryFlagWidget() {
                                                             </Tooltip>
                                                         </div>
                                                     </td>
-                                                    <td style={{verticalAlign:"middle"}}>
+                                                    <td style={{ verticalAlign: "middle" }}>
                                                         <Button size={"sm"} onClick={() => showResponses(flag)}>View responses</Button>
                                                     </td>
                                                 </tr>
