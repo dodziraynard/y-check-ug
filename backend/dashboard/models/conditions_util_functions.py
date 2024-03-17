@@ -113,7 +113,7 @@ def compute_bmi_sd_function(adolescent: Adolescent) -> int:
         if height_value and weight_value:
             height = height_value[0]  # Height is recorded in cm.
             weight = weight_value[0]  # Weight is recorded in kg.
-            bmi = weight / (height/100)**2
+            bmi = round(weight / (height/100)**2, 2)
 
     if not bmi:
         return sys.maxsize
