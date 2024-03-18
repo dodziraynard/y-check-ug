@@ -41,7 +41,7 @@ class UpstreamSyncBaseModel(models.Model):
         values = []
         fields = sorted(list(self._meta.fields), key=lambda a: a.name)
         fields = list(filter(lambda a: a.name not in [
-                      "updated_at", "updated_at", "localnode", "synced", "content_hash"], fields))
+                      "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
         for field in fields:
             values.extend([field.name, str(getattr(self, field.name))])
         return hashlib.sha256(".".join(values).encode()).hexdigest()
@@ -116,10 +116,6 @@ class UpstreamSyncBaseModel(models.Model):
             image_io = BytesIO()
             image.save(image_io, "jpeg", quality=100)
             file = files.File(image_io, filename)
-
-            current_image = getattr(self, field_name)
-            if current_image:
-                current_image.delete()
             getattr(self, field_name).save(filename, file)
             logger.debug("Saved %s", getattr(self, field_name).url)
         else:
@@ -133,11 +129,6 @@ class UpstreamSyncBaseModel(models.Model):
         filename = source_url.split("/")[-1]
         if response.status_code == 200:
             file = files.File(ContentFile(response.content), filename)
-
-            current_file = getattr(self, field_name)
-            if current_file:
-                current_file.delete()
-
             getattr(self, field_name).save(filename, file)
             logger.debug("Saved %s", getattr(self, field_name).url)
         else:

@@ -122,12 +122,12 @@ def download_questions_from_upstream():
         config.save()
         response = requests.get(url)
         if response.status_code == 200:
-            users = response.json().get("data")
-            total_users = len(users)
-            for index, user_dict in enumerate(users, 1):
+            questions = response.json().get("data")
+            total_questions = len(questions)
+            for index, question_dict in enumerate(questions, 1):
                 UpstreamSyncBaseModel.deserialise_into_object(
-                    Question, user_dict)
-                config.questions_download_status_message = f"Downloaded {index}/{total_users}, {int(index/total_users*100)}%"
+                    Question, question_dict)
+                config.questions_download_status_message = f"Downloaded {index}/{total_questions}, {int(index/total_questions*100)}%"
                 config.save()
 
             options_donwnloaded = download_entities_from_upstream(

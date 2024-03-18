@@ -1,6 +1,7 @@
 from django.db import models
 from functools import reduce
-from django.utils.timezone import make_aware
+
+from ycheck.utils.storage import OverwriteStorage
 from .mixin import UpstreamSyncBaseModel
 from io import BytesIO
 from PIL import Image as PillowImage, ImageOps
@@ -27,7 +28,8 @@ class Adolescent(UpstreamSyncBaseModel):
     other_names = models.CharField(max_length=50, db_index=True)
     study_phase = models.CharField(max_length=50, blank=True, null=True)
     consent = models.CharField(max_length=100, blank=True, null=True)
-    picture = models.ImageField(upload_to='images/', blank=True, null=True)
+    picture = models.ImageField(
+        upload_to='images/',  storage=OverwriteStorage(), blank=True, null=True)
     dob = models.DateTimeField(null=True, blank=True)
     check_up_location = models.CharField(max_length=200)
     check_up_reason = models.CharField(max_length=200, null=True, blank=True)
@@ -93,7 +95,8 @@ class Adolescent(UpstreamSyncBaseModel):
 class AdolescentActivityTime(UpstreamSyncBaseModel):
     timestamp = models.DateTimeField()
     activity_tag = models.CharField(max_length=100, db_index=True)
-    adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE, db_index=True)
+    adolescent = models.ForeignKey(
+        Adolescent, on_delete=models.CASCADE, db_index=True)
 
     def __str__(self) -> str:
         return f"{self.adolescent.get_name()} - {self.activity_tag}: {self.timestamp.strftime('%m/%d/%Y, %H:%M:%S')}"

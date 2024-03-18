@@ -1,5 +1,6 @@
 from django.db import models
 
+from ycheck.utils.storage import OverwriteStorage
 from ycheck.utils.functions import isnumber
 from .section import Section
 from ycheck.utils.constants import ResponseInputType
@@ -76,10 +77,12 @@ class Question(UpstreamSyncBaseModel):
     input_type = models.CharField(max_length=100, choices=INPUT_TYPES)
     answer_preamble = models.CharField(max_length=100, blank=True, null=True)
     apk_id = models.CharField(max_length=200, blank=True, null=True)
-    image = models.ImageField(upload_to='image/', blank=True, null=True)
-    audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
+    image = models.ImageField(
+        upload_to='image/', storage=OverwriteStorage(), blank=True, null=True)
+    audio_file = models.FileField(
+        upload_to='audios/',  storage=OverwriteStorage(), blank=True, null=True)
     audio_file_fat = models.FileField(
-        upload_to='audios/', blank=True, null=True)
+        upload_to='audios/', storage=OverwriteStorage(), blank=True, null=True)
     to_be_confirmed = models.BooleanField(default=False)
 
     # Useful if input_type is range slider
@@ -143,11 +146,13 @@ class Option(UpstreamSyncBaseModel):
     question = models.ForeignKey(
         Question, related_name="options", on_delete=models.CASCADE, db_index=True)
     value = models.CharField(max_length=200)
-    audio_file = models.FileField(upload_to='audios/', blank=True, null=True)
+    audio_file = models.FileField(
+        upload_to='audios/', storage=OverwriteStorage(), blank=True, null=True)
     audio_file_fat = models.FileField(
-        upload_to='audios/', blank=True, null=True)
+        upload_to='audios/',  storage=OverwriteStorage(), blank=True, null=True)
     context = models.CharField(max_length=200, null=True, blank=True)
-    image = models.ImageField(upload_to='image/', blank=True, null=True)
+    image = models.ImageField(
+        upload_to='image/', storage=OverwriteStorage(), blank=True, null=True)
     numeric_value = models.IntegerField(null=True, blank=True)
 
     def __str__(self) -> str:
