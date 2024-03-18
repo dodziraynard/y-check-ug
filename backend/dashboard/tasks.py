@@ -1,3 +1,5 @@
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
+from django.utils import timezone
 import json
 import logging
 import requests
@@ -271,3 +273,52 @@ def upload_adolescents():
 
     upload_entity_and_update_status(
         AdolescentActivityTime, "adolescentactivitytime", "summary_flag")
+
+
+schedule_every_5_hour, created = IntervalSchedule.objects.get_or_create(
+    every=5,
+    period=IntervalSchedule.HOURS,
+)
+
+schedule_every_2_minutes, created = IntervalSchedule.objects.get_or_create(
+    every=2,
+    period=IntervalSchedule.MINUTES,
+)
+
+
+def setup_period_tasks():
+    # Download setup data
+    if not PeriodicTask.objects.filter(task='dashboard.tasks.download_all_setup_data').exists():
+        PeriodicTask.objects.create(
+            interval=schedule_every_5_hour,
+            name='Download Setup Data',
+            task='dashboard.tasks.download_all_setup_data',
+            start_time=timezone.now()
+        )
+
+    # Upload adolescent
+    if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_adolescents').exists():
+        PeriodicTask.objects.create(
+            interval=schedule_every_2_minutes,
+            name='Upload Adolescent',
+            task='dashboard.tasks.upload_adolescents',
+            start_time=timezone.now()
+        )
+
+    # Upload referrals
+    if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_referrals').exists():
+        PeriodicTask.objects.create(
+            interval=schedule_every_2_minutes,
+            name='Upload Referrals',
+            task='dashboard.tasks.upload_referrals',
+            start_time=timezone.now()
+        )
+
+    # Upload treatments
+    if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_treatments').exists():
+        PeriodicTask.objects.create(
+            interval=schedule_every_2_minutes,
+            name='Upload Treatments',
+            task='dashboard.tasks.upload_treatments',
+            start_time=timezone.now()
+        )
