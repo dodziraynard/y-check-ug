@@ -3,6 +3,7 @@ from io import BytesIO
 from datetime import datetime
 import uuid_extensions
 from django.conf import settings
+import hashlib
 from django.db import models
 import requests
 from PIL import Image as PillowImage
@@ -29,15 +30,26 @@ class UpstreamSyncBaseModel(models.Model):
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    content_hash = models.CharField(max_length=200, null=True, blank=True)
 
     objects = UpstreamSyncManager()
 
     class Meta:
         abstract = True
 
+    def get_hash(self):
+        values = []
+        fields = sorted(list(self._meta.fields), key=lambda a: a.name)
+        fields = list(filter(lambda a: a.name not in [
+                      "updated_at", "updated_at", "content_hash"], fields))
+        for field in fields:
+            values.extend([field.name, str(getattr(self, field.name))])
+        return hashlib.sha256(".".join(values).encode()).hexdigest()
+
     def save(self, *args, **kwargs) -> None:
         self.synced = False
         self.localnode = settings.NODE_NAME
+        self.content_hash = self.get_hash()
         return super().save(*args, **kwargs)
 
     def _get_serialised_value(self, field):
@@ -130,6 +142,11 @@ class UpstreamSyncBaseModel(models.Model):
                 "Valid data type. Expected dict but got %s", type(data))
             return None
 
+        # Check if this data already exists and skip.
+        content_hash = data.get("content_hash", "random-string")
+        if model.objects.filter(content_hash=content_hash).exists():
+            return None
+
         parameters = {}
         unique_parameters = {}
         many_to_many_params = {}
@@ -180,4 +197,7 @@ class UpstreamSyncBaseModel(models.Model):
                         source_url = host + data.get(field.name)
                         source_url = source_url.replace("//assets", "/assets")
                         obj._download_file(field.name, source_url)
+        
+        # Save to compute content hash.
+        obj.save()
         return obj
