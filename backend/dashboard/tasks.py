@@ -269,10 +269,10 @@ def upload_adolescents():
         AdolescentResponse, "adolescentresponse", "adolescents_upload_status")
 
     upload_entity_and_update_status(
-        SummaryFlag, "summaryflag", "summary_flag")
+        SummaryFlag, "summaryflag", "adolescents_upload_status")
 
     upload_entity_and_update_status(
-        AdolescentActivityTime, "adolescentactivitytime", "summary_flag")
+        AdolescentActivityTime, "adolescentactivitytime", "adolescents_upload_status")
 
 
 schedule_every_5_hour, created = IntervalSchedule.objects.get_or_create(
@@ -300,7 +300,7 @@ def setup_period_tasks():
     if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_adolescents').exists():
         PeriodicTask.objects.create(
             interval=schedule_every_2_minutes,
-            name='Upload Adolescent',
+            name='Upload Adolescents',
             task='dashboard.tasks.upload_adolescents',
             start_time=timezone.now()
         )
