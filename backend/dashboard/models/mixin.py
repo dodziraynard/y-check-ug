@@ -30,7 +30,7 @@ class UpstreamSyncBaseModel(models.Model):
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    content_hash = models.CharField(max_length=200, null=True, blank=True)
+    content_hash = models.CharField(max_length=1000, null=True, blank=True)
 
     objects = UpstreamSyncManager()
 
@@ -44,7 +44,8 @@ class UpstreamSyncBaseModel(models.Model):
                       "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
         for field in fields:
             values.extend([field.name, str(getattr(self, field.name))])
-        return hashlib.sha256(".".join(values).encode()).hexdigest()
+        # return hashlib.sha256(".".join(values).encode()).hexdigest()
+        return ".".join(values)
 
     def save(self, *args, **kwargs) -> None:
         self.synced = False
