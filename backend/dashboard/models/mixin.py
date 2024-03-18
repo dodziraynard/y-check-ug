@@ -44,7 +44,7 @@ class UpstreamSyncBaseModel(models.Model):
                       "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
         for field in fields:
             values.extend([field.name, str(getattr(self, field.name))])
-        return hashlib.sha256(".".join(values).replace("None", "").encode()).hexdigest() + "||" + ".".join(values).replace("None", "")
+        return hashlib.sha256(".".join(values).replace("None", "").encode()).hexdigest()
 
     def save(self, *args, **kwargs) -> None:
         self.synced = False
@@ -144,7 +144,7 @@ class UpstreamSyncBaseModel(models.Model):
 
         # Check if this data already exists and skip.
         content_hash = data.get("content_hash", "random-string")
-        if model.objects.filter(content_hash=content_hash).exists():
+        if content_hash != "None" and model.objects.filter(content_hash=content_hash).exists():
             return None
 
         parameters = {}
