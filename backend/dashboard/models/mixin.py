@@ -30,7 +30,7 @@ class UpstreamSyncBaseModel(models.Model):
     synced = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    content_hash = models.CharField(max_length=1000, null=True, blank=True)
+    content_hash = models.TextField(null=True, blank=True)
 
     objects = UpstreamSyncManager()
 
