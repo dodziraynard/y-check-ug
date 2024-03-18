@@ -7,6 +7,7 @@ from dashboard.models.conditions_util_functions import (
     compute_time_difference,
     compute_vision_status,
 )
+from ycheck.utils.functions import isnumber
 from ycheck.utils.constants import COLOR_CHOICES
 from django.db.models import Q
 from dashboard.models.adolescent import Adolescent
@@ -216,6 +217,16 @@ class FlagCondition(UpstreamSyncBaseModel):
 
     def save(self, *arg, **kwargs) -> None:
         self.name = str(self)
+        if not isnumber(str(self.expected_integer_value)):
+            self.expected_integer_value = None
+        if not isnumber(str(self.min_age)):
+            self.min_age = None
+        if not isnumber(str(self.max_age)):
+            self.max_age = None
+        if not isnumber(str(self.range_min)):
+            self.range_min = None
+        if not isnumber(str(self.range_max)):
+            self.range_max = None
         return super().save(*arg, **kwargs)
 
     def _handle_range_sum_operator(self, adolescent):
