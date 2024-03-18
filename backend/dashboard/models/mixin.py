@@ -44,8 +44,7 @@ class UpstreamSyncBaseModel(models.Model):
                       "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
         for field in fields:
             values.extend([field.name, str(getattr(self, field.name))])
-        # return hashlib.sha256(".".join(values).encode()).hexdigest()
-        return ".".join(values)
+        return hashlib.sha256(".".join(values).replace("None", "").encode()).hexdigest() + "||" + ".".join(values).replace("None", "")
 
     def save(self, *args, **kwargs) -> None:
         self.synced = False
