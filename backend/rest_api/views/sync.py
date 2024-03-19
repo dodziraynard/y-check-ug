@@ -1,4 +1,3 @@
-from fileinput import filename
 import json
 import logging
 from datetime import datetime
@@ -6,7 +5,7 @@ from rest_framework import generics, permissions
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.response import Response
 from dashboard.models.mixin import UpstreamSyncBaseModel
-
+from accounts.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +58,11 @@ class DownStreamSyncModelView(generics.GenericAPIView):
 
         Model = content_type.model_class()
 
-        objects = Model.objects.all().order_by("created_at")
+        objects = Model.objects.all()
+        if Model == User:
+            objects = objects.order_by("updated_by", "created_by")
+        
+        objects = objects.order_by("created_at")
         if created_at_offset:
             created_at_offset = datetime.fromisoformat(
                 created_at_offset).astimezone()
