@@ -65,7 +65,7 @@ class DownStreamSyncModelView(generics.GenericAPIView):
         if hasattr(Model, "created_at"):
             objects = objects.order_by("created_at")
 
-        if created_at_offset:
+        if created_at_offset and hasattr(Model, "created_at"):
             created_at_offset = datetime.fromisoformat(
                 created_at_offset).astimezone()
             objects = objects.filter(created_at__gt=created_at_offset)
