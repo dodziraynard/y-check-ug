@@ -77,6 +77,8 @@ def download_users_from_upstream():
             users = response.json().get("data")
             total_users = len(users)
             for index, user_dict in enumerate(users, 1):
+                text = colored(f"Downloading ..... {index}/{len(users)} i.e., {round(index/len(users)*100, 2)}%", "light_cyan")
+                logger.debug(text)
                 try:
                     UpstreamSyncBaseModel.deserialise_into_object(
                         User, user_dict)
@@ -130,6 +132,9 @@ def download_questions_from_upstream():
             questions = response.json().get("data")
             total_questions = len(questions)
             for index, question_dict in enumerate(questions, 1):
+                text = colored(f"Downloading ..... {index}/{len(questions)} i.e., {round(index/len(questions)*100, 2)}%", "light_cyan")
+                logger.debug(text)
+
                 UpstreamSyncBaseModel.deserialise_into_object(
                     Question, question_dict)
                 config.questions_download_status_message = f"Downloaded {index}/{total_questions}, {int(index/total_questions*100)}%"
