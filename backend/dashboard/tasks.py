@@ -3,7 +3,7 @@ from django.utils import timezone
 import json
 import logging
 import requests
-from accounts.models import User, SyncGroup, SyncPermission
+from accounts.models import User, SyncGroup
 from dashboard.models import *
 from celery import shared_task
 from ycheck.utils.constants import SyncStatus
@@ -51,9 +51,6 @@ def download_all_setup_data():
     config.general_sync_message = "Downloading facilities"
     config.save()
     download_users_from_upstream()
-
-    logger.debug("Download user permissions")
-    download_entities_from_upstream("syncpermission", SyncPermission)
 
     logger.debug("Download user groups")
     download_entities_from_upstream("syncgroup", SyncGroup)
@@ -180,9 +177,12 @@ def download_entities_from_upstream(model_name, model):
         data_items = response.json().get("data")
         logger.info("Retrieved %s: %s items", model_name, len(data_items))
         for data_dict in data_items:
-            obj = UpstreamSyncBaseModel.deserialise_into_object(
-                model, data_dict)
-            logger.info("Downloaded %s: %s", model_name, str(obj))
+            try:
+                obj = UpstreamSyncBaseModel.deserialise_into_object(
+                    model, data_dict)
+                logger.info("Downloaded %s: %s", model_name, str(obj))
+            except Exception as e:
+                logger.exception("Downloaded %s: %s", model_name, str(e))
         return True
     return False
 
