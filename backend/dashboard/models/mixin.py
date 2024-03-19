@@ -11,6 +11,7 @@ from django.core import files
 from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 
+from backend.dashboard.models.flags import SummaryFlag
 from setup.models import NodeConfig
 
 
@@ -122,6 +123,7 @@ class UpstreamSyncMethodsModel():
         parameters = {}
         unique_parameters = {}
         many_to_many_params = {}
+        obj = None
         for key, value in data.items():
             if not (hasattr(model, key) and hasattr(getattr(model, key), "field")):
                 continue
@@ -143,9 +145,24 @@ class UpstreamSyncMethodsModel():
         if exists:
             all(map(parameters.pop, unique_parameters))
             model.objects.filter(**unique_parameters).update(**parameters)
+
+        # Hack: Special case for summary flag
+        elif model == SummaryFlag:
+            adolescent_id = parameters.get("adolescent_id")
+            label_id = parameters.get("label_id")
+            object = model.objects.filter(
+                adolescent_id=adolescent_id, label_id=label_id)
+            if object.exists():
+                parameters.pop("id", None)
+                parameters.pop("uuid", None)
+                object.update(**parameters)
         else:
-            model.objects.create(**parameters)
-        obj = model.objects.filter(**unique_parameters).first()
+            obj = model.objects.create(**parameters)
+
+        if model != SummaryFlag:
+            obj = model.objects.filter(**unique_parameters).first()
+        else:
+            obj = object.first()
 
         # Set many to many relations.
         for key, value in many_to_many_params.items():
