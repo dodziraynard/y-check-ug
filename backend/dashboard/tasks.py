@@ -9,7 +9,6 @@ from celery import shared_task
 from ycheck.utils.constants import SyncStatus
 from setup.models import NodeConfig
 from dashboard.models.mixin import UpstreamSyncBaseModel
-from django.db.utils import IntegrityError
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +76,7 @@ def download_users_from_upstream():
                 try:
                     UpstreamSyncBaseModel.deserialise_into_object(
                         User, user_dict)
-                except IntegrityError as e:
+                except Exception as e:
                     user_id = user_dict.get("surname")
                     surname = user_dict.get("other_names")
                     other_names = user_dict.get("id")
