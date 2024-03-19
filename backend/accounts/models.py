@@ -1,7 +1,10 @@
+import logging
 from functools import reduce
 from django.db import models
 from django.db.models import Q
-import uuid
+from io import BytesIO
+from django.core.files import File
+from PIL import Image as PillowImage, ImageOps
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin)
 from accounts.managers import UserManager
@@ -11,6 +14,8 @@ import geocoder
 
 from dashboard.models.mixin import UpstreamSyncBaseModel
 from ycheck.utils.storage import OverwriteStorage
+
+logger = logging.getLogger(__name__)
 
 
 class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
@@ -76,6 +81,28 @@ class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
     @property
     def fullname(self):
         return f"{self.surname} {self.other_names}"
+
+    def _compress_photo(self, height=500, width=500):
+        if not self.photo:
+            return
+
+        logger.info("Compressing photo")
+
+        user_name = f"{self.surname.lower()}_{self.other_names.lower()}"
+
+        thumbnail = PillowImage.open(self.photo)
+        thumbnail = ImageOps.exif_transpose(thumbnail)
+
+        thumbnail.thumbnail((height, width), PillowImage.LANCZOS)
+        thumb_io = BytesIO()
+        thumbnail = thumbnail.convert('RGB')
+        thumbnail.save(thumb_io, "jpeg", quality=80)
+        self.photo = File(
+            thumb_io, name=user_name.split(".")[0] + ".jpg")
+
+    def save(self, *args, **kwargs) -> None:
+        self._compress_photo()
+        return super().save(*args, **kwargs)
 
 
 class ActivityLog(models.Model):
