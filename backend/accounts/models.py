@@ -6,8 +6,12 @@ from io import BytesIO
 from django.core.files import File
 from PIL import Image as PillowImage, ImageOps
 from django.contrib.auth.models import (
-    AbstractBaseUser, PermissionsMixin)
+    AbstractBaseUser,
+    Permission,
+    Group,
+    PermissionsMixin)
 from accounts.managers import UserManager
+from dashboard.models.mixin import UpstreamSyncMethodsModel
 
 
 import geocoder
@@ -116,3 +120,13 @@ class ActivityLog(models.Model):
 
     def get_latlng(self):
         return geocoder.ip(self.registration_ip).latlng
+
+
+class SyncGroup(UpstreamSyncMethodsModel, Group):
+    class Meta:
+        proxy = True
+
+
+class SyncPermission(UpstreamSyncMethodsModel, Permission):
+    class Meta:
+        proxy = True

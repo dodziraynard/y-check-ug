@@ -22,35 +22,7 @@ class UpstreamSyncManager(BaseUserManager):
         return super().get_queryset()
 
 
-class UpstreamSyncBaseModel(models.Model):
-    id = models.CharField(primary_key=True, max_length=120,
-                          unique=True, default=uuid_extensions.uuid7, db_index=True)
-    uuid = models.UUIDField(default=uuid_extensions.uuid7, null=True)
-    localnode = models.CharField(max_length=100, null=True, blank=True)
-    synced = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    content_hash = models.CharField(max_length=128, null=True, blank=True)
-
-    objects = UpstreamSyncManager()
-
-    class Meta:
-        abstract = True
-
-    def get_hash(self):
-        values = []
-        fields = sorted(list(self._meta.fields), key=lambda a: a.name)
-        fields = list(filter(lambda a: a.name not in [
-                      "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
-        for field in fields:
-            values.extend([field.name, str(getattr(self, field.name))])
-        return hashlib.sha256(".".join(values).replace("None", "").encode()).hexdigest()
-
-    def save(self, *args, **kwargs) -> None:
-        self.synced = False
-        self.localnode = settings.NODE_NAME
-        self.content_hash = self.get_hash()
-        return super().save(*args, **kwargs)
+class UpstreamSyncMethodsModel():
 
     def _get_serialised_value(self, field):
         if type(field) == models.fields.related.ManyToManyField:
@@ -201,3 +173,34 @@ class UpstreamSyncBaseModel(models.Model):
         # Save to compute content hash.
         obj.save()
         return obj
+
+
+class UpstreamSyncBaseModel(UpstreamSyncMethodsModel, models.Model):
+    id = models.CharField(primary_key=True, max_length=120,
+                          unique=True, default=uuid_extensions.uuid7, db_index=True)
+    uuid = models.UUIDField(default=uuid_extensions.uuid7, null=True)
+    localnode = models.CharField(max_length=100, null=True, blank=True)
+    synced = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    content_hash = models.CharField(max_length=128, null=True, blank=True)
+
+    objects = UpstreamSyncManager()
+
+    class Meta:
+        abstract = True
+
+    def get_hash(self):
+        values = []
+        fields = sorted(list(self._meta.fields), key=lambda a: a.name)
+        fields = list(filter(lambda a: a.name not in [
+                      "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
+        for field in fields:
+            values.extend([field.name, str(getattr(self, field.name))])
+        return hashlib.sha256(".".join(values).replace("None", "").encode()).hexdigest()
+
+    def save(self, *args, **kwargs) -> None:
+        self.synced = False
+        self.localnode = settings.NODE_NAME
+        self.content_hash = self.get_hash()
+        return super().save(*args, **kwargs)
