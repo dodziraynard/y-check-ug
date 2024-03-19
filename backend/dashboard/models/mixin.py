@@ -11,7 +11,6 @@ from django.core import files
 from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 
-from dashboard.models.flags import SummaryFlag
 from setup.models import NodeConfig
 
 
@@ -142,6 +141,8 @@ class UpstreamSyncMethodsModel():
             parameters[key] = cls._get_deserialised_value(field, value)
 
         exists = model.objects.filter(**unique_parameters).exists()
+        
+        from dashboard.models.flags import SummaryFlag # Avoid circular import
         if exists:
             all(map(parameters.pop, unique_parameters))
             model.objects.filter(**unique_parameters).update(**parameters)
