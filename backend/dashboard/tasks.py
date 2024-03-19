@@ -4,6 +4,7 @@ import json
 import logging
 import requests
 from accounts.models import User
+from django.contrib.auth.models import Group
 from dashboard.models import *
 from celery import shared_task
 from ycheck.utils.constants import SyncStatus
@@ -51,6 +52,9 @@ def download_all_setup_data():
     config.general_sync_message = "Downloading facilities"
     config.save()
     download_users_from_upstream()
+
+    logger.debug("Download use groups/roles.")
+    download_entities_from_upstream("group", Group)
 
     config.general_sync_message = "Downloading questions"
     config.save()
