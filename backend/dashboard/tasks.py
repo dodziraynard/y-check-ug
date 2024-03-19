@@ -9,6 +9,7 @@ from celery import shared_task
 from ycheck.utils.constants import SyncStatus
 from setup.models import NodeConfig
 from dashboard.models.mixin import UpstreamSyncBaseModel
+from termcolor import colored
 
 logger = logging.getLogger(__name__)
 
@@ -83,8 +84,8 @@ def download_users_from_upstream():
                     user_id = user_dict.get("surname")
                     surname = user_dict.get("other_names")
                     other_names = user_dict.get("id")
-                    print("error", user_id, surname,
-                          other_names, type(e), str(e))
+                    logger.debug("error", user_id, surname,
+                                 other_names, type(e), str(e))
                     continue
                 config.users_download_status_message = f"Downloaded {index}/{total_users}, {int(index/total_users*100)}%"
                 config.save()
@@ -176,7 +177,9 @@ def download_entities_from_upstream(model_name, model):
     if response.status_code == 200:
         data_items = response.json().get("data")
         logger.info("Retrieved %s: %s items", model_name, len(data_items))
-        for data_dict in data_items:
+        for index, data_dict in enumerate(data_items, 1):
+            text = colored(f"Downloading ..... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%", "light_cyan")
+            logger.debug(text)
             try:
                 obj = UpstreamSyncBaseModel.deserialise_into_object(
                     model, data_dict)
