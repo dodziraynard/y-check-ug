@@ -11,7 +11,7 @@ from django.core import files
 from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 
-from backend.dashboard.models.flags import SummaryFlag
+from dashboard.models.flags import SummaryFlag
 from setup.models import NodeConfig
 
 
