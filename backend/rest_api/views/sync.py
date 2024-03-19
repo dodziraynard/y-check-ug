@@ -31,7 +31,8 @@ class UpstreamSyncModelView(generics.GenericAPIView):
                 # File uploads will be done via: UpstreamFileUpload
                 object = UpstreamSyncBaseModel.deserialise_into_object(
                     Model, item, download_files=False)
-                success_ids.append(object.id)
+                if object:
+                    success_ids.append(object.id)
             except Exception as e:
                 error_message = str(e)
                 logger.error("Error", str(e))
