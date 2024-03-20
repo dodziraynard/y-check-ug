@@ -116,7 +116,7 @@ class UpstreamSyncMethodsModel():
 
         # Check if this data already exists and skip.
         content_hash = data.get("content_hash", "random-string")
-        if content_hash != "None" and hasattr(model, "content_hash") and model.objects.filter(content_hash=content_hash).exists():
+        if content_hash and content_hash != "None" and hasattr(model, "content_hash") and model.objects.filter(content_hash=content_hash).exists():
             return None
 
         parameters = {}
