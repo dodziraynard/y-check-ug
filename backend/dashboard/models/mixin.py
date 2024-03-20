@@ -141,29 +141,14 @@ class UpstreamSyncMethodsModel():
             parameters[key] = cls._get_deserialised_value(field, value)
 
         exists = model.objects.filter(**unique_parameters).exists()
-        
-        from dashboard.models.flags import SummaryFlag # Avoid circular import
+
         if exists:
             all(map(parameters.pop, unique_parameters))
             model.objects.filter(**unique_parameters).update(**parameters)
-
-        # Hack: Special case for summary flag
-        elif model == SummaryFlag:
-            adolescent_id = parameters.get("adolescent_id")
-            label_id = parameters.get("label_id")
-            object = model.objects.filter(
-                adolescent_id=adolescent_id, label_id=label_id)
-            if object.exists():
-                parameters.pop("id", None)
-                parameters.pop("uuid", None)
-                object.update(**parameters)
         else:
             obj = model.objects.create(**parameters)
 
-        if model != SummaryFlag:
-            obj = model.objects.filter(**unique_parameters).first()
-        else:
-            obj = object.first()
+        obj = model.objects.filter(**unique_parameters).first()
 
         # Set many to many relations.
         for key, value in many_to_many_params.items():
