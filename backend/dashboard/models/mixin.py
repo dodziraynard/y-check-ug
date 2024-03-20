@@ -135,7 +135,7 @@ class UpstreamSyncMethodsModel():
                 continue
             if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
                 key += "_id"
-            if field.unique:
+            if field.name in ["id"]:
                 unique_parameters[key] = cls._get_deserialised_value(
                     field, value)
             parameters[key] = cls._get_deserialised_value(field, value)
