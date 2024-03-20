@@ -10,6 +10,7 @@ from PIL import Image as PillowImage
 from django.core import files
 from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
+from django.db import IntegrityError
 
 from setup.models import NodeConfig
 
@@ -146,7 +147,24 @@ class UpstreamSyncMethodsModel():
             all(map(parameters.pop, unique_parameters))
             model.objects.filter(**unique_parameters).update(**parameters)
         else:
-            obj = model.objects.create(**parameters)
+            try:
+                obj = model.objects.create(**parameters)
+            except IntegrityError as e:
+                # Delete duplicate
+                params = {}
+                for field_name in model._meta.constraints[0].fields:
+                    field = getattr(model, field_name).field
+                    key = field.name
+                    if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
+                        key += "_id"
+                    params[key] = cls._get_deserialised_value(
+                        field, data[field_name])
+
+                logger.debug("IntegrityError: %s. Removing %s", str(e), params)
+                model.objects.filter(**params).delete()
+
+                # Try creating new record again.
+                obj = model.objects.create(**parameters)
 
         obj = model.objects.filter(**unique_parameters).first()
 
