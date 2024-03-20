@@ -161,7 +161,8 @@ class UpstreamSyncMethodsModel():
                         field, data[field_name])
 
                 logger.debug("IntegrityError: %s. Removing %s", str(e), params)
-                model.objects.filter(**params).delete()
+                if params:
+                    model.objects.filter(**params).delete()
 
                 # Try creating new record again.
                 obj = model.objects.create(**parameters)
