@@ -36,7 +36,6 @@ const ApkWidget = React.lazy(() => import("./widgets/ApkWidget"));
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 
 function App() {
-  return <PageLoading></PageLoading>
   return (
     <Router>
       <Routes>
