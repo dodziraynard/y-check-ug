@@ -3,81 +3,87 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import React, { Suspense } from 'react';
+
 import Permissions from "./utils/permissions";
-import DashboardPage from "./pages/DashboardPage";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import Error404Screen from "./pages/ErrorPages/Error404";
 import ProtectedRoute from "./components/Common/ProtectedRoute";
-import DashboardWidget from "./widgets/DashboardWidget";
-import PatientsWidget from "./widgets/PatientsWidget";
-import SummaryFlagWidget from "./widgets/SummaryFlagWidget";
-import AdolescentReferralsWidget from "./widgets/AdolescentReferralsWidget";
-import ReferralsWidget from "./widgets/ReferralsWidget";
-import SetupWidget from "./widgets/SetupWidget";
-import FacilitiesWidget from "./widgets/FacilitiesWidget";
-import ServiceWidget from "./widgets/ServiceWidget";
-import RolesWidget from "./widgets/RolesWidget";
-import UsersWidget from "./widgets/UsersWidget";
-import UserProfileWidget from "./widgets/UserProfileWidget";
-import BioDataWidget from "./widgets/BioDataWidget";
-import ChangePasswordWidget from "./widgets/ChangePasswordWidget";
-import ProfilePictureWidget from "./widgets/ProfilePictureWidget";
-import ReferralDetailWidget from "./widgets/ReferralDetailWidget";
-import TreatmentsWidget from "./widgets/TreatmentsWidget";
-import TreatmentDetailWidget from "./widgets/TreatmentDetailWidget";
-import NodeWidget from "./widgets/NodeWidget";
-import ReportsWidget from "./widgets/ReportsWidget";
-import ApkWidget from "./widgets/ApkWidget";
+import PageLoading from "./components/PageLoading";
+
+const DashboardPage = React.lazy(() => import("./pages/DashboardPage"));
+const LoginPage = React.lazy(() => import("./pages/LoginPage"));
+const Error404Screen = React.lazy(() => import("./pages/ErrorPages/Error404"));
+const DashboardWidget = React.lazy(() => import("./widgets/DashboardWidget"));
+const PatientsWidget = React.lazy(() => import("./widgets/PatientsWidget"));
+const SummaryFlagWidget = React.lazy(() => import("./widgets/SummaryFlagWidget"));
+const AdolescentReferralsWidget = React.lazy(() => import("./widgets/AdolescentReferralsWidget"));
+const ReferralsWidget = React.lazy(() => import("./widgets/ReferralsWidget"));
+const SetupWidget = React.lazy(() => import("./widgets/SetupWidget"));
+const FacilitiesWidget = React.lazy(() => import("./widgets/FacilitiesWidget"));
+const ServiceWidget = React.lazy(() => import("./widgets/ServiceWidget"));
+const RolesWidget = React.lazy(() => import("./widgets/RolesWidget"));
+const UsersWidget = React.lazy(() => import("./widgets/UsersWidget"));
+const UserProfileWidget = React.lazy(() => import("./widgets/UserProfileWidget"));
+const BioDataWidget = React.lazy(() => import("./widgets/BioDataWidget"));
+const ChangePasswordWidget = React.lazy(() => import("./widgets/ChangePasswordWidget"));
+const ProfilePictureWidget = React.lazy(() => import("./widgets/ProfilePictureWidget"));
+const ReferralDetailWidget = React.lazy(() => import("./widgets/ReferralDetailWidget"));
+const TreatmentsWidget = React.lazy(() => import("./widgets/TreatmentsWidget"));
+const TreatmentDetailWidget = React.lazy(() => import("./widgets/TreatmentDetailWidget"));
+const NodeWidget = React.lazy(() => import("./widgets/NodeWidget"));
+const ReportsWidget = React.lazy(() => import("./widgets/ReportsWidget"));
+const ApkWidget = React.lazy(() => import("./widgets/ApkWidget"));
+
+const HomePage = React.lazy(() => import('./pages/HomePage'));
 
 function App() {
+  return <PageLoading></PageLoading>
   return (
     <Router>
       <Routes>
-        <Route path="" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="" element={<Suspense fallback={<PageLoading />}><HomePage /></Suspense>} />
+        <Route path="/login" element={<Suspense fallback={<PageLoading />}><LoginPage /></Suspense>} />
         <Route path="/dashboard" element={
           <ProtectedRoute permissions={[Permissions.VIEW_DASHBOARD]}>
-            <DashboardPage />
+            <Suspense fallback={<PageLoading />}><DashboardPage /></Suspense>
           </ProtectedRoute>
         }>
-          <Route path="" element={<DashboardWidget />} />
-          <Route path="/dashboard/patients" element={<PatientsWidget />} />
-          <Route path="/dashboard/patients/:pid/summary" element={<SummaryFlagWidget />} />
-          <Route path="/dashboard/patients/:pid/summary/referrals" element={<AdolescentReferralsWidget />} />
-          <Route path="/dashboard/referrals" element={<ReferralsWidget />} />
-          <Route path="/dashboard/treatments" element={<TreatmentsWidget />} />
-          <Route path="/dashboard/reports" element={<ReportsWidget />} />
-          <Route path="/dashboard/treatments/:referralId/details" element={<TreatmentDetailWidget />} />
-          <Route path="/dashboard/referrals/:referralId/details" element={<ReferralDetailWidget />} />
+          <Route path="" element={<Suspense fallback={<PageLoading />}><DashboardWidget /></Suspense>} />
+          <Route path="/dashboard/patients" element={<Suspense fallback={<PageLoading />}><PatientsWidget /></Suspense>} />
+          <Route path="/dashboard/patients/:pid/summary" element={<Suspense fallback={<PageLoading />}><SummaryFlagWidget /></Suspense>} />
+          <Route path="/dashboard/patients/:pid/summary/referrals" element={<Suspense fallback={<PageLoading />}><AdolescentReferralsWidget /></Suspense>} />
+          <Route path="/dashboard/referrals" element={<Suspense fallback={<PageLoading />}><ReferralsWidget /></Suspense>} />
+          <Route path="/dashboard/treatments" element={<Suspense fallback={<PageLoading />}><TreatmentsWidget /></Suspense>} />
+          <Route path="/dashboard/reports" element={<Suspense fallback={<PageLoading />}><ReportsWidget /></Suspense>} />
+          <Route path="/dashboard/treatments/:referralId/details" element={<Suspense fallback={<PageLoading />}><TreatmentDetailWidget /></Suspense>} />
+          <Route path="/dashboard/referrals/:referralId/details" element={<Suspense fallback={<PageLoading />}><ReferralDetailWidget /></Suspense>} />
 
-          <Route path="/dashboard/users" element={<UsersWidget />} />
+          <Route path="/dashboard/users" element={<Suspense fallback={<PageLoading />}><UsersWidget /></Suspense>} />
 
           <Route path="/dashboard/setup" element={
             <ProtectedRoute permissions={[Permissions.MANAGE_SETUP]}>
-              <SetupWidget />
+              <Suspense fallback={<PageLoading />}><SetupWidget /></Suspense>
             </ProtectedRoute>
           }>
-            <Route path="" element={<FacilitiesWidget />} />
-            <Route path="facilities" element={<FacilitiesWidget />} />
-            <Route path="services" element={<ServiceWidget />} />
-            <Route path="roles" element={<RolesWidget />} />
-            <Route path="apk" element={<ApkWidget />} />
-            <Route path="nodes" element={<NodeWidget />} />
+            <Route path="" element={<Suspense fallback={<PageLoading />}><FacilitiesWidget /></Suspense>} />
+            <Route path="facilities" element={<Suspense fallback={<PageLoading />}><FacilitiesWidget /></Suspense>} />
+            <Route path="services" element={<Suspense fallback={<PageLoading />}><ServiceWidget /></Suspense>} />
+            <Route path="roles" element={<Suspense fallback={<PageLoading />}><RolesWidget /></Suspense>} />
+            <Route path="apk" element={<Suspense fallback={<PageLoading />}><ApkWidget /></Suspense>} />
+            <Route path="nodes" element={<Suspense fallback={<PageLoading />}><NodeWidget /></Suspense>} />
           </Route>
 
           <Route path="/dashboard/user/profile" element={
             <ProtectedRoute>
-              <UserProfileWidget />
+              <Suspense fallback={<PageLoading />}><UserProfileWidget /></Suspense>
             </ProtectedRoute>
           }>
-            <Route path="" element={<BioDataWidget />} />
-            <Route path="bio/data" element={<BioDataWidget />} />
-            <Route path="change/password" element={<ChangePasswordWidget />} />
-            <Route path="picture" element={<ProfilePictureWidget />} />
+            <Route path="" element={<Suspense fallback={<PageLoading />}><BioDataWidget /></Suspense>} />
+            <Route path="bio/data" element={<Suspense fallback={<PageLoading />}><BioDataWidget /></Suspense>} />
+            <Route path="change/password" element={<Suspense fallback={<PageLoading />}><ChangePasswordWidget /></Suspense>} />
+            <Route path="picture" element={<Suspense fallback={<PageLoading />}><ProfilePictureWidget /></Suspense>} />
           </Route>
         </Route>
-        <Route path="*" element={<Error404Screen />} />
+        <Route path="*" element={<Suspense fallback={<PageLoading />}><Error404Screen /></Suspense>} />
       </Routes>
     </Router>
   );
