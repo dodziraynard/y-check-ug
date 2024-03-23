@@ -1,14 +1,16 @@
 import './style.scss';
-import React, { useState, useEffect, useRef, Fragment } from 'react'
+import React, { useState, useEffect, useRef, Fragment, Suspense } from 'react'
 import {
     usePutFacilitiesMutation,
     useDeleteFacilitiesMutation,
 } from '../../features/resources/resources-api-slice';
 import { BASE_API_URI } from '../../utils/constants';
-import TableView from '../../components/Table';
+import PageLoading from '../../components/PageLoading';
 import { Button, Spinner, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import { monitorShowErrorReduxHttpError } from '../../utils/functions';
+
+const TableView = React.lazy(() => import("../../components/Table"));
 
 function FacilitiesWidget() {
     const [triggerReload, setTriggerReload] = useState(0);
@@ -188,38 +190,40 @@ function FacilitiesWidget() {
                     <Button onClick={() => { setSelectedFacility(null); facilityModal?.show() }}><i className="bi bi-plus"></i> Add</Button>
                 </div>
 
-                <TableView
-                    reloadTrigger={triggerReload}
-                    responseDataAttribute="facilities"
-                    dataSourceUrl={`${BASE_API_URI}/facilities/`}
-                    filters={[
+                <Suspense fallback={<PageLoading />}>
+                    <TableView
+                        reloadTrigger={triggerReload}
+                        responseDataAttribute="facilities"
+                        dataSourceUrl={`${BASE_API_URI}/facilities/`}
+                        filters={[
 
-                    ]}
-                    headers={[
-                        {
-                            key: "name", value: "Name"
-                        },
-                        {
-                            key: "location", value: "Location"
-                        },
-                        {
-                            value: "Actions", textAlign: "right", render: (item) => {
-                                return (
-                                    <div className="d-flex justify-content-end">
-                                        <button className="mx-1 btn btn-outline-primary btn-sm d-flex"
-                                            onClick={() => showEditFacilityModal(item)}>
-                                            <i className="bi bi-pen me-1"></i> Edit
-                                        </button>
-                                        <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteFacilityModal(item)}>
-                                            <i className="bi bi-trash me-1"></i>
-                                            Delete
-                                        </button>
-                                    </div>
-                                )
-                            }
-                        }]}
-                >
-                </TableView>
+                        ]}
+                        headers={[
+                            {
+                                key: "name", value: "Name"
+                            },
+                            {
+                                key: "location", value: "Location"
+                            },
+                            {
+                                value: "Actions", textAlign: "right", render: (item) => {
+                                    return (
+                                        <div className="d-flex justify-content-end">
+                                            <button className="mx-1 btn btn-outline-primary btn-sm d-flex"
+                                                onClick={() => showEditFacilityModal(item)}>
+                                                <i className="bi bi-pen me-1"></i> Edit
+                                            </button>
+                                            <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteFacilityModal(item)}>
+                                                <i className="bi bi-trash me-1"></i>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                            }]}
+                    >
+                    </TableView>
+                </Suspense>
             </div>
         </Fragment>
     );

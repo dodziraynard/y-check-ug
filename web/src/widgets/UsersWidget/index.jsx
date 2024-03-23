@@ -5,7 +5,7 @@ import {
     useDeleteUsersMutation,
     useLazyGetAllFacilitiesQuery,
 } from '../../features/resources/resources-api-slice';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import {
     setGroups as setStoreGroups,
 } from '../../features/global/global-slice';
@@ -14,10 +14,12 @@ import { Button, Spinner, useToast } from '@chakra-ui/react';
 import TagInput from '../../components/TagInput';
 import PasswordInput from '../../components/PasswordInput';
 import SelectInput from '../../components/SelectInput';
-import TableView from '../../components/Table';
+import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
 import { useDispatch } from 'react-redux';
 import BreadCrumb from '../../components/BreadCrumb';
+
+const TableView = React.lazy(() => import("../../components/Table"));
 
 function UsersWidget() {
     const dispatch = useDispatch()
@@ -399,63 +401,65 @@ function UsersWidget() {
                     </div>
                 </div>
                 <div className="overflow-scroll">
-                    <TableView
-                        reloadTrigger={triggerReload}
-                        responseDataAttribute="users"
-                        dataSourceUrl={`${BASE_API_URI}/users/`}
-                        urlParams={urlParams}
-                        setUrlParams={setUrlParams}
-                        filters={[
-                            ...(groups?.map(group => { return { key: `groups__name:${group.name}`, value: `In ${(group.name || "").toLowerCase()}` } }) || []).sort()
-                        ]}
-                        bulkActions={[
+                    <Suspense fallback={<PageLoading />}>
+                        <TableView
+                            reloadTrigger={triggerReload}
+                            responseDataAttribute="users"
+                            dataSourceUrl={`${BASE_API_URI}/users/`}
+                            urlParams={urlParams}
+                            setUrlParams={setUrlParams}
+                            filters={[
+                                ...(groups?.map(group => { return { key: `groups__name:${group.name}`, value: `In ${(group.name || "").toLowerCase()}` } }) || []).sort()
+                            ]}
+                            bulkActions={[
 
-                        ]}
-                        headers={[{
-                            key: "photo",
-                            value: "Photo",
-                            render: (item) => (
-                                <img
-                                    src={item.photo ? item.photo : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
-                                    alt="User Photo"
-                                    style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                />
-                            ),
-                        }, {
-                            key: "username", value: "Username"
-                        }, {
-                        }, {
-                            key: "surname", value: "Surname"
-                        }, {
-                            key: "other_names", value: "Other Names"
-                        },
-                        {
-                            key: "groups", value: "Group", render: (item) => {
-                                return (
-                                    <div>
-                                        {item.groups?.map((group, index) => (
-                                            <span key={index} className="badge bg-primary">{group}</span>
-                                        ))}
-                                    </div>
-                                )
-                            }
-                        }, {
-                            value: "Actions", textAlign: "right", render: (item) => {
-                                return (
-                                    <div className="d-flex justify-content-end">
-                                        <button className="btn btn-sm btn-primary me-1 d-flex" onClick={() => showEditUserModal(item)}>
-                                            <i className="bi bi-list me-1"></i>
-                                            More
-                                        </button>
-                                        <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteUserAlert(item)}>
-                                            <i className="bi bi-trash me-1"></i>
-                                            Delete
-                                        </button>
-                                    </div>
-                                )
-                            }
-                        }]}
-                    />
+                            ]}
+                            headers={[{
+                                key: "photo",
+                                value: "Photo",
+                                render: (item) => (
+                                    <img
+                                        src={item.photo ? item.photo : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
+                                        alt="User Photo"
+                                        style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                                    />
+                                ),
+                            }, {
+                                key: "username", value: "Username"
+                            }, {
+                            }, {
+                                key: "surname", value: "Surname"
+                            }, {
+                                key: "other_names", value: "Other Names"
+                            },
+                            {
+                                key: "groups", value: "Group", render: (item) => {
+                                    return (
+                                        <div>
+                                            {item.groups?.map((group, index) => (
+                                                <span key={index} className="badge bg-primary">{group}</span>
+                                            ))}
+                                        </div>
+                                    )
+                                }
+                            }, {
+                                value: "Actions", textAlign: "right", render: (item) => {
+                                    return (
+                                        <div className="d-flex justify-content-end">
+                                            <button className="btn btn-sm btn-primary me-1 d-flex" onClick={() => showEditUserModal(item)}>
+                                                <i className="bi bi-list me-1"></i>
+                                                More
+                                            </button>
+                                            <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteUserAlert(item)}>
+                                                <i className="bi bi-trash me-1"></i>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                            }]}
+                        />
+                    </Suspense>
                 </div>
             </div>
         </div >
