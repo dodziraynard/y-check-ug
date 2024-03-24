@@ -5,7 +5,7 @@ import {
     useDeleteUsersMutation,
     useLazyGetAllFacilitiesQuery,
 } from '../../features/resources/resources-api-slice';
-import { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import {
     setGroups as setStoreGroups,
 } from '../../features/global/global-slice';
