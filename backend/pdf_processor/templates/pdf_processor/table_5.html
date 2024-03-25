@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table 5</title>
+</head>
+
+<body>
+    <h1>Table 5: Proportion flagged (excluding false flags) among n={{total_adolescent}} who had check-up visit</h1>
+    <table style="border: 1px solid black;">
+        <thead>
+            <tr style="padding: 0.3em; vertical-align: middle;">
+                <th>Condition</th>
+                <th style="text-align: center;" colspan="4">Proportion flagged</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="padding: 0.3em; vertical-align: middle;">
+                <td colspan="1"></td>
+                <td>Males age 10-14 (n={{totals.male_14}})</td>
+                <td>Females age 10-14 (n={{totals.female_14}})</td>
+                <td>Males age 15-19 (n={{totals.male_19}})</td>
+                <td>Females age 15-19 (n={{totals.female_19}})</td>
+            </tr>
+
+            {% for row in rows  %}
+            <tr style="padding: 0.3em; vertical-align: middle;">
+                <td><strong>{{row.condition}}</strong></td>
+                <td>{{row.male_14}}</td>
+                <td>{{row.female_14}}</td>
+                <td>{{row.male_19}}</td>
+                <td>{{row.female_19}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+</html>
