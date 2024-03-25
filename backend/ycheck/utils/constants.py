@@ -13,6 +13,7 @@ class Colors(Enum):
     GREY = "#808080"
     RED = "#ff0000"
     ORANGE = "#ffa500"
+    DARK_BLUE = "#3c4e77"
     GREEN = "#00ff00"
 
 
@@ -31,6 +32,7 @@ class SyncStatus(Enum):
 
 COLOR_CHOICES = [
     (Colors.GREY.value, "GREY"),
+    (Colors.DARK_BLUE.value, "DARK_BLUE"),
     (Colors.RED.value, "RED"),
     (Colors.ORANGE.value, "ORANGE"),
     (Colors.GREEN.value, "GREEN"),

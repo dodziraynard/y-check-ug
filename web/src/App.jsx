@@ -33,14 +33,13 @@ const NodeWidget = React.lazy(() => import("./widgets/NodeWidget"));
 const ReportsWidget = React.lazy(() => import("./widgets/ReportsWidget"));
 const ApkWidget = React.lazy(() => import("./widgets/ApkWidget"));
 
-const HomePage = React.lazy(() => import('./pages/HomePage'));
-const  Home  = React.lazy(() => import ("./pages/HomePage/Home"));
+const Home = React.lazy(() => import("./pages/HomePage/Home"));
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="" element={<Suspense fallback={<PageLoading />}><Home/></Suspense>} />
+        <Route path="" element={<Suspense fallback={<PageLoading />}><Home /></Suspense>} />
         <Route path="/login" element={<Suspense fallback={<PageLoading />}><LoginPage /></Suspense>} />
         <Route path="/dashboard" element={
           <ProtectedRoute permissions={[Permissions.VIEW_DASHBOARD]}>

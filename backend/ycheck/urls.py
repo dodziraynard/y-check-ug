@@ -36,6 +36,7 @@ def health(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('accounts.urls')),
+    path('pdf-reports/', include('pdf_processor.urls')),
     path('api/', include('rest_api.urls')),
     path('health/', health),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

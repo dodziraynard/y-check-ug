@@ -17,4 +17,5 @@ if (base_api?.includes("http") == true) {
 export const FLAG_GREY = "#808080"
 export const FLAG_RED = "#ff0000"
 export const FLAG_ORANGE = "#ffa500"
+export const FLAG_DARK_BLUE = "#3c4e77"
 export const FLAG_GREEN = "#00ff00"

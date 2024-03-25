@@ -31,6 +31,9 @@ class Adolescent(UpstreamSyncBaseModel):
     picture = models.ImageField(
         upload_to='images/',  storage=OverwriteStorage(), blank=True, null=True)
     dob = models.DateTimeField(null=True, blank=True)
+    # We need to store the age to perform age specific queries relative to the time of 
+    # registration
+    age = models.IntegerField(null=True, blank=True)
     check_up_location = models.CharField(max_length=200)
     check_up_reason = models.CharField(max_length=200, null=True, blank=True)
     type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
@@ -89,6 +92,7 @@ class Adolescent(UpstreamSyncBaseModel):
 
     def save(self, *args, **kwargs) -> None:
         self._compress_picture()
+        self.age = self.get_age()
         return super().save(*args, **kwargs)
 
 

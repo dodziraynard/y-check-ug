@@ -8,7 +8,7 @@ from dashboard.models.conditions_util_functions import (
     compute_vision_status,
 )
 from ycheck.utils.functions import isnumber
-from ycheck.utils.constants import COLOR_CHOICES
+from ycheck.utils.constants import COLOR_CHOICES, Colors
 from django.db.models import Q
 from dashboard.models.adolescent import Adolescent
 from dashboard.models.questions import Question, QuestionGroup, AdolescentResponse
@@ -25,6 +25,9 @@ class SummaryFlag(UpstreamSyncBaseModel):
     computed_color_code = models.CharField(
         choices=COLOR_CHOICES, max_length=10)
     updated_color_code = models.CharField(
+        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
+    # For report generation only.
+    final_color_code = models.CharField(
         choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -98,6 +101,20 @@ class SummaryFlag(UpstreamSyncBaseModel):
                 "answers": response
             }
             result.append(data)
+
+        # If no responses have been provided yet,
+        # make final color dark-blue else if no questions make
+        # final color grey.
+        if self.updated_color_code:
+            self.final_color_code = self.updated_color_code
+        elif not result:
+            self.final_color_code = Colors.GREY.value
+        elif not any([len(item.get("answers", [])) > 0 for item in result]):
+            self.final_color_code = Colors.DARK_BLUE.value
+        else:
+            self.final_color_code = self.get_final_colour()
+
+        self.save()
         return result
 
 

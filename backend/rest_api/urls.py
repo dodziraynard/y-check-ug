@@ -22,7 +22,7 @@ urlpatterns = [
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
-    path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view()),
+    path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view(), name="summary_flags"),
     path("<str:pid>/recommended-services/",
          views.GetRecommendedServices.as_view()),
     path("web-adolescents-types/", views.getAdolescentType.as_view()),
