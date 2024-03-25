@@ -323,7 +323,7 @@ function SummaryFlagWidget() {
             </div>
 
             <div className="patients-widget">
-                <BreadCrumb items={[{ "name": "Patients", "url": "/patients" }, { "name": "Summary", "url": "" }]} />
+                <BreadCrumb items={[{ "name": "Patients", "url": "/dashboard/patients" }, { "name": "Summary", "url": "" }]} />
 
                 <section className="page-summary">
                     <div className='py-3' style={{ position: "sticky", top: "4em", background: "white", zIndex: "3" }}>

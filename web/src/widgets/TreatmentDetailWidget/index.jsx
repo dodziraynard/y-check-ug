@@ -82,7 +82,7 @@ function TreatmentDetailWidget() {
 
     return (
         <div className="referral-detail-widget">
-            <BreadCrumb items={[{ "name": "Treatment", "url": "/treatments" }, { "name": referral?.facility_name, "url": "/treatments" }, { "name": referral?.adolescent?.fullname, "url": `/patients/${referral?.adolescent?.pid}/summary` }]} />
+            <BreadCrumb items={[{ "name": "Treatment", "url": "/dashboard/treatments" }, { "name": referral?.facility_name, "url": "/treatments" }, { "name": referral?.adolescent?.fullname, "url": `/patients/${referral?.adolescent?.pid}/summary` }]} />
             <h4>Treatment Detail</h4>
             <section className='page-treatment-detail  col-md-8 mx-auto'>
                 <div className='d-flex justify-content-center'>
@@ -94,6 +94,7 @@ function TreatmentDetailWidget() {
                         checked={true}
                         required
                         readOnly
+
                         id="confirm-photo" />
                     <label className="form-check-label" htmlFor="confirm-photo">
                         <strong>I confirm the picture is of the adolescent before me</strong>
