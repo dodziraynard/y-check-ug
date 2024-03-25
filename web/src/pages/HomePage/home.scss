@@ -1068,11 +1068,9 @@ button,select,textarea,label {
     margin-bottom: -16px
 }
 
-.feature {
-    padding: 16px 30px;
-    width: 320px;
-    max-width: 320px;
-    flex-grow: 1
+.row-icon{
+    display: flex;
+    gap: 1rem;
 }
 
 .feature-inner {
@@ -1100,6 +1098,7 @@ button,select,textarea,label {
         margin-bottom: 80px
 
     }
+    
 
     .features .section-title::before {
         content: '';
@@ -1444,6 +1443,9 @@ main {
     }
     .container2{
         margin-top: 0px;
+    }
+    .feature-inner{
+        margin-left: 30px;
     }
 }
 
