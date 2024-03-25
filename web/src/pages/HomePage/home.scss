@@ -31,24 +31,20 @@ svg:not(:root) {
     overflow: hidden
 }
 
-button,input,optgroup,select,textarea {
+button,optgroup,select,textarea {
     font-family: "Helvetica", "Arial", sans-serif;
     font-size: 100%;
     line-height: 1.15;
     margin: 0
 }
 
-button,input {
+button {
     overflow: visible
 }
 
 button,select {
     text-transform: none
 }
-
-
-
-
 
 details,menu {
     display: block
@@ -69,14 +65,6 @@ template {
 [hidden] {
     display: none
 }
-
-
-
-*,*:before,*:after {
-    box-sizing: inherit
-}
-
-
 
 img {
     height: auto;
@@ -99,7 +87,7 @@ img,svg {
 }
 
 
-body,button,input,select,textarea {
+button,select,textarea {
     font-family: "Helvetica", "Arial", sans-serif;
 }
 
@@ -278,7 +266,7 @@ b,strong {
     font-weight: 700
 }
 
-button,input,select,textarea,label {
+button,select,textarea,label {
     font-size: 20px;
     line-height: 30px
 }
@@ -763,16 +751,6 @@ button,input,select,textarea,label {
     visibility: hidden
 }
 
-.input,.textarea {
-    background-color: #fff;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #273C5A;
-    border-radius: 2px;
-    color: #7487A3;
-    max-width: 100%;
-    width: 100%
-}
 
 
 
@@ -797,7 +775,6 @@ button,input,select,textarea,label {
 }
 
 .button {
-    display: inline-flex;
     font-size: 14px;
     letter-spacing: 0px;
     font-weight: 700;
@@ -1093,8 +1070,8 @@ button,input,select,textarea,label {
 
 .feature {
     padding: 16px 30px;
-    width: 380px;
-    max-width: 380px;
+    width: 320px;
+    max-width: 320px;
     flex-grow: 1
 }
 

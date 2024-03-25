@@ -1,4 +1,4 @@
-import './style.css'
+import './home.scss'
 import ycheck from '../../assets/images/y2.png'
 import team1 from '../../assets/images/team1.jpg'
 import team2 from '../../assets/images/team2.jpg'
