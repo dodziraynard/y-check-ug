@@ -16,6 +16,7 @@ a {
 }
 
 
+
 dfn {
     font-style: italic
 }
@@ -1228,10 +1229,11 @@ button,select,textarea,label {
 
 .body-wrap {
     background: #06101F;
+    overflow: hidden;
     display: flex;
     font-family: "Helvetica", "Arial", sans-serif;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh
 }
 
 .boxed-container {
@@ -1435,6 +1437,25 @@ main {
     flex-wrap: wrap;
     margin-top: -150px;
 }
+
+@media(max-width:760px){
+    .device-mockup{
+        width: 300px;
+        margin-top: 20px;
+    }
+}
+@media(max-width:760px){
+    .device-mockup{
+        width: 250px;
+        margin-top: 50px;
+    }
+}
+@media(max-width:680px){
+    .device-mockup{
+        width: 220px;
+        margin-top: 100px;
+    }
+}
 @media(max-width:650px){
     .box{
         flex-grow: 0.7;
@@ -1444,6 +1465,26 @@ main {
     }
     .feature-inner{
         margin-left: 30px;
+        margin-right: 30px;
+    }
+    .device-mockup{
+        margin-top: 150px;
+    }
+    .hero-title{
+        color: white;
+    }
+    .row-icon{
+        margin-top: 10px;
+    }
+    .text-sm{
+        margin-top: 10px;
     }
 }
 
+@media(max-width:640px){
+    .device-mockup{
+        margin-top: -100px;
+        width: 350px;
+
+    }
+}
