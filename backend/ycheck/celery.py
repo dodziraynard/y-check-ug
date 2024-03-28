@@ -14,3 +14,8 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 def celery_info():
     return bool(app.control.inspect().active())
+
+
+@app.task(bind=True, ignore_result=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')

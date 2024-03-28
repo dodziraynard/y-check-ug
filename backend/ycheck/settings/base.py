@@ -162,6 +162,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles/'
 MEDIA_URL = '/assets/'
 
 MEDIA_ROOT = BASE_DIR / "assets"
+TEMP_REPORT_DIR = MEDIA_ROOT / "temp/reports/"
+TEMP_REPORT_URL = MEDIA_URL + "temp/reports/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -184,6 +186,7 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_IMPORTS = [
     "dashboard.tasks",
+    "pdf_processor.tasks",
 ]
 
 REDIS_HOST = os.environ.get(

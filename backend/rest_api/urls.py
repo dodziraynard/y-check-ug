@@ -22,7 +22,8 @@ urlpatterns = [
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
-    path("<str:pid>/summary-flags/", views.GetSummaryFlags.as_view(), name="summary_flags"),
+    path("<str:pid>/summary-flags/",
+         views.GetSummaryFlags.as_view(), name="summary_flags"),
     path("<str:pid>/recommended-services/",
          views.GetRecommendedServices.as_view()),
     path("web-adolescents-types/", views.getAdolescentType.as_view()),
@@ -63,10 +64,10 @@ urlpatterns = [
          views.UpstreamSyncModelView.as_view()),
     path("sync/upload-file/<str:model_name>/<str:instance_id>",
          views.UpstreamFileUpload.as_view()),
-    
-    #apk
-     path("upload-apk/", views.UploadApkAPI.as_view()),
-     path("get-apk/", views.GetApk.as_view()),
+
+    # apk
+    path("upload-apk/", views.UploadApkAPI.as_view()),
+    path("get-apk/", views.GetApk.as_view()),
 
 ]
 
@@ -74,4 +75,5 @@ urlpatterns = [
 # Misc URLs
 urlpatterns += [
     path("record-activity-time/", views.RecordAdolescentActivityTime.as_view()),
+    path("reports/<int:table_number>/", views.TableReportsView.as_view()),
 ]

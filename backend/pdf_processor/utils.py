@@ -52,12 +52,12 @@ def render_to_pdf(template_src, context_dict={}):
 def render_to_pdf_file(template_src, filename, context_dict={}):
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
     # find the template and render it.
     template = get_template(template_src)
     html = template.render(context_dict)
 
     # create a pdf
     pisa.CreatePDF(html,
-                   dest=open(filename, "w+b"),
+                   dest=open(filename, "wb"),
                    link_callback=link_callback)
