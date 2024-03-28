@@ -57,7 +57,6 @@ function ReportGenerationWidget({ toDate, fromDate, tableNumber }) {
         }
     }
 
-
     useEffect(() => {
         if (error && !isLoading) {
             toast.close(`${error}`)
@@ -86,7 +85,7 @@ function ReportGenerationWidget({ toDate, fromDate, tableNumber }) {
 
         {errorMessage != null ? <p className='text text-danger'>{errorMessage}</p> : ""}
         {taskStatusMessage != null ? <p>{taskStatusMessage}</p> : ""}
-        {downloadLink != null ? <a href={downloadLink} target='_blank' className='my-4 d-block btn btn-sm btn-outline-primary'>Open Report</a> : ""}
+        {downloadLink != null && errorMessage == null ? <a href={downloadLink} target='_blank' className='my-4 d-block btn btn-sm btn-outline-primary'>Open Report</a> : ""}
 
     </div>
 }

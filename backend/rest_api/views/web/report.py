@@ -23,7 +23,7 @@ class TableReportsView(generics.GenericAPIView):
         to_date = request.GET.get("to_date") or timezone.now()
 
         task_id, error_message = None, None
-        filename = f"y-check-report-table-{table_number}.pdf"
+        filename = f"y-check-report-table-{table_number}-{from_date.strftime("%m-%d-%Y")}-{to_date.strftime("%m-%d-%Y")}.pdf"
         match table_number:
             case 5:
                 task_id = generate_table_5_report.delay(
