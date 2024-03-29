@@ -10,7 +10,7 @@ from collections import namedtuple
 import logging
 from django.utils import timezone
 from ycheck.utils.constants import Colors
-from dashboard.models import Adolescent, FlagLabel, SummaryFlag, CheckupLocation
+from dashboard.models import Adolescent, FlagLabel, SummaryFlag, CheckupLocation, Question
 from django.utils.timezone import make_aware
 
 
@@ -168,10 +168,7 @@ def generate_table_1_report(self, filename="report.pdf", from_date=None, to_date
         created_at__gte=from_date,
         created_at__lte=to_date,
     )
-
-    set_task_state(self,
-                   "RETRIEVING RECORDS",
-                   1,
+    set_task_state(self, "RETRIEVING RECORDS", 1,
                    info=f"Retrieving invoice data.")
 
     # Total
@@ -179,56 +176,54 @@ def generate_table_1_report(self, filename="report.pdf", from_date=None, to_date
         adolescents.filter(type=t).count() for t in ["basic", "secondary", "community"]
     ]
     rows: List[Table1RowValue] = []
-
-    #  Age rows
-    for i, age in enumerate(range(10, 20)):
-        adoles = adolescents.filter(age=age)
-
-        name = "Age in years" if i == 0 else ""
-        value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
-            "basic", "secondary", "community"]]
-        rows.append(
-            Table1RowValue(
-                name,
-                age,
-                f"{value_2} ({round(value_2/max(1, basic_total)*100,1)})",
-                f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)})",
-                f"{value_4} ({round(value_4/max(1, community_total)*100,1)})",
-            )
-        )
-
-    # Sex rows
-    for i, sex in enumerate(["male", "female"]):
-        adoles = adolescents.filter(gender=sex)
-        name = "Sex" if i == 0 else ""
-        value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
-            "basic", "secondary", "community"]]
-        rows.append(
-            Table1RowValue(
-                name,
-                sex.capitalize(),
-                f"{value_2} ({round(value_2/max(1, basic_total)*100,1)})",
-                f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)})",
-                f"{value_4} ({round(value_4/max(1, community_total)*100,1)})",
-            )
-        )
-
-    # Location rows
     locations = CheckupLocation.objects.all().values_list("name", flat=True)
-    for i, location in enumerate(locations):
-        adoles = adolescents.filter(check_up_location=location)
-        value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
-            "basic", "secondary", "community"]]
-        name = "Location" if i == 0 else ""
-        rows.append(
-            Table1RowValue(
-                name,
-                location.capitalize(),
-                f"{value_2} ({round(value_2/max(1, basic_total)*100,1)})",
-                f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)})",
-                f"{value_4} ({round(value_4/max(1, community_total)*100,1)})",
+    for field, title, values in [
+        ("age", "Age in years", range(10, 20)),
+        ("gender", "Sex", ["male", "female"]),
+            ("check_up_location", "Location", locations)]:
+        for i, value in enumerate(values):
+            adoles = adolescents.filter(**{field: value})
+            name = title if i == 0 else ""
+            value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
+                "basic", "secondary", "community"]]
+            rows.append(
+                Table1RowValue(
+                    name,
+                    str(value).title(),
+                    f"{value_2} ({round(value_2/max(1, basic_total)*100,1)}%)",
+                    f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)}%)",
+                    f"{value_4} ({round(value_4/max(1, community_total)*100,1)}%)",
+                )
             )
-        )
+
+    # Who the participant lives with &
+    # Guardian working status
+    for question_text, question_id in [
+        ("Who the participant lives with (multiple selection)", "Q101"),
+        ("Guardian working status", "Q2105"),
+        ("In school", "Q201"),
+        ("Religion", "Q2108"),
+    ]:
+        question = Question.objects.filter(
+            question_id=question_id
+        ).first()
+        if question:
+            options = question.options.all().order_by("value")
+            for i, option in enumerate(options):
+                responses = question.responses.filter(chosen_options=option)
+                value_2, value_3, value_4 = [responses.filter(adolescent__type=t).count() for t in [
+                    "basic", "secondary", "community"]]
+                value_1 = option.value
+                name = question_text if i == 0 else ""
+                rows.append(
+                    Table1RowValue(
+                        name,
+                        str(value_1),
+                        f"{value_2} ({round(value_2/max(1, basic_total)*100,1)}%)",
+                        f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)}%)",
+                        f"{value_4} ({round(value_4/max(1, community_total)*100,1)}%)",
+                    )
+                )
 
     context = {
         "basic_total": basic_total,
