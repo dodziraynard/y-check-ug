@@ -2,6 +2,7 @@
 This module is responsible for processing files using the celery worker
 """
 from datetime import datetime
+from typing import List
 from pdf_processor.utils import render_to_pdf_file
 from django.conf import settings
 from celery import shared_task
@@ -9,7 +10,7 @@ from collections import namedtuple
 import logging
 from django.utils import timezone
 from ycheck.utils.constants import Colors
-from dashboard.models import Adolescent, FlagLabel, SummaryFlag
+from dashboard.models import Adolescent, FlagLabel, SummaryFlag, CheckupLocation
 from django.utils.timezone import make_aware
 
 
@@ -19,6 +20,8 @@ Table5RowTotal = namedtuple(
     "Table5RowTotal", "male_14, female_14, male_19, female_19")
 Table5RowValue = namedtuple(
     "Table5RowValue", "condition, male_14, female_14, male_19, female_19")
+Table1RowValue = namedtuple(
+    "Table1RowValue", "name, value_1, value_2, value_3, value_4")
 
 
 def set_task_state(task,
@@ -133,6 +136,106 @@ def generate_table_5_report(self, filename="report.pdf", from_date=None, to_date
         "totals": totals,
         "rows": rows,
         "total_adolescent": sum(totals)
+    }
+
+    # Writing PDF
+    parent = settings.TEMP_REPORT_DIR
+    parent.mkdir(parents=True, exist_ok=True)
+    filename = parent / filename
+
+    set_task_state(
+        self,
+        "WRITING",
+        2,
+        info=f"Writing the pdf report...")
+    render_to_pdf_file(template_name, filename, context)
+    # Preparing link
+    set_task_state(self, "GENERATING", 3, info="Generating download link")
+    set_task_state(self, "DONE", 3, info="Done")
+
+
+@shared_task(bind=True)
+def generate_table_1_report(self, filename="report.pdf", from_date=None, to_date=None):
+    template_name = "pdf_processor/table_1.html"
+
+    # Validate from and to dates.
+    if not isinstance(from_date, datetime):
+        from_date = make_aware(datetime(2023, 1, 1))
+    if not isinstance(to_date, datetime):
+        to_date = timezone.now()
+
+    adolescents = Adolescent.objects.filter(
+        created_at__gte=from_date,
+        created_at__lte=to_date,
+    )
+
+    set_task_state(self,
+                   "RETRIEVING RECORDS",
+                   1,
+                   info=f"Retrieving invoice data.")
+
+    # Total
+    basic_total, secondary_total, community_total = [
+        adolescents.filter(type=t).count() for t in ["basic", "secondary", "community"]
+    ]
+    rows: List[Table1RowValue] = []
+
+    #  Age rows
+    for i, age in enumerate(range(10, 20)):
+        adoles = adolescents.filter(age=age)
+
+        name = "Age in years" if i == 0 else ""
+        value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
+            "basic", "secondary", "community"]]
+        rows.append(
+            Table1RowValue(
+                name,
+                age,
+                f"{value_2} ({round(value_2/max(1, basic_total)*100,1)})",
+                f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)})",
+                f"{value_4} ({round(value_4/max(1, community_total)*100,1)})",
+            )
+        )
+
+    # Sex rows
+    for i, sex in enumerate(["male", "female"]):
+        adoles = adolescents.filter(gender=sex)
+        name = "Sex" if i == 0 else ""
+        value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
+            "basic", "secondary", "community"]]
+        rows.append(
+            Table1RowValue(
+                name,
+                sex.capitalize(),
+                f"{value_2} ({round(value_2/max(1, basic_total)*100,1)})",
+                f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)})",
+                f"{value_4} ({round(value_4/max(1, community_total)*100,1)})",
+            )
+        )
+
+    # Location rows
+    locations = CheckupLocation.objects.all().values_list("name", flat=True)
+    for i, location in enumerate(locations):
+        adoles = adolescents.filter(check_up_location=location)
+        value_2, value_3, value_4 = [adoles.filter(type=t).count() for t in [
+            "basic", "secondary", "community"]]
+        name = "Location" if i == 0 else ""
+        rows.append(
+            Table1RowValue(
+                name,
+                location.capitalize(),
+                f"{value_2} ({round(value_2/max(1, basic_total)*100,1)})",
+                f"{value_3} ({round(value_3/max(1, secondary_total)*100,1)})",
+                f"{value_4} ({round(value_4/max(1, community_total)*100,1)})",
+            )
+        )
+
+    context = {
+        "basic_total": basic_total,
+        "secondary_total": secondary_total,
+        "community_total": community_total,
+        "rows": rows,
+        "total": sum([basic_total, secondary_total, community_total])
     }
 
     # Writing PDF

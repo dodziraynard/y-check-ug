@@ -4,7 +4,7 @@ from rest_framework import generics
 from datetime import datetime
 from django.utils import timezone
 from django.utils.timezone import make_aware
-from pdf_processor.tasks import generate_table_5_report
+from pdf_processor.tasks import generate_table_5_report, generate_table_1_report
 from rest_framework.response import Response
 from django.conf import settings
 
@@ -21,15 +21,19 @@ class TableReportsView(generics.GenericAPIView):
         from_date = request.GET.get("from_date") or make_aware(
             datetime(2023, 1, 1))  # since project started in 2023
         to_date = request.GET.get("to_date") or timezone.now()
-        
+
         if isinstance(from_date, str):
             from_date = make_aware(datetime.strptime(from_date, '%Y-%m-%d'))
-        if isinstance(to_date, str):    
+        if isinstance(to_date, str):
             to_date = make_aware(datetime.strptime(to_date, '%Y-%m-%d'))
 
         task_id, error_message = None, None
         filename = f"y-check-report-table-{table_number}-{from_date.strftime('%m-%d-%Y')}-{to_date.strftime('%m-%d-%Y')}.pdf"
         match table_number:
+            case 1:
+                task_id = generate_table_1_report.delay(
+                    filename, from_date, to_date)
+                task_id = str(task_id) if task_id else None
             case 5:
                 task_id = generate_table_5_report.delay(
                     filename, from_date, to_date)
