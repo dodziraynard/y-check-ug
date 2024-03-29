@@ -45,18 +45,21 @@ const Home = () => {
                 <div className="container">
                     <div className="hero-inner">
                         <div className="hero-copy">
-                            <h1 className="hero-title mt-0">Welcome to <br /> Y-CHECK, GHANA</h1>
+                            <h1 className="hero-title mt-0">Welcome to <br /> Y-Check Ghana</h1>
                             <p className="hero-paragraph">
                                 Click on download app to get the latest version of the app,
                                 the app can only be used by people of Y-Check Ghana.
                                 Click on dashboard to login into your dashboard.
-
                             </p>
                             <div className="hero-cta">
                                 {webConfigurations?.android_apk_url &&
-                                    <a className="button button-shadow" href={webConfigurations.android_apk_url} >Download App</a>
+                                    <a className="button button-shadow" href={webConfigurations.android_apk_url} >
+                                        <i className="bi bi-google-play mx-2"></i>Download App
+                                    </a>
                                 }
-                                <Link to={'/dashboard'} className="button button-primary">Dashboard</Link>
+                                <Link to={'/dashboard'} className="button button-primary">
+                                    Dashboard
+                                </Link>
                             </div>
                         </div>
                         <div className="hero-app">
