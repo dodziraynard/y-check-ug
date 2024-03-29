@@ -17,7 +17,7 @@ class StreamTaskStatusView(View):
 
         def get_task_progress():
             retry_count = 0
-            while True:
+            while retry_count < 20:
                 time.sleep(0.2)
                 data = ""
                 try:
@@ -30,13 +30,13 @@ class StreamTaskStatusView(View):
                         break
                     yield 'data: %s\n\n' % data
                 except AttributeError as e:
-                    yield 'data: Error occured: %s\n\n' % str(e)
-                    if retry_count > 20:
-                        break
+                    yield "data: Error: Can't fetch tasks status\n\n"
                     retry_count += 1
-                    logging.error("StreamTaskStatusView", str(e))
+                    logging.error("StreamTaskStatusView %s", str(e))
 
                 except Exception as e:
-                    logging.error("StreamTaskStatusView", str(e))
+                    retry_count += 1
+                    logging.error("StreamTaskStatusView %s", str(e))
+            yield 'data: CLOSE \n\n'
         return StreamingHttpResponse(get_task_progress(),
                                      content_type='text/event-stream')

@@ -14,7 +14,7 @@ function ReportGenerationWidget({ toDate, fromDate, tableNumber }) {
 
     const initiateReportGeneration = () => {
         setIsGenerating(true)
-        trigger(`${BASE_API_URI}/reports/${tableNumber}`)
+        trigger(`${BASE_API_URI}/reports/${tableNumber}?from_date=${fromDate}&to_date=${toDate}`)
     }
 
     useEffect(() => {
@@ -36,7 +36,7 @@ function ReportGenerationWidget({ toDate, fromDate, tableNumber }) {
             setErrorMessage(responseData.error_message)
         } else if (responseData?.sse_status_url, responseData?.download_link) {
             streamTaskProgress(responseData.sse_status_url, responseData.download_link)
-        } 
+        }
         setIsGenerating(false)
     }, [responseData])
 
@@ -48,6 +48,9 @@ function ReportGenerationWidget({ toDate, fromDate, tableNumber }) {
                     source.close();
                     setDownloadLink(downloadLink)
                     setTaskStatusMessage(null)
+                }
+                else if (event.data.includes("CLOSE")) {
+                    source.close();
                 } else {
                     setTaskStatusMessage(event.data)
                 }

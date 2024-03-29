@@ -21,6 +21,11 @@ class TableReportsView(generics.GenericAPIView):
         from_date = request.GET.get("from_date") or make_aware(
             datetime(2023, 1, 1))  # since project started in 2023
         to_date = request.GET.get("to_date") or timezone.now()
+        
+        if isinstance(from_date, str):
+            from_date = make_aware(datetime.strptime(from_date, '%Y-%m-%d'))
+        if isinstance(to_date, str):    
+            to_date = make_aware(datetime.strptime(to_date, '%Y-%m-%d'))
 
         task_id, error_message = None, None
         filename = f"y-check-report-table-{table_number}-{from_date.strftime('%m-%d-%Y')}-{to_date.strftime('%m-%d-%Y')}.pdf"
