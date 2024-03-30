@@ -48,7 +48,7 @@ const Home = () => {
                             <h1 className="hero-title mt-0">Welcome to <br /> Y-Check Ghana</h1>
                             <p className="hero-paragraph">
                                 Click on download app to get the latest version of the app,
-                                the app can only be used by people of Y-Check Ghana.
+                                the app can only be used by the Y-Check Ghana team.
                                 Click on dashboard to login into your dashboard.
                             </p>
                             <div className="hero-cta">
