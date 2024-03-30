@@ -91,9 +91,9 @@ function DashboardPage() {
 
                 <span className="close-sidebar" data-target=".sidebar"><i className="bi bi-x-lg"></i></span>
                 <section className="d-flex justify-content-center align-items-center sidebar-header">
-                    <div className="logo">
-                        <img src={logo} alt="Y-CHECK Logo" height="50" />
-                    </div>
+                    <Link to="/" className="logo d-block">
+                        <img src={logo} alt="Y-CHECK Logo" style={{ height: "3em" }} />
+                    </Link>
                 </section>
 
                 <h6 className="header mt-4">HOME</h6>

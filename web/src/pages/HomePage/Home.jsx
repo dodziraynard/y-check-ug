@@ -53,12 +53,12 @@ const Home = () => {
                             </p>
                             <div className="hero-cta">
                                 {webConfigurations?.android_apk_url &&
-                                    <a className="button button-shadow" href={webConfigurations.android_apk_url} >
+                                    <a className="button button-shadow" href={webConfigurations.android_apk_url} style={{ background: "rgb(235,126,48)" }} >
                                         <i className="bi bi-google-play mx-2"></i>Download App
                                     </a>
                                 }
                                 <Link to={'/dashboard'} className="button button-primary">
-                                    Dashboard
+                                    <i className="bi bi-box-arrow-in-right mx-2"></i> Login
                                 </Link>
                             </div>
                         </div>

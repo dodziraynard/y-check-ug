@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react'
 import { useToast, Spinner } from '@chakra-ui/react'
 import logo from "../../assets/images/logo.png";
 import { Navigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLoginUserMutation, setUser as setStoreUser, setToken, setUserPermissions } from '../../features/authentication/authentication-api-slice';
 import PasswordInput from '../../components/PasswordInput';
 import { BASE_API_URI } from '../../utils/constants';
@@ -16,7 +16,8 @@ function LoginScreen() {
     const [password, setPassword] = useState('')
     const [showIpConfig, setShowIpConfig] = useState(false)
     const [configuredIp, setConfiguredIp] = useState(BASE_API_URI)
-    const [user, setUser] = useState(null)
+    const loggedInUser = useSelector((state) => state.authentication.user);
+    const [user, setUser] = useState(loggedInUser)
     const dispatch = useDispatch();
 
     const saveConfiguredIp = () => {
