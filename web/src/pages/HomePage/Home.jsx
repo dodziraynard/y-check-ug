@@ -1,9 +1,6 @@
 import './home.scss'
 import ycheck from '../../assets/images/y2.png'
-import team1 from '../../assets/images/team1.jpg'
-import team2 from '../../assets/images/team2.jpg'
-import team3 from '../../assets/images/team3.jpg'
-import team4 from '../../assets/images/team4.jpg'
+import avatar from '../../assets/images/avatar.jpeg'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { useToast } from "@chakra-ui/react";
@@ -341,21 +338,19 @@ const Home = () => {
                         <div class="top-bar"></div>
 
                         <div class="details">
-                            <img src={team1} alt="" />
-                            <strong>Emma Olivia</strong>
-                            <p>Emmaolivia@gmail.com</p>
+                            <img src={avatar} alt="" />
+                            <strong>Team Member</strong>
+                            <p>user@gmail.com</p>
                         </div>
-
-
                     </div>
                     <div class="box">
                         <div class="top-bar"></div>
 
 
                         <div class="details">
-                            <img src={team2} alt="" />
-                            <strong>Sofia Adward</strong>
-                            <p>Sofiaadward@gmail.com</p>
+                            <img src={avatar} alt="" />
+                            <strong>Team Member</strong>
+                            <p>user@gmail.com</p>
                         </div>
 
                     </div>
@@ -364,9 +359,9 @@ const Home = () => {
 
 
                         <div class="details">
-                            <img src={team3} alt="" />
-                            <strong>Touseeq Ijaz</strong>
-                            <p>Touseeqijaz@gmail.com</p>
+                            <img src={avatar} alt="" />
+                            <strong>Team Member</strong>
+                            <p>user@gmail.com</p>
                         </div>
 
                     </div>
@@ -374,9 +369,9 @@ const Home = () => {
                         <div class="top-bar"></div>
 
                         <div class="details">
-                            <img src={team4} alt="" />
-                            <strong>Amelia Alex</strong>
-                            <p>Ameliaalex@gmail.com</p>
+                            <img src={avatar} alt="" />
+                            <strong>Team Member</strong>
+                            <p>user@gmail.com</p>
                         </div>
 
 
