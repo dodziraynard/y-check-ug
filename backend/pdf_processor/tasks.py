@@ -211,7 +211,11 @@ def generate_table_1_report(self, filename="report.pdf", from_date=None, to_date
             options = question.options.all().order_by("value")
             for i, option in enumerate(options):
                 responses = question.responses.filter(chosen_options=option)
-                value_2, value_3, value_4 = [responses.filter(adolescent__type=t).count() for t in [
+                value_2, value_3, value_4 = [responses.filter(
+                    adolescent__type=t,
+                    created_at__gte=from_date,
+                    created_at__lte=to_date,
+                ).count() for t in [
                     "basic", "secondary", "community"]]
                 value_1 = option.value
                 name = question_text if i == 0 else ""
