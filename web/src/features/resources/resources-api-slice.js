@@ -19,6 +19,16 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
+            changeOwnPassword: builder.mutation({
+                query(body) {
+                    return {
+                        url: `/auth/change-own-password/`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
+
             // Groups
             getGroups: builder.query({
                 query() {
@@ -279,8 +289,7 @@ export const {
 
     // apk
     usePutApkUploadFileMutation,
-
-
+    useChangeOwnPasswordMutation
 } = resourceApiSlice;
 
 export default resourceApiSlice;

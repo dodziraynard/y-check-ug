@@ -11,9 +11,9 @@ if (userPermissions === null || userPermissions === 'undefined') {
 export const authenticationSlice = createSlice({
     name: "authentication",
     initialState: {
-        user: JSON.parse(localStorage.getItem("user")),
+        user: localStorage.getItem("user") != "undefined" ? JSON.parse(localStorage.getItem("user") || "{}") : "{}",
         token: localStorage.getItem("token"),
-        userPermissions: JSON.parse(userPermissions),
+        userPermissions: JSON.parse(userPermissions || "{}"),
     },
     reducers: {
         setUser: (state, action) => {

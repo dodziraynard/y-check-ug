@@ -14,6 +14,7 @@ import {
 } from '../../features/authentication/authentication-api-slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToast } from '@chakra-ui/react';
+import { Navigate } from "react-router-dom";
 
 function DashboardPage() {
     const toast = useToast()
@@ -83,6 +84,10 @@ function DashboardPage() {
 
     return <Fragment>
         <PageMeta title="Dashboard | Y-Check" />
+
+        {!(user && user.changed_password) && (
+            <Navigate to="/dashboard/password-reset/" replace={true} />
+        )}
 
         <div className='dashboard-page'>
             <div className="overlay"></div>

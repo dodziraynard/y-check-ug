@@ -345,8 +345,6 @@ const Home = () => {
                     </div>
                     <div class="box">
                         <div class="top-bar"></div>
-
-
                         <div class="details">
                             <img src={avatar} alt="" />
                             <strong>Team Member</strong>

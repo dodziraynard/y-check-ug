@@ -10,6 +10,7 @@ urlpatterns = [
     path("auth/register/", views.UserRegistrationAPI.as_view()),
     path("auth/update-user/", views.UpdateUserObject.as_view()),
     path("auth/change-password/", views.UserChangePassword.as_view()),
+    path("auth/change-own-password/", views.ChangeOwnPassword.as_view()),
 
     path("checkup-location/", views.GetCheckupLocation.as_view()),
     path("adolescents/", views.MobileAdolescentsAPI.as_view()),

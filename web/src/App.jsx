@@ -9,6 +9,7 @@ import Permissions from "./utils/permissions";
 import ProtectedRoute from "./components/Common/ProtectedRoute";
 import PageLoading from "./components/PageLoading";
 
+const ChangeDefaultPassword = React.lazy(() => import("./pages/ChangeDefaultPassword"));
 const DashboardPage = React.lazy(() => import("./pages/DashboardPage"));
 const LoginPage = React.lazy(() => import("./pages/LoginPage"));
 const Error404Screen = React.lazy(() => import("./pages/ErrorPages/Error404"));
@@ -47,6 +48,7 @@ function App() {
           </ProtectedRoute>
         }>
           <Route path="" element={<Suspense fallback={<PageLoading />}><DashboardWidget /></Suspense>} />
+          <Route path="/dashboard/password-reset" element={<Suspense fallback={<PageLoading />}><ChangeDefaultPassword /></Suspense>} />
           <Route path="/dashboard/patients" element={<Suspense fallback={<PageLoading />}><PatientsWidget /></Suspense>} />
           <Route path="/dashboard/patients/:pid/summary" element={<Suspense fallback={<PageLoading />}><SummaryFlagWidget /></Suspense>} />
           <Route path="/dashboard/patients/:pid/summary/referrals" element={<Suspense fallback={<PageLoading />}><AdolescentReferralsWidget /></Suspense>} />
