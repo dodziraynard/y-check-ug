@@ -88,6 +88,7 @@ function ChangeDefaultPassword() {
                         <PasswordInput
                             value={newPassword}
                             setValue={setNewPassword}
+                            minLength={5}
                             name='new_password' required />
                     </div>
                     <div className="form-group my-3">
