@@ -293,7 +293,7 @@ class ReferralDetail(generics.GenericAPIView):
         relevant_adolescent_responses = {}
         for service in referral.services.all():
             flag_labels = service.related_flag_labels.all()
-            flags = SummaryFlag.objects.filter(label__in=flag_labels)
+            flags = SummaryFlag.objects.filter(label__in=flag_labels, adolescent=adolescent)
             responses = [
                 response for flag in flags for response in flag.get_responses()]
             relevant_adolescent_responses[service.id] = responses
