@@ -7,8 +7,8 @@ import logo from "../../assets/images/logo.png";
 function Error401Screen() {
     // Save token to local storage
     localStorage.clear('token')
-    localStorage.setItem('user')
-    localStorage.setItem('user_permissions')
+    localStorage.clear('user')
+    localStorage.clear('user_permissions')
 
     return (
         <Fragment>
