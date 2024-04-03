@@ -75,7 +75,7 @@ function ReferralDetailWidget() {
     }, [])
 
     function showResponses(serviceId) {
-        setSelectedResponse(relevantAdolescentResponses?.[serviceId])
+        setSelectedResponse(Array.from(new Set(relevantAdolescentResponses?.[serviceId])))
         responseModal?.show()
     }
 
@@ -348,7 +348,7 @@ function ReferralDetailWidget() {
                                         </div>
                                         <div className="row align-items-center">
                                             <h6 className="col-md-4 text-muted">DoB</h6>
-                                            <strong className="col-md-8 text">{getDateFromMills(adolescent?.dob)}</strong>
+                                            <strong className="col-md-8 text">{adolescent?.dob != undefined ? getDateFromMills(adolescent?.dob) : ""}</strong>
                                         </div>
                                     </section>
                                 </div>
