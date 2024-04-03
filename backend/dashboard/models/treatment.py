@@ -12,6 +12,7 @@ class Treatment(UpstreamSyncBaseModel):
         Referral, related_name="treatment", on_delete=models.CASCADE)
     adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE)
     total_service_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    nhis_cost = models.DecimalField(max_digits=10, decimal_places=2,null=True, blank=True)
     date_of_service = models.DateField(auto_now_add=True)
     picture_confirmed = models.BooleanField(default=True)
     full_treatment_received = models.BooleanField()
