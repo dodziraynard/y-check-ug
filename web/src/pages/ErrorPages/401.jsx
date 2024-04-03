@@ -18,7 +18,7 @@ function Error401Screen() {
                 <div className="d-flex justify-content-center">
                     <div>
                         <div className="d-flex justify-content-center">
-                            <img className='d-block' src={logo} alt="logo" style={{ "height": "10em" }} />
+                            <img className='d-block' src={logo} alt="logo" style={{ "height": "3em" }} />
                         </div>
 
                         <div className="d-flex justify-content-center">

@@ -11,7 +11,7 @@ function Error404Screen() {
             <div className="error-page">
                 <div className="content">
                     <div className="d-flex justify-content-center">
-                        <img src={logo} alt="logo" style={{ "height": "10em" }} />
+                        <img src={logo} alt="logo" style={{ "height": "3em" }} />
                     </div>
                     <h1 style={{ "fontSize": "10em" }}>404</h1>
 
