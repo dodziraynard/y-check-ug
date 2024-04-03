@@ -1,4 +1,5 @@
 import sys
+import logging
 from django.db import models
 from dashboard.models.conditions_util_functions import (
     compute_bmi_sd_function,
@@ -13,6 +14,8 @@ from django.db.models import Q
 from dashboard.models.adolescent import Adolescent
 from dashboard.models.questions import Question, QuestionGroup, AdolescentResponse
 from dashboard.models.mixin import UpstreamSyncBaseModel
+
+logger = logging.getLogger(__name__)
 
 
 class SummaryFlag(UpstreamSyncBaseModel):
@@ -87,13 +90,21 @@ class SummaryFlag(UpstreamSyncBaseModel):
             if condition.question2:
                 question_ids.append(condition.question2.question_id)
 
-        for question in Question.objects.filter(
+        questions = Question.objects.filter(
             Q(question_id__in=question_ids) &
             (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
             ((Q(adolescent_type=None) | (Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False))) |
              (Q(adolescent_type=None) | (~Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=True)))) &
             (Q(study_phase=None) | Q(study_phase__iexact=adolescent.study_phase))
-        ).distinct():
+        )
+
+        try:
+            questions = questions.distinct("question_id")
+        except Exception as e:
+            logger.exception(str(e))
+            questions = questions.distinct()
+
+        for question in questions:
             response = question.get_response(adolescent)
             data = {
                 "question": question.text,
