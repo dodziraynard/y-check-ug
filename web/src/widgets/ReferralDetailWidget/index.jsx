@@ -28,6 +28,7 @@ function ReferralDetailWidget() {
 
     // Form inputs
     const [totalTreatmentCost, setTotalTreatmentCost] = useState()
+    const [nhisCost, setNhisCost] = useState()
     const [pictureConfirmed, setPictureConfirmed] = useState(false)
     const [isFurtherReferred, setIsFurtherReferred] = useState(false)
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
@@ -35,7 +36,7 @@ function ReferralDetailWidget() {
     const [noOnwardReferralReason, setNoOnwardReferralReason] = useState("")
     const [providedTreatment, setProvidedTreatment] = useState("")
     const [selectedFacilityId, setSelectedFacilityId] = useState("")
-
+    
     const handleSubmit = (event) => {
         event.preventDefault()
         // Nullify the values of hidden fields.
@@ -49,6 +50,7 @@ function ReferralDetailWidget() {
 
         const body = {
             total_service_cost: totalTreatmentCost,
+            nhis_cost: nhisCost,
             full_treatment_received: fullTreatmentProvided,
             provided_treaments: providedTreatment,
             is_referred: isFurtherReferred,
@@ -90,6 +92,7 @@ function ReferralDetailWidget() {
         if (Boolean(treatment)) {
             setSelectedFacilityId(treatment.further_referral_facility)
             setTotalTreatmentCost(treatment.total_service_cost)
+            setNhisCost(treatment.nhis_cost)
             setFullTreamentProvided(treatment.full_treatment_received)
             setProvidedTreatment(treatment.provided_treaments)
             setIsFurtherReferred(treatment.is_referred)
@@ -255,6 +258,20 @@ function ReferralDetailWidget() {
                                                 </div>
                                             }
 
+                                            <div className="form-group my-3">
+                                                <label htmlFor=''><strong>What's the total cost covered by NHIS? </strong></label>
+                                                <div className="d-flex align-items-center col-md-4">
+                                                    <strong>GHC</strong>
+                                                    <input className='form-control'
+                                                        type="number" name="nhis_cost"
+                                                        step={0.01}
+                                                        min={0.01}
+                                                        value={nhisCost}
+                                                        required
+                                                        onChange={(event) => setNhisCost(event.target.value)}
+                                                        id="nhis_cost" />
+                                                </div>
+                                            </div>
                                             <div className="form-group my-3">
                                                 <label htmlFor=''><strong>What's the total cost of the treatment? </strong></label>
                                                 <div className="d-flex align-items-center col-md-4">

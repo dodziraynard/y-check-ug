@@ -27,6 +27,7 @@ function TreatmentDetailWidget() {
 
     // Form inputs
     const [totalTreatmentCost, setTotalTreatmentCost] = useState()
+    const [nhisCost, setNhisCost] = useState()
     const [isFurtherReferred, setIsFurtherReferred] = useState(false)
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
     const [remarks, setRemarks] = useState("")
@@ -61,6 +62,7 @@ function TreatmentDetailWidget() {
         if (Boolean(treatment)) {
             setSelectedFacilityId(treatment.further_referral_facility)
             setTotalTreatmentCost(treatment.total_service_cost)
+            setNhisCost(treatment.nhis_cost)
             setFullTreamentProvided(treatment.full_treatment_received)
             setProvidedTreatment(treatment.provided_treaments)
             setIsFurtherReferred(treatment.is_referred)
@@ -185,6 +187,20 @@ function TreatmentDetailWidget() {
                         </div>
                     }
 
+                    <div className="form-group my-3">
+                        <label htmlFor=''><strong>What's the total cost covered by NHIS?</strong></label>
+                        <div className="d-flex align-items-center col-md-4">
+                            <strong>GHC</strong>
+                            <input className='form-control'
+                                type="number" name="nhis_cost"
+                                step={0.01}
+                                min={0.01}
+                                readOnly
+                                value={nhisCost}
+                                required
+                                id="nhis_cost" />
+                        </div>
+                    </div>
                     <div className="form-group my-3">
                         <label htmlFor=''><strong>What's the total cost of the treatment? </strong></label>
                         <div className="d-flex align-items-center col-md-4">

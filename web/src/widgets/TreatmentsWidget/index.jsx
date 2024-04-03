@@ -41,6 +41,9 @@ function TreatmentsWidget() {
                                         key: "facility_name", value: "Facility"
                                     },
                                     {
+                                        key: "nhis_cost", value: "NHIS Cost", textAlign: "center",
+                                    },
+                                    {
                                         key: "total_service_cost", value: "Service Cost", textAlign: "center",
                                     },
                                     {

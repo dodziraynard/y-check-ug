@@ -336,6 +336,7 @@ class ReferralTreatment(generics.GenericAPIView):
 
         # Posted data
         total_service_cost = request.data.get("total_service_cost")
+        total_nhis_cost = request.data.get("nhis_cost")
         full_treatment_received = request.data.get("full_treatment_received")
         provided_treaments = request.data.get("provided_treaments")
         is_referred = request.data.get("is_referred")
@@ -348,6 +349,7 @@ class ReferralTreatment(generics.GenericAPIView):
             "referral": referral,
             "adolescent": referral.adolescent,
             "total_service_cost": total_service_cost,
+            "nhis_cost": total_nhis_cost,
             "full_treatment_received": full_treatment_received,
             "provided_treaments": provided_treaments,
             "is_referred": is_referred,
