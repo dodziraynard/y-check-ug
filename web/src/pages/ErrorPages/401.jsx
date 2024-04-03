@@ -3,9 +3,13 @@ import React, { Fragment } from 'react'
 import Footer from '../../components/Footer';
 import { Link } from 'react-router-dom';
 import logo from "../../assets/images/logo.png";
-// import TopNav from '../../components/TopNav';
 
 function Error401Screen() {
+    // Save token to local storage
+    localStorage.clear('token')
+    localStorage.setItem('user')
+    localStorage.setItem('user_permissions')
+
     return (
         <Fragment>
             {/* <TopNav /> */}

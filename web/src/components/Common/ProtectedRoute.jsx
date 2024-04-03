@@ -29,6 +29,6 @@ const ProtectedRoute = ({ children, permissions = [] }) => {
 
     if (!hasPermission)
         return <Error401Screen />
-    return user ? children : <Navigate to="/login" />;
+    return Boolean(user?.username) ? children : <Navigate to="/login" />;
 }
 export default ProtectedRoute;

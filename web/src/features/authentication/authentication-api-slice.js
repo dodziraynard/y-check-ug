@@ -8,10 +8,16 @@ if (userPermissions === null || userPermissions === 'undefined') {
     userPermissions = "[]"
 }
 
+let user = null;
+try {
+    user = JSON.parse(localStorage.getItem("user"))
+} catch (error) {
+}
+
 export const authenticationSlice = createSlice({
     name: "authentication",
     initialState: {
-        user: localStorage.getItem("user") != "undefined" ? JSON.parse(localStorage.getItem("user") || "{}") : "{}",
+        user: user,
         token: localStorage.getItem("token"),
         userPermissions: JSON.parse(userPermissions || "{}"),
     },

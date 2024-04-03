@@ -85,7 +85,7 @@ function DashboardPage() {
     return <Fragment>
         <PageMeta title="Dashboard | Y-Check" />
 
-        {!(user && user.changed_password) && (
+        {user?.username && !user.changed_password && (
             <Navigate to="/dashboard/password-reset/" replace={true} />
         )}
 
