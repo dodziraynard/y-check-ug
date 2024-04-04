@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
-import { Button, Spinner,  useToast } from '@chakra-ui/react';
-import {  monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastSuccessMessage } from '../../utils/functions';
+import { Button, Spinner, useToast } from '@chakra-ui/react';
+import { monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastSuccessMessage } from '../../utils/functions';
 import { Link, useParams } from "react-router-dom";
 import { Modal } from 'bootstrap';
 
@@ -27,6 +27,7 @@ function TreatmentDetailWidget() {
 
     // Form inputs
     const [totalTreatmentCost, setTotalTreatmentCost] = useState()
+    const [totalTreatmentCostNHIS, setTotalTreatmentCostNHIS] = useState()
     const [isFurtherReferred, setIsFurtherReferred] = useState(false)
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
     const [remarks, setRemarks] = useState("")
@@ -61,6 +62,7 @@ function TreatmentDetailWidget() {
         if (Boolean(treatment)) {
             setSelectedFacilityId(treatment.further_referral_facility)
             setTotalTreatmentCost(treatment.total_service_cost)
+            setTotalTreatmentCostNHIS(treatment.total_service_cost_nhis)
             setFullTreamentProvided(treatment.full_treatment_received)
             setProvidedTreatment(treatment.provided_treaments)
             setIsFurtherReferred(treatment.is_referred)
@@ -197,6 +199,22 @@ function TreatmentDetailWidget() {
                                 value={totalTreatmentCost}
                                 required
                                 id="total_treatment_cost" />
+                        </div>
+                    </div>
+
+                    <div className="form-group my-3">
+                        <label htmlFor=''><strong>What's the total cost of the treatment covered by NHIS? </strong></label>
+                        <div className="d-flex align-items-center col-md-4">
+                            <strong>GHC</strong>
+                            <input className='form-control'
+                                type="number" name="total_treatment_cost_nhis"
+                                step={0.01}
+                                min={0.01}
+                                value={totalTreatmentCostNHIS}
+                                required
+                                readOnly
+                                onChange={(event) => setTotalTreatmentCostNHIS(event.target.value)}
+                                id="total_treatment_cost_nhis" />
                         </div>
                     </div>
 

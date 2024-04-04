@@ -231,8 +231,8 @@ function TableView({ headers,
                 <div className="table-container">
                     <table className="table mb-2" id="data_table">
                         <thead>
-                            <tr>
-                                {bulkActions?.length > 0 && <th>
+                            <tr style={{ verticalAlign: "middle" }}>
+                                {bulkActions?.length > 0 ? <th>
                                     <input type="checkbox" className="form-check-input" id="bulk_select"
                                         onChange={(e) => {
                                             if (e.target.checked) {
@@ -244,7 +244,8 @@ function TableView({ headers,
                                             }
                                         }}
                                         checked={bulkSelectedIds.length === displayedData.length && bulkSelectedIds.length > 0}
-                                    /> </th>}
+                                    />
+                                </th> : ""}
 
                                 <th>
                                     <div className="d-flex">

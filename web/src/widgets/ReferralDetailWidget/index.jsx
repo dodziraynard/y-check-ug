@@ -28,6 +28,7 @@ function ReferralDetailWidget() {
 
     // Form inputs
     const [totalTreatmentCost, setTotalTreatmentCost] = useState()
+    const [totalTreatmentCostNHIS, setTotalTreatmentCostNHIS] = useState()
     const [pictureConfirmed, setPictureConfirmed] = useState(false)
     const [isFurtherReferred, setIsFurtherReferred] = useState(false)
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
@@ -49,6 +50,7 @@ function ReferralDetailWidget() {
 
         const body = {
             total_service_cost: totalTreatmentCost,
+            total_service_cost_nhis: totalTreatmentCostNHIS,
             full_treatment_received: fullTreatmentProvided,
             provided_treaments: providedTreatment,
             is_referred: isFurtherReferred,
@@ -90,6 +92,7 @@ function ReferralDetailWidget() {
         if (Boolean(treatment)) {
             setSelectedFacilityId(treatment.further_referral_facility)
             setTotalTreatmentCost(treatment.total_service_cost)
+            setTotalTreatmentCostNHIS(treatment.total_service_cost_nhis)
             setFullTreamentProvided(treatment.full_treatment_received)
             setProvidedTreatment(treatment.provided_treaments)
             setIsFurtherReferred(treatment.is_referred)
@@ -270,6 +273,21 @@ function ReferralDetailWidget() {
                                                 </div>
                                             </div>
 
+                                            <div className="form-group my-3">
+                                                <label htmlFor=''><strong>What's the total cost of the treatment covered by NHIS? </strong></label>
+                                                <div className="d-flex align-items-center col-md-4">
+                                                    <strong>GHC</strong>
+                                                    <input className='form-control'
+                                                        type="number" name="total_treatment_cost_nhis"
+                                                        step={0.01}
+                                                        min={0.01}
+                                                        value={totalTreatmentCostNHIS}
+                                                        required
+                                                        onChange={(event) => setTotalTreatmentCostNHIS(event.target.value)}
+                                                        id="total_treatment_cost_nhis" />
+                                                </div>
+                                            </div>
+
                                             {isFurtherReferred &&
                                                 <div className="form-group my-3">
                                                     <label htmlFor=''><strong>Reason for referral</strong></label>
@@ -339,8 +357,8 @@ function ReferralDetailWidget() {
                                             <strong className="col-md-8 text">{adolescent?.other_names}</strong>
                                         </div>
                                         <div className="row align-items-center">
-                                            <h6 className="col-md-4 text-muted">VISIT TYPE</h6>
-                                            <strong className="col-md-8 text">{adolescent?.visit_type}</strong>
+                                            <h6 className="col-md-4 text-muted">STUDY PHASE</h6>
+                                            <strong className="col-md-8 text">{adolescent?.study_phase}</strong>
                                         </div>
                                         <div className="row align-items-center">
                                             <h6 className="col-md-4 text-muted">GENDER</h6>

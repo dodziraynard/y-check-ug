@@ -121,15 +121,11 @@ function PatientsWidget() {
                                     key: "gender", value: "Gender", textAlign: "center",
                                 },
                                 {
-                                    key: "visit_type", value: "Visit"
+                                    key: "study_phase", value: "Phase"
                                 }, {
                                     key: "check_up_location", value: "Location", textAlign: "left",
                                 },
                                 {
-                                    key: "status", value: "Status", textAlign: "center", render: (item) => {
-                                        return "..."
-                                    }
-                                }, {
                                     value: "Actions", textAlign: "right", render: (item) => {
                                         return (
                                             <div className="d-flex justify-content-end">

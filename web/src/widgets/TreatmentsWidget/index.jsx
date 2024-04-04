@@ -4,6 +4,7 @@ import './style.scss';
 import { Link } from 'react-router-dom';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
+import TextElipsis from '../../components/TextElipsis';
 
 const TableView = React.lazy(() => import("../../components/Table"));
 
@@ -44,7 +45,14 @@ function TreatmentsWidget() {
                                         key: "total_service_cost", value: "Service Cost", textAlign: "center",
                                     },
                                     {
-                                        key: "remarks", value: "Remarks"
+                                        key: "total_service_cost_nhis", value: "NHIS Cost", textAlign: "center",
+                                    },
+                                    {
+                                        key: "remarks", value: "Remarks", render: (item) => {
+                                            return <TextElipsis>
+                                                {item.remarks}
+                                            </TextElipsis>
+                                        }
                                     },
                                     {
                                         key: "provided_treaments", value: "Treatment",

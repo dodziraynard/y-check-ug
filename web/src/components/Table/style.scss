@@ -1,3 +1,5 @@
+@import "../../theme-variables.scss";
+
 .table-component {
   thead {
     user-select: none;
@@ -18,6 +20,9 @@
   }
 
   th {
+    font-weight: 300;
+    color: $primary-color;
+    background-color: rgba($color: $primary-color, $alpha: 0.05);
     i {
       font-size: 12px;
     }

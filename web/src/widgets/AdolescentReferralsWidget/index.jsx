@@ -14,6 +14,7 @@ import { Modal } from 'bootstrap';
 import { monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastErrorMessage } from '../../utils/functions';
 import TagInput from '../../components/TagInput';
 import { useSearchParams } from "react-router-dom";
+import TextElipsis from '../../components/TextElipsis';
 
 function AdolescentReferralsWidget() {
     const { pid } = useParams()
@@ -188,10 +189,15 @@ function AdolescentReferralsWidget() {
 
                                 <div className="form-group my-4">
                                     <label htmlFor="service_type"><strong>Type of initiating service</strong></label>
-                                    <input type="text" className="form-control"
-                                        value={serviceType || ""}
+                                    <select className='form-select'
+                                        defaultValue={serviceType || ""}
                                         onChange={(event) => setServiceType(event.target.value)}
-                                        name='service_type' id='service_type' required />
+                                        name='service_type' id='service_type' required>
+                                        <option value="">Choose service type</option>
+                                        <option value="BASIC">BASIC</option>
+                                        <option value="SECONDARY">SECONDARY</option>
+                                        <option value="TERTIARY">TERTIARY</option>
+                                    </select>
                                 </div>
 
                                 <div className="form-group my-4">
@@ -225,13 +231,13 @@ function AdolescentReferralsWidget() {
 
             {/* Content */}
             <div className="patients-widget">
-                <BreadCrumb items={[{ "name": "Patients", "url": "/patients" }, { "name": "Summary", "url": `/patients/${pid}/summary` }, { "name": "Referrals", "url": "" }]} />
+                <BreadCrumb items={[{ "name": "Patients", "url": "/dashboard/patients" }, { "name": "Summary", "url": `/dashboard/patients/${pid}/summary` }, { "name": "Referrals", "url": "" }]} />
                 <h4>Referrals</h4>
                 {isLoadingReferrals ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
                 <section>
                     <div className="col-md-10 mx-auto">
-                        <table className='table'>
+                        <table className='table m-4'>
                             <thead>
                                 <tr>
                                     <th>Facility</th>
@@ -244,7 +250,7 @@ function AdolescentReferralsWidget() {
                             <tbody>
                                 {Boolean(referrals?.length) ?
                                     referrals?.map((referral, index) => {
-                                        return <tr key={index}>
+                                        return <tr key={index} style={{ verticalAlign: "middle" }}>
                                             <td>{referral.facility_name}</td>
                                             <td>
                                                 {referral?.services?.map((service, index) => {
@@ -253,21 +259,27 @@ function AdolescentReferralsWidget() {
                                                     </Badge>
                                                 })}
                                             </td>
-                                            <td>{referral.referral_reason}</td>
+                                            <td>
+                                                <TextElipsis>
+                                                    {referral.referral_reason}
+                                                </TextElipsis>
+                                            </td>
                                             <td>
                                                 <Badge variant='subtle' colorScheme='blue'>
                                                     {referral.status}
                                                 </Badge>
                                             </td>
-                                            <td className='d-flex justify-content-end'>
-                                                <button className="mx-1 btn btn-outline-primary btn-sm align-self-end"
-                                                    onClick={() => showEditReferralModal(referral)}>
-                                                    <i className="bi bi-pen me-1"></i> Edit
-                                                </button>
-                                                <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeleteReferallModal(referral)}>
-                                                    <i className="bi bi-trash me-1"></i>
-                                                    Delete
-                                                </button>
+                                            <td>
+                                                <div className='d-flex justify-content-end'>
+                                                    <button className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
+                                                        onClick={() => showEditReferralModal(referral)}>
+                                                        <i className="bi bi-pen me-1"></i> Edit
+                                                    </button>
+                                                    <button className="btn btn-sm btn-outline-primary me-1 d-flex align-items-center" onClick={() => showDeleteReferallModal(referral)}>
+                                                        <i className="bi bi-trash me-1"></i>
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     })

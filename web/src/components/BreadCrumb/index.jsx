@@ -6,12 +6,11 @@ const BreadCrumb = ({ items }) => {
 
     return (
         <div className="breadcrumb">
-            <Link to="/">Home /</Link>
+            <Link to="/dashboard">Home /</Link>
             {items?.map((item, index) => {
                 return <Fragment key={index}>
                     <Link key={index} to={item.url}>{item.name} / </Link>
                 </Fragment >
-
             })}
         </div >
     );

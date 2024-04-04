@@ -68,7 +68,7 @@ function ReferralsWidget() {
                                         value: "Actions", textAlign: "right", render: (item) => {
                                             return (
                                                 <div className="d-flex justify-content-end">
-                                                    <Link to={`/dashboard/referrals/${item.id}/details`} className="mx-1 btn btn-outline-primary btn-sm align-self-end"
+                                                    <Link to={`/dashboard/referrals/${item.id}/details`} className="mx-1 btn btn-outline-primary btn-sm d-flex align-items-center"
                                                         onClick={() => null}>
                                                         <i className="bi bi-list me-1"></i> More
                                                     </Link>
