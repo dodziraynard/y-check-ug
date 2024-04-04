@@ -14,7 +14,7 @@ import { Modal } from 'bootstrap';
 import { monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastErrorMessage } from '../../utils/functions';
 import TagInput from '../../components/TagInput';
 import { useSearchParams } from "react-router-dom";
-import TextElipsis from '../../components/TextElipsis';
+import TextOverflow from '../../components/TextOverflow';
 
 function AdolescentReferralsWidget() {
     const { pid } = useParams()
@@ -260,9 +260,9 @@ function AdolescentReferralsWidget() {
                                                 })}
                                             </td>
                                             <td>
-                                                <TextElipsis>
+                                                <TextOverflow>
                                                     {referral.referral_reason}
-                                                </TextElipsis>
+                                                </TextOverflow>
                                             </td>
                                             <td>
                                                 <Badge variant='subtle' colorScheme='blue'>
