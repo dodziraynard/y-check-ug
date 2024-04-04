@@ -4,7 +4,7 @@ import './style.scss';
 import { Link } from 'react-router-dom';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
-import TextElipsis from '../../components/TextElipsis';
+import TextOverflow from '../../components/TextOverflow';
 
 const TableView = React.lazy(() => import("../../components/Table"));
 
@@ -49,9 +49,9 @@ function TreatmentsWidget() {
                                     },
                                     {
                                         key: "remarks", value: "Remarks", render: (item) => {
-                                            return <TextElipsis>
+                                            return <TextOverflow>
                                                 {item.remarks}
-                                            </TextElipsis>
+                                            </TextOverflow>
                                         }
                                     },
                                     {
