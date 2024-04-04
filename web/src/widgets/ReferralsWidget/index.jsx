@@ -5,6 +5,7 @@ import { Badge } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
+import TextOverflow from '../../components/TextOverflow';
 
 const TableView = React.lazy(() => import("../../components/Table"));
 
@@ -55,7 +56,10 @@ function ReferralsWidget() {
                                         }
                                     },
                                     {
-                                        key: "referral_reason", value: "Referral Reason"
+                                        key: "referral_reason", value: "Referral Reason", render: (item) => {
+                                            return <TextOverflow text={item.referral_reason} />
+
+                                        }
                                     },
                                     {
                                         key: "services", value: "Status", textAlign: "center", render: (item) => {

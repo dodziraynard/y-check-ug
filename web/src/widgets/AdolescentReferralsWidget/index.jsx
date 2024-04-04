@@ -260,9 +260,7 @@ function AdolescentReferralsWidget() {
                                                 })}
                                             </td>
                                             <td>
-                                                <TextOverflow>
-                                                    {referral.referral_reason}
-                                                </TextOverflow>
+                                                <TextOverflow text={referral.referral_reason} />
                                             </td>
                                             <td>
                                                 <Badge variant='subtle' colorScheme='blue'>

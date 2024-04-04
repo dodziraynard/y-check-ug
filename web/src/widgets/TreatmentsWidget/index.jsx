@@ -49,9 +49,7 @@ function TreatmentsWidget() {
                                     },
                                     {
                                         key: "remarks", value: "Remarks", render: (item) => {
-                                            return <TextOverflow>
-                                                {item.remarks}
-                                            </TextOverflow>
+                                            return <TextOverflow text={item.remarks} />
                                         }
                                     },
                                     {
