@@ -194,7 +194,7 @@ function TreatmentDetailWidget() {
                             <input className='form-control'
                                 type="number" name="total_treatment_cost"
                                 step={0.01}
-                                min={0.01}
+                                min={0}
                                 readOnly
                                 value={totalTreatmentCost}
                                 required
@@ -209,7 +209,7 @@ function TreatmentDetailWidget() {
                             <input className='form-control'
                                 type="number" name="total_treatment_cost_nhis"
                                 step={0.01}
-                                min={0.01}
+                                min={0}
                                 value={totalTreatmentCostNHIS}
                                 required
                                 readOnly
