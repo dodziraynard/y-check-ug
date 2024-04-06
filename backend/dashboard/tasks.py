@@ -48,6 +48,8 @@ def download_all_setup_data():
     config.save()
     logger.debug("Download triggered by: download_users_from_upstream")
 
+    download_flags_services_location()
+
     download_entities_from_upstream("facility", Facility)
     config.general_sync_message = "Downloading facilities"
     config.save()
@@ -77,7 +79,8 @@ def download_users_from_upstream():
             users = response.json().get("data")
             total_users = len(users)
             for index, user_dict in enumerate(users, 1):
-                text = colored(f"Downloading ..... {index}/{len(users)} i.e., {round(index/len(users)*100, 2)}%", "light_cyan")
+                text = colored(
+                    f"Downloading ..... {index}/{len(users)} i.e., {round(index/len(users)*100, 2)}%", "light_cyan")
                 logger.debug(text)
                 try:
                     UpstreamSyncBaseModel.deserialise_into_object(
@@ -132,7 +135,8 @@ def download_questions_from_upstream():
             questions = response.json().get("data")
             total_questions = len(questions)
             for index, question_dict in enumerate(questions, 1):
-                text = colored(f"Downloading ..... {index}/{len(questions)} i.e., {round(index/len(questions)*100, 2)}%", "light_cyan")
+                text = colored(
+                    f"Downloading ..... {index}/{len(questions)} i.e., {round(index/len(questions)*100, 2)}%", "light_cyan")
                 logger.debug(text)
 
                 UpstreamSyncBaseModel.deserialise_into_object(
@@ -183,7 +187,8 @@ def download_entities_from_upstream(model_name, model):
         data_items = response.json().get("data")
         logger.info("Retrieved %s: %s items", model_name, len(data_items))
         for index, data_dict in enumerate(data_items, 1):
-            text = colored(f"Downloading ..... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%", "light_cyan")
+            text = colored(
+                f"Downloading ..... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%", "light_cyan")
             logger.debug(text)
             try:
                 obj = UpstreamSyncBaseModel.deserialise_into_object(
