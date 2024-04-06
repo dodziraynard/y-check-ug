@@ -138,7 +138,7 @@ function PatientsWidget() {
                                                     Delete
                                                 </button>
                                                 {item?.localnode?.toLowerCase() != "live" && !item?.synced ?
-                                                    <i className="bi bi-cloud-slash mx-2 text-danger" title='Synced with remote server'></i> :
+                                                    <i className="bi bi-cloud-slash mx-2 text-danger" title='Not synced with remote server'></i> :
                                                     <i className="bi bi-cloud-check mx-2 text-success" title='Synced with remote server'></i>
                                                 }
                                             </div>
