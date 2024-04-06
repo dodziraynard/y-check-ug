@@ -9,7 +9,10 @@ if (base_api?.includes("http") == true) {
 
     if (url.search("://test.") >= 0) {
         BASE_API_URI = 'https://test-api.ycheckgh.com/api'
-    } else {
+    } else if (url.search("://localhost") >= 0) {
+        BASE_API_URI = 'http://localhost:8000/api'
+    }
+    else {
         BASE_API_URI = 'https://api.ycheckgh.com/api'
     }
 }
