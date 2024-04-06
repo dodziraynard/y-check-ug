@@ -76,6 +76,10 @@ function ReferralsWidget() {
                                                         onClick={() => null}>
                                                         <i className="bi bi-list me-1"></i> More
                                                     </Link>
+                                                    {!item?.synced ?
+                                                        <i className="bi bi-cloud-check mx-2 text-success" title='Synced with remote server'></i> :
+                                                        <i className="bi bi-cloud-slash mx-2 text-danger" title='Synced with remote server'></i>
+                                                    }
                                                 </div>
                                             )
                                         }

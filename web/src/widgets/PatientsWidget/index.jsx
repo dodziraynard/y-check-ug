@@ -137,6 +137,10 @@ function PatientsWidget() {
                                                     <i className="bi bi-trash me-1"></i>
                                                     Delete
                                                 </button>
+                                                {!item?.synced ?
+                                                    <i className="bi bi-cloud-check mx-2 text-success" title='Synced with remote server'></i> :
+                                                    <i className="bi bi-cloud-slash mx-2 text-danger" title='Synced with remote server'></i>
+                                                }
                                             </div>
                                         )
                                     }
