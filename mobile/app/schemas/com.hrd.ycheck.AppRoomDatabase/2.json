@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "215bc9d13f8544d3413d032b6362f447",
+    "identityHash": "99c5bb45bc666f9e23ed5f2f53158dfb",
     "entities": [
       {
         "tableName": "users",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "configurations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `host` TEXT NOT NULL, `showCreateAccount` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `host` TEXT NOT NULL, `showCreateAccount` INTEGER, `apkVersion` TEXT, `apkUrl` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -105,6 +105,18 @@
             "columnName": "showCreateAccount",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "apkVersion",
+            "columnName": "apkVersion",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "apkUrl",
+            "columnName": "apkUrl",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -120,7 +132,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '215bc9d13f8544d3413d032b6362f447')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '99c5bb45bc666f9e23ed5f2f53158dfb')"
     ]
   }
 }

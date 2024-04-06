@@ -108,7 +108,6 @@ interface ApiService {
         @Field("question_responses_json") questionResponsesJson: String
     ): Call<PostSurveyResponseResponse?>?
 
-
     @GET("get-schools/")
     fun getSchools(
         @Query("type") filters: String? = ""

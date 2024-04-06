@@ -10,5 +10,7 @@ import com.hrd.ycheck.utils.Constants
 data class Configuration(
     @PrimaryKey val id: Long,
     var host: String = "",
-    @SerializedName("show_create_account") var showCreateAccount: Boolean? = false
+    @SerializedName("show_create_account") var showCreateAccount: Boolean? = false,
+    @SerializedName("apk_version")  var apkVersion: String? = null,
+    @SerializedName("apk_url")  var apkUrl: String? = null
 )

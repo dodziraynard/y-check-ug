@@ -30,7 +30,7 @@ from rest_api.serializers import (CheckupLocationSerializer,
                                   RegisterSerializer,
                                   UserSerializer)
 
-logger = logging.getLogger("app")
+logger = logging.getLogger(__name__)
 
 
 class MobileConfigAPI(generics.GenericAPIView):
@@ -39,6 +39,7 @@ class MobileConfigAPI(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         config, _ = MobileConfig.objects.get_or_create()
         config = MobileConfigSerializer(config).data
+        logger.debug("HRDDDDDD")
         return Response({'config': config}, status=status.HTTP_200_OK)
 
 

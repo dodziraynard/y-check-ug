@@ -12,7 +12,6 @@ import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ItemAdolescentBinding
 import com.hrd.ycheck.models.Adolescent
 
-
 class AdolescentAdapter(private val context: Context) :
     RecyclerView.Adapter<AdolescentAdapter.AdolescentViewHolder>() {
     private var dataset = listOf<Adolescent>()

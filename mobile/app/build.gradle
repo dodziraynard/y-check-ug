@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id "com.google.devtools.ksp"
+    id 'androidx.room'
 }
 
 android {
@@ -18,7 +19,7 @@ android {
         minSdk 26
         targetSdk 34
         versionCode 5
-        versionName "2.4.3"
+        versionName "2.4.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         archivesBaseName = "ycheck-v$versionName"
@@ -26,12 +27,6 @@ android {
         resValue "string", "test_base_api_url", properties.getProperty("test.base.api.url", "https://0.0.0.0/api/")
         resValue "string", "live_base_api_url", properties.getProperty("live.base.api.url", "https://0.0.0.0/api/")
         resValue "string", "app_version", "v$versionName"
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
     }
 
     buildTypes {
@@ -64,6 +59,9 @@ android {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
+    }
+    room {
+        schemaDirectory "$projectDir/schemas"
     }
 }
 

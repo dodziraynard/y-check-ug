@@ -14,9 +14,25 @@ logger = logging.getLogger(__name__)
 
 
 class MobileConfigSerializer(serializers.ModelSerializer):
+    apk_version = serializers.SerializerMethodField()
+    apk_url = serializers.SerializerMethodField()
+
     class Meta:
         model = MobileConfig
         fields = "__all__"
+
+    def get_apk_version(self, obj):
+        conf = AppConfiguration.objects.first()
+        logger.info("HRDDDDD", conf)
+        return conf.current_apk_versions if conf else None
+
+    def get_apk_url(self, obj):
+        conf = AppConfiguration.objects.first()
+        request = self.context.get("request")
+        if conf and request:
+            url = conf.android_apk.url
+            return request.build_absolute_uri(url)
+        return None
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -37,6 +37,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 binding.searchButton.isEnabled = false
                 binding.searchAdolescentLoadingProcessBar.visibility = View.VISIBLE
                 binding.searchInfo.visibility = View.GONE
+                binding.resultsAnimation.visibility = View.GONE
             } else {
                 binding.searchButton.isEnabled = true
                 binding.searchAdolescentLoadingProcessBar.visibility = View.GONE
@@ -106,42 +107,60 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 }
                 dialogBinding.physicalAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            MultipleQuestionnaireActivity::class.java
+                        )
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.PHYSICAL_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.labAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            MultipleQuestionnaireActivity::class.java
+                        )
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.LAB_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.clinicalAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            MultipleQuestionnaireActivity::class.java
+                        )
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.CLINICAL_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.counsellorAssessmentOption.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            MultipleQuestionnaireActivity::class.java
+                        )
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.COUNSELLOR_ASSESSMENT)
                     startActivity(intent)
                 }
                 dialogBinding.evaluation.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            MultipleQuestionnaireActivity::class.java
+                        )
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.EVALUATION)
                     startActivity(intent)
                 }
                 dialogBinding.exitInterview.setOnClickListener {
                     val intent =
-                        Intent(this@SearchAdolescentActivity, MultipleQuestionnaireActivity::class.java)
+                        Intent(
+                            this@SearchAdolescentActivity,
+                            MultipleQuestionnaireActivity::class.java
+                        )
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.EXIT_INTERVIEW)
                     startActivity(intent)
@@ -173,6 +192,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                 }
                 return true
             }
+
             override fun onQueryTextChange(p0: String?): Boolean {
                 return true;
             }

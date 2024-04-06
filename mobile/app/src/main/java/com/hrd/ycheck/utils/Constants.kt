@@ -10,7 +10,7 @@ object Constants {
     const val SHARED_PREFS_FILE = "ycheck-pf"
     const val USER_ID = "com.hrd.ycheck.USER_ID"
     const val IS_NEW_USER = "com.hrd.ycheck.IS_NEW_USER"
-    const val USER_OBJECT = "com.hrd.ycheck.USER_OBJECT"
+    const val UPDATE_IGNORED_VERSION = "com.hrd.ycheck.UPDATE_IGNORED_VERSION"
 }
 
 object AdolescentTypes {

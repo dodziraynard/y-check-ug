@@ -3,11 +3,12 @@ package com.hrd.ycheck.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.hrd.ycheck.R
@@ -23,6 +24,7 @@ import com.hrd.ycheck.ui.authentication.ProfileActivity
 import com.hrd.ycheck.ui.authentication.SecurityQuestionActivity
 import com.hrd.ycheck.utils.Constants
 import com.hrd.ycheck.utils.Constants.SHARED_PREFS_FILE
+import com.hrd.ycheck.utils.Constants.UPDATE_IGNORED_VERSION
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         preferences = getSharedPreferences(SHARED_PREFS_FILE, MODE_PRIVATE)
 
         // If new user, redirect to login
-
         viewModel.user?.observe(this) {
             user = it
             if (user != null) {
@@ -87,8 +88,39 @@ class MainActivity : AppCompatActivity() {
         binding.playGameLabel.setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
         }
-    }
 
+        viewModel.configuration?.observe(this) {
+            if (it != null) {
+                val appVersion = packageManager.getPackageInfo(packageName, 0).versionName
+                val remoteVersion = it.apkVersion
+                val message = getString(R.string.app_new_version_info, appVersion, remoteVersion)
+                val ignoreVersion = preferences.getString(UPDATE_IGNORED_VERSION, "")
+                if (remoteVersion?.isNotEmpty() == true && !ignoreVersion.equals(remoteVersion) && !appVersion.equals(
+                        remoteVersion
+                    )
+                ) {
+                    val dialog =
+                        AlertDialog.Builder(this).setTitle(getString(R.string.update_available))
+                            .setNegativeButton(getString(R.string.no)) { _, _ ->
+                                val prefsEditor = preferences.edit()
+                                prefsEditor.putString(UPDATE_IGNORED_VERSION, remoteVersion)
+                                prefsEditor.apply()
+                            }.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                val homePage =
+                                    getString(R.string.live_base_api_url).replace("/api/", "")
+                                        .replace("api.", "")
+                                val intent = Intent(Intent.ACTION_VIEW)
+                                intent.data = Uri.parse(homePage)
+                                startActivity(intent)
+                            }
+                            .setMessage(message)
+                    dialog.create()
+                    dialog.show()
+                }
+            }
+        }
+        viewModel.getMobileConfig()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
