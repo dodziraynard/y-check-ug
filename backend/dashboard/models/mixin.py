@@ -55,7 +55,7 @@ class UpstreamSyncMethodsModel():
             if isinstance(value, str):
                 return datetime.fromisoformat(value).astimezone()
             return None
-        return value if value != "" else None
+        return value if value not in ["", "None"] else None
 
     def get_file_fields(self):
         fields = self.get_fields()
