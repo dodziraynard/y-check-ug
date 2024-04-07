@@ -26,8 +26,13 @@ class SimpleCrudMixin(generics.GenericAPIView):
             objects = objects.filter(
                 self.model_class.generate_query(query))  # type: ignore
 
+        if not hasattr(self, "order_by"):
+            self.order_by = "-created_at"
+
+        if hasattr(self.model_class, str(self.order_by).lstrip("-")):
+            objects = objects.order_by(self.order_by)
+
         if hasattr(self.model_class, "created_at"):
-            objects = objects.order_by("-created_at")
             if start_date:
                 start_date = datetime.strptime(start_date, '%Y-%m-%d')
                 objects = objects.filter(

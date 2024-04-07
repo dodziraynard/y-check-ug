@@ -138,18 +138,7 @@ class AllFacilitiesAPI(SimpleCrudMixin):
     form_class = FacilityForm
     response_data_label = "facility"
     response_data_label_plural = "facilities"
-
-    def get(self, request):
-        facilities = Facility.objects.all()
-        response_data = {
-            self.response_data_label_plural:
-            self.serializer_class(facilities,
-                                  context={
-                                      "request": request
-                                  },
-                                  many=True).data,
-        }
-        return Response(response_data)
+    order_by = "name"
 
 
 class ServicesAPI(SimpleCrudMixin):
@@ -164,7 +153,7 @@ class ServicesAPI(SimpleCrudMixin):
     form_class = ServiceForm
     response_data_label = "service"
     response_data_label_plural = "services"
-
+    order_by = "name"
 
 
 class FlagsAPI(SimpleCrudMixin):
@@ -174,18 +163,6 @@ class FlagsAPI(SimpleCrudMixin):
     model_class = FlagLabel
     response_data_label = "summary_flag"
     response_data_label_plural = "summary_flags"
-
-    def get(self, request):
-        summary_flags = FlagLabel.objects.all()
-        response_data = {
-            self.response_data_label_plural:
-            self.serializer_class(summary_flags,
-                                  context={
-                                      "request": request
-                                  },
-                                  many=True).data,
-        }
-        return Response(response_data)
 
 
 class UpdateUserBioAPI(SimpleCrudMixin):
