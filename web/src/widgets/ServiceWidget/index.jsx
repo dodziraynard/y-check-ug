@@ -109,6 +109,13 @@ function ServiceWidget() {
         }
     }, [])
 
+    const showNewServiceModal = () => {
+        setSelectedFlags([])
+        setSelectedService(null)
+        setName("")
+        serviceModal?.show()
+    }
+
     // Error alerts
     monitorShowErrorReduxHttpError(errorPuttingService, isPuttingServices)
     monitorShowErrorReduxHttpError(errorDeletingService, isDeletingService)
@@ -212,10 +219,7 @@ function ServiceWidget() {
             <div className="facilities-widget">
                 <div className="d-flex justify-content-between">
                     <p className="text-muted">Use the available controls to create and update Services. </p>
-                    <Button onClick={() => {
-                        setSelectedFlags([])
-                        serviceModal?.show()
-                    }}><i className="bi bi-plus"></i> Add</Button>
+                    <Button onClick={() => showNewServiceModal()}><i className="bi bi-plus"></i> Add</Button>
                 </div>
 
                 <TableView
@@ -241,7 +245,7 @@ function ServiceWidget() {
                                 )
                             }
                         },
-                        
+
                         {
                             value: "Actions", textAlign: "right", render: (item) => {
                                 return (

@@ -165,17 +165,6 @@ class ServicesAPI(SimpleCrudMixin):
     response_data_label = "service"
     response_data_label_plural = "services"
 
-    def get(self, request):
-        services = Service.objects.all()
-        response_data = {
-            self.response_data_label_plural:
-            self.serializer_class(services,
-                                  context={
-                                      "request": request
-                                  },
-                                  many=True).data,
-        }
-        return Response(response_data)
 
 
 class FlagsAPI(SimpleCrudMixin):
