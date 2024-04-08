@@ -8,7 +8,6 @@ from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
 from dashboard.models import *
-from ycheck.utils.functions import relevant_permission_objects
 from rest_framework import generics
 from django.contrib.auth import authenticate
 

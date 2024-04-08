@@ -150,15 +150,22 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
         uuid = adolescent_data.pop("uuid")
         adolescent_data.pop("id")
 
+        adolescent = None
         try:
             adolescent, _ = Adolescent.objects.get_or_create(uuid=uuid)
             for key, value in adolescent_data.items():
                 if hasattr(adolescent, key) and value:
                     setattr(adolescent, key, value)
-            adolescent.save()
+            if adolescent.pid == "" or adolescent.pid == None:
+                adolescent.delete()
+            else:
+                adolescent.save()
         except Exception as e:
             logger.error(
                 "Error occured while adding/updating adolescent: %s", str(e))
+
+            if adolescent != None and (adolescent.pid == "" or adolescent.pid == None):
+                adolescent.delete()
 
             error_message = f"Error: {str(e)}"
             if "UNIQUE" in str(e).upper():
@@ -318,6 +325,8 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
         action = request.GET.get("action", "next")
         question_type = request.GET.get("question_type", "survey")
 
+        print("GET", request.GET)
+
         adolescent = Adolescent.objects.filter(id=adolescent_id).first()
         if not adolescent:
             return Response({"error_message": "Adolescent not found."})
@@ -348,11 +357,16 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
         current_question = target_questions.filter(
             id=current_question_id).first()
 
+        print("current_question", current_question)
+
         current_section: Section = current_question.section if current_question else None
+
+        print("current_section", current_section, current_section.number)
+
         if current_question:
             if action == "next_unanswered":
                 target_questions = target_questions.exclude(
-                    adolescentresponse__adolescent=adolescent)
+                    responses__adolescent=adolescent)
 
             if action in ["next", "next_unanswered"]:
                 target_questions = target_questions.filter(
@@ -363,7 +377,7 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
         else:
             target_questions = target_questions.order_by("number")
 
-        # Filter out questions not meeting depenpency requirements.
+        # Filter out questions not meeting dependency requirements.
         invalid_questions_ids = set()
         last_invalid_question_number = sys.maxsize
         for index, question in enumerate(target_questions):
@@ -377,9 +391,9 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
 
             if not question.are_previous_response_conditions_met(
                     adolescent):
-                
+
                 # If we have questions to answer i.e., index > len(invalid_questions_ids)
-                # and 'question' is not eligible, 
+                # and 'question' is not eligible,
 
                 if index > len(invalid_questions_ids) and action in ["next", "next_unanswered"]:
                     last_invalid_question_number = question.number
@@ -387,15 +401,21 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
                     break
                 invalid_questions_ids.add(question.id)
 
-
-        questions = target_questions.exclude(Q(id__in=invalid_questions_ids) | Q(number__gte=last_invalid_question_number))
+        questions = target_questions.exclude(
+            Q(id__in=invalid_questions_ids) | Q(number__gte=last_invalid_question_number))
         new_section = None
         first_question = questions.first()
-        if  first_question and first_question.section != current_section:
+        if first_question and first_question.section != current_section:
             new_section = first_question.section
 
         # Only show questions from same section at once.
-        questions = questions.filter(section=new_section or current_section)[:max_questions]
+        questions = questions.filter(section=new_section or current_section)
+        if action == "previous":
+            questions = questions.order_by("-number")[:max_questions]
+        else:
+            questions = questions[:max_questions]
+        # questions = questions.order_by("number")
+
         if questions.exists():
             responses = AdolescentResponse.objects.filter(question__in=questions,
                                                           adolescent=adolescent)

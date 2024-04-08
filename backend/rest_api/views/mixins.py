@@ -7,7 +7,7 @@ from django.utils.timezone import make_aware
 
 from ycheck.utils.functions import apply_filters, get_errors_from_form
 
-QUERY_PAGE_SIZE = 10
+QUERY_PAGE_SIZE = 100
 
 
 class SimpleCrudMixin(generics.GenericAPIView):

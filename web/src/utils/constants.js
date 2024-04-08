@@ -12,6 +12,10 @@ if (base_api?.includes("http") == true) {
     } else if (url.search("://localhost") >= 0) {
         BASE_API_URI = 'http://localhost:8000/api'
     }
+    // Localhost server
+    else if (url.search("192.168.0.10") >= 0) {
+        BASE_API_URI = 'http://192.168.0.10:8000/api'
+    }
     else {
         BASE_API_URI = 'https://api.ycheckgh.com/api'
     }
