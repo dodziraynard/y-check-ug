@@ -154,7 +154,7 @@ class TreatmentsAPI(SimpleCrudMixin):
 
 class AdolescentReferrals(generics.GenericAPIView):
     """
-    Get the summary flags for an adolescent/patient.
+    Get the referrals adolescent/patient.
     """
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
     serializer_class = ReferralSerializer
@@ -184,6 +184,7 @@ class AdolescentReferrals(generics.GenericAPIView):
         services = Service.objects.filter(name__in=service_names)
 
         data = {
+            "is_onsite": request.data.get("is_onsite"),
             "service_type": request.data.get("service_type"),
             "facility_id": request.data.get("facility_id"),
             "referral_reason": request.data.get("referral_reason"),
@@ -346,6 +347,9 @@ class ReferralTreatment(generics.GenericAPIView):
         further_referral_facility = request.data.get(
             "further_referral_facility")
 
+        condition_treatments_details = request.data.get(
+            "condition_treatments_details")
+
         treatment_data = {
             "referral": referral,
             "adolescent": referral.adolescent,
@@ -368,6 +372,27 @@ class ReferralTreatment(generics.GenericAPIView):
         referral.status = ReferralStatus.COMPLETED.value
         referral.save()
 
+        # Since we always receive the correct current state of the condition treatment details,
+        # let's delete old records.
+        ConditionTreatment.objects.filter(treatment=treatment).delete()
+
+        # Process treatment of each referred condition.
+        for details in condition_treatments_details:
+            service_id = details.get('service_id')
+            if service_id == None:
+                logger.error(
+                    "Treatment condition creation for %s failed. service_id = None", details)
+                continue
+
+            treatment_detail = {
+                "total_service_cost": details.get("total_service_cost"),
+                "total_service_cost_nhis": details.get("total_service_cost_nhis"),
+            }
+            ConditionTreatment.objects.create(
+                treatment=treatment,
+                service_id=service_id,
+                **treatment_detail,
+            )
         response_data = {
             "treatment": self.serializer_class(treatment).data
         }

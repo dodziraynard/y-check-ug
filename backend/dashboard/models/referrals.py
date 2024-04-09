@@ -8,7 +8,6 @@ from .facility import Facility
 from .mixin import UpstreamSyncBaseModel
 
 
-
 class Referral(UpstreamSyncBaseModel):
     referral_status_choices = [
         (ReferralStatus.NEW.value, ReferralStatus.NEW.value),
@@ -17,6 +16,7 @@ class Referral(UpstreamSyncBaseModel):
     ]
     adolescent = models.ForeignKey(Adolescent, on_delete=models.CASCADE)
     facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
+    is_onsite = models.BooleanField(default=False)
     referral_reason = models.TextField()
     service_type = models.CharField(max_length=200)
     services = models.ManyToManyField(Service)
@@ -28,7 +28,7 @@ class Referral(UpstreamSyncBaseModel):
         max_length=100, default=ReferralStatus.NEW.value, choices=referral_status_choices)
 
     def __str__(self) -> str:
-        return self.status
+        return f"{self.adolescent.get_name()} - {self.status}"
 
     @staticmethod
     def generate_query(query):

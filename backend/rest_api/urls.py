@@ -59,12 +59,10 @@ urlpatterns = [
     path("get-schools/", views.GetSchoolsAPI.as_view()),
 
     # Syncing
-    path("sync/download/<str:model_name>/",
-         views.DownStreamSyncModelView.as_view()),
-    path("sync/upload/<str:model_name>/",
-         views.UpstreamSyncModelView.as_view()),
-    path("sync/upload-file/<str:model_name>/<str:instance_id>",
-         views.UpstreamFileUpload.as_view()),
+    path("sync/download/<str:model_name>/", views.DownStreamSyncModelView.as_view()),
+    path("sync/upload/<str:model_name>/", views.UpstreamSyncModelView.as_view()),
+    path("sync/upload-file/<str:model_name>/<str:instance_id>", views.UpstreamFileUpload.as_view()),
+    path("sync/delete-entities/", views.UpstreamSyncModelDeleteView.as_view()),
 
     # apk
     path("upload-apk/", views.UploadApkAPI.as_view()),

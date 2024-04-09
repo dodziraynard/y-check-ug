@@ -17,6 +17,7 @@ function TreatmentDetailWidget() {
     const [getTreatmentDetail, { data: treatmentResponse = [], isLoading: isLoadingTreatment, error: treatmentError }] = resourceApiSlice.useLazyGetTreatmentQuery()
     const [putTreatment, { data: putTreatmentResponse = [], isLoading: isPuttingTreatment, error: putTreatmentError }] = resourceApiSlice.usePutTreatmentMutation()
 
+    const [conditionTreatments, setConditionTreatments] = useState([])
     const [referral, setReferral] = useState(null)
     const [adolescent, setAdolescent] = useState(null)
     const [facilities, setFacilities] = useState([])
@@ -68,8 +69,61 @@ function TreatmentDetailWidget() {
             setIsFurtherReferred(treatment.is_referred)
             setNoOnwardReferralReason(treatment.no_referral_reason)
             setRemarks(treatment.remarks)
+
+            treatment.condition_treatments?.forEach(conTreatment => {
+                handleConditionTreatment(true, treatment.referral, conTreatment.service, conTreatment.total_service_cost, conTreatment.total_service_cost_nhis)
+            });
         }
     }, [treatment])
+
+
+    let conTreatments = [...conditionTreatments]
+    const handleConditionTreatment = (checked, referralId, serviceId, totalCost = "", totalCostNhis = "") => {
+        if (checked) {
+            conTreatments.push({
+                service_id: serviceId,
+                referral_id: referralId,
+                total_service_cost: totalCost,
+                total_service_cost_nhis: totalCostNhis,
+            })
+        } else {
+            conTreatments = conTreatments.filter(item => {
+                return item.service_id != serviceId
+            })
+        }
+        setConditionTreatments(conTreatments);
+    }
+
+    const handleConditionTreatmentCost = (totalCost, referralId, service, attributeName) => {
+        const serviceId = service.id
+        let cons = [...conditionTreatments]
+        cons.forEach(conTreatment => {
+            if (conTreatment.service_id === serviceId && conTreatment.referral_id === referralId) {
+                conTreatment[attributeName] = totalCost
+            }
+        })
+        setConditionTreatments(cons)
+    }
+
+    const getConditionTreatmentAttrValue = (serviceId, referralId, attributeName) => {
+        let result = "";
+        conditionTreatments.forEach(conTreatment => {
+            if (conTreatment?.service_id === serviceId && conTreatment.referral_id === referralId) {
+                result = conTreatment?.[attributeName]
+            }
+        })
+        return result
+    }
+    const serviceSelected = (serviceId, referralId) => {
+        let found = false;
+        conditionTreatments.forEach(conTreatment => {
+            if (conTreatment?.service_id === serviceId && conTreatment.referral_id === referralId) {
+                found = true
+            }
+        })
+        return found
+    }
+
 
     monitorAndLoadResponse(referralResponse, "referral", setReferral)
     monitorAndLoadResponse(referralResponse, "adolescent", setAdolescent)
@@ -105,24 +159,53 @@ function TreatmentDetailWidget() {
 
                 <div>
                     <div className="form-group my-3">
-                        <p className='m-0'><strong>Has the adolescent received full treament for the condition he/she was referred?</strong></p>
-                        <div className="d-flex m-0">
-                            <div className="form-group mt-0 me-3">
-                                <input className='form-check-input me-2'
-                                    required
-                                    readOnly
-                                    checked={fullTreatmentProvided == true}
-                                    type="radio" name="full_treament" id="full_treament_yes" />
-                                <label htmlFor="full_treament_yes">Yes</label>
-                            </div>
-                            <div className="form-group mt-0 me-3">
-                                <input className='form-check-input me-2'
-                                    required
-                                    readOnly
-                                    checked={fullTreatmentProvided == false}
-                                    type="radio" name="full_treament" id="full_treament_no" />
-                                <label htmlFor="full_treament_no">No</label>
-                            </div>
+                        <p className='m-0'><strong>Which of the following conditions have been treated for the aodelecent?</strong></p>
+                        <div className="m-0">
+                            <table className='my-3'>
+                                <thead>
+                                    <tr style={{ verticalAlign: "middle" }}>
+                                        <th></th>
+                                        <th style={{ border: "1px solid black" }}>NHIS Cost (₵)</th>
+                                        <th style={{ border: "1px solid black" }}>Other Costs (₵)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        referral?.services?.map(service => {
+                                            return <tr key={service.id} style={{ verticalAlign: "middle" }}>
+                                                <td>
+                                                    <div key={service.id} className="form-group mt-0 me-3">
+                                                        <label htmlFor={`input-${service.name}`}>
+                                                            <input id={`input-${service.name}`}
+                                                                checked={serviceSelected(service.id, referral.id)}
+                                                                disabled
+                                                                onChange={(event) => handleConditionTreatment(event.target.checked, referral.id, service.id)}
+                                                                className='form-check-input me-2' type='checkbox' />
+                                                            {service.name}
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td style={{ border: "1px solid black" }}>
+                                                    <input className='form-control'
+                                                        type="number"
+                                                        disabled={true}
+                                                        value={getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost_nhis")}
+                                                        onChange={(event) => handleConditionTreatmentCost(event.target.value, referral.id, service, "total_service_cost_nhis")}
+                                                        min={0}
+                                                        required placeholder='0.00' />
+                                                </td>
+                                                <td style={{ border: "1px solid black" }}>
+                                                    <input className='form-control' type="number"
+                                                        disabled={true}
+                                                        value={getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost")}
+                                                        onChange={(event) => handleConditionTreatmentCost(event.target.value, referral.id, service, "total_service_cost")}
+                                                        min={0} required placeholder='0.00' />
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -146,7 +229,7 @@ function TreatmentDetailWidget() {
                                     <input className='form-check-input me-2'
                                         type="radio" name="further_referral"
                                         required
-                                        readOnly
+                                        disabled
                                         checked={fullTreatmentProvided == true}
                                         id="further_referral_yes" />
                                     <label htmlFor="further_referral_yes">Yes</label>
@@ -154,7 +237,7 @@ function TreatmentDetailWidget() {
                                 <div className="form-group mt-0 me-3">
                                     <input className='form-check-input me-2'
                                         required
-                                        readOnly
+                                        disabled
                                         type="radio" name="further_referral"
                                         checked={fullTreatmentProvided == false}
                                         id="further_referral_no" />
@@ -169,7 +252,7 @@ function TreatmentDetailWidget() {
                             <label htmlFor='facility_id'><strong>Where was the adolescent further referred?</strong></label>
                             {isLoadingFacilities && <Spinner />}
                             <select className='form-select'
-                                readOnly
+                                disabled
                                 name='facility_id' id='facility_id' required>
                                 <option value="">Choose facility</option>
                                 {facilities?.map(facility => <option value={facility.id} selected={selectedFacilityId === facility.id}>{facility.name}</option>)}
@@ -182,41 +265,10 @@ function TreatmentDetailWidget() {
                             <textarea className='form-control'
                                 name="treatment" id="treatment"
                                 required
-                                readOnly
+                                disabled
                                 cols="30" rows="4"></textarea>
                         </div>
                     }
-
-                    <div className="form-group my-3">
-                        <label htmlFor=''><strong>What's the total cost of the treatment? </strong></label>
-                        <div className="d-flex align-items-center col-md-4">
-                            <strong>GHC</strong>
-                            <input className='form-control'
-                                type="number" name="total_treatment_cost"
-                                step={0.01}
-                                min={0}
-                                readOnly
-                                value={totalTreatmentCost}
-                                required
-                                id="total_treatment_cost" />
-                        </div>
-                    </div>
-
-                    <div className="form-group my-3">
-                        <label htmlFor=''><strong>What's the total cost of the treatment covered by NHIS? </strong></label>
-                        <div className="d-flex align-items-center col-md-4">
-                            <strong>GHC</strong>
-                            <input className='form-control'
-                                type="number" name="total_treatment_cost_nhis"
-                                step={0.01}
-                                min={0}
-                                value={totalTreatmentCostNHIS}
-                                required
-                                readOnly
-                                onChange={(event) => setTotalTreatmentCostNHIS(event.target.value)}
-                                id="total_treatment_cost_nhis" />
-                        </div>
-                    </div>
 
                     {isFurtherReferred &&
                         <div className="form-group my-3">
@@ -225,7 +277,7 @@ function TreatmentDetailWidget() {
                                 name="treatment"
                                 value={noOnwardReferralReason}
                                 required
-                                readOnly
+                                disabled
                                 id="treatment"
                                 cols="30"
                                 rows="4"></textarea>
@@ -236,7 +288,7 @@ function TreatmentDetailWidget() {
                         <textarea className='form-control'
                             value={remarks}
                             required
-                            readOnly
+                            disabled
                             name="treatment" id="treatment"
                             cols="30" rows="4"></textarea>
                     </div>

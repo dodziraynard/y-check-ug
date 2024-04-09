@@ -105,3 +105,32 @@ class UpstreamFileUpload(generics.GenericAPIView):
             "error_message": None,
         }
         return Response(response_data)
+
+
+class UpstreamSyncModelDeleteView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        data_items = request.data.get("data_items")
+        data_items = json.loads(data_items)
+
+        success_ids = []
+        for item in data_items:
+            model_name = item.get("model_name")
+            object_id = item.get("object_id")
+
+            # Get the model
+            content_type = ContentType.objects.filter(model=model_name).first()
+            if not content_type:
+                message = {"message": "Model not found"}
+                raise Response(message)
+
+            Model = content_type.model_class()
+            objects = Model.objects.filter(id=object_id)
+            if objects.delete()[0] or not objects.exists():
+                success_ids.append(object_id)
+
+        response_data = {
+            "success_ids": success_ids,
+        }
+        return Response(response_data)

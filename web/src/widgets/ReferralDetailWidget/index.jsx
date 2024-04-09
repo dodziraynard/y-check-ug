@@ -17,6 +17,8 @@ function ReferralDetailWidget() {
     const [getTreatmentDetail, { data: treatmentResponse = [], isLoading: isLoadingTreatment, error: treatmentError }] = resourceApiSlice.useLazyGetTreatmentQuery()
     const [putTreatment, { data: putTreatmentResponse = [], isLoading: isPuttingTreatment, error: putTreatmentError }] = resourceApiSlice.usePutTreatmentMutation()
 
+    const [conditionTreatments, setConditionTreatments] = useState([])
+    const [isOnsite, setIsOnsite] = useState(false)
     const [referral, setReferral] = useState(null)
     const [adolescent, setAdolescent] = useState(null)
     const [facilities, setFacilities] = useState([])
@@ -26,9 +28,10 @@ function ReferralDetailWidget() {
     const [responseModal, setResponseModal] = useState(null);
     const [feedbackModal, setFeedbackModal] = useState(null);
 
+
     // Form inputs
-    const [totalTreatmentCost, setTotalTreatmentCost] = useState()
-    const [totalTreatmentCostNHIS, setTotalTreatmentCostNHIS] = useState()
+    const [totalTreatmentCost, setTotalTreatmentCost] = useState("")
+    const [totalTreatmentCostNHIS, setTotalTreatmentCostNHIS] = useState("")
     const [pictureConfirmed, setPictureConfirmed] = useState(false)
     const [isFurtherReferred, setIsFurtherReferred] = useState(false)
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
@@ -57,6 +60,7 @@ function ReferralDetailWidget() {
             remarks: remarks,
             further_referral_facility: selectedFacilityId,
             no_referral_reason: noOnwardReferralReason,
+            condition_treatments_details: conditionTreatments
         }
         putTreatment({ body, referralId })
     }
@@ -98,8 +102,63 @@ function ReferralDetailWidget() {
             setIsFurtherReferred(treatment.is_referred)
             setNoOnwardReferralReason(treatment.no_referral_reason)
             setRemarks(treatment.remarks)
+
+            treatment.condition_treatments?.forEach(conTreatment => {
+                handleConditionTreatment(true, treatment.referral, conTreatment.service, conTreatment.total_service_cost, conTreatment.total_service_cost_nhis)
+            });
         }
     }, [treatment])
+
+    useEffect(() => {
+        setIsOnsite(referral?.is_onsite === true)
+    }, [referral])
+
+    let conTreatments = [...conditionTreatments]
+    const handleConditionTreatment = (checked, referralId, serviceId, totalCost = "", totalCostNhis = "") => {
+        if (checked) {
+            conTreatments.push({
+                service_id: serviceId,
+                referral_id: referralId,
+                total_service_cost: totalCost,
+                total_service_cost_nhis: totalCostNhis,
+            })
+        } else {
+            conTreatments = conTreatments.filter(item => {
+                return item.service_id != serviceId
+            })
+        }
+        setConditionTreatments(conTreatments);
+    }
+
+    const handleConditionTreatmentCost = (totalCost, referralId, service, attributeName) => {
+        const serviceId = service.id
+        let cons = [...conditionTreatments]
+        cons.forEach(conTreatment => {
+            if (conTreatment.service_id === serviceId && conTreatment.referral_id === referralId) {
+                conTreatment[attributeName] = totalCost
+            }
+        })
+        setConditionTreatments(cons)
+    }
+
+    const getConditionTreatmentAttrValue = (serviceId, referralId, attributeName) => {
+        let result = "";
+        conditionTreatments.forEach(conTreatment => {
+            if (conTreatment?.service_id === serviceId && conTreatment.referral_id === referralId) {
+                result = conTreatment?.[attributeName]
+            }
+        })
+        return result
+    }
+    const serviceSelected = (serviceId, referralId) => {
+        let found = false;
+        conditionTreatments.forEach(conTreatment => {
+            if (conTreatment?.service_id === serviceId && conTreatment.referral_id === referralId) {
+                found = true
+            }
+        })
+        return found
+    }
 
     monitorAndLoadResponse(referralResponse, "referral", setReferral)
     monitorAndLoadResponse(referralResponse, "adolescent", setAdolescent)
@@ -163,7 +222,7 @@ function ReferralDetailWidget() {
                                     <div className='d-flex justify-content-center'>
                                         <img src={adolescent?.photo_url} alt="Adolescent's photo" style={{ height: "250px" }} />
                                     </div>
-                                    <div class="form-group d-flex justify-content-center my-3">
+                                    <div className="form-group d-flex justify-content-center my-3">
                                         <input className="form-check-input me-2"
                                             type="checkbox"
                                             checked={pictureConfirmed}
@@ -177,29 +236,57 @@ function ReferralDetailWidget() {
                                     {pictureConfirmed &&
                                         <div>
                                             <div className="form-group my-3">
-                                                <p className='m-0'><strong>Has the adolescent received full treament for the condition he/she was referred?</strong></p>
-                                                <div className="d-flex m-0">
-                                                    <div className="form-group mt-0 me-3">
-                                                        <input className='form-check-input me-2'
-                                                            onChange={() => setFullTreamentProvided(true)}
-                                                            required
-                                                            checked={fullTreatmentProvided == true}
-                                                            type="radio" name="full_treament" id="full_treament_yes" />
-                                                        <label htmlFor="full_treament_yes">Yes</label>
-                                                    </div>
-                                                    <div className="form-group mt-0 me-3">
-                                                        <input className='form-check-input me-2'
-                                                            onChange={() => setFullTreamentProvided(false)}
-                                                            required
-                                                            checked={fullTreatmentProvided == false}
-                                                            type="radio" name="full_treament" id="full_treament_no" />
-                                                        <label htmlFor="full_treament_no">No</label>
-                                                    </div>
+                                                <p className='m-0'><strong>Which of the following conditions have been treated for the aodelecent?</strong></p>
+                                                <div className="m-0">
+                                                    <table className='my-3'>
+                                                        <thead>
+                                                            <tr style={{ verticalAlign: "middle" }}>
+                                                                <th></th>
+                                                                <th style={{ border: "1px solid black" }}>NHIS Cost (₵)</th>
+                                                                <th style={{ border: "1px solid black" }}>Other Costs (₵)</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                referral?.services?.map(service => {
+                                                                    return <tr key={service.id} style={{ verticalAlign: "middle" }}>
+                                                                        <td>
+                                                                            <div key={service.id} className="form-group mt-0 me-3">
+                                                                                <label htmlFor={`input-${service.name}`}>
+                                                                                    <input id={`input-${service.name}`}
+                                                                                        checked={serviceSelected(service.id, referral.id)}
+                                                                                        onChange={(event) => handleConditionTreatment(event.target.checked, referral.id, service.id)}
+                                                                                        className='form-check-input me-2' type='checkbox' />
+                                                                                    {service.name}
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td style={{ border: "1px solid black" }}>
+                                                                            <input className='form-control'
+                                                                                type="number"
+                                                                                disabled={!serviceSelected(service.id, referral.id)}
+                                                                                value={isOnsite ? 0 : getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost_nhis")}
+                                                                                onChange={(event) => handleConditionTreatmentCost(event.target.value, referral.id, service, "total_service_cost_nhis")}
+                                                                                min={0}
+                                                                                required placeholder='0.00' />
+                                                                        </td>
+                                                                        <td style={{ border: "1px solid black" }}>
+                                                                            <input className='form-control' type="number"
+                                                                                disabled={!serviceSelected(service.id, referral.id)}
+                                                                                value={isOnsite ? 0 : getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost")}
+                                                                                onChange={(event) => handleConditionTreatmentCost(event.target.value, referral.id, service, "total_service_cost")}
+                                                                                min={0} required placeholder='0.00' />
+                                                                        </td>
+                                                                    </tr>
+                                                                })
+                                                            }
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
 
                                             {fullTreatmentProvided &&
-                                                <div className="form-group my-3">
+                                                <div className="cgroup my-3">
                                                     <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
                                                     <textarea className='form-control'
                                                         value={providedTreatment}
@@ -243,7 +330,7 @@ function ReferralDetailWidget() {
                                                     <select className='form-select'
                                                         onChange={(event) => setSelectedFacilityId(event.target.value)}
                                                         name='facility_id' id='facility_id' required>
-                                                        <option value="">Choose facility</option>
+                                                        <option defaultValue="">Choose facility</option>
                                                         {facilities?.map(facility => <option value={facility.id} selected={selectedFacilityId === facility.id}>{facility.name}</option>)}
                                                     </select>
                                                 </div>}
@@ -257,36 +344,6 @@ function ReferralDetailWidget() {
                                                         cols="30" rows="4"></textarea>
                                                 </div>
                                             }
-
-                                            <div className="form-group my-3">
-                                                <label htmlFor=''><strong>What's the total cost of the treatment? </strong></label>
-                                                <div className="d-flex align-items-center col-md-4">
-                                                    <strong>GHC</strong>
-                                                    <input className='form-control'
-                                                        type="number" name="total_treatment_cost"
-                                                        step={0.01}
-                                                        min={0.01}
-                                                        value={totalTreatmentCost}
-                                                        required
-                                                        onChange={(event) => setTotalTreatmentCost(event.target.value)}
-                                                        id="total_treatment_cost" />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group my-3">
-                                                <label htmlFor=''><strong>What's the total cost of the treatment covered by NHIS? </strong></label>
-                                                <div className="d-flex align-items-center col-md-4">
-                                                    <strong>GHC</strong>
-                                                    <input className='form-control'
-                                                        type="number" name="total_treatment_cost_nhis"
-                                                        step={0.01}
-                                                        min={0.01}
-                                                        value={totalTreatmentCostNHIS}
-                                                        required
-                                                        onChange={(event) => setTotalTreatmentCostNHIS(event.target.value)}
-                                                        id="total_treatment_cost_nhis" />
-                                                </div>
-                                            </div>
 
                                             {isFurtherReferred &&
                                                 <div className="form-group my-3">
@@ -326,7 +383,7 @@ function ReferralDetailWidget() {
             {/* Content */}
             <div className="referral-detail-widget">
                 <BreadCrumb items={[{ "name": "Referrals", "url": "/dashboard/referrals" }, { "name": referral?.facility_name }]} />
-                {isLoadingReferral ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
+                {isLoadingReferral ? <span className="text-center"><Spinner size={"lg"} /></span> : ""}
                 <section className='page-referral-detail'>
                     <h4>Referral Detail</h4>
                     <div>
@@ -389,7 +446,7 @@ function ReferralDetailWidget() {
                                     <h6 className="col-md-12 my-0 text-muted">REQUESTED SERVICES:</h6>
                                     <div className="col-md-12 my-0">
                                         {referral?.services?.map((service, serIndex) => {
-                                            return <div className='ms-2 my-2'>
+                                            return <div key={serIndex} className='ms-2 my-2'>
                                                 <span className='me-2'>{serIndex + 1}.</span>
                                                 <Badge key={serIndex} variant={""} colorScheme='blue' className='me-2'>
                                                     {service.name}

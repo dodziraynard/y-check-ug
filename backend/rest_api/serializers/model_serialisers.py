@@ -369,10 +369,41 @@ class ReferralSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ConditionTreatmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ConditionTreatment
+        fields = [
+            "treatment",
+            "service",
+            "total_service_cost",
+            "total_service_cost_nhis"
+        ]
+
+
 class TreatmentSerializer(serializers.ModelSerializer):
     adolescent = AdolescentSerializer()
     facility_name = serializers.SerializerMethodField()
     further_referred_to = serializers.SerializerMethodField()
+    condition_treatments = serializers.SerializerMethodField()
+    total_service_cost = serializers.SerializerMethodField()
+    total_service_cost_nhis = serializers.SerializerMethodField()
+
+    def get_total_service_cost(self, obj):
+        result = 0
+        for item in obj.condition_treatements.all():
+            result += item.total_service_cost if item.total_service_cost else 0
+        return float(result)
+
+    def get_total_service_cost_nhis(self, obj):
+        result = 0
+        for item in obj.condition_treatements.all():
+            result += item.total_service_cost_nhis if item.total_service_cost_nhis else 0
+        return float(result)
+
+    def get_condition_treatments(self, obj):
+        condition_treatements = obj.condition_treatements.all()
+        return ConditionTreatmentSerializer(condition_treatements, many=True).data
 
     def get_facility_name(self, obj):
         return obj.referral.facility.name

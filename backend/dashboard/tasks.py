@@ -242,6 +242,9 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
 
     url = config.up_stream_host + f"/api/sync/upload/{model_name}/"
     objects: list[UpstreamSyncBaseModel] = model.objects.filter(synced=False)
+    if objects.count() == 0:
+        return
+
     data = {"data_items": json.dumps([obj.serialise() for obj in objects])}
     response = requests.post(url, data=data)
     if response.status_code == 200:
@@ -270,6 +273,8 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
 def upload_treatments():
     upload_entity_and_update_status(
         Treatment, "treatment", "treatments_upload_status")
+    upload_entity_and_update_status(
+        ConditionTreatment, "conditiontreatment", "treatments_upload_status")
 
 
 @shared_task()
@@ -291,6 +296,32 @@ def upload_adolescents():
 
     upload_entity_and_update_status(
         AdolescentActivityTime, "adolescentactivitytime", "adolescents_upload_status")
+
+
+@shared_task()
+def sync_object_deletion():
+    logger.debug("Sync deleted models triggered.")
+    deleted_objects = DeletionBackLog.objects.all()[:50]
+    if deleted_objects.count() == 0:
+        return
+    logger.debug("Found %s objects for deletion", deleted_objects.count())
+
+    config, _ = NodeConfig.objects.get_or_create()
+    if not config.up_stream_host:
+        logger.debug("No hosts configured")
+        return
+
+    url = config.up_stream_host + f"/api/sync/delete-entities/"
+    data = {"data_items": json.dumps(
+        [obj.serialise() for obj in deleted_objects])}
+    response = requests.post(url, data=data)
+
+    if response.status_code == 200:
+        response = response.json()
+        success_ids = response.get("success_ids", [])
+        result = DeletionBackLog.objects.filter(
+            object_id__in=success_ids).delete()[0]
+        logger.debug("successfully synced %s deleted objects", result)
 
 
 schedule_every_5_hour, created = IntervalSchedule.objects.get_or_create(
@@ -338,5 +369,14 @@ def setup_period_tasks():
             interval=schedule_every_2_minutes,
             name='Upload Treatments',
             task='dashboard.tasks.upload_treatments',
+            start_time=timezone.now()
+        )
+
+    # Sync deleted objects
+    if not PeriodicTask.objects.filter(task='dashboard.tasks.sync_object_deletion').exists():
+        PeriodicTask.objects.create(
+            interval=schedule_every_2_minutes,
+            name='Sync Object Deletion',
+            task='dashboard.tasks.sync_object_deletion',
             start_time=timezone.now()
         )

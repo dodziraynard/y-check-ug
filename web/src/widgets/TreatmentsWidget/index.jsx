@@ -43,9 +43,15 @@ function TreatmentsWidget() {
                                     },
                                     {
                                         key: "total_service_cost", value: "Service Cost", textAlign: "center",
+                                        render: (item) => {
+                                            return `GH₵${item.total_service_cost}`
+                                        }
                                     },
                                     {
                                         key: "total_service_cost_nhis", value: "NHIS Cost", textAlign: "center",
+                                        render: (item) => {
+                                            return `GH₵${item.total_service_cost}`
+                                        }
                                     },
                                     {
                                         key: "remarks", value: "Remarks", render: (item) => {

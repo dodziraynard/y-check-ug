@@ -9,3 +9,4 @@ from dashboard.models.questions import *
 from dashboard.models.checkup_location import *
 from dashboard.models.previous_question_requirement import *
 from dashboard.models.app_configuration import *
+from dashboard.models.sync_deletion_models import *

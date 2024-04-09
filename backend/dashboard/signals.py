@@ -3,7 +3,7 @@ import os
 from django.db import models
 from django.dispatch import receiver
 
-from dashboard.models import Question, Option, Adolescent
+from dashboard.models import Question, Option, Adolescent, ConditionTreatment, DeletionBackLog
 
 
 @receiver(models.signals.pre_save, sender=Question)
@@ -76,3 +76,12 @@ def auto_delete_redundant_images_for_adolescent(sender, instance, **kwargs):
     if not old_image == new_image and old_image:
         if os.path.isfile(old_image.path):
             os.remove(old_image.path)
+
+
+@receiver(models.signals.post_delete, sender=ConditionTreatment)
+@receiver(models.signals.post_delete, sender=Adolescent)
+def create_sync_deletion_backlog(sender, instance, **kwargs):
+    DeletionBackLog.objects.create(
+        model_name=str(sender.__name__).lower(),
+        object_id=instance.id
+    )

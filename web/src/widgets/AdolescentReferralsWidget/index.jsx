@@ -7,7 +7,7 @@ import {
 } from '../../features/resources/resources-api-slice';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
 import { BASE_API_URI } from '../../utils/constants';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import useAxios from '../../app/hooks/useAxios';
 import { Button, Spinner, Badge, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
@@ -40,6 +40,7 @@ function AdolescentReferralsWidget() {
     const [newReferralModal, setNewReferralModal] = useState(null);
     const [deleteReferralModal, setDeleteReferralModal] = useState(null);
     const [selectedReferral, setSelectedReferral] = useState(null);
+    const [isOnsiteReferral, setIsOnsiteReferral] = useState(null);
 
     // Form fields
     const [facilityId, setFacilityId] = useState(null)
@@ -92,7 +93,8 @@ function AdolescentReferralsWidget() {
             "facility_id": facilityId,
             "service_type": serviceType,
             "referral_reason": referralReason,
-            "service_names": selectedServices
+            "service_names": selectedServices,
+            "is_onsite": isOnsiteReferral,
         }
         const response = await putReferrals({ body, pid }).unwrap()
         const referral = response["referral"]
@@ -133,6 +135,18 @@ function AdolescentReferralsWidget() {
             newReferralModal?.show()
         }
     }, [newReferralModal, createNewReferal])
+
+    useEffect(() => {
+        let isOnsite = false
+        facilities?.forEach(facility => {
+            // Hack: Onsite referral facilites have "onsite" in their names.
+            if (facility.id == facilityId && facility.name.toLowerCase().includes("onsite")) {
+                isOnsite = true
+            }
+        });
+        setIsOnsiteReferral(isOnsite)
+    }, [facilities, facilityId])
+
 
     return (
         <Fragment>
@@ -236,7 +250,7 @@ function AdolescentReferralsWidget() {
                 {isLoadingReferrals ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
                 <section>
-                    <div className="col-md-10 mx-auto">
+                    <div className="col-md-11 col-12 mx-auto">
                         <table className='table m-4'>
                             <thead>
                                 <tr>
@@ -273,6 +287,10 @@ function AdolescentReferralsWidget() {
                                                         onClick={() => showEditReferralModal(referral)}>
                                                         <i className="bi bi-pen me-1"></i> Edit
                                                     </button>
+                                                    <Link to={`/dashboard/referrals/${referral.id}/details`} className="mx-1 btn btn-outline-primary btn-sm align-self-end d-flex"
+                                                        onClick={() => null}>
+                                                        <i className="bi bi-list me-1"></i> Feedback
+                                                    </Link>
                                                     <button className="btn btn-sm btn-outline-primary me-1 d-flex align-items-center" onClick={() => showDeleteReferallModal(referral)}>
                                                         <i className="bi bi-trash me-1"></i>
                                                         Delete
