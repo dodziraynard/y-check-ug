@@ -119,8 +119,8 @@ function ReferralDetailWidget() {
             conTreatments.push({
                 service_id: serviceId,
                 referral_id: referralId,
-                total_service_cost: totalCost,
-                total_service_cost_nhis: totalCostNhis,
+                total_service_cost: totalCost == "" && isOnsite ? 0 : totalCost,
+                total_service_cost_nhis: totalCostNhis == "" && isOnsite ? 0 : totalCostNhis,
             })
         } else {
             conTreatments = conTreatments.filter(item => {
@@ -265,7 +265,7 @@ function ReferralDetailWidget() {
                                                                             <input className='form-control'
                                                                                 type="number"
                                                                                 disabled={!serviceSelected(service.id, referral.id)}
-                                                                                value={isOnsite ? 0 : getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost_nhis")}
+                                                                                value={getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost_nhis")}
                                                                                 onChange={(event) => handleConditionTreatmentCost(event.target.value, referral.id, service, "total_service_cost_nhis")}
                                                                                 min={0}
                                                                                 required placeholder='0.00' />
@@ -273,7 +273,7 @@ function ReferralDetailWidget() {
                                                                         <td style={{ border: "1px solid black" }}>
                                                                             <input className='form-control' type="number"
                                                                                 disabled={!serviceSelected(service.id, referral.id)}
-                                                                                value={isOnsite ? 0 : getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost")}
+                                                                                value={getConditionTreatmentAttrValue(service.id, referral.id, "total_service_cost")}
                                                                                 onChange={(event) => handleConditionTreatmentCost(event.target.value, referral.id, service, "total_service_cost")}
                                                                                 min={0} required placeholder='0.00' />
                                                                         </td>
