@@ -146,6 +146,8 @@ class UpstreamSyncMethodsModel():
         if exists:
             all(map(parameters.pop, unique_parameters))
             parameters.pop("password", None)
+            parameters.pop("groups", None)
+            parameters.pop("permissions", None)
             model.objects.filter(**unique_parameters).update(**parameters)
         else:
             try:
