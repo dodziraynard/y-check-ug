@@ -353,7 +353,7 @@ fun SimpleInputResponse(
     val errorMessage = remember(id) { mutableStateOf(TextFieldValue("Enter enter correct value.")) }
 
     // Update response
-    newResponse.value = textState.value.text
+    newResponse.value = textState.value.text.trim()
 
     val currentQuestionAnswered =
         newResponse.value.isNotEmpty() || newResponse.chosenOptions.isNotEmpty()
@@ -361,7 +361,7 @@ fun SimpleInputResponse(
     if (!currentQuestionAnswered) {
         errorMessage.value = TextFieldValue("Please enter a valid value here.")
         newResponse.value = ""
-    } else if (currentQuestion.toBeConfirmed == true && textState.value.text.isNotEmpty() && textState.value.text != confirmTextState.value.text) {
+    } else if (currentQuestion.toBeConfirmed == true && textState.value.text.trim().isNotEmpty() && textState.value.text.trim() != confirmTextState.value.text.trim()) {
         errorMessage.value = TextFieldValue("Values do not match.")
         newResponse.value = ""
     } else if (!isNumericResponseValid(currentQuestion, textState.value.text)) {

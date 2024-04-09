@@ -51,7 +51,7 @@ class ConditionTreatment(UpstreamSyncBaseModel):
     total_service_cost = models.DecimalField(max_digits=10, decimal_places=2)
     total_service_cost_nhis = models.DecimalField(
         max_digits=10, decimal_places=2)
-    comment = models.TextField()
+    comment = models.TextField(null=True, blank=True)
 
     class Meta:
         constraints = [

@@ -113,6 +113,8 @@ class GetRecommendedServices(generics.GenericAPIView):
         services = Service.objects.filter(
             related_flag_labels__id__in=label_ids).exclude(id__in=service_ids)
 
+        services = services.distinct()
+        
         services = self.serializer_class(services, many=True).data
         repsonse_data = {
             "services": services,
@@ -349,7 +351,7 @@ class ReferralTreatment(generics.GenericAPIView):
 
         condition_treatments_details = request.data.get(
             "condition_treatments_details")
-
+        
         treatment_data = {
             "referral": referral,
             "adolescent": referral.adolescent,
@@ -385,8 +387,8 @@ class ReferralTreatment(generics.GenericAPIView):
                 continue
 
             treatment_detail = {
-                "total_service_cost": details.get("total_service_cost"),
-                "total_service_cost_nhis": details.get("total_service_cost_nhis"),
+                "total_service_cost": details.get("total_service_cost") or 0,
+                "total_service_cost_nhis": details.get("total_service_cost_nhis") or 0,
             }
             ConditionTreatment.objects.create(
                 treatment=treatment,
