@@ -36,9 +36,8 @@ import java.util.UUID
 class NewAdolescentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewAdolescentBinding
     private lateinit var viewModel: AdolescentActivityViewModel
-    private val TAG = "NewAdolescentActivity"
     private lateinit var adolescent: Adolescent
-    private var pidPrefix: String = "YC1"
+    private var pidPrefix: String = "YC-"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -413,13 +412,13 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-            if (validateForm(adolescent)) {
+//            if (validateForm(adolescent)) {
                 viewModel.postAdolescent(adolescent)
-            } else {
-                Toast.makeText(
-                    this, getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
-                ).show()
-            }
+//            } else {
+//                Toast.makeText(
+//                    this, getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
+//                ).show()
+//            }
         }
     }
 

@@ -23,7 +23,6 @@ class MobileConfigSerializer(serializers.ModelSerializer):
 
     def get_apk_version(self, obj):
         conf = AppConfiguration.objects.first()
-        logger.info("HRDDDDD", conf)
         return conf.current_apk_versions if conf else None
 
     def get_apk_url(self, obj):

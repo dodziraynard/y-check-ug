@@ -39,7 +39,6 @@ class MobileConfigAPI(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         config, _ = MobileConfig.objects.get_or_create()
         config = MobileConfigSerializer(config).data
-        logger.debug("HRDDDDDD")
         return Response({'config': config}, status=status.HTTP_200_OK)
 
 
@@ -152,6 +151,8 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
         pid = adolescent_data.get("pid")
 
         if not pid:
+            logger.error("Invalid data from client: %s", str(adolescent_data))
+
             response_data = {
                 "error_message": f"Invalid PID '{pid}'"
             }
@@ -163,16 +164,10 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
             for key, value in adolescent_data.items():
                 if hasattr(adolescent, key) and value:
                     setattr(adolescent, key, value)
-            if adolescent.pid == "" or adolescent.pid == None:
-                adolescent.delete()
-            else:
-                adolescent.save()
+            adolescent.save()
         except Exception as e:
             logger.error(
                 "Error occured while adding/updating adolescent: %s", str(e))
-
-            if adolescent != None and (adolescent.pid == "" or adolescent.pid == None):
-                adolescent.delete()
 
             error_message = f"Error: {str(e)}"
             if "UNIQUE" in str(e).upper():
