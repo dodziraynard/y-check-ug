@@ -149,6 +149,13 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
         adolescent_data["dob"] = make_aware(dob)
         uuid = adolescent_data.pop("uuid")
         adolescent_data.pop("id")
+        pid = adolescent_data.get("pid")
+
+        if not pid:
+            response_data = {
+                "error_message": f"Invalid PID '{pid}'"
+            }
+            return Response(response_data)
 
         adolescent = None
         try:
@@ -170,6 +177,9 @@ class MobileAdolescentsAPI(generics.GenericAPIView):
             error_message = f"Error: {str(e)}"
             if "UNIQUE" in str(e).upper():
                 error_message = "PID already exists."
+                Adolescent.objects.filter(pid=None).delete()
+                Adolescent.objects.filter(pid="").delete()
+
             response_data = {
                 "error_message": error_message,
                 "message": "",
