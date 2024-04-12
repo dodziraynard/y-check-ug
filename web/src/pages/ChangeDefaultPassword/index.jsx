@@ -51,10 +51,11 @@ function ChangeDefaultPassword() {
                 window.location = "/dashboard"
             }
         } catch (err) {
+            const description = err.status == 401 ? "Invalid session. Pleaes logout and login gain." : `HTTP STATUS ${err.status}`
             toast({
                 position: 'top-center',
                 title: `An error occurred`,
-                description: err.originalStatus,
+                description: description,
                 status: 'error',
                 duration: 2000,
                 isClosable: true,
