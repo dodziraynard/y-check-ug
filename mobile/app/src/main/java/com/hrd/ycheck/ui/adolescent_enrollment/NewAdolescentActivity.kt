@@ -267,7 +267,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                     binding.checkUpLocationContainer.visibility = View.VISIBLE
                 }
             }
-
+            adolescent.pid = pidPrefix + binding.pidInput.text.toString()
             binding.idPrefix.text = pidPrefix
 
         }
@@ -412,13 +412,13 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-//            if (validateForm(adolescent)) {
+            if (validateForm(adolescent)) {
                 viewModel.postAdolescent(adolescent)
-//            } else {
-//                Toast.makeText(
-//                    this, getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
-//                ).show()
-//            }
+            } else {
+                Toast.makeText(
+                    this, getString(R.string.please_check_form_for_errors), Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 

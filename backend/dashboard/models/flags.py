@@ -24,7 +24,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
     label = models.ForeignKey(
         "dashboard.FlagLabel", on_delete=models.CASCADE, db_index=True)
     comment = models.CharField(
-        max_length=200, default="This value was inffered.")
+        max_length=200, default="This value was inferred/computed.")
     computed_color_code = models.CharField(
         choices=COLOR_CHOICES, max_length=10)
     updated_color_code = models.CharField(
