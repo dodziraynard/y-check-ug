@@ -120,8 +120,6 @@ function TableView({ headers,
         var dataType = 'application/vnd.ms-excel';
         var tableSelect = document.getElementById(tableID);
 
-        console.log(tableSelect.outerHTML)
-
         var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
 
         // Specify file name

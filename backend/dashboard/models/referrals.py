@@ -33,5 +33,8 @@ class Referral(UpstreamSyncBaseModel):
     @staticmethod
     def generate_query(query):
         queries = [models.Q(**{f"{key}__icontains": query})
-                   for key in ["adolescent__pid", "adolescent__surname", "adolescent__other_names"]]
+                   for key in ["adolescent__pid",
+                               "adolescent__surname",
+                               "facility__name",
+                               "adolescent__other_names"]]
         return reduce(lambda x, y: x | y, queries)

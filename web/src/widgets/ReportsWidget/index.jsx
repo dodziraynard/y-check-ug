@@ -26,6 +26,9 @@ function ReportsWidget() {
                 <div>
                     <p>Choose the type of report to generate.</p>
                     <div className="d-flex flex-wrap justify-content-center">
+                        <div onClick={(event) => setTableNumber(0)} style={{ background: "#3c4e77", margin: "1em", color: "white", cursor: "pointer", padding: "1em", borderRadius: "0.4em" }}>
+                            <p>Referral Statistics</p>
+                        </div>
                         <div onClick={(event) => setTableNumber(1)} style={{ background: "#3c4e77", margin: "1em", color: "white", cursor: "pointer", padding: "1em", borderRadius: "0.4em" }}>
                             <p>Table 1: Socio-demographic characteristics of Y-Check cohort</p>
                         </div>

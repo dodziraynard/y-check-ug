@@ -1,9 +1,30 @@
 import os
-
+import logging
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+
+logger = logging.getLogger(__name__)
+
+
+def set_task_state(task,
+                   message,
+                   current,
+                   total=3,
+                   info="Processing",
+                   link=None):
+    try:
+        task.update_state(state=message,
+                          meta={
+                              "current": str(current),
+                              "total": total,
+                              "info": info,
+                              "link": link
+                          })
+    except Exception as e:
+        logger.error(str(e))
+        return
 
 
 def link_callback(uri, rel):

@@ -16,7 +16,6 @@ const BarChart = () => {
     getAdolescentTypes(); 
   }, [getAdolescentTypes]);
 
-  console.log(response)
   const users = response?.total_user || 0;
   const adolescents = response?.total_adolescent || 0;
   const referrals = response?.total_referal || 0;

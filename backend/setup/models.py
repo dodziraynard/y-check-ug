@@ -81,5 +81,9 @@ class SetupPerm(models.Model):
             # System configuration
             ("manage_service", "Can manage services"),
             ("manage_facility", "Can manage facility"),
-            ("edit_system_config", "Can edit and update system configurations"),
+            ("edit_system_config",
+             "Can edit and update system configurations"),
+
+            # Referrals
+            ("change_referral", "Can change referral"),
         ]

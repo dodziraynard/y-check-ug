@@ -100,8 +100,11 @@ function PatientsWidget() {
                             reloadTrigger={triggerReload}
                             responseDataAttribute="adolescents"
                             dataSourceUrl={`${BASE_API_URI}/web-adolescents/`}
+                            filterByDate={true}
                             filters={[
-
+                                { key: `pid__startswith:YC1`, value: `Basic`},
+                                { key: `pid__startswith:YC2`, value: `Secondary`},
+                                { key: `pid__startswith:YC3`, value: `Community`},
                             ]}
                             headers={[
                                 {

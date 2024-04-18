@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral Statistics</title>
+</head>
+
+<body>
+    <h1>Referral Statistics from {{from_date}} to {{to_date}}.</h1>
+    <table style="border: 1px solid black;">
+        <thead>
+            <tr style="padding: 0.3em; vertical-align: middle;">
+                <th>Facility</th>
+                <th style="text-align: center;" colspan="4">Referrals</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="padding: 0.3em; vertical-align: middle;">
+                <td colspan="1"></td>
+                <td style="text-align: center;">NEW</td>
+                <td style="text-align: center;">IN REVIEW</td>
+                <td style="text-align: center;">COMPLETED</td>
+                <td style="text-align: center;"><strong>TOTAL</strong></td>
+            </tr>
+
+            {% for row in rows %}
+            <tr style="padding: 0.3em; vertical-align: middle;">
+                <td><strong>{{row.facility}}</strong></td>
+                <td style="text-align: center;">{{row.new}}</td>
+                <td style="text-align: center;">{{row.in_review}}</td>
+                <td style="text-align: center;">{{row.completed}}</td>
+                <td style="text-align: center;"><strong>{{row.total}}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+</html>
