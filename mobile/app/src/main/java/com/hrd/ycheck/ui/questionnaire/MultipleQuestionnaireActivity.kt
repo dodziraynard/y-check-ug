@@ -2,6 +2,7 @@ package com.hrd.ycheck.ui.questionnaire
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -43,8 +44,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
     private var adolescent: Adolescent? = null
     private var questionnaireType: String = QuestionnaireType.SURVEY
     private var currentQuestionId: String = "-1"
-
-    //    private var currentQuestion: Question? = null
+    private var stack = ArrayDeque<String>()
     private lateinit var audioPlayer: AudioPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +52,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         binding = ActivityQuestionnaireBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[QuestionnaireActivityViewModel::class.java]
+
 
         adolescent = intent.getParcelableExtra("adolescent")
 
@@ -65,6 +66,8 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
         currentQuestionId = intent.getStringExtra("current_question_id") ?: "-1"
         val congratulatedFor = intent.getLongExtra("congratulated_for_session_number", -1L)
+        val serialisedStack = intent.getStringExtra("serialisedStack") ?: ""
+        stack = ArrayDeque(serialisedStack.split(","))
 
         if (questionnaireType == SURVEY_PRACTICE) {
             showPracticeTourText()
@@ -84,11 +87,9 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         }
 
         if (activityTag.isNotEmpty() && adolescent?.id != null && congratulatedFor == -1L) {
-            val dialogFragment =
-                TimeInputDialogFragment(
-                    activityTag,
-                    adolescent!!.id
-                )
+            val dialogFragment = TimeInputDialogFragment(
+                activityTag, adolescent!!.id
+            )
             dialogFragment.isCancelable = false
             dialogFragment.show(supportFragmentManager, "TimeInputDialogFragment")
         }
@@ -103,13 +104,12 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
         viewModel.postMultipleResponseResult.observe(this) { response ->
             if (response?.success == true && response.lastAnsweredQuestionID != null) {
+                stack.addLast(currentQuestionId)
                 currentQuestionId = response.lastAnsweredQuestionID
+
                 // Load next questions
                 viewModel.getMultipleQuestion(
-                    adolescentId,
-                    currentQuestionId,
-                    viewModel.action.value,
-                    questionnaireType
+                    adolescentId, currentQuestionId, viewModel.action.value, questionnaireType
                 )
             }
         }
@@ -132,15 +132,9 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         }
 
         binding.previousButton.setOnClickListener {
-            // First question in current question set.
-            val firstQuestionId = currentQuestions?.get(0)?.id ?: "-1"
-
-            // Load previous questions
+            currentQuestionId = if (stack.isNotEmpty()) stack.removeLast() else "0"
             viewModel.getMultipleQuestion(
-                adolescentId,
-                firstQuestionId,
-                "previous",
-                questionnaireType
+                adolescentId, currentQuestionId, "next", questionnaireType
             )
         }
 
@@ -153,7 +147,6 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         viewModel.nextQuestionsResponse.observe(this) { response ->
             if (response != null) {
                 currentQuestions = response.questions
-
                 val section = response.newSection
                 val submittedResponses = response.currentResponses
                 currentSessionNumber = response.currentSectionNumber
@@ -207,11 +200,10 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
                         totalSessions
                     )
                 } else if (questionnaireType == SURVEY_PRACTICE) {
-                    val message =
-                        getString(
-                            R.string.well_done_you_ve_completed_the_practice_questions_now_let_s_start_the_actual_survey,
-                            adolescent?.otherNames
-                        )
+                    val message = getString(
+                        R.string.well_done_you_ve_completed_the_practice_questions_now_let_s_start_the_actual_survey,
+                        adolescent?.otherNames
+                    )
                     showSessionEndScreen(message, QuestionnaireType.SURVEY, -1L)
                 } else {
                     showCompletionDialog()
@@ -234,14 +226,11 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
                 val options = response.chosenOptions
                 val value = response.value
 
-                val currentQuestionAnswered =
-                    value.isNotEmpty() || options.isNotEmpty()
+                val currentQuestionAnswered = value.isNotEmpty() || options.isNotEmpty()
                 if (!currentQuestionAnswered) {
                     Toast.makeText(
-                        this,
-                        getString(R.string.please_check_your_responses), Toast.LENGTH_LONG
-                    )
-                        .show()
+                        this, getString(R.string.please_check_your_responses), Toast.LENGTH_LONG
+                    ).show()
                     currentQuestions?.let { questions ->
                         renderQuestion(
                             questions,
@@ -274,8 +263,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         section: Section
     ) {
         val dialog = AlertDialog.Builder(this).setTitle(getString(R.string.game_available))
-            .setCancelable(false)
-            .setNegativeButton(getString(R.string.no)) { _, _ ->
+            .setCancelable(false).setNegativeButton(getString(R.string.no)) { _, _ ->
                 renderNewSectionInstructionAndQuestion(
                     adolescent,
                     question,
@@ -353,9 +341,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
                 R.string.no_more_questions
             )
         val dialog =
-            AlertDialog.Builder(this)
-                .setTitle(getString(R.string.thank_you))
-                .setCancelable(false)
+            AlertDialog.Builder(this).setTitle(getString(R.string.thank_you)).setCancelable(false)
                 .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     when (questionnaireType) {
                         QuestionnaireType.SURVEY -> {
@@ -394,8 +380,8 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         intent.putExtra("congratulated_for_session_number", currentSessionNumber)
         intent.putExtra("adolescent", adolescent)
         intent.putExtra("message", message)
+        intent.putExtra("serialisedStack", stack.joinToString(","))
         startActivity(intent)
-        finish()
     }
 
     private fun showPracticeTourText() {

@@ -93,8 +93,8 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:2.6.1"
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
 
     // Paging
     implementation "androidx.paging:paging-runtime-ktx:3.2.1"

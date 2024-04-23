@@ -387,8 +387,13 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
                 invalid_questions_ids.add(question.id)
                 continue
 
-            if not question.are_previous_response_conditions_met(
-                    adolescent):
+            # If this question has dependencies on previous responses and one of such responses
+            # in this the current window and there's at least one question to answer, return.
+            if question.has_previous_question_requirement(current_question) and index > len(invalid_questions_ids):
+                last_invalid_question_number = question.number
+                break
+
+            if not question.are_previous_response_conditions_met(adolescent):
 
                 # If we have questions to answer i.e., index > len(invalid_questions_ids)
                 # and 'question' is not eligible,

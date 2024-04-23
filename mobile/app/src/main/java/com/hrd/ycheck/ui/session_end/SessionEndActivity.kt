@@ -30,6 +30,7 @@ class SessionEndActivity : AppCompatActivity() {
         val questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
         val adolescent: Adolescent? = intent.getParcelableExtra("adolescent")
         val congratulatedFor = intent.getLongExtra("congratulated_for_session_number", -1L)
+        val serialisedStack = intent.getStringExtra("serialisedStack") ?: ""
 
         val message =
             intent.getStringExtra("message") ?: "You have successfully completed the session."
@@ -43,6 +44,7 @@ class SessionEndActivity : AppCompatActivity() {
             intent.putExtra("question_type", questionnaireType)
             intent.putExtra("congratulated_for_session_number", congratulatedFor)
             intent.putExtra("adolescent", adolescent)
+            intent.putExtra("serialisedStack", serialisedStack)
             startActivity(intent)
             finish()
         }

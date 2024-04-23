@@ -2,6 +2,7 @@ package com.hrd.ycheck.ui.questionnaire
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -41,8 +42,6 @@ class QuestionnaireActivity : AppCompatActivity() {
     private var currentQuestionId: String = "-1"
     private var currentQuestion: Question? = null
     private lateinit var audioPlayer: AudioPlayer
-
-    private var showError = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,8 +116,7 @@ class QuestionnaireActivity : AppCompatActivity() {
         }
 
         binding.previousButton.setOnClickListener {
-            val questionId = newAdolescentResponse?.questionId ?: "0"
-            viewModel.getQuestion(adolescentId, questionId, "previous", questionnaireType)
+            viewModel.getQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
         }
 
         viewModel.errorMessage.observe(this) { message ->

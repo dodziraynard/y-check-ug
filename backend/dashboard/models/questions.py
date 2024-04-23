@@ -116,6 +116,14 @@ class Question(UpstreamSyncBaseModel):
     regex_error_message = models.CharField(
         max_length=200, blank=True, null=True)
 
+    def has_previous_question_requirement(self, current_question):
+        if not current_question:
+            return False
+        return (self.previous_question_group
+                and self.previous_question_group.filter(dependent_questions__number__gt=current_question.number)) or \
+            self.previous_response_requirements.filter(
+                question__number__gt=current_question.number).exists()
+
     def are_previous_response_conditions_met(self, adolescent):
         if self.previous_question_group:
             group_value = self.previous_question_group.get_group_value(
