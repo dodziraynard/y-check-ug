@@ -11,14 +11,22 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         header {
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
             padding: 20px;
             background-color: #ffffff; 
         }
+        
+        header table {
+            width: 100%;
+        }
+        
+        header td {
+            text-align: center;
+        }
+        
         header img {
             width: 100px;
+            margin-left: 99px;
+            margin-right: 90px;
             height: auto;
         }
         h1 {
@@ -30,7 +38,7 @@
         }
         .box {
             border: 1px solid black;
-            width: 70%; 
+            width: 74%; 
             margin: 20px auto; 
             padding: 20px;
             font-size: 13px;
@@ -52,38 +60,45 @@
             font-size: 18px;
             margin-top: -20px;
         }
-        .container .date{
-            display: flex;
-            justify-content: space-between;
-            margin-top: -20px;
-        }
-        .description{
-            font-size: 14px;
-        }
-        .y_id{
-            display: flex;
-            justify-content: space-between;
-        }
+       
     
+        .date, .name, .y_id {
+            width: 100%;
+        }
         
-        table {
+        .date td, .name td, .y_id td {
+            vertical-align: top;
+        }
+        
+        .date p, .name p{
+            margin: 0;
+        }
+        
+        .y-table table {
             width: 100%; 
         }
         
-        th,td {
-            flex: 1;
+        .y-table th,td {
             text-align: left; 
             padding: 10px;
         }
-        th{
+        .y-table th{
             border-bottom: 1px solid black;
         }
         
+        .y-table th:first-child,
+        td:first-child {
+            text-align: left; 
+        }
+        .y-table table tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+
         th:first-child,
         td:first-child {
             text-align: left; 
         }
-        table tr:nth-child(even) td {
+        .y-table table tr:nth-child(even) td {
             background-color: #f0f0f0;
         }
         th div span {
@@ -98,33 +113,72 @@
 </head>
 <body>
     <header>
-        <img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt="">
-        <h1>YC_07NP Screening Report for Service 3</h1>
-        <img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt="">
+        <table>
+            <tr>
+                <td><img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt=""></td>
+                <td> <h1>YC_07NP Screening Report for Service 3</h1></td>
+                <td><img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt=""></td>
+            </tr>
+        </table>
     </header>
     <h2 style="text-align: center; margin-top:-10px;">Private and Confidential</h2>
     <h3>Complete this form in Capital Letters, paying attention to a Clear, Bold, and Easy to read handwriting.</h3>
-    <div class="box">
-        <h2>Gender:_____________ Age: _____________ Y-Check PID:_______________________________</h2>
-    </div>
+    <table class="box">
+        <tr>
+            <td>
+                <h2>Gender:_____________ Age: _____________ Y-Check PID:_________________________</h2>
+            </td>
+        </tr>
+    </table>
     <div class="container">
-        <div class="date">
-            <p>Dear Y-Check Participant</p>
-            <p>Date:__________________</p>
-        </div>
-        <div class="description">
-            <p> You attended a Y-Check health and well-being check-up today.</p>
-            <p>Your screening results (see overleaf) indicate that no problem was detected.</p>
-            <p>This means that your health is as expected for your age.</p>
-            <p>These results do not rule out future problems. If you have any concerns about your health at</p>
-            <p>any stage in the future, contact your local health service provider.</p>
-        </div>
-        <div class="y_id">
-            <p>Name of Y-Check PA:________________________</p>
-            <p>Signature:_______________________________</p>
-        </div>
-        <p>Referring Organisation:..............................................................</p>
-        <p>Contact details:..........................................................................</p>
+        <table class="date">
+            <tr>
+                <td>Dear Y-Check Participant,</td>
+                <td> <span style="margin-left: 400px;"> Date:__________________</span></td>
+            </tr>
+        </table>
+        <table class="description">
+            <tr>
+                <td>
+                    You attended a Y-Check health and well-being check-up today.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Your screening results (see overleaf) indicate that no problem was detected.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    This means that your health is as expected for your age..
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    These results do not rule out future problems. If you have any concerns about your health at                </td>
+            </tr>
+            <tr>
+                <td>
+                    any stage in the future, contact your local health service provider.
+                </td>
+            </tr>
+        </table>
+        <table class="date">
+            <tr>
+                <td>Name of Y-Check PA:__________________________________</td>
+                <td>Signature:___________________________</td>
+            </tr>
+        </table>
+        <table class="date">
+            <tr>
+                <td>Referring Organisation: ...............................................</td>
+            </tr>
+        </table>
+        <table class="date">
+            <tr>
+                <td>Contact details: ...........................................................</td>
+            </tr>
+        </table>
         <div class="y-table">
             <table>
                 <tr>
