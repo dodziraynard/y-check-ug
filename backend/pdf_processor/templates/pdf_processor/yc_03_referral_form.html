@@ -10,16 +10,26 @@
             padding: 0;
         }
         header {
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
             padding: 20px;
             background-color: #ffffff; 
         }
+        
+        header table {
+            width: 100%;
+        }
+        
+        header td {
+            text-align: center;
+        }
+        
         header img {
             width: 100px;
+            margin-left: 100px;
+            margin-right: 100px;
             height: auto;
         }
+        
+        
         h1 {
             margin: 0;
         }
@@ -29,21 +39,28 @@
         }
         .box {
             border: 1px solid black;
-            width: 70%; 
-            margin: 20px auto; 
+            width: 70%;
+            margin: 20px auto;
             padding: 20px;
             font-size: 13px;
         }
+        
+        .box table {
+            width: 100%;
+        }
+        
         .box h2 {
             margin: 10px 0;
         }
-        .box .middle{
+        
+        .box .middle {
             text-align: center;
         }
+        
         .box span {
             display: inline-block;
-            width: 320px; /
-        }
+            width: 320px;
+        }        
         .container {
             width: 74%; 
             margin: 20px auto;
@@ -51,20 +68,23 @@
             font-size: 18px;
             margin-top: -20px;
         }
-        .container .date{
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
+        .date, .name, .y_id {
+            width: 100%;
         }
-        .name{
-            margin-top: -20px;
+        
+        .date td, .name td, .y_id td {
+            vertical-align: top;
         }
-        .y_id{
-            display: flex;
-            justify-content: space-between;
-            margin-top: -20px;
+        
+        .date p, .name p{
+            margin: 0;
         }
-    
+        
+        .name span {
+            display: inline-block;
+            width: 450px;
+        }
+        
         
         table {
             width: 150%; 
@@ -79,52 +99,83 @@
         td:first-child {
             text-align: left; 
         }
-        .organization{
-            margin-top: -15px;
-        }
-        .organization p {
-            margin: 5px 0; 
-        }
+       
         .box2 {
             border: 1px solid black;
-            width: 70%; 
-            margin: 20px auto; 
+            width: 70%;
+            margin: 20px auto;
             padding: 20px;
             margin-top: -30px;
             font-size: 13px;
         }
-        .box2 p{
+        
+        .box2 table {
+            width: 100%;
+        }
+        
+        .box2 p {
             font-size: 20px;
         }
+        
+        .box2 input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
     </style>
 </head>
 <body>
     <header>
-        <img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt="">
-        <h1>YC_03 Referral Form for Service Providers</h1>
-        <img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt="">
+        <table>
+            <tr>
+                <td><img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt=""></td>
+                <td><h1>YC_03 Referral Form for Service Providers</h1></td>
+                <td><img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt=""></td>
+            </tr>
+        </table>
     </header>
     <h3>Complete this form in Capital Letters, paying attention to a Clear, Bold, and Easy to read handwriting.</h3>
     <div class="box">
-        <h2>PART 1 </h2>
-        <h2 class="middle">YOUNG PERSON MUST TAKE THIS FORM WITH THEM TO</h2>
-        <h2>REFERRAL SERVICE: <span>____________________________</span></h2>
-        <h2>LOCATION: <span>____________________________</span></h2>
+        <table>
+            <tr>
+                <td><h2>PART 1</h2></td>
+            </tr>
+            <tr>
+                <td><h2 class="middle">YOUNG PERSON MUST TAKE THIS FORM WITH THEM TO</h2></td>
+            </tr>
+            <tr>
+                <td><h2>REFERRAL SERVICE: <span>____________________________</span></h2></td>
+            </tr>
+            <tr>
+                <td><h2>LOCATION: <span>____________________________</span></h2></td>
+            </tr>
+        </table>
     </div>
+    
     <div class="container">
-        <div class="date">
-            <p>Dear esteemed colleague,</p>
-            <p>Date:__________________</p>
-        </div>
-        <div class="name">
-            <p> <strong>Please receive </strong> (First NAME, SurNAME)  <span>_______________________________________________________</span> <strong>who attended </strong></p>
-            <p> <strong>the Y-Check screening service delivered by Y-Check staff. </strong></p>
-        </div>
-        <div class="y_id">
-            <p>Y-Check ID:________________________</p>
-            <p>Age:_______________________________</p>
-            <p>Sex:_______________________________</p>
-        </div>
+        <table class="date">
+            <tr>
+                <td><strong>Dear esteemed colleague,</strong></td>
+                <td ><strong style="margin-left: 400px;">Date:__________________</strong></td>
+            </tr>
+        </table>
+        
+        <table class="name">
+            <tr>
+                <td><p><strong>Please receive</strong> (First NAME, SurNAME) <span>_________________________________________________</span> <strong>who attended</strong></p></td>
+            </tr>
+            <tr>
+                <td><p><strong>the Y-Check screening service delivered by Y-Check staff.</strong></p></td>
+            </tr>
+        </table>
+        
+        <table class="y_id">
+            <tr>
+                <td><p>Y-Check ID:________________________</p></td>
+                <td><p>Age:_______________________________</p></td>
+                <td><p>Sex:_______________________________</p></td>
+            </tr>
+        </table>
+        
         <div class="y-table">
             <table>
                 <tr>
@@ -324,29 +375,67 @@
         </div>
 
         <p>Additional notes:</p>
-        <div class="date">
-            <p>Name of Y-Check PA:_______________________________________________________</p>
-            <p>Signature:__________________</p>
-        </div>
-        <div class="organization">
-            <p>Referring Organisation: ...........................................................</p>
-            <p>Contact details: ...........................................................</p>
-        </div>
+       <table class="date">
+           <tr>
+               <td>Name of Y-Check PA:__________________________________</td>
+               <td>Signature:___________________________</td>
+           </tr>
+       </table>
+       <table class="date">
+            <tr>
+                <td>Referring Organisation: ...............................................</td>
+            </tr>
+        </table>
+        <table class="date">
+            <tr>
+                <td>Contact details: .........................................</td>
+            </tr>
+        </table>
+       
     </div>
     <div class="box2">
-        <h2>PART 2 </h2>
-        <h2>To be completed by the Receiving Facility/Service</h2>
-        <p>Name of facility/service: <span>__________________________________________________________</span></p>
-        <p>Location of facility/service: <span>________________________________________________________</span></p>
-        <p>Date of Referral Service Provided (first visit): <span>___ ___ /___ ___ /___ ___ ___ ___</span></p>
-        <p>Was the adolescent accompanied by an adult? <span><input type="checkbox"> YES</span> <span><input type="checkbox"> NO</span> </p>
-        <p>Parent/Guardian Name: <span>___________________________________________________________</span></p>
-        <p>Address: <span>________________________________</span> Phone No:<span>______________________________</span> </p>
-        <p>Management provided:_________________________________________________________________________</p>
-        <p>____________________________________________________________________________________________</p>
-        <p>Cost of service provided (circle one GHC/USD):..............................................</p>
-        <p>Name of service provider: <span>________________________</span> Signature:<span>_________________________</span> </p>
-        <p>Phone number of service provider: <span>_________________________</span> </p>
+        <table>
+            <tr>
+                <td><h2>PART 2</h2></td>
+            </tr>
+            <tr>
+                <td><h2>To be completed by the Receiving Facility/Service</h2></td>
+            </tr>
+            <tr>
+                <td><p>Name of facility/service: <span>__________________________________________________________</span></p></td>
+            </tr>
+            <tr>
+                <td><p>Location of facility/service: <span>________________________________________________________</span></p></td>
+            </tr>
+            <tr>
+                <td><p>Date of Referral Service Provided (first visit): <span>___ ___ /___ ___ /___ ___ ___ ___</span></p></td>
+            </tr>
+            <tr>
+                <td><p>Was the adolescent accompanied by an adult? <span><input type="checkbox"> YES</span> <span><input type="checkbox"> NO</span> </p></td>
+            </tr>
+            <tr>
+                <td><p>Parent/Guardian Name: <span>___________________________________________________________</span></p></td>
+            </tr>
+            <tr>
+                <td><p>Address: <span>________________________________</span> Phone No:<span>______________________________</span> </p></td>
+            </tr>
+            <tr>
+                <td><p>Management provided:_________________________________________________________________________</p></td>
+            </tr>
+            <tr>
+                <td><p>____________________________________________________________________________________________</p></td>
+            </tr>
+            <tr>
+                <td><p>Cost of service provided (circle one GHC/USD):..............................................</p></td>
+            </tr>
+            <tr>
+                <td><p>Name of service provider: <span>________________________</span> Signature:<span>_________________________</span> </p></td>
+            </tr>
+            <tr>
+                <td><p>Phone number of service provider: <span>_________________________</span> </p></td>
+            </tr>
+        </table>
     </div>
+    
 </body>
 </html>
