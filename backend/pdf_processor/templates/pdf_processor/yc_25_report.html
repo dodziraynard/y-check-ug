@@ -11,16 +11,21 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 20px;
             background-color: #ffffff; 
-            margin-left: 150px;
-            margin-right: 150px;
         }
+        
+        header table {
+            width: 100%;
+        }
+        
+        header td {
+            text-align: center;
+        }
+        
         header img {
             width: 100px;
+            margin-left: 150px;
             height: auto;
         }
         h1 {
@@ -32,124 +37,108 @@
             text-align: center;
             text-decoration: underline;
         }
-        .box {
-            border: 1px solid black;
-            width: 70%; 
-            margin: 20px auto; 
-            padding: 20px;
-            font-size: 13px;
-        }
-        .box h2 {
-            margin: 10px 0;
-        }
-        .box .middle{
-            text-align: center;
-        }
-        .box span {
-            display: inline-block;
-            width: 320px; /
-        }
-        .container {
-            width: 74%; 
-            margin: 20px auto;
-            padding: 20px;
-            font-size: 18px;
-            margin-top: -20px;
-        }
-        .container .date{
-            display: flex;
-            justify-content: space-between;
-            margin-top: -20px;
-        }
-        .description{
-            font-size: 14px;
-        }
-        .y_id{
-            display: flex;
-            justify-content: space-between;
-        }
-    
         
-        table {
-            width: 100%; 
-        }
         
-        th,td {
-            flex: 1;
-            text-align: left; 
-            padding: 10px;
-        }
-        th{
+        .y-table th{
             border-bottom: 1px solid black;
         }
         
+        .y-table th:first-child,
+        td:first-child {
+            text-align: left; 
+        }
+        .y-table table tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+
         th:first-child,
         td:first-child {
             text-align: left; 
         }
-        table tr:nth-child(even) td {
+        .y-table table tr:nth-child(even) td {
             background-color: #f0f0f0;
         }
-        th div span {
-            margin-right: 10px; 
-        }
-        td input {
-            margin-right: 20px; 
-        }
-       .box2{
-            border: 1px solid black;
-            width: 95%; 
-            margin: 20px auto; 
-            padding: 20px;
-            font-size: 13px;
-            align-items: center;
-            text-align: center;
-       }
+       
 
-       .box2 p{
-        font-size: 21px;
-       }
+      
         
     </style>
 </head>
 <body>
     <header>
-        <img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt="">
-        <img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt="">
+        <table>
+            <tr>
+                <td><img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt=""></td>
+                <td style="margin-left: 120px;"><img src="https://1c0bb1c435.imgdist.com/pub/bfra/nnugauc1/nop/v9p/tul/Picture1.png" alt=""></td>
+            </tr>
+        </table>
     </header>
     <h1 style="text-align: center; margin-top:-10px;">YC_25P Follow-up Report for Service 3</h1>
     <h2 style="text-align: center;">Private and Confidential</h2>
     <h3>Complete this form in Capital Letters, paying attention to a Clear, Bold, and Easy to read handwriting.</h3>
-    <div class="box">
-        <h2>Gender:_____________ Age: _____________ Y-Check PID:_______________________________</h2>
-    </div>
-    <div class="container">
-        <div class="date">
-            <p>Dear Y-Check Participant</p>
-            <p>Date:__________________</p>
-        </div>
-        <div class="description">
-            <p>You attended a Y-Check health and well-being follow-up today. Your screening results <br> (see
-                overleaf) indicate a possible problem.</p>
-            <p>We strongly recommend that you visit the following service(s) for further assessment:</p>
-            <p>Name and location of service provider:</p>
-            <p>_____________________________________________________________________________________</p>
-            <p>We encourage you to bring your trusted adult with you when you attend the service. <br>
-                We believe you will benefit by giving this matter your attention as untreated conditions <br>
-                can affect your general health and wellbeing.</p>
-        </div>
-        <div class="box2">
-            <p>Y-Check will pay the referral consultation and treatment fees.</p>
-            <h2><strong>You must bring your Y-Check ID card with you to the service.</strong></h2>
-        </div>
-        <div class="y_id">
-            <p>Name of Y-Check PA:________________________</p>
-            <p>Signature:_______________________________</p>
-        </div>
-        <p>Referring Organisation:..............................................................</p>
-        <p>Contact details:..........................................................................</p>
+    <table style="border: 1px solid black; padding-top:5px; padding-bottom:5px; margin:0;">
+        <tr style="border: none;">
+            <td style="border: none; margin-left: 20px"><h2>Y-Check PID:_____________ </h2></td>
+            <td style="border: none;"><h2> Gender:_____________</h2></td>
+            <td style="border: none;"> <h2>Age: _____________ </h2></td>
+        </tr>
+    </table>
+    <div>
+        <table  style="margin-top: 20px; padding: 5px;">
+            <tr>
+                <td>Dear Y-Check Participant,</td>
+                <td style="margin-left: 200px;"> <span> Date:__________________</span></td>
+            </tr>
+        </table>
+        
+        <table style="margin-top: 10px; padding: 5px;" >
+            <tr>
+                <td>You attended a Y-Check health and well-being follow-up today. Your screening results <br> (see overleaf) indicate a possible problem.</td>
+            </tr>
+            <tr>
+                <td>We strongly recommend that you visit the following service(s) for further assessment</td>
+            </tr>
+            <tr>
+                <td>Name and location of service provider:</td>
+            </tr>
+            <tr>
+                <td><span>_____________________________________________________________________________________</span></td>
+            </tr>
+            <tr>
+                <td >We encourage you to bring your trusted adult with you when you attend the service. <br>
+                    We believe you will benefit by giving this matter your attention as untreated conditions <br>
+                    can affect your general health and wellbeing.</td>
+            </tr>
+        </table>
+        
+        <table style="border: 1px solid black; padding-top:5px; padding-bottom:5px; margin:0;">
+            <tr style="border: none;">
+                <td style="border: none; margin-left: 200px">Y-Check will pay the referral consultation and treatment fees.</td>
+            </tr>
+            <tr style="border: none;">
+                <td style="border: none; margin-left: 200px">
+                    <strong >You must bring your Y-Check ID card with you to the service.</h2>
+                </td>
+            </tr>
+        </table>
+        <table style="padding: 5px; margin-top:10px">
+            <tr>
+                <td>Name of Y-Check PA:__________________________________</td>
+                <td>Signature:___________________________</td>
+            </tr>
+        </table>
+        <table  style="padding: 5px;">
+            <tr>
+                <td>Referring Organisation: ...............................................</td>
+            </tr>
+        </table>
+        <table style="padding: 5px;">
+            <tr>
+                <td>Contact details: ...........................................................</td>
+            </tr>
+        </table>
         <div class="y-table">
-            <table>
+            <table >
                 <tr>
                     <th>Condition</th>
                     <th>
@@ -175,7 +164,7 @@
                     </th>  
                     <th>Further details</th>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Mental health
                     </td>
@@ -194,7 +183,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Suicide risk
                     </td>
@@ -213,7 +202,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Alcohol and drugs abuse
                     </td>
@@ -233,7 +222,7 @@
 
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Malaria
                     </td>
@@ -252,7 +241,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Hearing impairment
                     </td>
@@ -271,7 +260,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Visual impairment
                     </td>
@@ -290,7 +279,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Oral health
                     </td>
@@ -309,7 +298,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Physical impairment
                     </td>
@@ -328,7 +317,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Nutrition
                     </td>
@@ -347,7 +336,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Anaemia
                     </td>
@@ -366,7 +355,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Schistosomiasis
                     </td>
@@ -385,7 +374,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Blood pressure
                     </td>
@@ -404,7 +393,7 @@
                     <td></td>
                 </tr>
                
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         STIs
                     </td>
@@ -422,7 +411,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         HIV
                     </td>
@@ -440,7 +429,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Hepatitis B
                     </td>
@@ -458,7 +447,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Hepatitis C
                     </td>
@@ -476,7 +465,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Sickel Cell Diseases
                     </td>
@@ -494,7 +483,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Worm Infestation
                     </td>
@@ -512,7 +501,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         ENT issues
                     </td>
@@ -530,7 +519,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Migraine
                     </td>
@@ -548,7 +537,7 @@
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr style="padding: 5px;">
                     <td>
                         Family Planning
                     </td>
@@ -570,7 +559,6 @@
             </table>
             
         </div>
-
         
     </div>
    

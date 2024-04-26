@@ -38,6 +38,7 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('api/', include('rest_api.urls')),
+    path('pdf/', include('pdf_processor.urls')),
     path('health/', health),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
