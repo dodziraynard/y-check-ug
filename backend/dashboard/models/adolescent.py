@@ -57,7 +57,7 @@ class Adolescent(UpstreamSyncBaseModel):
     def get_age(self):
         # Calculate age at the time of registration
         if self.created_at and self.dob:
-            return round((self.created_at-self.dob).days / 365.25)
+            return int((self.created_at-self.dob).days / 365.25)
         return -1
 
     def registration_age_in_months(self):
