@@ -106,6 +106,9 @@ class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
 
     def save(self, *args, **kwargs) -> None:
         self._compress_photo()
+        self.username = str(self.username).upper()
+        self.surname = str(self.surname).upper()
+        self.other_names = str(self.other_names).upper()
         return super().save(*args, **kwargs)
 
 
