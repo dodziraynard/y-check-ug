@@ -18,8 +18,9 @@ class NodeConfig(models.Model):
 
     node_name = models.CharField(max_length=100, default="Node1")
     is_local = models.BooleanField(default=False)
-    up_stream_host = models.URLField(
-        default=settings.UPSTREAM_HOST, null=True, blank=True)
+    up_stream_host = models.URLField(default=settings.UPSTREAM_HOST,
+                                     null=True,
+                                     blank=True)
     sync_enabled = models.BooleanField(default=True)
 
     adolescents_upload_status = models.CharField(max_length=200,
@@ -86,4 +87,8 @@ class SetupPerm(models.Model):
 
             # Referrals
             ("change_referral", "Can change referral"),
+            ("create_referral", "Can refer adolescent"),
+            ("review_patient_referrals",
+             "Can view referrals for a particular patient."),
+            ("override_flag", "Can override summary flag colour."),
         ]

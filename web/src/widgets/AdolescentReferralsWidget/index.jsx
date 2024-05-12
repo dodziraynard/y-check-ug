@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
+import { useSelector } from 'react-redux';
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 import {
@@ -17,6 +18,7 @@ import { useSearchParams } from "react-router-dom";
 import TextOverflow from '../../components/TextOverflow';
 
 function AdolescentReferralsWidget() {
+    const user = useSelector((state) => state.authentication.user);
     const { pid } = useParams()
     const newReferralModalRef = useRef(null);
     const [searchParams] = useSearchParams();
@@ -100,6 +102,12 @@ function AdolescentReferralsWidget() {
         const referral = response["referral"]
         if (referral !== undefined) {
             setReferrals([referral, ...referrals.filter(c => c.id !== referral.id)])
+
+            // If onsite, redirect to treatment.
+            if (facilityId === user?.facility) {
+                location.href = `/dashboard/referrals/${referral.id}/details?feedback=true`
+            }
+
         } else if (Boolean(response?.error_message)) {
             toastErrorMessage(response.error_message, toast)
         }
@@ -228,10 +236,11 @@ function AdolescentReferralsWidget() {
                                 </div>
 
                                 <div className="form-group my-4">
-                                    <Button className="d-flex" type='submit' disabled={isPuttingReferrals} isLoading={isPuttingReferrals}>
-                                        <i className="bi bi-h-circle me-2"></i>
-                                        Submit
-                                    </Button>
+                                    {selectedServices?.length === 0 ? <p className='text text-danger text-center'><strong>Please choose at least one service.</strong></p> :
+                                        <Button className="d-flex" type='submit' disabled={isPuttingReferrals} isLoading={isPuttingReferrals}>
+                                            <i className="bi bi-h-circle me-2"></i>
+                                            Submit
+                                        </Button>}
                                 </div>
                             </form>
                         </div>

@@ -4,10 +4,15 @@ import './style.scss';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
 import { Button, Spinner, Badge, useToast } from '@chakra-ui/react';
 import { getDateFromMills, monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastSuccessMessage } from '../../utils/functions';
-import { useParams } from "react-router-dom";
+import { redirect, useParams } from "react-router-dom";
 import { Modal } from 'bootstrap';
+import { Link } from 'react-router-dom';
+import { useSearchParams } from "react-router-dom";
 
 function ReferralDetailWidget() {
+    const [searchParams] = useSearchParams();
+    const showFeedbackModal = searchParams.get('feedback') === "true"
+
     const responseModalRef = useRef(null);
     const feedbackModalRef = useRef(null);
     const toast = useToast()
@@ -89,6 +94,12 @@ function ReferralDetailWidget() {
         if (Boolean(putTreatmentResponse?.treatment) && !isPuttingTreatment) {
             toastSuccessMessage("Treatment info recorded.", toast)
             feedbackModal?.hide()
+
+            // If the treatment is for onsite referral i.e., showFeedbackModal === true,
+            // redirect to the adolescents review page.
+            if (showFeedbackModal) {
+                location.href = `/dashboard/patients/${adolescent.pid}/summary`
+            }
         }
     }, [putTreatmentResponse, isPuttingTreatment])
 
@@ -112,6 +123,13 @@ function ReferralDetailWidget() {
     useEffect(() => {
         setIsOnsite(referral?.is_onsite === true)
     }, [referral])
+
+    useEffect(() => {
+        if (showFeedbackModal) {
+            setPictureConfirmed(true)
+            feedbackModal?.show()
+        }
+    }, [feedbackModal, showFeedbackModal])
 
     let conTreatments = [...conditionTreatments]
     const handleConditionTreatment = (checked, referralId, serviceId, totalCost = "", totalCostNhis = "") => {
@@ -475,6 +493,13 @@ function ReferralDetailWidget() {
                     </div>
                     <div className="d-flex justify-content-end">
                         <Button className='d-flex' onClick={() => feedbackModal?.show()}> <i className="bi bi-chat-right-text me-2"></i> Feedback</Button>
+
+                        <Link to={`/dashboard/patients/${adolescent?.pid}/summary`}>
+                            <Button className="d-flex mx-2" >
+                                <i className="bi bi-search-heart me-2"></i>
+                                Review/Flags
+                            </Button>
+                        </Link>
                     </div>
                 </section>
             </div >

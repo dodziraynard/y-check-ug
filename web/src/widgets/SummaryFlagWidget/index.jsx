@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment, useRef } from 'react'
+import { useSelector } from 'react-redux';
 import BreadCrumb from '../../components/BreadCrumb';
 import DropDownContainer from '../../components/DropDownContainer';
 import './style.scss';
@@ -10,8 +11,11 @@ import useAxios from '../../app/hooks/useAxios';
 import { Button, Spinner, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import SummaryFlagLegend from '../../components/SummaryFlagLegend';
+import Permissions from '../../utils/permissions';
 
 function SummaryFlagWidget() {
+    const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
+
     const profileModalRef = useRef(null);
     const responseModalRef = useRef(null);
     const flagOverrideModalRef = useRef(null);
@@ -454,19 +458,22 @@ function SummaryFlagWidget() {
 
                         <hr />
                         <div className='d-flex justify-content-end'>
-                            <Link to={"referrals?new=true"}>
-                                <Button className="d-flex mx-2" >
-                                    <i className="bi bi-plus me-2"></i>
-                                    New Referral
-                                </Button>
-                            </Link>
-
-                            <Link to={"referrals"}>
-                                <Button className="d-flex">
-                                    <i className="bi bi-h-circle me-2"></i>
-                                    View referrals
-                                </Button>
-                            </Link>
+                            {userPermissions?.has(Permissions.CREATE_REFERRAL) ?
+                                <Link to={"referrals?new=true"}>
+                                    <Button className="d-flex mx-2" >
+                                        <i className="bi bi-plus me-2"></i>
+                                        New Referral
+                                    </Button>
+                                </Link> : ""
+                            }
+                            {userPermissions?.has(Permissions.VIEW_REFERRAL) ?
+                                <Link to={"referrals"}>
+                                    <Button className="d-flex">
+                                        <i className="bi bi-h-circle me-2"></i>
+                                        View referrals
+                                    </Button>
+                                </Link> : ""
+                            }
                         </div>
                     </section>
                 </section>
