@@ -149,6 +149,12 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
+             getAllPendingReferrals: builder.query({
+                query() {
+                    return `/pending/referrals/notification/`;
+                },
+            }),
+
             // Services
             getServices: builder.query({
                 query() {
@@ -272,6 +278,7 @@ export const {
     useLazyGetFacilitiesQuery,
     usePutFacilitiesMutation,
     useDeleteFacilitiesMutation,
+    useLazyGetAllPendingReferralsQuery,
 
     // Services
     useLazyGetRecommendedServicesQuery,

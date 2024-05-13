@@ -133,28 +133,14 @@
         border-radius: 0.4em;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         z-index: 8;
 
         .notification {
-            position: relative;
             cursor: pointer;
-
-            &::after {
-                content: attr(data-count);
-                position: absolute;
-                top: -0.7em;
-                right: -0.7em;
-                background-color: $primary-color;
-                color: $white;
-                width: 1.5em;
-                height: 1.5em;
-                justify-content: center;
-                align-items: center;
-                display: flex;
-                border-radius: 50%;
-                font-size: 0.8em;
-            }
+            margin-right: 20px;
+            margin-top: 10px;
+            
         }
 
         .avatar {
