@@ -387,7 +387,10 @@ function ReferralDetailWidget() {
                                             </div>
 
                                             <div className="form-group my-3">
-                                                <Button type='submit'>Submit</Button>
+                                                {conditionTreatments.length > 0 ?
+                                                    <Button type='submit'>Submit</Button> :
+                                                    <p className="text-danger text-center"><strong>Please choose at least one condition.</strong></p>
+                                                }
                                             </div>
                                         </div>
                                     }
