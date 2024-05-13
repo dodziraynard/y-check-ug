@@ -12,6 +12,8 @@ import {
 import {
     useLogOutUserMutation
 } from '../../features/authentication/authentication-api-slice';
+import { useLazyGetAllPendingReferralsQuery } from '../../features/resources/resources-api-slice';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { useToast } from '@chakra-ui/react';
 import { Navigate } from "react-router-dom";
@@ -23,6 +25,14 @@ function DashboardPage() {
     const user = useSelector((state) => state.authentication.user);
     const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const [getPendingReferralsCount, { data: response = [], isFetching }] = useLazyGetAllPendingReferralsQuery();
+
+    useEffect(() => {
+        getPendingReferralsCount(); 
+    }, [getPendingReferralsCount]);
+
+  const total_pending_referral_count = response?.total_pending_referral_count || 0;
     
     const dropdownRef = useRef(null);
     useEffect(() => {
@@ -199,6 +209,19 @@ function DashboardPage() {
                             <i className='bi bi-list' id="btn"></i>
                         </span>
                     </div>
+
+                    {userPermissions.has(Permissions.ACCESS_REFERRALS) ?
+                    <NavLink to="/dashboard/referrals">
+                        <div className="notification position-relative mr-5">
+                            <div className="notification-count position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle">
+                                {total_pending_referral_count}
+                            </div>
+                            <i className="bi bi-bell"></i>
+                        </div>
+                    </NavLink>
+                    : ""
+                    }
+
 
                     <div className="drop-container position-relative ">
                         <div className="d-flex align-items-center">
