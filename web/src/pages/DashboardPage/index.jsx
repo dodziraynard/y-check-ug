@@ -1,6 +1,6 @@
 import './styles.scss'
 import './styles-m.scss'
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState,useRef} from "react";
 import logo from "../../assets/images/logo.png";
 import Permissions from "../../utils/permissions";
 import PageMeta from "../../components/PageMeta";
@@ -23,6 +23,21 @@ function DashboardPage() {
     const user = useSelector((state) => state.authentication.user);
     const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
+    const dropdownRef = useRef(null);
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                // If the click is outside the dropdown, close it
+                setIsDropdownOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdownRef]);
 
     async function logoutUser() {
         await logoutUserServerSide().unwrap()
@@ -201,11 +216,11 @@ function DashboardPage() {
                         </div>
 
                         {isDropdownOpen && (
-                            <div className="drop-down mt-1 profile">
-                                <Link to="/dashboard/user/profile" className="drop-down-item d-block">
-                                    <i className="bi bi-person mx-2"></i> Profile
-                                </Link>
-                            </div>
+                            <div ref={dropdownRef} className="drop-down mt-1 profile">
+                             <Link to="/dashboard/user/profile" className="drop-down-item d-block">
+                                 <i className="bi bi-person mx-2"></i> Profile
+                             </Link>
+                         </div>
                         )}
                     </div>
                 </nav>
