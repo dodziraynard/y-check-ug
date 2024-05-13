@@ -348,3 +348,26 @@ class GetApk(generics.GenericAPIView):
                 }
             })
         return Response({}, 404)
+
+
+class PendingReferralNotifications(generics.GenericAPIView):
+    """
+    Get the count of pending referrals for user's facility.
+    """
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+
+    def get(self, request, *args, **kwargs):
+        referrals = Referral.objects.all().order_by("-created_at")
+        if not request.user.has_perm("setup.access_all_referrals"):
+            referrals = referrals.filter(facility=request.user.facility,status="new")
+            referrals_serializer = ReferralSerializer(referrals, many=True)
+            total_pending_referral_count = len(referrals_serializer.data)
+            return Response({
+            "total_pending_referral_count": total_pending_referral_count,
+            })
+        else:
+            referrals_serializer = ReferralSerializer(referrals, many=True)
+            total_pending_referral_count = len(referrals_serializer.data)
+            return Response({
+            "total_pending_referral_count": total_pending_referral_count,
+            })

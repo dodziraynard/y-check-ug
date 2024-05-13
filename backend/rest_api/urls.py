@@ -40,6 +40,7 @@ urlpatterns = [
     path("facilities/", views.FacilitiesAPI.as_view()),
     path("all/facilities/", views.AllFacilitiesAPI.as_view()),
     path("all-nodes/", views.AllNodeAPI.as_view()),
+    path("pending/referrals/notification/", views.PendingReferralNotifications.as_view()),
 
     # Groups
     path("groups/", views.GroupsAPI.as_view()),
