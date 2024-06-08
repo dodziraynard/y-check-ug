@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { useToast, Box, Text, Heading, Button } from '@chakra-ui/react';
+import { useToast, Box, Text, Heading } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 import BreadCrumb from '../../components/BreadCrumb';
 import { BASE_API_URI } from '../../utils/constants';
@@ -129,7 +129,6 @@ function ProcessReviewWidget() {
 
         <section className='page-review mt-5' style={{ maxWidth: "1024px", margin: "auto" }}>
 
-          {/* Flags section  */}
           <Box as="section" mt={8}>
             <Heading as="h3" size="sm" mb={4}>Flags Section</Heading>
             <TableContainer >
@@ -175,7 +174,7 @@ function ProcessReviewWidget() {
 
 
         <section className='page-review my-5 d-flex justify-content-center flex-column' style={{ maxWidth: "1024px", margin: "auto" }}>
-          <p className="text text-primary text-center">Congratulation <strong>{adolescent?.fullname}</strong>, you have successfully completed the process. </p>
+          <p className="text text-primary text-center">Congratulation! <strong>{adolescent?.fullname}</strong> have successfully completed the process. </p>
           <button className="btn btn-sm btn-primary mx-auto">
             Mark as Done
           </button>

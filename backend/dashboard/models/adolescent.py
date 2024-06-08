@@ -115,8 +115,8 @@ class Adolescent(UpstreamSyncBaseModel):
     def save(self, *args, **kwargs) -> None:
         self._compress_picture()
         self.age = self.get_age()
-        self.surname = self.surname.title()
-        self.other_names = self.other_names.title()
+        self.surname = self.surname.upper()
+        self.other_names = self.other_names.upper()
         return super().save(*args, **kwargs)
 
 
