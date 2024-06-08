@@ -6,22 +6,43 @@ import BreadCrumb from '../../components/BreadCrumb';
 import { BASE_API_URI } from '../../utils/constants';
 import useAxios from '../../app/hooks/useAxios';
 import SummaryFlagLegend from '../../components/SummaryFlagLegend';
-
+import { resourceApiSlice } from '../../features/resources/resources-api-slice';
+import { usePutUpdateAdolescentStatusMutation } from '../../features/resources/resources-api-slice';
 function ProcessReviewWidget() {
   const { pid } = useParams();
   const toast = useToast();
   const { trigger: getAdolescentProfile, data: adolescentResponseData, adolescentError, isLoadingAdolescent } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-profile/${pid}/` });
+  const { trigger: getAdolescentFlag, data: adolescentFlagResponseData, adolescentFlagError, isLoadingAdolescentFlag } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-flag-check/${pid}` });
   const [adolescent, setAdolescent] = useState(null);
+  const [adolescentFlag, setAdolescentFlag] = useState([]);
+  const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetReferralsQuery()
+  const [referrals, setReferrals] = useState([])
+  const [updateAdolescentStatus, { isLoading: isUpdatingAdolescent, error: errorUpdatingAdolescent }] = usePutUpdateAdolescentStatusMutation()
 
   useEffect(() => {
     getAdolescentProfile();
+    getAdolescentFlag();
+    getReferrals({ pid })
   }, []);
 
+  
   useEffect(() => {
     if (Boolean(adolescentResponseData?.adolescent)) {
       setAdolescent(adolescentResponseData.adolescent);
     }
   }, [adolescentResponseData]);
+
+  useEffect(() => {
+    if (adolescentFlagResponseData && Array.isArray(adolescentFlagResponseData.flags)) {
+        setAdolescentFlag(adolescentFlagResponseData.flags);
+    }
+  }, [adolescentFlagResponseData]);
+
+  useEffect(() => {
+    if (referralsResponse && Array.isArray(referralsResponse.referrals)) {
+        setReferrals(referralsResponse.referrals);
+    }
+  }, [referralsResponse]);
 
   useEffect(() => {
     if (adolescentError && isLoadingAdolescent !== true) {
@@ -38,10 +59,83 @@ function ProcessReviewWidget() {
     }
   }, [adolescentError, isLoadingAdolescent]);
 
+  useEffect(() => {
+    if (referralsError) {
+        toast({
+            position: 'top-center',
+            title: `An error occurred: ${referralsError.originalStatus}`,
+            description: referralsError.status,
+            status: 'error',
+            duration: 2000,
+            isClosable: true,
+        })
+    }
+    }, [referralsError, toast])
+
+  useEffect(() => {
+    if (errorUpdatingAdolescent) {
+        toast({
+            position: 'top-center',
+            title: `An error occurred: ${errorUpdatingAdolescent.originalStatus}`,
+            description: errorUpdatingAdolescent.status,
+            status: 'error',
+            duration: 2000,
+            isClosable: true,
+        })
+    }
+    }, [errorUpdatingAdolescent, toast])
+
   const getStatusColor = (status) => {
-    return (status === 'Completed' || status === 'Done' || status === 'Pending' || status === 'Referred' || status === 'Treated') ? 'green.500' : 'red.500';
+    return (status === 'completed'  || status === 'referred' || status === 'normal') ? 'green.500' : 'red.500';
   };
 
+  const getDisplayStatus = (status) => {
+    return getStatusColor(status) === 'red.500' ? 'Must be referred' : status;
+  };
+
+  const getDisplayStatusReferral = (status) => {
+    return getStatusColor(status) === 'red.500' ? 'Must be completed' : status;
+  };
+
+  const handleUpdateAdolescentStatus = async () => {
+    const body = {
+        status: "Completed",
+    }
+    console.log(body)
+    try {
+        const response = await updateAdolescentStatus({ body, pid }).unwrap()
+        if (response['error_message'] != null) {
+          toast({
+              position: 'top-center',
+              title: `An error occurred`,
+              description: response["error_message"],
+              status: 'error',
+              duration: 5000,
+              isClosable: true,
+          })
+      } else {
+        toast({
+          position: 'top-center',
+          title: 'OTP Sent',
+          description: response["message"],
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+      })
+       
+      }
+      } catch (err) {
+        toast({
+          position: 'top-center',
+          title: `An error occurred`,
+          description: err.originalStatus,
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+      })
+      }
+    
+  }
   return (
     <Fragment>
       <div className="review-widget">
@@ -100,27 +194,20 @@ function ProcessReviewWidget() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td >
-                      Onsite Counselling
-                      <Text as="span" color="gray.500">(suicidal thought)</Text>
-                    </Td>
-                    <Td color={getStatusColor('Must be Completed')}>Must be Completed</Td>
-                  </Tr>
-                  <Tr>
-                    <Td >
-                      Onsite Counselling
-                      <Text as="span" color="gray.500">(Migraine)</Text>
-                    </Td>
-                    <Td color={getStatusColor('Completed')}>Completed</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>
-                      CCHT
-                      <Text as="span" color="gray.500">(Dentals)</Text>
-                    </Td>
-                    <Td color={getStatusColor('Pending')}>Pending</Td>
-                  </Tr>
+                    {referrals.map((referral, index) => (
+                        <Tr key={index}>
+                        <Td>
+                            {referral.facility_name}
+                            <Text as="span" color="gray.500"> ({referral.services.map(service => service.name).join(', ')})</Text>
+                        </Td>
+                        <Td>
+                            <SummaryFlagLegend colour={referral.color} />
+                        </Td>
+                        <Td color={getStatusColor(referral.status)}>
+                            {getDisplayStatusReferral(referral.status)}
+                        </Td>
+                        </Tr>
+                    ))}                 
                 </Tbody>
               </Table>
             </TableContainer>
@@ -141,27 +228,17 @@ function ProcessReviewWidget() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td >MALARIA</Td>
-                    <Td >
-                      <SummaryFlagLegend colour={"#ff0000"} />
-                    </Td>
-                    <Td color={getStatusColor('Must be Referred')} >Must be Referred</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>ANEAMIA</Td>
+                {adolescentFlag.map((flagData, index) => (
+                    <Tr key={index}>
+                    <Td>{flagData.flag}</Td>
                     <Td>
-                      <SummaryFlagLegend colour={"#ff0000"} />
+                        <SummaryFlagLegend colour={flagData.color} />
                     </Td>
-                    <Td color={getStatusColor('Referred')}>Referred</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>MIGRAINE</Td>
-                    <Td>
-                      <SummaryFlagLegend colour={"#ff0000"} />
+                    <Td color={getStatusColor(flagData.status)}>
+                        {getDisplayStatus(flagData.status)}
                     </Td>
-                    <Td color={getStatusColor('Treated')}>Treated</Td>
-                  </Tr>
+                    </Tr>
+                ))}
                 </Tbody>
               </Table>
             </TableContainer>
@@ -175,7 +252,12 @@ function ProcessReviewWidget() {
 
         <section className='page-review my-5 d-flex justify-content-center flex-column' style={{ maxWidth: "1024px", margin: "auto" }}>
           <p className="text text-primary text-center">Congratulation! <strong>{adolescent?.fullname}</strong> have successfully completed the process. </p>
-          <button className="btn btn-sm btn-primary mx-auto">
+          <button 
+          className="btn btn-sm btn-primary mx-auto" 
+          type='submit' 
+          disabled={isUpdatingAdolescent} 
+          onClick={handleUpdateAdolescentStatus}>
+          {isUpdatingAdolescent && <Spinner />}
             Mark as Done
           </button>
         </section>

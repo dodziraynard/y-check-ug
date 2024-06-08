@@ -233,6 +233,16 @@ export const resourceApiSlice = createApi({
                     return `/web-adolescents-types/`;
                 },
             }),
+
+            putUpdateAdolescentStatus: builder.mutation({
+                query({ body, pid }) {
+                    return {
+                        url: `/update-adolescent-status/${pid}`,
+                        method: 'POST',
+                        body,
+                    }
+                },
+            }),
             // apk
             putApkUploadFile: builder.mutation({
                 query(body) {
@@ -290,10 +300,9 @@ export const {
     useLazyGetFlagLabelsQuery,
     //Adolescents-Types
     useLazyGetAllAdolescentTypesQuery,
-
+    usePutUpdateAdolescentStatusMutation,
     // Patients
     useDeletePatientsMutation,
-
     // apk
     usePutApkUploadFileMutation,
     useChangeOwnPasswordMutation

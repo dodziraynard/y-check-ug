@@ -172,6 +172,8 @@ class UpdateAdolescentStatus(generics.GenericAPIView):
         if adolescent:
             adolescent.process_status = status
             adolescent.save()
-
-        response_data = {"message": "Updated successfully"}
-        return Response(response_data)
+            response_data = {"message": "Updated successfully"}
+            return Response(response_data)
+        else:
+            response_data = {"error_message": "Failed to Update"}
+            return Response(response_data)
