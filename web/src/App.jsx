@@ -33,6 +33,7 @@ const TreatmentDetailWidget = React.lazy(() => import("./widgets/TreatmentDetail
 const NodeWidget = React.lazy(() => import("./widgets/NodeWidget"));
 const ReportsWidget = React.lazy(() => import("./widgets/ReportsWidget"));
 const ApkWidget = React.lazy(() => import("./widgets/ApkWidget"));
+const ProcessReviewWidget = React.lazy(() => import("./widgets/ProcessReviewWidget"));
 
 const Home = React.lazy(() => import("./pages/HomePage/Home"));
 
@@ -51,6 +52,7 @@ function App() {
           <Route path="/dashboard/password-reset" element={<Suspense fallback={<PageLoading />}><ChangeDefaultPassword /></Suspense>} />
           <Route path="/dashboard/patients" element={<Suspense fallback={<PageLoading />}><PatientsWidget /></Suspense>} />
           <Route path="/dashboard/patients/:pid/summary" element={<Suspense fallback={<PageLoading />}><SummaryFlagWidget /></Suspense>} />
+          <Route path="/dashboard/patients/:pid/review" element={<Suspense fallback={<PageLoading />}><ProcessReviewWidget /></Suspense>} />
           <Route path="/dashboard/patients/:pid/summary/referrals" element={<Suspense fallback={<PageLoading />}><AdolescentReferralsWidget /></Suspense>} />
           <Route path="/dashboard/referrals" element={<Suspense fallback={<PageLoading />}><ReferralsWidget /></Suspense>} />
           <Route path="/dashboard/treatments" element={<Suspense fallback={<PageLoading />}><TreatmentsWidget /></Suspense>} />
