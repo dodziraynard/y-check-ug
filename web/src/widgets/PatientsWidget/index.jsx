@@ -122,7 +122,13 @@ function PatientsWidget() {
                                     }
                                 },
                                 {
-                                    key: "fullname", value: "Full Name"
+                                    key: "fullname", value: "Full Name", render: (item) => {
+                                        return (
+                                            <Link to={`${item.pid}/review`}  className="btn btn-sm btn-primary">
+                                                {item.fullname}
+                                            </Link>
+                                        );
+                                    }
                                 },
                                 {
                                     key: "gender", value: "Gender", textAlign: "center",

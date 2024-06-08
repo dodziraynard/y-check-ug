@@ -10,6 +10,7 @@ from accounts.models import User
 from dashboard.models import *
 from rest_framework import generics
 from django.contrib.auth import authenticate
+from django.db.models import Q
 
 
 class GroupsAPI(SimpleCrudMixin):
@@ -359,13 +360,14 @@ class PendingReferralNotifications(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         referrals = Referral.objects.all().order_by("-created_at")
         if not request.user.has_perm("setup.access_all_referrals"):
-            referrals = referrals.filter(facility=request.user.facility,status="new")
+            referrals = referrals.filter(Q(facility=request.user.facility) & (Q(status="new") | Q(status="review")))
             referrals_serializer = ReferralSerializer(referrals, many=True)
             total_pending_referral_count = len(referrals_serializer.data)
             return Response({
             "total_pending_referral_count": total_pending_referral_count,
             })
         else:
+            referrals = referrals.filter((Q(status="new") | Q(status="review")))
             referrals_serializer = ReferralSerializer(referrals, many=True)
             total_pending_referral_count = len(referrals_serializer.data)
             return Response({
