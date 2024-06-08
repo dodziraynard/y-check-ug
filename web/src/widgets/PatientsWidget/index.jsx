@@ -102,9 +102,13 @@ function PatientsWidget() {
                             dataSourceUrl={`${BASE_API_URI}/web-adolescents/`}
                             filterByDate={true}
                             filters={[
-                                { key: `pid__startswith:YC1`, value: `Basic`},
-                                { key: `pid__startswith:YC2`, value: `Secondary`},
-                                { key: `pid__startswith:YC3`, value: `Community`},
+                                { key: `pid__startswith:YC1`, value: `Basic` },
+                                { key: `pid__startswith:YC2`, value: `Secondary` },
+                                { key: `pid__startswith:YC3`, value: `Community` },
+                            ]}
+                            filters2={[
+                                { key: `process_status:pending`, value: `pending` },
+                                { key: `process_status:completed`, value: `completed` },
                             ]}
                             headers={[
                                 {
@@ -127,6 +131,13 @@ function PatientsWidget() {
                                     key: "study_phase", value: "Phase"
                                 }, {
                                     key: "check_up_location", value: "Location", textAlign: "left",
+                                },
+                                {
+                                    value: "Status", textAlign: "left", render: (item) => {
+                                        return (
+                                            <span className='badge bg-primary'>{item.process_status}</span>
+                                        )
+                                    }
                                 },
                                 {
                                     value: "Actions", textAlign: "right", render: (item) => {
