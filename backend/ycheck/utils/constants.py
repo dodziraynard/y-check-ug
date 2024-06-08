@@ -29,6 +29,10 @@ class SyncStatus(Enum):
     FAILED = 'failed'
     COMPLETED = "completed"
 
+class AdolescentStatus(Enum):
+    PENDING = 'pending'
+    COMPLETED = "completed"
+
 
 COLOR_CHOICES = [
     (Colors.GREY.value, "GREY"),

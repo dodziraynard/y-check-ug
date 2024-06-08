@@ -1,6 +1,7 @@
 from django.db import models
 from functools import reduce
 
+from ycheck.utils.constants import AdolescentStatus
 from ycheck.utils.storage import OverwriteStorage
 from .mixin import UpstreamSyncBaseModel
 from io import BytesIO
@@ -21,33 +22,49 @@ class Adolescent(UpstreamSyncBaseModel):
         ("male", 'male'),
         ("female", 'female'),
     ]
+    ADOLESCENT_STATUS = [
+        (AdolescentStatus.PENDING.value, AdolescentStatus.PENDING.value),
+        (AdolescentStatus.COMPLETED.value, AdolescentStatus.COMPLETED.value),
+    ]
     pid = models.CharField(unique=True, max_length=20, db_index=True)
     surname = models.CharField(max_length=50, db_index=True)
-    lang_iso = models.CharField(
-        max_length=50, db_index=True, default="fat", null=True, blank=True)
+    lang_iso = models.CharField(max_length=50,
+                                db_index=True,
+                                default="fat",
+                                null=True,
+                                blank=True)
     other_names = models.CharField(max_length=50, db_index=True)
     study_phase = models.CharField(max_length=50, blank=True, null=True)
     consent = models.CharField(max_length=100, blank=True, null=True)
-    picture = models.ImageField(
-        upload_to='images/',  storage=OverwriteStorage(), blank=True, null=True)
+    process_status = models.CharField(max_length=50,
+                                      default=ADOLESCENT_STATUS[0][0],
+                                      choices=ADOLESCENT_STATUS)
+    picture = models.ImageField(upload_to='images/',
+                                storage=OverwriteStorage(),
+                                blank=True,
+                                null=True)
     dob = models.DateTimeField(null=True, blank=True)
-    # We need to store the age to perform age specific queries relative to the time of 
+    # We need to store the age to perform age specific queries relative to the time of
     # registration
     age = models.IntegerField(null=True, blank=True)
     check_up_location = models.CharField(max_length=200)
     check_up_reason = models.CharField(max_length=200, null=True, blank=True)
     type = models.CharField(max_length=20, choices=ADOLESCENT_TYPE_CHOICES)
-    residential_status = models.CharField(
-        max_length=200, null=True, blank=True)
+    residential_status = models.CharField(max_length=200,
+                                          null=True,
+                                          blank=True)
     school = models.CharField(max_length=200, null=True, blank=True)
     grade = models.CharField(max_length=200, null=True, blank=True)
-    leaves_in_catchment = models.CharField(
-        max_length=200, null=True, blank=True)
+    leaves_in_catchment = models.CharField(max_length=200,
+                                           null=True,
+                                           blank=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)
-    created_by = models.ForeignKey(
-        "accounts.User", on_delete=models.SET_NULL, null=True, related_name='adolescent_created')
+    created_by = models.ForeignKey("accounts.User",
+                                   on_delete=models.SET_NULL,
+                                   null=True,
+                                   related_name='adolescent_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -57,12 +74,13 @@ class Adolescent(UpstreamSyncBaseModel):
     def get_age(self):
         # Calculate age at the time of registration
         if self.created_at and self.dob:
-            return int((self.created_at-self.dob).days / 365.25)
+            return int((self.created_at - self.dob).days / 365.25)
         return -1
 
     def registration_age_in_months(self):
         if self.dob and self.created_at:
-            return (self.created_at.year - self.dob.year) * 12 + self.created_at.month - self.dob.month
+            return (self.created_at.year - self.dob.year
+                    ) * 12 + self.created_at.month - self.dob.month
         return 0
 
     def get_name(self):
@@ -70,8 +88,10 @@ class Adolescent(UpstreamSyncBaseModel):
 
     @staticmethod
     def generate_query(query):
-        queries = [models.Q(**{f"{key}__icontains": query})
-                   for key in ["pid", "surname", "other_names", "gender"]]
+        queries = [
+            models.Q(**{f"{key}__icontains": query})
+            for key in ["pid", "surname", "other_names", "gender"]
+        ]
         return reduce(lambda x, y: x | y, queries)
 
     def _compress_picture(self, height=500, width=500):
@@ -89,8 +109,8 @@ class Adolescent(UpstreamSyncBaseModel):
         thumb_io = BytesIO()
         thumbnail = thumbnail.convert('RGB')
         thumbnail.save(thumb_io, "jpeg", quality=80)
-        self.picture = File(
-            thumb_io, name=adolescent_name.split(".")[0] + ".jpg")
+        self.picture = File(thumb_io,
+                            name=adolescent_name.split(".")[0] + ".jpg")
 
     def save(self, *args, **kwargs) -> None:
         self._compress_picture()
@@ -103,8 +123,9 @@ class Adolescent(UpstreamSyncBaseModel):
 class AdolescentActivityTime(UpstreamSyncBaseModel):
     timestamp = models.DateTimeField()
     activity_tag = models.CharField(max_length=100, db_index=True)
-    adolescent = models.ForeignKey(
-        Adolescent, on_delete=models.CASCADE, db_index=True)
+    adolescent = models.ForeignKey(Adolescent,
+                                   on_delete=models.CASCADE,
+                                   db_index=True)
 
     def __str__(self) -> str:
         return f"{self.adolescent.get_name()} - {self.activity_tag}: {self.timestamp.strftime('%m/%d/%Y, %H:%M:%S')}"

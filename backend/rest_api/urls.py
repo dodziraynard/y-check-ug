@@ -75,5 +75,8 @@ urlpatterns = [
 # Misc URLs
 urlpatterns += [
     path("record-activity-time/", views.RecordAdolescentActivityTime.as_view()),
+    path("adolescent-activity/", views.AdolescentActivityView.as_view()),
+    path("adolescent-flag-check/<str:pid>", views.AdolescentFlagCheckView.as_view()),
+    path("update-adolescent-status/<str:pid>", views.UpdateAdolescentStatus.as_view()),
     path("reports/<int:table_number>/", views.TableReportsView.as_view()),
 ]
