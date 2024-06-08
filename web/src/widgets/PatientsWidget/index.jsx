@@ -124,7 +124,7 @@ function PatientsWidget() {
                                 {
                                     key: "fullname", value: "Full Name", render: (item) => {
                                         return (
-                                            <Link to={`${item.pid}/review`}  className="btn btn-sm btn-primary">
+                                            <Link to={`${item.pid}/review`} className='text text-primary' style={{ textDecoration: "underline" }}>
                                                 {item.fullname}
                                             </Link>
                                         );
@@ -141,7 +141,10 @@ function PatientsWidget() {
                                 {
                                     value: "Status", textAlign: "left", render: (item) => {
                                         return (
-                                            <span className='badge bg-primary'>{item.process_status.toUpperCase()}</span>
+                                            <Link to={`${item.pid}/review`} className='mx-2 d-flex align-items-center'>
+                                                <span className='badge bg-primary'>{item.process_status.toUpperCase()}</span>
+                                                <i className='mx-2 bi bi-info-circle'></i>
+                                            </Link>
                                         )
                                     }
                                 },
