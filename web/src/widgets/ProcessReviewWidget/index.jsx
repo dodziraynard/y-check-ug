@@ -5,6 +5,7 @@ import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/reac
 import BreadCrumb from '../../components/BreadCrumb';
 import { BASE_API_URI } from '../../utils/constants';
 import useAxios from '../../app/hooks/useAxios';
+import SummaryFlagLegend from '../../components/SummaryFlagLegend';
 
 function ProcessReviewWidget() {
   const { pid } = useParams();
@@ -138,17 +139,23 @@ function ProcessReviewWidget() {
               <Tbody>
                 <Tr>
                   <Td >MALARIA</Td>
-                  <Td >RED</Td>
+                  <Td >
+                  <SummaryFlagLegend  colour={"#ff0000"}/>
+                  </Td>
                   <Td color={getStatusColor('Must be Referred')} >Must be Referred</Td>
                 </Tr>
                 <Tr>
                   <Td>ANEAMIA</Td>
-                  <Td>RED</Td>
+                  <Td>
+                  <SummaryFlagLegend colour={"#ff0000"}/>
+                  </Td>
                   <Td color={getStatusColor('Referred')}>Referred</Td>
                 </Tr>
                 <Tr>
                   <Td>MIGRAINE</Td>
-                  <Td>RED</Td>
+                  <Td>
+                  <SummaryFlagLegend  colour={"#ff0000"}/>
+                  </Td>
                   <Td color={getStatusColor('Treated')}>Treated</Td>
                 </Tr>
               </Tbody>
