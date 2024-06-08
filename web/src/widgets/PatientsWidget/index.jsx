@@ -135,7 +135,7 @@ function PatientsWidget() {
                                 {
                                     value: "Status", textAlign: "left", render: (item) => {
                                         return (
-                                            <span className='badge bg-primary'>{item.process_status}</span>
+                                            <span className='badge bg-primary'>{item.process_status.toUpperCase()}</span>
                                         )
                                     }
                                 },
