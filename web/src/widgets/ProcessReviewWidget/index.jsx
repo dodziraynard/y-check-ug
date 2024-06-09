@@ -15,23 +15,27 @@ function ProcessReviewWidget() {
   const toast = useToast();
   const { trigger: getAdolescentProfile, data: adolescentResponseData, adolescentError, isLoadingAdolescent } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-profile/${pid}/` });
   const { trigger: getAdolescentFlag, data: adolescentFlagResponseData, adolescentFlagError, isLoadingAdolescentFlag } = useAxios({ mainUrl: `${BASE_API_URI}/adolescent-flag-check/${pid}` });
-  const [adolescent, setAdolescent] = useState(null);
-  const [adolescentFlag, setAdolescentFlag] = useState([]);
   const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetReferralsQuery()
-  const [referrals, setReferrals] = useState([])
   const [updateAdolescentStatus, { isLoading: isUpdatingAdolescent, error: errorUpdatingAdolescent }] = usePutUpdateAdolescentStatusMutation()
   const [getAdolescentActivity, { data: activityResponse = [], isLoading: isLoadingActivity, error: activityError }] = useLazyGetAdolescentActivityQuery()
-  const [adolescentActivity, setAdolescentActivity] = useState([])
 
   const [isAllGood, setIsAllGood] = useState(true)
+  const [referrals, setReferrals] = useState([])
+  const [adolescent, setAdolescent] = useState(null);
+  const [adolescentFlag, setAdolescentFlag] = useState([]);
+  const [adolescentActivity, setAdolescentActivity] = useState([])
+
   const adolescent_ids = adolescent?.id
-  
+
   useEffect(() => {
     getAdolescentProfile();
     getAdolescentFlag();
     getReferrals({ pid })
+  }, []);
+
+  useEffect(() => {
     getAdolescentActivity({ adolescent_ids })
-  }, [adolescent, pid]);
+  }, [adolescent]);
 
 
   useEffect(() => {
