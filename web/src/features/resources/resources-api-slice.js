@@ -243,6 +243,13 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            getAdolescentActivity: builder.query({
+                query: (body) => ({
+                    url: `/adolescent-activity/`,
+                    method: 'GET',
+                    body,
+                }),
+            }),
             // apk
             putApkUploadFile: builder.mutation({
                 query(body) {
@@ -301,6 +308,7 @@ export const {
     //Adolescents-Types
     useLazyGetAllAdolescentTypesQuery,
     usePutUpdateAdolescentStatusMutation,
+    useLazyGetAdolescentActivityQuery,
     // Patients
     useDeletePatientsMutation,
     // apk
