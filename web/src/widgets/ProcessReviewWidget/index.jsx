@@ -27,7 +27,7 @@ function ProcessReviewWidget() {
   const body = {
     adolescent_ids:[adolescent?.id],
   }
-
+  console.log(adolescentActivity)
   useEffect(() => {
     getAdolescentActivity()
     getAdolescentProfile();
@@ -122,6 +122,11 @@ function ProcessReviewWidget() {
   const getDisplayStatus = (status) => {
     return getStatusColor(status) === 'red.500' ? 'Must be referred' : status;
   };
+
+  const getDisplayStatusReferral = (status) => {
+    return getStatusColor(status) === 'red.500' ? 'Must be completed' : status;
+  };
+
 
   const handleUpdateAdolescentStatus = async () => {
     const body = {
@@ -222,9 +227,13 @@ function ProcessReviewWidget() {
                         {referral.facility_name}
                         <Text as="p" color="gray.500"> ({referral.services.map(service => service.name).join(', ')})</Text>
                       </Td>
-                      <Td color={referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
-                        {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "Must be referred" : referral.status}
-                      </Td>
+                      {referral.is_onsite ? (
+                        <Td color={referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
+                          {referral.status?.toLowerCase() !== "completed" ? "Must be referred" : referral.status}
+                        </Td>
+                      ) : <Td color={getStatusColor(referral.status)}>
+                          {getDisplayStatusReferral(referral.status)}
+                          </Td>}
                     </Tr>
                   })}
                 </Tbody>
