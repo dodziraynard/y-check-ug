@@ -244,11 +244,9 @@ export const resourceApiSlice = createApi({
                 },
             }),
             getAdolescentActivity: builder.query({
-                query: (body) => ({
-                    url: `/adolescent-activity/`,
-                    method: 'GET',
-                    body,
-                }),
+                query({adolescent_ids}) {
+                    return `/adolescent-activity/?adolescent_ids=${adolescent_ids}`;
+                },
             }),
             // apk
             putApkUploadFile: builder.mutation({

@@ -24,15 +24,12 @@ function ProcessReviewWidget() {
   const [adolescentActivity, setAdolescentActivity] = useState([])
 
   const [isAllGood, setIsAllGood] = useState(true)
-  const body = {
-    adolescent_ids:[adolescent?.id],
-  }
-  console.log(adolescentActivity)
+  const adolescent_ids = adolescent?.id
   useEffect(() => {
-    getAdolescentActivity()
     getAdolescentProfile();
     getAdolescentFlag();
     getReferrals({ pid })
+    getAdolescentActivity({adolescent_ids})
   }, []);
 
 
@@ -227,13 +224,9 @@ function ProcessReviewWidget() {
                         {referral.facility_name}
                         <Text as="p" color="gray.500"> ({referral.services.map(service => service.name).join(', ')})</Text>
                       </Td>
-                      {referral.is_onsite ? (
-                        <Td color={referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
-                          {referral.status?.toLowerCase() !== "completed" ? "Must be referred" : referral.status}
-                        </Td>
-                      ) : <Td color={getStatusColor(referral.status)}>
-                          {getDisplayStatusReferral(referral.status)}
-                          </Td>}
+                        <Td color={referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
+                        {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "Must be referred" : referral.status}
+                      </Td>
                     </Tr>
                   })}
                 </Tbody>
