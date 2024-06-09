@@ -13,7 +13,7 @@ function formatDuration(seconds) {
   const hours = Math.floor(seconds / 3600);
   seconds %= 3600;
   const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.round(seconds % 60);
+  const remainingSeconds = Math.ceil(seconds % 60);
 
   // Create an array to hold the formatted units
   const parts = [];
