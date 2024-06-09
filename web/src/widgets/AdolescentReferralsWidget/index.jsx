@@ -255,10 +255,11 @@ function AdolescentReferralsWidget() {
             {/* Content */}
             <div className="patients-widget">
                 <BreadCrumb items={[{ "name": "Patients", "url": "/dashboard/patients" }, { "name": "Summary", "url": `/dashboard/patients/${pid}/summary` }, { "name": "Referrals", "url": "" }]} />
-                <h4>Referrals</h4>
-                {isLoadingReferrals ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
-                <section>
+                <section className="page-patients">
+                    <h4>Referrals</h4>
+                    {isLoadingReferrals ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
+
                     <div className="col-md-11 col-12 mx-auto">
                         <table className='table m-4'>
                             <thead>

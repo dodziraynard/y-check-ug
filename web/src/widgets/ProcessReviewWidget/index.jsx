@@ -25,12 +25,13 @@ function ProcessReviewWidget() {
 
   const [isAllGood, setIsAllGood] = useState(true)
   const adolescent_ids = adolescent?.id
+  
   useEffect(() => {
     getAdolescentProfile();
     getAdolescentFlag();
     getReferrals({ pid })
     getAdolescentActivity({ adolescent_ids })
-  }, []);
+  }, [adolescent, pid]);
 
 
   useEffect(() => {
