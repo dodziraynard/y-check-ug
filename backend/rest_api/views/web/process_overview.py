@@ -59,7 +59,7 @@ class AdolescentActivityView(generics.GenericAPIView):
 
             registration = activities.filter(
                 activity_tag="adolescent_registration_start").first()
-            adolescent_registration_start = None
+            adolescent_registration_start = adolescent.created_at
             if registration:
                 adolescent_registration_start = registration.timestamp
 
@@ -73,14 +73,14 @@ class AdolescentActivityView(generics.GenericAPIView):
                     "registration")].append(registration_duration)
 
             # Get first station/section
-            first_section_start = adolescent.created_at
+            first_section_start = section_start = adolescent.created_at
             first_section_first_responses = responses.first()
             if not first_section_first_responses: continue
             first_section_name = first_section_first_responses.question.section.name
             first_section_responses = responses.filter(
                 question__section__name=first_section_name)
             first_section_last_response = first_section_responses.last()
-            first_section_end = first_section_last_response.created_at
+            first_section_end = section_end = first_section_last_response.created_at
 
             first_section_duration = (first_section_end -
                                       first_section_start).total_seconds() / 60
