@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { useToast, Box, Text, Heading } from '@chakra-ui/react';
+import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 import BreadCrumb from '../../components/BreadCrumb';
 import { BASE_API_URI } from '../../utils/constants';
@@ -129,7 +129,7 @@ function ProcessReviewWidget() {
       } else {
         toast({
           position: 'top-center',
-          title: 'OTP Sent',
+          title: 'Marked as done.',
           description: response["message"],
           status: 'success',
           duration: 5000,
@@ -214,7 +214,7 @@ function ProcessReviewWidget() {
                         <Text as="p" color="gray.500"> ({referral.services.map(service => service.name).join(', ')})</Text>
                       </Td>
                       <Td color={referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
-                        {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "Must be referred" : referral.status}
+                        {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "Must be completed" : referral.status}
                       </Td>
                     </Tr>
                   })}
