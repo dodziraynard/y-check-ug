@@ -243,6 +243,11 @@ export const resourceApiSlice = createApi({
                     }
                 },
             }),
+            getAdolescentActivity: builder.query({
+                query({adolescent_ids}) {
+                    return `/adolescent-activity/?adolescent_ids=${adolescent_ids}`;
+                },
+            }),
             // apk
             putApkUploadFile: builder.mutation({
                 query(body) {
@@ -301,6 +306,7 @@ export const {
     //Adolescents-Types
     useLazyGetAllAdolescentTypesQuery,
     usePutUpdateAdolescentStatusMutation,
+    useLazyGetAdolescentActivityQuery,
     // Patients
     useDeletePatientsMutation,
     // apk
