@@ -48,7 +48,7 @@ class AdolescentActivityView(generics.GenericAPIView):
         adolescents = Adolescent.objects.filter(created_at__gte=start_time,
                                                 created_at__lte=end_time)
         if adolescent_id:
-            adolescents = adolescents.filter(id__in=adolescent_id)
+            adolescents = adolescents.filter(id=adolescent_id)
         adolescent_time_spent = defaultdict(list)
 
         for adolescent in adolescents:

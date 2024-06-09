@@ -32,9 +32,9 @@ function ProcessReviewWidget() {
   }, []);
 
   useEffect(() => {
-    const adolescent_ids = adolescent?.id
-    if (adolescent_ids)
-      getAdolescentActivity({ adolescent_ids })
+    const adolescent_id = adolescent?.id
+    if (adolescent_id)
+      getAdolescentActivity({ adolescent_id })
   }, [adolescent]);
 
 
@@ -162,7 +162,7 @@ function ProcessReviewWidget() {
       })
     }
   }
-  
+
   const convertTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
