@@ -20,13 +20,13 @@ function formatDuration(seconds) {
 
   // Only add non-zero units to the parts array
   if (hours > 0) {
-    parts.push(`${hours} hours`);
+    parts.push(`${hours} hour${hours !== 1 ? 's' : ''}`);
   }
   if (minutes > 0) {
-    parts.push(`${minutes} minutes`);
+    parts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`);
   }
   if (remainingSeconds > 0) {
-    parts.push(`${remainingSeconds} seconds`);
+    parts.push(`${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''}`);
   }
 
   // Join the parts array into a single string with ', ' separator
