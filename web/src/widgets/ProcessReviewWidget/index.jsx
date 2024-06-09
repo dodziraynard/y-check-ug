@@ -25,8 +25,6 @@ function ProcessReviewWidget() {
   const [adolescentFlag, setAdolescentFlag] = useState([]);
   const [adolescentActivity, setAdolescentActivity] = useState([])
 
-  const adolescent_ids = adolescent?.id
-
   useEffect(() => {
     getAdolescentProfile();
     getAdolescentFlag();
@@ -34,7 +32,9 @@ function ProcessReviewWidget() {
   }, []);
 
   useEffect(() => {
-    getAdolescentActivity({ adolescent_ids })
+    const adolescent_ids = adolescent?.id
+    if (adolescent_ids)
+      getAdolescentActivity({ adolescent_ids })
   }, [adolescent]);
 
 
@@ -161,8 +161,8 @@ function ProcessReviewWidget() {
         isClosable: true,
       })
     }
-
   }
+  
   const convertTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);

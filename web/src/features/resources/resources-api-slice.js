@@ -244,8 +244,8 @@ export const resourceApiSlice = createApi({
                 },
             }),
             getAdolescentActivity: builder.query({
-                query({adolescent_ids}) {
-                    return `/adolescent-activity/?adolescent_ids=${adolescent_ids}`;
+                query({adolescent_id}) {
+                    return `/adolescent-activity/?adolescent_id=${adolescent_id}`;
                 },
             }),
             // apk

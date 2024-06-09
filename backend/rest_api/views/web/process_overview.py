@@ -38,17 +38,17 @@ class AdolescentActivityView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
-        adolescent_ids = request.data.get("adolescent_ids")
-        start_time = request.data.get("start_time", "2023-01-01")
-        end_time = request.data.get("end_time",
+        adolescent_id = request.GET.get("adolescent_id")
+        start_time = request.GET.get("start_time", "2023-01-01")
+        end_time = request.GET.get("end_time",
                                     timezone.now().strftime('%Y-%m-%d'))
         start_time = make_aware(datetime.strptime(start_time, "%Y-%m-%d"))
         end_time = make_aware(datetime.strptime(end_time, "%Y-%m-%d"))
 
         adolescents = Adolescent.objects.filter(created_at__gte=start_time,
                                                 created_at__lte=end_time)
-        if adolescent_ids:
-            adolescents = adolescents.filter(id__in=adolescent_ids)
+        if adolescent_id:
+            adolescents = adolescents.filter(id__in=adolescent_id)
         adolescent_time_spent = defaultdict(list)
 
         for adolescent in adolescents:
