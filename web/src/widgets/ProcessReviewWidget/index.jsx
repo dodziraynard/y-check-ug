@@ -63,8 +63,7 @@ function ProcessReviewWidget() {
 
   useEffect(() => {
     if (Boolean(adolescentResponseData?.adolescent)) {
-      setAdolescent(adolescentResponseData?.adolescent);
-      getAdolescentActivity({adolescent_ids})
+      setAdolescent(adolescentResponseData.adolescent);
     }
   }, [adolescentResponseData]);
 
