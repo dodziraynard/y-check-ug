@@ -69,7 +69,7 @@ class AdolescentActivityView(generics.GenericAPIView):
             # Registration
             registration_duration = (
                 adolescent.created_at -
-                adolescent_registration_start).total_seconds() / 60
+                adolescent_registration_start).total_seconds()
             if registration_duration > 0:
                 adolescent_time_spent[(
                     "Registration",
@@ -86,7 +86,7 @@ class AdolescentActivityView(generics.GenericAPIView):
             first_section_end = section_end = first_section_last_response.created_at
 
             first_section_duration = (first_section_end -
-                                      first_section_start).total_seconds() / 60
+                                      first_section_start).total_seconds()
             if first_section_duration > 0:
                 adolescent_time_spent[(
                     first_section_name, first_section_first_responses.question.
@@ -107,7 +107,7 @@ class AdolescentActivityView(generics.GenericAPIView):
                 section_end = section_last_response.created_at
 
                 section_duration = (section_end -
-                                    section_start).total_seconds() / 60
+                                    section_start).total_seconds()
                 if section_duration > 0:
                     adolescent_time_spent[(
                         section_name,
@@ -120,7 +120,7 @@ class AdolescentActivityView(generics.GenericAPIView):
 
             # Enter screening
             screening_duration = (section_end -
-                                  first_section_start).total_seconds() / 60
+                                  first_section_start).total_seconds()
             if screening_duration > 0:
                 adolescent_time_spent[(
                     "Total Screening Time",
@@ -146,7 +146,8 @@ class AdolescentFlagCheckView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pid, *args, **kwargs):
-        flags = SummaryFlag.objects.filter(adolescent__pid=pid).order_by("label__name")
+        flags = SummaryFlag.objects.filter(
+            adolescent__pid=pid).order_by("label__name")
         results = []
         for flag in flags:
             status = "normal"
