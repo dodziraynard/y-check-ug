@@ -39,7 +39,6 @@ class AdolescentActivityView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         adolescent_ids = request.data.get("adolescent_ids")
-        print(adolescent_ids)
         start_time = request.data.get("start_time", "2023-01-01")
         end_time = request.data.get("end_time",
                                     timezone.now().strftime('%Y-%m-%d'))
@@ -50,7 +49,6 @@ class AdolescentActivityView(generics.GenericAPIView):
                                                 created_at__lte=end_time)
         if adolescent_ids:
             adolescents = adolescents.filter(id__in=adolescent_ids)
-            print(f'hdhdhhh,{adolescents}')
         adolescent_time_spent = defaultdict(list)
 
         for adolescent in adolescents:
@@ -58,7 +56,6 @@ class AdolescentActivityView(generics.GenericAPIView):
                 adolescent=adolescent).order_by("created_at")
             activities = AdolescentActivityTime.objects.filter(
                 adolescent=adolescent).order_by("timestamp")
-            print(f'act,{ activities}')
 
             registration = activities.filter(
                 activity_tag="adolescent_registration_start").first()
