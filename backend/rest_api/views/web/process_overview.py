@@ -39,9 +39,6 @@ class AdolescentActivityView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         adolescent_ids = request.data.get("adolescent_ids")
-
-        print('adolescent_ids', adolescent_ids)
-
         start_time = request.data.get("start_time", "2023-01-01")
         end_time = request.data.get("end_time",
                                     timezone.now().strftime('%Y-%m-%d'))
