@@ -35,7 +35,7 @@ class FlagStatus:
 
 
 class AdolescentActivityView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         adolescent_id = request.GET.get("adolescent_id")
