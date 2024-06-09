@@ -7,7 +7,7 @@ import { BASE_API_URI } from '../../utils/constants';
 import useAxios from '../../app/hooks/useAxios';
 import SummaryFlagLegend from '../../components/SummaryFlagLegend';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
-import { usePutUpdateAdolescentStatusMutation } from '../../features/resources/resources-api-slice';
+import { usePutUpdateAdolescentStatusMutation ,useLazyGetAdolescentActivityQuery} from '../../features/resources/resources-api-slice';
 
 
 function ProcessReviewWidget() {
@@ -20,13 +20,16 @@ function ProcessReviewWidget() {
   const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetReferralsQuery()
   const [referrals, setReferrals] = useState([])
   const [updateAdolescentStatus, { isLoading: isUpdatingAdolescent, error: errorUpdatingAdolescent }] = usePutUpdateAdolescentStatusMutation()
+  const [getAdolescentActivity, { data: activityResponse = [], isLoading: isLoadingActivity, error: activityError }] = useLazyGetAdolescentActivityQuery()
+  const [adolescentActivity, setAdolescentActivity] = useState([])
 
   const [isAllGood, setIsAllGood] = useState(true)
-
+  const adolescent_ids = adolescent?.id
   useEffect(() => {
     getAdolescentProfile();
     getAdolescentFlag();
     getReferrals({ pid })
+    getAdolescentActivity({adolescent_ids})
   }, []);
 
 
@@ -35,6 +38,12 @@ function ProcessReviewWidget() {
       setAdolescent(adolescentResponseData.adolescent);
     }
   }, [adolescentResponseData]);
+
+  useEffect(() => {
+    if (activityResponse && Array.isArray(activityResponse.activities)) {
+      setAdolescentActivity(activityResponse.activities);
+    }
+  }, [activityResponse]);
 
   useEffect(() => {
     if (adolescentFlagResponseData && Array.isArray(adolescentFlagResponseData.flags)) {
@@ -111,6 +120,11 @@ function ProcessReviewWidget() {
     return getStatusColor(status) === 'red.500' ? 'Must be referred' : status;
   };
 
+  const getDisplayStatusReferral = (status) => {
+    return getStatusColor(status) === 'red.500' ? 'Must be completed' : status;
+  };
+
+
   const handleUpdateAdolescentStatus = async () => {
     const body = {
       status: "completed",
@@ -149,6 +163,11 @@ function ProcessReviewWidget() {
     }
 
   }
+  const convertTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}mins ${remainingSeconds}secs`;
+  };
   return (
     <Fragment>
       <div className="review-widget">
@@ -173,21 +192,13 @@ function ProcessReviewWidget() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>Registration</Td>
-                    <Td color={getStatusColor('Done')}>Done</Td>
-                    <Td>5mins</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Pre-Screening</Td>
-                    <Td color={getStatusColor('Done')}>Done</Td>
-                    <Td>1mins</Td>
-                  </Tr>
-                  <Tr>
-                    <Td >Home</Td>
-                    <Td color={getStatusColor('Not Done')}>Not Done</Td>
-                    <Td>0mins</Td>
-                  </Tr>
+                {adolescentActivity.map((activity, index) => (
+                    <Tr key={index}>
+                      <Td>{activity?.activity}</Td>
+                      <Td color={getStatusColor(activity?.status)}>{activity?.status}</Td>
+                      <Td>{convertTime(activity?.average_time)}</Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </TableContainer>
@@ -213,7 +224,7 @@ function ProcessReviewWidget() {
                         {referral.facility_name}
                         <Text as="p" color="gray.500"> ({referral.services.map(service => service.name).join(', ')})</Text>
                       </Td>
-                      <Td color={referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
+                        <Td color={referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
                         {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "Must be referred" : referral.status}
                       </Td>
                     </Tr>
