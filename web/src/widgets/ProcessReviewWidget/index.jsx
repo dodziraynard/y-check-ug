@@ -9,6 +9,29 @@ import SummaryFlagLegend from '../../components/SummaryFlagLegend';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
 import { usePutUpdateAdolescentStatusMutation, useLazyGetAdolescentActivityQuery } from '../../features/resources/resources-api-slice';
 
+function formatDuration(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  seconds %= 3600;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.round(seconds % 60);
+
+  // Create an array to hold the formatted units
+  const parts = [];
+
+  // Only add non-zero units to the parts array
+  if (hours > 0) {
+    parts.push(`${hours} hours`);
+  }
+  if (minutes > 0) {
+    parts.push(`${minutes} minutes`);
+  }
+  if (remainingSeconds > 0) {
+    parts.push(`${remainingSeconds} seconds`);
+  }
+
+  // Join the parts array into a single string with ', ' separator
+  return parts.join(', ');
+}
 
 function ProcessReviewWidget() {
   const { pid } = useParams();
@@ -163,11 +186,6 @@ function ProcessReviewWidget() {
     }
   }
 
-  const convertTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}mins ${remainingSeconds}secs`;
-  };
   return (
     <Fragment>
       <div className="review-widget">
@@ -196,7 +214,7 @@ function ProcessReviewWidget() {
                     <Tr key={index}>
                       <Td>{activity?.activity}</Td>
                       <Td color={getStatusColor(activity?.status)}>{activity?.status}</Td>
-                      <Td>{convertTime(activity?.average_time)}</Td>
+                      <Td>{formatDuration(activity?.average_time)}</Td>
                     </Tr>
                   ))}
                 </Tbody>
