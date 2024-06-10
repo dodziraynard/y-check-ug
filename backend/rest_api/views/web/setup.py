@@ -397,7 +397,7 @@ class PendingReferralNotifications(generics.GenericAPIView):
             })
             
 class AllAdolescentsFlagCheckView(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         # Get all adolescents
