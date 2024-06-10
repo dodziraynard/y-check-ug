@@ -41,12 +41,12 @@ const BarChart = () => {
   
   const data = {
     labels: [
-      'Total Users',
-      'Total Adolescents',
-      'Total Referrals',
-      'Total Treatments',
-      'Total Services',
-      'Total Facilities'
+      'Users',
+      'Adolescents',
+      'Referrals',
+      'Treatments',
+      'Services',
+      'Facilities'
     ],
     datasets: [
       {
