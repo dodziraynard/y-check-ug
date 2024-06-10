@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React from 'react';
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 import PieChart from '../../components/graph/PieChart';
 import BarChart from '../../components/graph/BarChart';
 import AdolescentFlags from '../../components/AdolescentFlags';
 import ActivityTime from '../../components/ActivityTime';
-function DashboardWidget() {
+import FlagYieldsPieChart from '../../components/graph/FlagYieldsPieChart';
 
+
+function DashboardWidget() {
 
     return (
         <div className="dashboard-widget">
@@ -14,7 +16,8 @@ function DashboardWidget() {
             <div className="row">
                 <div className="d-flex justify-content-between my-2">
                     <div>
-                        <h4>Reports</h4>
+                        <h4>Dashboard</h4>
+                        <p className="text text-muted">Summary Statistical Reports</p>
                     </div>
                     <form action="" method="get" className='d-flex'>
                         <div className="d-flex align-items-center">
@@ -34,9 +37,13 @@ function DashboardWidget() {
                 </div>
 
                 <div className="col-md-6">
+                    <FlagYieldsPieChart />
+                </div>
+                <div className="col-md-3">
                     <PieChart />
                 </div>
-                <div className="col-md-6">
+
+                <div className="col-md-3">
                     <BarChart />
                 </div>
                 <div className="col-md-6 my-5">

@@ -68,8 +68,32 @@ export const toastSuccessMessage = (message, toast, title = "fetching") => {
     })
 }
 
-
 export function getDateFromMills(timeInMills) {
     var date = new Date(timeInMills);
     return date.toLocaleDateString()
+}
+
+
+export function formatDuration(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    seconds %= 3600;
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.ceil(seconds % 60);
+
+    // Create an array to hold the formatted units
+    const parts = [];
+
+    // Only add non-zero units to the parts array
+    if (hours > 0) {
+        parts.push(`${hours} hour${hours !== 1 ? 's' : ''}`);
+    }
+    if (minutes > 0) {
+        parts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`);
+    }
+    if (remainingSeconds > 0) {
+        parts.push(`${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''}`);
+    }
+
+    // Join the parts array into a single string with ', ' separator
+    return parts.join(', ');
 }

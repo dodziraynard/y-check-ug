@@ -47,7 +47,7 @@ function PieChart() {
   return (
     <div className="section" style={{ maxHeight: "400px" }}>
       <div className="d-flex justify-content-between">
-        <h4>Yields</h4>
+        <h4>Adolescent Type</h4>
         <button className="btn btn-sm btn-outline-primary d-flex align-items-center">
           <i className='bi bi-file-spreadsheet me-2'></i>
           Export

@@ -3,8 +3,9 @@ import { Button, Spinner, useToast } from '@chakra-ui/react';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
 import { useDispatch } from 'react-redux';
+import { formatDuration } from '../../utils/functions';
 
-const TableView = React.lazy(() => import("./table"));
+const TableView = React.lazy(() => import("../../components/Table"));
 
 function ActivityTime() {
     const dispatch = useDispatch()
@@ -14,26 +15,25 @@ function ActivityTime() {
     const [urlParams, setUrlParams] = useState("");
 
     return (
-        <div>        
-            <div className="page-users">
-               
-                <div className="overflow-scroll">
-                    <Suspense fallback={<PageLoading />}>
-                        <TableView
-                            responseDataAttribute="users"
-                            dataSourceUrl={`${BASE_API_URI}/users/`}
-                            headers={[
+        <div className="page-users">
+            <div className="overflow-scroll">
+                <Suspense fallback={<PageLoading />}>
+                    <TableView
+                        responseDataAttribute="activities"
+                        dataSourceUrl={`${BASE_API_URI}/adolescent-activity/`}
+                        headers={[
                             {
-                                key: "pid", value: "Activity"
+                                key: "activity", value: "Activity"
                             }, {
                             }, {
-                                key: "flag", value: "Average Time "
+                                key: "average_time", value: "Average Time", render: (item) => {
+                                    return formatDuration(item.average_time)
+                                }
                             }]}
-                        />
-                    </Suspense>
-                </div>
+                    />
+                </Suspense>
             </div>
-        </div >
+        </div>
     );
 }
 

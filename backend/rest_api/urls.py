@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_api import views
 
+# yapf: disable
 
 app_label = "rest_api"
 urlpatterns = [
@@ -71,7 +72,6 @@ urlpatterns = [
 
 ]
 
-
 # Misc URLs
 urlpatterns += [
     path("record-activity-time/", views.RecordAdolescentActivityTime.as_view()),
@@ -80,4 +80,5 @@ urlpatterns += [
     path("update-adolescent-status/<str:pid>", views.UpdateAdolescentStatus.as_view()),
     path("reports/<int:table_number>/", views.TableReportsView.as_view()),
     path("adolescent-flags/", views.AllAdolescentsFlagCheckView.as_view()),
+    path("flag-colour-distribution/", views.FlagColourDistributionView.as_view()),
 ]

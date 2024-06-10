@@ -18,6 +18,7 @@ function TableView({ headers,
     exportable = true,
     exportFileName = "table-data",
     filterByDate = false,
+    onExportButtonClick = null,
 }) {
     const [originalData, setOriginalData] = useState([])
     const [displayedData, setDisplayedData] = useState([])
@@ -81,10 +82,12 @@ function TableView({ headers,
     }
 
     useEffect(() => {
-        const filtered = originalData.filter(c => {
+        const filtered = originalData.filter(data => {
             for (const { key } of headers) {
-                return c[key] !== null && typeof c[key] !== 'object' && c[key]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+                if (data[key] !== null && typeof data[key] !== 'object' && data[key]?.toString()?.toLowerCase()?.includes(search?.toLowerCase()))
+                    return true;
             }
+            return false;
         })
         setDisplayedData(filtered)
     }, [search])
@@ -113,7 +116,6 @@ function TableView({ headers,
         setOriginalData(newData)
         setDisplayedData(newData)
     }, [newUpdate])
-
 
     function exportTableToExcel(tableID, filename = 'hi') {
         var downloadLink;
@@ -352,7 +354,7 @@ function TableView({ headers,
                     <i className="bi bi-skip-forward"></i>
                 </button>
                 <div className="mx-2">
-                    {exportable ? <button className="btn btn-sm btn-outline-primary d-flex" onClick={() => exportTableToExcel('data_table', exportFileName)}> <i className="bi bi-file-spreadsheet-fill"></i>  Export</button> : ""}
+                    {exportable ? <button className="btn btn-sm btn-outline-primary d-flex" onClick={onExportButtonClick ?? (() => exportTableToExcel('data_table', exportFileName))}> <i className="bi bi-file-spreadsheet-fill"></i>  Export</button> : ""}
                 </div>
             </div>
         </section >

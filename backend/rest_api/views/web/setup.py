@@ -3,7 +3,7 @@ from rest_api.permissions import APILevelPermissionCheck
 from rest_framework.response import Response
 from rest_api.serializers import *
 from dashboard.forms import *
-from rest_api.views.mixins import SimpleCrudMixin
+from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from django.contrib.auth.models import Group, Permission
 from ycheck.utils.functions import relevant_permission_objects, get_errors_from_form
 from accounts.models import User
@@ -11,29 +11,7 @@ from dashboard.models import *
 from rest_framework import generics
 from django.contrib.auth import authenticate
 from django.db.models import Q
-from serde import serde
-from django.db.models import Prefetch
 
-@serde
-class FlagStatus:
-    flag: str
-    final_color_code: str
-    computed_color_code: str
-
-def get_color_name(color_code):
-    for color in Colors:
-        if color.value == color_code:
-            return color.name
-    return None
-
-def to_dict(flag_status, adolescent_pid):
-    return {
-        "adolescent_pid": adolescent_pid,
-        "flag": flag_status.flag,
-        "final_color_code": get_color_name(flag_status.final_color_code),
-        "computed_color_code": get_color_name(flag_status.computed_color_code),
-    }
-    
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -224,8 +202,9 @@ class ChangePasswordAPI(generics.GenericAPIView):
         password = request.data.get("password")
         new_password = request.data.get("new_password")
         user = User.objects.filter(id=user_id).first()
-        check_user = authenticate(
-            request, username=user.username, password=password)
+        check_user = authenticate(request,
+                                  username=user.username,
+                                  password=password)
 
         if check_user and len(new_password) > 0:
             check_user.set_password(new_password)
@@ -255,10 +234,10 @@ class UploadPictureAPI(generics.GenericAPIView):
             return Response({
                 "message":
                 f" Profile Picture Updated successfully",
-
             })
         return Response({
-            "error_message": "Profile Picture Could not be Updated successfully",
+            "error_message":
+            "Profile Picture Could not be Updated successfully",
         })
 
 
@@ -281,8 +260,8 @@ class getAdolescentType(generics.GenericAPIView):
 
         # TOTAL ADOLESCENTS
         total_adolescent = Adolescent.objects.all()
-        total_adolescent_serializer = AdolescentSerializer(
-            total_adolescent, many=True)
+        total_adolescent_serializer = AdolescentSerializer(total_adolescent,
+                                                           many=True)
         total_adolescent_count = len(total_adolescent_serializer.data)
 
         # TOTAL USERS
@@ -367,7 +346,8 @@ class GetApk(generics.GenericAPIView):
                     "android_apk_url":
                     request.build_absolute_uri(config.android_apk.url)
                     if config.android_apk else "",
-                    "version": config.current_apk_versions,
+                    "version":
+                    config.current_apk_versions,
                 }
             })
         return Response({}, 404)
@@ -382,39 +362,21 @@ class PendingReferralNotifications(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         referrals = Referral.objects.all().order_by("-created_at")
         if not request.user.has_perm("setup.access_all_referrals"):
-            referrals = referrals.filter(Q(facility=request.user.facility) & (Q(status="new") | Q(status="review")))
+            referrals = referrals.filter(
+                Q(facility=request.user.facility)
+                & (Q(status="new") | Q(status="review")))
             referrals_serializer = ReferralSerializer(referrals, many=True)
             total_pending_referral_count = len(referrals_serializer.data)
             return Response({
-            "total_pending_referral_count": total_pending_referral_count,
+                "total_pending_referral_count":
+                total_pending_referral_count,
             })
         else:
-            referrals = referrals.filter((Q(status="new") | Q(status="review")))
+            referrals = referrals.filter(
+                (Q(status="new") | Q(status="review")))
             referrals_serializer = ReferralSerializer(referrals, many=True)
             total_pending_referral_count = len(referrals_serializer.data)
             return Response({
-            "total_pending_referral_count": total_pending_referral_count,
+                "total_pending_referral_count":
+                total_pending_referral_count,
             })
-            
-class AllAdolescentsFlagCheckView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        # Get all adolescents
-        adolescents = Adolescent.objects.all().prefetch_related(
-            Prefetch('summaryflag_set', queryset=SummaryFlag.objects.order_by('label__name'))
-        )
-
-        all_results = []
-        for adolescent in adolescents:
-            flags = adolescent.summaryflag_set.all()
-            for flag in flags:
-                all_results.append(
-                    to_dict(
-                        FlagStatus(flag.label.name, flag.final_color_code, flag.computed_color_code),
-                        adolescent.pid
-                    )
-                )
-
-        response_data = {"adolescents": all_results}
-        return Response(response_data)

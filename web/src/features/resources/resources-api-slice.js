@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_API_URI } from '../../utils/constants';
 import * as referrals from "./referrals"
+import * as dashboardStats from "./dashboard-stats"
 
 export const resourceApiSlice = createApi({
     reducerPath: 'resources-api',
@@ -149,7 +150,7 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
-             getAllPendingReferrals: builder.query({
+            getAllPendingReferrals: builder.query({
                 query() {
                     return `/pending/referrals/notification/`;
                 },
@@ -244,7 +245,7 @@ export const resourceApiSlice = createApi({
                 },
             }),
             getAdolescentActivity: builder.query({
-                query({adolescent_id}) {
+                query({ adolescent_id }) {
                     return `/adolescent-activity/?adolescent_id=${adolescent_id}`;
                 },
             }),
@@ -259,8 +260,8 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
-
-            ...referrals.getReferralEndpoints(builder)
+            ...referrals.getReferralEndpoints(builder),
+            ...dashboardStats.getDashboardData(builder),
         };
     },
 });
@@ -311,7 +312,10 @@ export const {
     useDeletePatientsMutation,
     // apk
     usePutApkUploadFileMutation,
-    useChangeOwnPasswordMutation
+    useChangeOwnPasswordMutation,
+
+    // Dashboard stats
+    useLazyGetFlagColourDistributionQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;

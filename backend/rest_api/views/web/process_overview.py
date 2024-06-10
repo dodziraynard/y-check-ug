@@ -8,6 +8,7 @@ from django.utils.timezone import make_aware
 from datetime import datetime
 
 from serde import serde, to_dict
+from rest_api.views.web.types import FlagStatus
 from ycheck.utils.constants import Colors
 from dashboard.models import (
     Adolescent,
@@ -27,13 +28,6 @@ class ProcessActivity:
     required: bool = False
 
 
-@serde
-class FlagStatus:
-    flag: str
-    color: str
-    status: str
-
-
 class AdolescentActivityView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -41,7 +35,7 @@ class AdolescentActivityView(generics.GenericAPIView):
         adolescent_id = request.GET.get("adolescent_id")
         start_time = request.GET.get("start_time", "2023-01-01")
         end_time = request.GET.get("end_time",
-                                    timezone.now().strftime('%Y-%m-%d'))
+                                   timezone.now().strftime('%Y-%m-%d'))
         start_time = make_aware(datetime.strptime(start_time, "%Y-%m-%d"))
         end_time = make_aware(datetime.strptime(end_time, "%Y-%m-%d"))
 
