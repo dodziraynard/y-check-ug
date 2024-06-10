@@ -11,7 +11,29 @@ from dashboard.models import *
 from rest_framework import generics
 from django.contrib.auth import authenticate
 from django.db.models import Q
+from serde import serde
+from django.db.models import Prefetch
 
+@serde
+class FlagStatus:
+    flag: str
+    final_color_code: str
+    computed_color_code: str
+
+def get_color_name(color_code):
+    for color in Colors:
+        if color.value == color_code:
+            return color.name
+    return None
+
+def to_dict(flag_status, adolescent_pid):
+    return {
+        "adolescent_pid": adolescent_pid,
+        "flag": flag_status.flag,
+        "final_color_code": get_color_name(flag_status.final_color_code),
+        "computed_color_code": get_color_name(flag_status.computed_color_code),
+    }
+    
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -373,3 +395,26 @@ class PendingReferralNotifications(generics.GenericAPIView):
             return Response({
             "total_pending_referral_count": total_pending_referral_count,
             })
+            
+class AllAdolescentsFlagCheckView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        # Get all adolescents
+        adolescents = Adolescent.objects.all().prefetch_related(
+            Prefetch('summaryflag_set', queryset=SummaryFlag.objects.order_by('label__name'))
+        )
+
+        all_results = []
+        for adolescent in adolescents:
+            flags = adolescent.summaryflag_set.all()
+            for flag in flags:
+                all_results.append(
+                    to_dict(
+                        FlagStatus(flag.label.name, flag.final_color_code, flag.computed_color_code),
+                        adolescent.pid
+                    )
+                )
+
+        response_data = {"adolescents": all_results}
+        return Response(response_data)

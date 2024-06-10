@@ -1,8 +1,10 @@
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 import PieChart from '../../components/graph/PieChart';
 import BarChart from '../../components/graph/BarChart';
-
+import AdolescentFlags from '../../components/AdolescentFlags';
+import ActivityTime from '../../components/ActivityTime';
 function DashboardWidget() {
 
 
@@ -36,6 +38,12 @@ function DashboardWidget() {
                 </div>
                 <div className="col-md-6">
                     <BarChart />
+                </div>
+                <div className="col-md-6 my-5">
+                    <AdolescentFlags />
+                </div>
+                <div className="col-md-6 my-5">
+                    <ActivityTime />
                 </div>
             </div>
         </div>
