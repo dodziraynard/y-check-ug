@@ -8,62 +8,30 @@ import { Spinner } from '@chakra-ui/react';
 function TableView({ headers,
     responseDataAttribute = "images",
     dataSourceUrl,
-    urlParams = "",
-    setUrlParams = () => null,
-    newUpdate = null,
-    filters = null,
-    filters2 = null,
-    bulkActions = [],
     reloadTrigger = 0,
-    exportable = true,
     exportFileName = "table-data",
     filterByDate = false,
 }) {
-    const [originalData, setOriginalData] = useState([])
     const [displayedData, setDisplayedData] = useState([])
     const { trigger, data: responseData, error, isLoading } = useAxios()
-    const [filter, setFilter] = useState(filters?.filter((filter) => filter?.defaultValue)[0]?.key)
-    const [filter2, setFilter2] = useState(filters2?.filter((filter) => filter?.defaultValue)[0]?.key)
     const [sortAscending, setSortAscending] = useState(true)
     const [searchParams] = useSearchParams();
 
-    const [bulkSelectedIds, setBulkSelectedIds] = useState([])
-    const [selectedItems, setSelectedItems] = useState([])
-    const [selectedBulkActionIndex, setSelectedBulkActionIndex] = useState(-1)
 
     // Filter inputs
     const [search, setSearch] = useState(searchParams.get('query') || "");
-    const [sort, setSort] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [pageSize, setPageSize] = useState(100);
-
-    // Pagination
-    const [page, setPage] = useState(1);
-    const [customPage, setCustomPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [totalItems, setTotalItems] = useState(0);
-    const [nextPage, setNextPage] = useState(null);
-    const [previousPage, setPreviousPage] = useState(null);
-
+    const [sort, setSort] = useState('');  
+    const [page, setPage] = useState(1);  
+    const [pageSize, setPageSize] = useState(50); 
+    const totalItems = displayedData.length
     useEffect(() => {
         if (responseData) {
             if (responseDataAttribute === null) {
                 return
             }
 
-            setOriginalData(responseData[responseDataAttribute])
             setDisplayedData(responseData[responseDataAttribute])
-
-            setTotalPages(responseData.total_pages)
-            setNextPage(responseData.next_page)
-            setPage(responseData?.page || 1)
-            setPreviousPage(responseData.previous_page)
-            setTotalItems(responseData?.total || 0)
-
             // Reset selection
-            setBulkSelectedIds([])
-            setSelectedItems([])
         }
     }, [responseData])
    
@@ -79,27 +47,30 @@ function TableView({ headers,
         setDisplayedData(toToSorted)
     }
     useEffect(() => {
-        setUrlParams(`?page=${page}&q=${search}&page_size=${pageSize}&filters=${filter}&filters=${filter2}`)
-        trigger(`${dataSourceUrl}?page=${page}&q=${search}&page_size=${pageSize}&filters=${filter}&filters=${filter2}&start_date=${startDate}&end_date=${endDate}`)
-    }, [page, filter, filter2, pageSize, dataSourceUrl])
+        trigger(dataSourceUrl)
+    }, [dataSourceUrl])
 
     useEffect(() => {
-        trigger(`${dataSourceUrl}?page=${page}&q=${search}&page_size=${pageSize}&filters=${filter}&filters=${filter2}&start_date=${startDate}&end_date=${endDate}`)
+        trigger(dataSourceUrl)
     }, [reloadTrigger])
 
-    const reloadData = () => {
-        trigger(`${dataSourceUrl}?page=${page}&q=${search}&page_size=${pageSize}&filters=${filter}&filters=${filter2}&start_date=${startDate}&end_date=${endDate}`)
+    // Pagination logic
+    const totalPages = Math.ceil(displayedData.length / pageSize);
+    const paginatedData = displayedData.slice((page - 1) * pageSize, page * pageSize);
+
+    function goToPage(pageNumber) {
+        setPage(pageNumber);
     }
 
-    useEffect(() => {
-        const filtered = originalData.filter(c => {
-            for (const { key } of headers) {
-                return c[key] !== null && typeof c[key] !== 'object' && c[key]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
-            }
-        })
-        setDisplayedData(filtered)
-    }, [search])
-   
+    function goToPreviousPage() {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    }
+
+    function handlePageSizeChange(event) {
+        setPageSize(parseInt(event.target.value));
+    }
 
     function exportTableToExcel(tableID, filename = 'hi') {
         var downloadLink;
@@ -142,7 +113,8 @@ function TableView({ headers,
                         </div>
                     </div>
                     <div className="d-flex align-items-center">
-                        <button className="btn btn-sm btn-outline-primary d-flex align-items-center">
+                        <button className="btn btn-sm btn-outline-primary d-flex align-items-center"
+                        onClick={() => exportTableToExcel('data_table', exportFileName)}>
                             <i className="bi bi-file-spreadsheet-fill me-2"></i>
                             Export
                         </button>
@@ -175,12 +147,12 @@ function TableView({ headers,
                                     <span className="mx-2">Loading...</span>
                                 </span>
                             </td></tr>}
-                            {(!isLoading && displayedData?.length === 0) && <tr><td colSpan={(headers?.length || 7) + 2}>
+                            {(!isLoading && paginatedData?.length === 0) && <tr><td colSpan={(headers?.length || 7) + 2}>
                                 <p className="text-center">No data to display</p>
                             </td></tr>}
                             {!isLoading && error && <tr><td colSpan={(headers?.length || 7) + 2}><p className="text-center text-warning">Error: {error}</p> </td></tr>}
 
-                            {displayedData?.map((item, index) => {
+                            {paginatedData?.map((item, index) => {
                                 return (
                                     <tr key={index} style={{ minHeight: "3em", verticalAlign: "middle" }}>
                                         {headers?.map(({ key, render, textAlign = "left" }, headerIndex) => {
@@ -196,6 +168,36 @@ function TableView({ headers,
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div className="d-flex align-items-center my-3 table-footer-controls">
+                <div className="d-flex align-items-center me-2">
+                    <select 
+                    className="form-select" 
+                    name="page_size" 
+                    id="page_size" 
+                    value={pageSize} 
+                    onChange={handlePageSizeChange}>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="2000">2000</option>
+                    </select>
+                </div>
+                <button className="btn btn-sm btn-primary"
+                   disabled={page === 1} onClick={goToPreviousPage}
+                >
+                    <i className="bi bi-skip-backward"></i>
+                </button>
+                <span className="mx-2 d-flex"><span className="me-1">Page</span> <span>{page}</span> <span className="mx-1">of</span> <span>{totalPages}</span></span>
+                (<b><span className="me-1">{totalItems}</span><span>items</span></b>)
+                <button className="btn btn-sm btn-primary"
+                    disabled={page === totalPages} onClick={() => goToPage(page + 1)}
+                >
+                    <i className="bi bi-skip-forward"></i>
+                </button>
             </div>
 
         </section >
