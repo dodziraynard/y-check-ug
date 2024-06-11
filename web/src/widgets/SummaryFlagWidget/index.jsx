@@ -383,10 +383,10 @@ function SummaryFlagWidget() {
                                             problematicFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
                                                 return <tr key={`${index}-${flag.name}`}>
-                                                    <td style={{ verticalAlign: "middle", display: "flex", alignItems: "center" }}>
+                                                    <td style={{ verticalAlign: "middle" }}>
                                                         {flag.name}
                                                         {flag.is_referred ?
-                                                            (<i className="bi bi-check-circle text-success mx-2"></i>)
+                                                            (<i className="bi bi-check-circle text-success mx-2" title='Referred'></i>)
                                                             :
                                                             (<span className='badge mx-2 my-auto bg-warning'><i className="bi bi-info-circle me-2"></i><small>Not referred</small></span>)
                                                         }

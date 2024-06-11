@@ -124,7 +124,7 @@ function PatientsWidget() {
                                 {
                                     key: "fullname", value: "Full Name", render: (item) => {
                                         return (
-                                            <Link to={`${item.pid}/review`} className='text text-primary' style={{ textDecoration: "underline" }}>
+                                            <Link to={`${item.pid}/summary`} className='text text-primary' style={{ textDecoration: "underline" }}>
                                                 {item.fullname}
                                             </Link>
                                         );
