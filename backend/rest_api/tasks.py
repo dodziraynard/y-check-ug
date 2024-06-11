@@ -101,8 +101,9 @@ def compute_activity_average_time(start_time: datetime, end_time: datetime):
             times = list(sorted(times))[offset:-1 * offset]
 
         average = round(statistics.mean(times), 2)
+        comp_key = f"{activity.replace(' ', '-').lower()}-{key}"
         comp_time = ComputedAverageActivityTime.objects.get_or_create(
-            key=key)[0]
+            key=comp_key)[0]
         comp_time.activity = activity
         comp_time.average_time_in_seconds = average
         comp_time.save()
