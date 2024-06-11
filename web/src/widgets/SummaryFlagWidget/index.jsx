@@ -383,7 +383,15 @@ function SummaryFlagWidget() {
                                             problematicFlags?.map((flag, index) => {
                                                 const mutable = !Boolean(flag.updated_color_code);
                                                 return <tr key={`${index}-${flag.name}`}>
-                                                    <td style={{ verticalAlign: "middle" }}>{flag.name} <p className="text-muted">{flag.context}</p> </td>
+                                                    <td style={{ verticalAlign: "middle", display: "flex", alignItems: "center" }}>
+                                                        {flag.name}
+                                                        {flag.is_referred ?
+                                                            (<span className='badge bg-success mx-2'><i className="bi bi-check"></i> <small>Referred</small></span>)
+                                                            :
+                                                            (<span className='badge mx-2 my-auto bg-warning'><i className="bi bi-info-circle me-2"></i><small>Not referred</small></span>)
+                                                        }
+                                                        <p className="text-muted">{flag.context}
+                                                        </p> </td>
                                                     <td style={{ verticalAlign: "middle" }}>
                                                         <div className="d-flex">
                                                             <Tooltip hasArrow label={mutable ? flag.comment : "Infered"} bg='gray.600' color='white'>

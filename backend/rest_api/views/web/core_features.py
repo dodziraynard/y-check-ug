@@ -6,6 +6,8 @@ from ycheck.utils.functions import apply_filters
 from dashboard.forms import FacilityForm
 from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
 from django.db.models import Q
@@ -43,7 +45,10 @@ class GetAdolescentProfile(generics.GenericAPIView):
             return Response({"error_message": f"{pid} not found."})
 
         response_data = {
-            "adolescent": self.serializer_class(adolescent, context={"request": request}).data
+            "adolescent":
+            self.serializer_class(adolescent, context={
+                "request": request
+            }).data
         }
         return Response(response_data)
 
@@ -100,21 +105,23 @@ class GetRecommendedServices(generics.GenericAPIView):
         if not adolescent:
             return Response({"error_message": f"{pid} not found."})
 
-        problematic_flags = SummaryFlag.objects.filter(adolescent=adolescent).exclude(
-            (Q(computed_color_code=Colors.GREEN.value) & Q(updated_color_code=None))
-            | Q(updated_color_code=Colors.GREEN.value)
-        )
+        problematic_flags = SummaryFlag.objects.filter(
+            adolescent=adolescent).exclude(
+                (Q(computed_color_code=Colors.GREEN.value)
+                 & Q(updated_color_code=None))
+                | Q(updated_color_code=Colors.GREEN.value))
         label_ids = problematic_flags.values_list("label", flat=True)
 
         already_referred_services = Referral.objects.filter(
-            adolescent=adolescent).exclude(status=ReferralStatus.COMPLETED.value)
-        service_ids = already_referred_services.exclude(services=None).values_list(
-            "services", flat=True)
+            adolescent=adolescent).exclude(
+                status=ReferralStatus.COMPLETED.value)
+        service_ids = already_referred_services.exclude(
+            services=None).values_list("services", flat=True)
         services = Service.objects.filter(
             related_flag_labels__id__in=label_ids).exclude(id__in=service_ids)
 
         services = services.distinct()
-        
+
         services = self.serializer_class(services, many=True).data
         repsonse_data = {
             "services": services,
@@ -149,7 +156,8 @@ class TreatmentsAPI(SimpleCrudMixin):
     response_data_label_plural = "treatments"
 
     def modify_response_data(self, treatments: List[Treatment], request=None):
-        if not (request and request.user.has_perm("setup.access_all_treatments")):
+        if not (request
+                and request.user.has_perm("setup.access_all_treatments")):
             treatments = treatments.filter(created_by=request.user)
         return treatments
 
@@ -198,7 +206,7 @@ class AdolescentReferrals(generics.GenericAPIView):
             else:
                 referral = Referral.objects.create(created_by=request.user,
                                                    adolescent=adolescent,
-                                                   ** data)
+                                                   **data)
         except IntegrityError as e:
             return Response({"error_message": f"{str(e)}"})
 
@@ -210,9 +218,7 @@ class AdolescentReferrals(generics.GenericAPIView):
 
     def delete(self, request, pid, *args, **kwargs):
         deleted = Referral.objects.filter(id=request.data.get("id")).delete()
-        response_data = {
-            "referral_id": request.data.get("id")
-        }
+        response_data = {"referral_id": request.data.get("id")}
         return Response(response_data)
 
 
@@ -249,13 +255,16 @@ class MyReferrals(generics.GenericAPIView):
             page = total_pages
         page = max(page, 1)
 
-        paginated_referrals = referrals[(
-            page - 1) * page_size:page * page_size]
+        paginated_referrals = referrals[(page - 1) * page_size:page *
+                                        page_size]
         prev_page = page - 1 if page > 1 else None
         next_page = page + 1 if total_pages > page else None
 
-        referrals_data = self.serializer_class(
-            paginated_referrals, many=True, context={"request": request}).data
+        referrals_data = self.serializer_class(paginated_referrals,
+                                               many=True,
+                                               context={
+                                                   "request": request
+                                               }).data
         repsonse_data = {
             "referrals": referrals_data,
             "page": page,
@@ -264,7 +273,6 @@ class MyReferrals(generics.GenericAPIView):
             "next_page": next_page,
             "previous_page": prev_page,
             "total_pages": total_pages,
-
         }
         return Response(repsonse_data, status=status.HTTP_200_OK)
 
@@ -288,8 +296,10 @@ class ReferralDetail(generics.GenericAPIView):
             referral.status = ReferralStatus.REVIEW.value
             referral.save()
 
-        adolescent = AdolescentSerializer(
-            referral.adolescent, context={"request": request}).data
+        adolescent = AdolescentSerializer(referral.adolescent,
+                                          context={
+                                              "request": request
+                                          }).data
         referral_data = self.serializer_class(referral).data
 
         # Retrieve all flags
@@ -297,9 +307,12 @@ class ReferralDetail(generics.GenericAPIView):
         for service in referral.services.all():
             flag_labels = service.related_flag_labels.all()
             flags = SummaryFlag.objects.filter(
-                label__in=flag_labels, adolescent=referral.adolescent).distinct()
+                label__in=flag_labels,
+                adolescent=referral.adolescent).distinct()
             responses = [
-                response for flag in flags for response in flag.get_responses()]
+                response for flag in flags
+                for response in flag.get_responses()
+            ]
             relevant_adolescent_responses[service.id] = responses
 
         repsonse_data = {
@@ -327,9 +340,7 @@ class ReferralTreatment(generics.GenericAPIView):
             return Response({"error_message": f"Referral not found."})
 
         treatment = Treatment.objects.filter(referral=referral).first()
-        response_data = {
-            "treatment": self.serializer_class(treatment).data
-        }
+        response_data = {"treatment": self.serializer_class(treatment).data}
         return Response(response_data)
 
     def post(self, request, referral_id, *args, **kwargs):
@@ -351,7 +362,7 @@ class ReferralTreatment(generics.GenericAPIView):
 
         condition_treatments_details = request.data.get(
             "condition_treatments_details")
-        
+
         treatment_data = {
             "referral": referral,
             "adolescent": referral.adolescent,
@@ -383,19 +394,20 @@ class ReferralTreatment(generics.GenericAPIView):
             service_id = details.get('service_id')
             if service_id == None:
                 logger.error(
-                    "Treatment condition creation for %s failed. service_id = None", details)
+                    "Treatment condition creation for %s failed. service_id = None",
+                    details)
                 continue
 
             treatment_detail = {
-                "total_service_cost": details.get("total_service_cost") or 0,
-                "total_service_cost_nhis": details.get("total_service_cost_nhis") or 0,
+                "total_service_cost":
+                details.get("total_service_cost") or 0,
+                "total_service_cost_nhis":
+                details.get("total_service_cost_nhis") or 0,
             }
             ConditionTreatment.objects.create(
                 treatment=treatment,
                 service_id=service_id,
                 **treatment_detail,
             )
-        response_data = {
-            "treatment": self.serializer_class(treatment).data
-        }
+        response_data = {"treatment": self.serializer_class(treatment).data}
         return Response(response_data)

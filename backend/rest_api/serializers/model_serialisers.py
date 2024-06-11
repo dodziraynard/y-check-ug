@@ -9,7 +9,6 @@ from setup.models import MobileConfig, NodeConfig
 from dashboard.models import *
 from django.utils.timezone import make_aware
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -181,7 +180,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
         adolescent = self.context.get("adolescent")
         response = AdolescentResponse.objects.filter(
-            adolescent=adolescent, question=question.show_response_for).first()
+            adolescent=adolescent,
+            question=question.show_response_for).first()
         return {
             "question": question.show_response_for.text,
             "responses": response.get_values_as_list() if response else []
@@ -212,8 +212,11 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def get_options(self, question):
         if hasattr(question, "options"):
-            self.options = question.options.all().order_by("numeric_value", "value")
-            return OptionSerlializer(self.options, context=self.context, many=True).data
+            self.options = question.options.all().order_by(
+                "numeric_value", "value")
+            return OptionSerlializer(self.options,
+                                     context=self.context,
+                                     many=True).data
         return None
 
     def get_image_url(self, question):
@@ -261,7 +264,8 @@ class AdolescentResponseSerialiser(serializers.ModelSerializer):
     def get_chosen_options(self, response):
         if hasattr(response, "chosen_options"):
             options = response.chosen_options.all()
-            return OptionSerlializer(options, context=self.context,  many=True).data
+            return OptionSerlializer(options, context=self.context,
+                                     many=True).data
         return None
 
     class Meta:
@@ -273,6 +277,7 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
     responses = serializers.SerializerMethodField()
     comment = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
+    is_referred = serializers.SerializerMethodField()
 
     def get_name(self, obj):
         return obj.label.name
@@ -284,6 +289,10 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
 
     def get_responses(self, obj):
         return obj.get_responses()
+
+    def get_is_referred(self, obj):
+        return Referral.objects.filter(
+            services__related_flag_labels=obj.label).exists()
 
     class Meta:
         model = SummaryFlag
@@ -373,9 +382,7 @@ class ConditionTreatmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConditionTreatment
         fields = [
-            "treatment",
-            "service",
-            "total_service_cost",
+            "treatment", "service", "total_service_cost",
             "total_service_cost_nhis"
         ]
 
@@ -402,7 +409,8 @@ class TreatmentSerializer(serializers.ModelSerializer):
 
     def get_condition_treatments(self, obj):
         condition_treatements = obj.condition_treatements.all()
-        return ConditionTreatmentSerializer(condition_treatements, many=True).data
+        return ConditionTreatmentSerializer(condition_treatements,
+                                            many=True).data
 
     def get_facility_name(self, obj):
         return obj.referral.facility.name
@@ -418,6 +426,7 @@ class TreatmentSerializer(serializers.ModelSerializer):
 
 
 class NodeConfigSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = NodeConfig
         fields = "__all__"

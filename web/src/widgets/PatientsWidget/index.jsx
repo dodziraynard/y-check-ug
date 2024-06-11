@@ -154,7 +154,7 @@ function PatientsWidget() {
                                             <div className="d-flex justify-content-end">
                                                 <Link to={`${item.pid}/summary`} className="btn btn-sm btn-primary me-1 d-flex">
                                                     <i className="bi bi-list me-1"></i>
-                                                    More
+                                                    Flags
                                                 </Link>
                                                 <button className="btn btn-sm btn-outline-primary me-1 d-flex" onClick={() => showDeletePatientModal(item)}>
                                                     <i className="bi bi-trash me-1"></i>
