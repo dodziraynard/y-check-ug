@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
-import PieChart from '../../components/graph/PieChart';
-import BarChart from '../../components/graph/BarChart';
 import AdolescentFlags from '../../components/AdolescentFlags';
 import ActivityTime from '../../components/ActivityTime';
 import FlagYieldsPieChart from '../../components/graph/FlagYieldsPieChart';
 
+const PieChart = React.lazy(() => import('../../components/graph/PieChart'));
+const BarChart = React.lazy(() => import('../../components/graph/BarChart'));
 
 function DashboardWidget() {
 
@@ -40,11 +40,15 @@ function DashboardWidget() {
                     <FlagYieldsPieChart />
                 </div>
                 <div className="col-md-3">
-                    <PieChart />
+                    <Suspense fallback={<p>Loading ...</p>}>
+                        <PieChart />
+                    </Suspense>
                 </div>
 
                 <div className="col-md-3">
-                    <BarChart />
+                    <Suspense fallback={<p>Loading ...</p>}>
+                        <BarChart />
+                    </Suspense>
                 </div>
                 <div className="col-md-6 my-5">
                     <AdolescentFlags />
