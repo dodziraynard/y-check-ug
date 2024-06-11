@@ -41,7 +41,7 @@ class FlagStatus:
 class AdolescentActivityView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @method_decorator(cache_page(60 / 2))
+    @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
         adolescent_id = request.GET.get("adolescent_id")
         start_time = request.GET.get("start_time", "2023-01-01")

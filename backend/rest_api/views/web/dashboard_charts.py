@@ -33,7 +33,7 @@ def to_dict(flag_status, adolescent_pid):
 class AllAdolescentsFlagCheckView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @method_decorator(cache_page(60 / 2))
+    @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
         start_date = request.GET.get("start_date")
         end_date = request.GET.get("end_date")
@@ -80,7 +80,7 @@ class FlagColourDistributionView(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    @method_decorator(cache_page(60 / 2))
+    @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
         colors = [Colors.GREEN, Colors.RED, Colors.ORANGE]
         result = {}
@@ -99,7 +99,7 @@ class FlagColourDistributionView(generics.GenericAPIView):
 class GetAdolescentType(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
 
-    @method_decorator(cache_page(60 / 2))
+    @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
 
         # BASIC
