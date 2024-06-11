@@ -6,7 +6,6 @@ from dashboard.forms import *
 from rest_api.views.mixins import QUERY_PAGE_SIZE
 from dashboard.models import *
 from rest_framework import generics
-from django.db.models import Q
 from django.db.models import Prefetch
 from .types import FlagStatus
 
@@ -43,35 +42,30 @@ class AllAdolescentsFlagCheckView(generics.GenericAPIView):
         page_size = int(
             page_size) if page_size.isnumeric() else QUERY_PAGE_SIZE
 
-        # Get all adolescents
-        adolescents = Adolescent.objects.all().prefetch_related(
-            Prefetch('summaryflag_set',
-                     queryset=SummaryFlag.objects.order_by('label__name')))
-
         all_results = []
-        for adolescent in adolescents:
-            flags = adolescent.summaryflag_set.all()
-            for flag in flags:
-                all_results.append(
-                    to_dict(
-                        FlagStatus(flag.label.name, flag.final_color_code,
-                                   flag.computed_color_code), adolescent.pid))
+        all_flags = SummaryFlag.objects.order_by('adolescent__pid',
+                                                 "label__name")
+        flags = all_flags[(page - 1) * page_size:page * page_size]
 
-        total_pages = max(1, math.ceil(len(all_results) / page_size))
+        for flag in flags:
+            all_results.append(
+                to_dict(
+                    FlagStatus(flag.label.name, flag.final_color_code,
+                               flag.computed_color_code), flag.adolescent.pid))
+
+        total_pages = max(1, math.ceil(all_flags.count() / page_size))
         if page > total_pages:
             page = total_pages
         page = max(page, 1)
-
-        paginated_result = all_results[(page - 1) * page_size:page * page_size]
 
         prev_page = page - 1 if page > 1 else None
         next_page = page + 1 if total_pages > page else None
 
         response_data = {
-            "adolescents": paginated_result,
+            "adolescents": all_results,
             "page": page,
             "page_size": page_size,
-            "total": len(all_results),
+            "total": all_flags.count(),
             "next_page": next_page,
             "previous_page": prev_page,
             "total_pages": total_pages,

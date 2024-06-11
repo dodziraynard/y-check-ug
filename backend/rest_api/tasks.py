@@ -4,19 +4,16 @@ import statistics
 from datetime import datetime
 from collections import defaultdict
 from celery import shared_task
-from serde import serde, to_dict
-from dashboard.models import Adolescent, AdolescentResponse, AdolescentActivityTime, ComputedAverageActivityTime
+from django.db.models import Prefetch
+from dashboard.models import (
+    Adolescent,
+    AdolescentResponse,
+    AdolescentActivityTime,
+    ComputedAverageActivityTime,
+    SummaryFlag,
+)
 
 logger = logging.getLogger(__name__)
-
-
-@serde
-class ProcessActivity:
-    activity: str
-    key: str
-    status: str
-    average_time: float = 0
-    required: bool = False
 
 
 @shared_task()
