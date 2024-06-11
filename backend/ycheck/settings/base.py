@@ -187,6 +187,7 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_IMPORTS = [
     "dashboard.tasks",
     "pdf_processor.tasks",
+    "rest_api.tasks",
 ]
 
 REDIS_HOST = os.environ.get(

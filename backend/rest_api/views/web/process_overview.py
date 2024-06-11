@@ -8,7 +8,8 @@ from django.utils.timezone import make_aware
 from datetime import datetime
 
 from serde import serde, to_dict
-from rest_api.views.web.types import FlagStatus
+from rest_api.tasks import compute_activity_average_time
+from rest_api.serializers.activity_time import ComputedAverageActivityTimeSerializer
 from ycheck.utils.constants import Colors
 from dashboard.models import (
     Adolescent,
@@ -16,6 +17,7 @@ from dashboard.models import (
     AdolescentActivityTime,
     SummaryFlag,
     Referral,
+    ComputedAverageActivityTime,
 )
 
 
@@ -26,6 +28,13 @@ class ProcessActivity:
     status: str
     average_time: float = 0
     required: bool = False
+
+
+@serde
+class FlagStatus:
+    flag: str
+    color: str
+    status: str
 
 
 class AdolescentActivityView(generics.GenericAPIView):
@@ -42,10 +51,8 @@ class AdolescentActivityView(generics.GenericAPIView):
         adolescents = Adolescent.objects.filter(created_at__gte=start_time,
                                                 created_at__lte=end_time)
         if adolescent_id:
-            adolescents = adolescents.filter(id=adolescent_id)
-        adolescent_time_spent = defaultdict(list)
-
-        for adolescent in adolescents:
+            adolescent = adolescents.filter(id=adolescent_id).first()
+            adolescent_time_spent = defaultdict(list)
             responses = AdolescentResponse.objects.filter(
                 adolescent=adolescent).order_by("created_at")
             activities = AdolescentActivityTime.objects.filter(
@@ -69,66 +76,73 @@ class AdolescentActivityView(generics.GenericAPIView):
             # Get first station/section
             first_section_start = section_start = adolescent.created_at
             first_section_first_responses = responses.first()
-            if not first_section_first_responses: continue
-            first_section_name = first_section_first_responses.question.section.name
-            first_section_responses = responses.filter(
-                question__section__name=first_section_name)
-            first_section_last_response = first_section_responses.last()
-            first_section_end = section_end = first_section_last_response.created_at
+            if first_section_first_responses:
+                first_section_name = first_section_first_responses.question.section.name
+                first_section_responses = responses.filter(
+                    question__section__name=first_section_name)
+                first_section_last_response = first_section_responses.last()
+                first_section_end = section_end = first_section_last_response.created_at
 
-            first_section_duration = (first_section_end -
-                                      first_section_start).total_seconds()
-            if first_section_duration > 0:
-                adolescent_time_spent[(
-                    first_section_name, first_section_first_responses.question.
-                    section.question_type)].append(first_section_duration)
-
-            # Subsequent sections
-            section_last_response = first_section_last_response
-            rem_responses = responses.filter(
-                question__section__number__gt=first_section_last_response.
-                question.section.number)
-            while rem_responses.exists():
-                section_start = section_last_response.created_at
-                section_first_responses = rem_responses.first()
-                section_name = section_first_responses.question.section.name
-                section_responses = responses.filter(
-                    question__section__name=section_name)
-                section_last_response = section_responses.last()
-                section_end = section_last_response.created_at
-
-                section_duration = (section_end -
-                                    section_start).total_seconds()
-                if section_duration > 0:
+                first_section_duration = (first_section_end -
+                                          first_section_start).total_seconds()
+                if first_section_duration > 0:
                     adolescent_time_spent[(
-                        section_name,
-                        section_first_responses.question.section.question_type
-                    )].append(section_duration)
+                        first_section_name,
+                        first_section_first_responses.question.section.
+                        question_type)].append(first_section_duration)
 
+                # Subsequent sections
+                section_last_response = first_section_last_response
                 rem_responses = responses.filter(
-                    question__section__number__gt=section_last_response.
+                    question__section__number__gt=first_section_last_response.
                     question.section.number)
+                while rem_responses.exists():
+                    section_start = section_last_response.created_at
+                    section_first_responses = rem_responses.first()
+                    section_name = section_first_responses.question.section.name
+                    section_responses = responses.filter(
+                        question__section__name=section_name)
+                    section_last_response = section_responses.last()
+                    section_end = section_last_response.created_at
 
-            # Enter screening
-            screening_duration = (section_end -
-                                  first_section_start).total_seconds()
-            if screening_duration > 0:
-                adolescent_time_spent[(
-                    "Total Screening Time",
-                    "total_screen_time")].append(screening_duration)
+                    section_duration = (section_end -
+                                        section_start).total_seconds()
+                    if section_duration > 0:
+                        adolescent_time_spent[(
+                            section_name, section_first_responses.question.
+                            section.question_type)].append(section_duration)
 
-        # Average
-        activities = []
-        for (activity, key), times in adolescent_time_spent.items():
-            # Remove outliers
-            offset = math.ceil(0.1 * len(times))
-            if len(times) > 2:
-                times = list(sorted(times))[offset:-1 * offset]
+                    rem_responses = responses.filter(
+                        question__section__number__gt=section_last_response.
+                        question.section.number)
 
-            average = round(statistics.mean(times), 2)
-            activities.append(
-                to_dict(ProcessActivity(activity, key, "completed", average)))
+                # Enter screening
+                screening_duration = (section_end -
+                                      first_section_start).total_seconds()
+                if screening_duration > 0:
+                    adolescent_time_spent[(
+                        "Total Screening Time",
+                        "total_screen_time")].append(screening_duration)
 
+            # Average
+            activities = []
+            for (activity, key), times in adolescent_time_spent.items():
+                # Remove outliers
+                offset = math.ceil(0.1 * len(times))
+                if len(times) > 2:
+                    times = list(sorted(times))[offset:-1 * offset]
+
+                average = round(statistics.mean(times), 2)
+                activities.append(
+                    to_dict(
+                        ProcessActivity(activity, key, "completed", average)))
+        else:
+            # Pre-compute average time for next request
+            compute_activity_average_time.delay(start_time, end_time)
+            # Retrieve pre-computed average time.
+            times = ComputedAverageActivityTime.objects.all()
+            activities = ComputedAverageActivityTimeSerializer(times,
+                                                               many=True).data
         response_data = {"activities": activities}
         return Response(response_data)
 
