@@ -386,7 +386,7 @@ function SummaryFlagWidget() {
                                                     <td style={{ verticalAlign: "middle", display: "flex", alignItems: "center" }}>
                                                         {flag.name}
                                                         {flag.is_referred ?
-                                                            (<span className='badge bg-success mx-2'><i className="bi bi-check"></i> <small>Referred</small></span>)
+                                                            (<i className="bi bi-check-circle text-success mx-2"></i>)
                                                             :
                                                             (<span className='badge mx-2 my-auto bg-warning'><i className="bi bi-info-circle me-2"></i><small>Not referred</small></span>)
                                                         }
