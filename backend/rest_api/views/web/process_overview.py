@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from datetime import datetime
-
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from serde import serde, to_dict
 from rest_api.tasks import compute_activity_average_time
 from rest_api.serializers.activity_time import ComputedAverageActivityTimeSerializer
@@ -40,6 +41,7 @@ class FlagStatus:
 class AdolescentActivityView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @method_decorator(cache_page(60 / 2))
     def get(self, request, *args, **kwargs):
         adolescent_id = request.GET.get("adolescent_id")
         start_time = request.GET.get("start_time", "2023-01-01")
