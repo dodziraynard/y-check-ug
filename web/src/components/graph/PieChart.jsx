@@ -45,7 +45,7 @@ function PieChart() {
   };
 
   return (
-    <div className="section" style={{ maxHeight: "400px" }}>
+    <div className="section">
       <div className="d-flex justify-content-between">
         <h4>Adolescent Type</h4>
         <button className="btn btn-sm btn-outline-primary d-flex align-items-center">
@@ -53,7 +53,7 @@ function PieChart() {
           Export
         </button>
       </div>
-      <div className="chart-container" style={{ maxHeight: "400px" }}>
+      <div className="chart-container">
         <Doughnut data={data} options={chartOptions} />
       </div>
     </div>

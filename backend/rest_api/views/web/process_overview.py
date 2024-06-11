@@ -140,7 +140,7 @@ class AdolescentActivityView(generics.GenericAPIView):
             # Pre-compute average time for next request
             compute_activity_average_time.delay(start_time, end_time)
             # Retrieve pre-computed average time.
-            times = ComputedAverageActivityTime.objects.all()
+            times = ComputedAverageActivityTime.objects.all().order_by("order")
             activities = ComputedAverageActivityTimeSerializer(times,
                                                                many=True).data
         response_data = {"activities": activities}
