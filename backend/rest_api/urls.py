@@ -28,7 +28,7 @@ urlpatterns = [
          views.GetSummaryFlags.as_view(), name="summary_flags"),
     path("<str:pid>/recommended-services/",
          views.GetRecommendedServices.as_view()),
-    path("web-adolescents-types/", views.getAdolescentType.as_view()),
+    path("web-adolescents-types/", views.GetAdolescentType.as_view()),
 
     path("<str:pid>/referrals/", views.AdolescentReferrals.as_view()),
     path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view()),

@@ -1,12 +1,14 @@
 import math
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from rest_api.permissions import APILevelPermissionCheck
 from rest_api.serializers import *
 from dashboard.forms import *
 from rest_api.views.mixins import QUERY_PAGE_SIZE
 from dashboard.models import *
 from rest_framework import generics
-from django.db.models import Prefetch
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from .types import FlagStatus
 
 logger = logging.getLogger(__name__)
@@ -90,3 +92,49 @@ class FlagColourDistributionView(generics.GenericAPIView):
 
         response_data = {"flag_distribution": result}
         return Response(response_data)
+
+
+class GetAdolescentType(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
+
+    @method_decorator(cache_page(60 / 2))
+    def get(self, request, format=None):
+
+        # BASIC
+        basic_count = Adolescent.objects.filter(type="basic").count()
+
+        # SECONDARY
+        secondary_count = Adolescent.objects.filter(type="secondary").count()
+
+        # COMMUNITY
+        community_count = Adolescent.objects.filter(type="community").count()
+
+        # TOTAL ADOLESCENTS
+        total_adolescent_count = Adolescent.objects.all().count()
+
+        # TOTAL USERS
+        total_user_count = User.objects.all().count()
+
+        # TOTAL TREATMENTS
+        total_treatment_count = Treatment.objects.all().count()
+
+        # TOTAL REFERRALS
+        total_referral_count = Referral.objects.all().count()
+
+        # TOTAL SERVICES
+        total_service_count = Service.objects.all().count()
+
+        # TOTAL FACILITIES
+        total_facility_count = Facility.objects.all().count()
+
+        return Response({
+            "basic": basic_count,
+            "secondary": secondary_count,
+            "community": community_count,
+            "total_adolescent": total_adolescent_count,
+            "total_user": total_user_count,
+            "total_referal": total_referral_count,
+            "total_treatment": total_treatment_count,
+            "total_service": total_service_count,
+            "total_facility": total_facility_count,
+        })
