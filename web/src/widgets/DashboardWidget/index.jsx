@@ -17,7 +17,7 @@ function DashboardWidget() {
                 <div className="d-flex justify-content-between my-2">
                     <div>
                         <h4>Dashboard</h4>
-                        <p className="text text-muted">Summary Statistical Reports</p>
+                        <p className="text text-muted">Summary statistical reports</p>
                     </div>
                 </div>
 
