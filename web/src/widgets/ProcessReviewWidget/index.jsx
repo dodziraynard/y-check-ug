@@ -176,9 +176,6 @@ function ProcessReviewWidget() {
               Summary of the entire process for <strong>{adolescent?.fullname}</strong> ({adolescent?.pid}).
             </Text>
             <Heading as="h3" size="sm" mb={4}>Activity Time</Heading>
-            <Text mt={2}>
-              Time spent <strong>(total 3 hours)</strong>
-            </Text>
             <TableContainer mt={4} >
               <Table variant="simple">
                 <Thead>

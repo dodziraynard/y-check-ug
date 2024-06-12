@@ -321,7 +321,7 @@ class PendingReferralNotifications(generics.GenericAPIView):
             })
 
 from django.db.models import Count
-class GetAdolescentDistribution(generics.GenericAPIView):
+class BasicDemographics(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     # @method_decorator(cache_page(60 * 2))
@@ -331,7 +331,7 @@ class GetAdolescentDistribution(generics.GenericAPIView):
 
         # Initialize dictionaries to store counts
         age_gender_counts = {}
-        total_counts = {'Male': 0, 'Female': 0, 'total': 0}
+        total_counts = {'male': 0, 'female': 0, 'total': 0}
 
         for record in adolescents:
             age = record['age']
@@ -340,7 +340,7 @@ class GetAdolescentDistribution(generics.GenericAPIView):
             
             # Update age_gender_counts
             if age not in age_gender_counts:
-                age_gender_counts[age] = {'Male': 0, 'Female': 0, 'total': 0}
+                age_gender_counts[age] = {'male': 0, 'female': 0, 'total': 0}
             
             age_gender_counts[age][gender] = count
             age_gender_counts[age]['total'] += count
@@ -352,7 +352,7 @@ class GetAdolescentDistribution(generics.GenericAPIView):
         # Calculate percentages
         total_adolescents = total_counts['total']
         for age in age_gender_counts:
-            for gender in ['Male', 'Female', 'total']:
+            for gender in ['male', 'female', 'total']:
                 count = age_gender_counts[age][gender]
                 percentage = (count / total_adolescents) * 100
                 age_gender_counts[age][f'{gender}_percentage'] = percentage
@@ -362,17 +362,17 @@ class GetAdolescentDistribution(generics.GenericAPIView):
         for age, counts in sorted(age_gender_counts.items()):
             response_data.append({
                 'Age': age,
-                'Female': counts['Female'],
-                'Male': counts['Male'],
+                'female': counts['female'],
+                'male': counts['male'],
                 'Total': counts['total'],
                 'Percentage': f"{counts['total_percentage']:.0f}%"
             })
 
         response_data.append({
             'Age': 'Total',
-            'Female': f"{total_counts['Female']} ({(total_counts['Female'] / total_adolescents) * 100:.0f}%)",
-            'Male': f"{total_counts['Male']} ({(total_counts['Male'] / total_adolescents) * 100:.0f}%)",
+            'female': f"{total_counts['female']} ({(total_counts['female'] / total_adolescents) * 100:.0f}%)",
+            'male': f"{total_counts['male']} ({(total_counts['male'] / total_adolescents) * 100:.0f}%)",
             'Total': total_adolescents
         })
 
-        return Response(response_data)
+        return Response({"basic_demographics":response_data})

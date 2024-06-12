@@ -235,6 +235,12 @@ export const resourceApiSlice = createApi({
                 },
             }),
 
+            getBasicDemographics: builder.query({
+                query() {
+                    return `/basic-demographics/`;
+                },
+            }),
+
             putUpdateAdolescentStatus: builder.mutation({
                 query({ body, pid }) {
                     return {
@@ -315,7 +321,8 @@ export const {
     useChangeOwnPasswordMutation,
 
     // Dashboard stats
-    useLazyGetFlagColourDistributionQuery
+    useLazyGetFlagColourDistributionQuery,
+    useLazyGetBasicDemographicsQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;
