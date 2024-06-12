@@ -319,3 +319,4 @@ class PendingReferralNotifications(generics.GenericAPIView):
                 "total_pending_referral_count":
                 total_pending_referral_count,
             })
+

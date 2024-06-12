@@ -3,6 +3,7 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_api.permissions import APILevelPermissionCheck
 from rest_api.serializers import *
+from django.db.models import Count
 from dashboard.forms import *
 from rest_api.views.mixins import QUERY_PAGE_SIZE
 from dashboard.models import *
@@ -10,7 +11,7 @@ from rest_framework import generics
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from .types import FlagStatus
-
+from .utils import get_demographic_data
 logger = logging.getLogger(__name__)
 
 
@@ -140,3 +141,28 @@ class GetAdolescentType(generics.GenericAPIView):
             "total_service": total_service_count,
             "total_facility": total_facility_count,
         })
+
+
+class BasicDemographics(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, format=None):
+        response_data = get_demographic_data(adolescent_type="basic")
+        return Response({"basic_demographics": response_data})
+
+class SecondaryDemographics(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, format=None):
+        response_data = get_demographic_data(adolescent_type="secondary")
+        return Response({"secondary_demographics": response_data})
+    
+class CommunityDemographics(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, format=None):
+        response_data = get_demographic_data(adolescent_type="community")
+        return Response({"community_demographics": response_data})

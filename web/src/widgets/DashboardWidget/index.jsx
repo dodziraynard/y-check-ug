@@ -4,10 +4,11 @@ import './style.scss';
 import AdolescentFlags from '../../components/AdolescentFlags';
 import ActivityTime from '../../components/ActivityTime';
 import FlagYieldsPieChart from '../../components/graph/FlagYieldsPieChart';
-
 const PieChart = React.lazy(() => import('../../components/graph/PieChart'));
 const BarChart = React.lazy(() => import('../../components/graph/BarChart'));
-
+import BasicDemographics from '../../components/BasicDemographics';
+import SecondaryDemographics from '../../components/SecondaryDemographics';
+import CommunityDemographics from '../../components/CommunityDemographics';
 function DashboardWidget() {
 
     return (
@@ -41,6 +42,15 @@ function DashboardWidget() {
                 </div>
                 <div className="col-12 mt-3 col-lg-6 my-5">
                     <ActivityTime />
+                </div>
+                <div className="col-12 mt-3 col-lg-6 my-5">
+                    <BasicDemographics />
+                </div>
+                <div className="col-12 mt-3 col-lg-6 my-5">
+                    <SecondaryDemographics />
+                </div>
+                <div className="col-12 mt-3 col-lg-6 my-5">
+                    <CommunityDemographics />
                 </div>
             </div>
         </div>

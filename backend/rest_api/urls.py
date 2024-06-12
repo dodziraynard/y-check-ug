@@ -81,4 +81,7 @@ urlpatterns += [
     path("reports/<int:table_number>/", views.TableReportsView.as_view()),
     path("adolescent-flags/", views.AllAdolescentsFlagCheckView.as_view()),
     path("flag-colour-distribution/", views.FlagColourDistributionView.as_view()),
+    path("basic-demographics/", views.BasicDemographics.as_view()),
+    path("secondary-demographics/", views.SecondaryDemographics.as_view()),
+    path("community-demographics/", views.CommunityDemographics.as_view()),
 ]
