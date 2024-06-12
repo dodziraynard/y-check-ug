@@ -90,6 +90,7 @@ interface ApiService {
         @Query("current_question_id") currentQuestionId: String,
         @Query("action") action: String? = "next",
         @Query("question_type") questionType: String? = "survey",
+        @Query("query") query: String? = "",
     ): Call<GetMultipleQuestionsResponse?>?
 
     @FormUrlEncoded

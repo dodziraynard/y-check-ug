@@ -53,9 +53,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[QuestionnaireActivityViewModel::class.java]
 
-
         adolescent = intent.getParcelableExtra("adolescent")
-
         audioPlayer = AudioPlayer()
 
         if (adolescent == null) {
