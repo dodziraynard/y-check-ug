@@ -46,12 +46,6 @@ function DashboardWidget() {
                 <div className="col-12 mt-3 col-lg-6 my-5">
                     <BasicDemographics />
                 </div>
-                <div className="col-12 mt-3 col-lg-6 my-5">
-                    <SecondaryDemographics />
-                </div>
-                <div className="col-12 mt-3 col-lg-6 my-5">
-                    <CommunityDemographics />
-                </div>
             </div>
         </div>
     );
