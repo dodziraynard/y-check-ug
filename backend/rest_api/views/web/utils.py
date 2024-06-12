@@ -46,8 +46,8 @@ def get_demographic_data(adolescent_type):
 
     response_data.append({
         'Age': 'Total',
-        'female': f"{total_counts['female']} ({(total_counts['female'] / total_adolescents) * 100:.0f}%)",
-        'male': f"{total_counts['male']} ({(total_counts['male'] / total_adolescents) * 100:.0f}%)",
+        'female': f"{total_counts['female']} ({(total_counts['female'] / max(1, total_adolescents)) * 100:.0f}%)",
+        'male': f"{total_counts['male']} ({(total_counts['male'] / max(1, total_adolescents)) * 100:.0f}%)",
         'Total': total_adolescents
     })
 
