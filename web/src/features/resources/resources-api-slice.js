@@ -240,6 +240,17 @@ export const resourceApiSlice = createApi({
                     return `/basic-demographics/`;
                 },
             }),
+            getSecondaryDemographics: builder.query({
+                query() {
+                    return `/secondary-demographics/`;
+                },
+            }),
+
+            getCommunityDemographics: builder.query({
+                query() {
+                    return `/community-demographics/`;
+                },
+            }),
 
             putUpdateAdolescentStatus: builder.mutation({
                 query({ body, pid }) {
@@ -322,7 +333,9 @@ export const {
 
     // Dashboard stats
     useLazyGetFlagColourDistributionQuery,
-    useLazyGetBasicDemographicsQuery
+    useLazyGetBasicDemographicsQuery,
+    useLazyGetSecondaryDemographicsQuery,
+    useLazyGetCommunityDemographicsQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;
