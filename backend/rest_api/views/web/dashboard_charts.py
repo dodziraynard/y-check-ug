@@ -144,7 +144,7 @@ class GetAdolescentType(generics.GenericAPIView):
 
 
 class BasicDemographics(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
@@ -152,7 +152,7 @@ class BasicDemographics(generics.GenericAPIView):
         return Response({"basic_demographics": response_data})
 
 class SecondaryDemographics(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
@@ -160,7 +160,7 @@ class SecondaryDemographics(generics.GenericAPIView):
         return Response({"secondary_demographics": response_data})
     
 class CommunityDemographics(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
