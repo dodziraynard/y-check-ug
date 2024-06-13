@@ -2,8 +2,8 @@ package com.hrd.ycheck.ui.questionnaire
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +16,7 @@ import com.hrd.ycheck.R
 import com.hrd.ycheck.components.compose.MultipleQuestionnaireUI
 import com.hrd.ycheck.components.compose.YCheckTheme
 import com.hrd.ycheck.databinding.ActivityQuestionnaireBinding
+import com.hrd.ycheck.databinding.SearchQuestionsBottomSheetLayoutBinding
 import com.hrd.ycheck.databinding.SectionInstructionBottomSheetLayoutBinding
 import com.hrd.ycheck.game.GameActivity
 import com.hrd.ycheck.models.Adolescent
@@ -117,6 +118,23 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
             validateAndSubmit(adolescentId)
         }
 
+        binding.searchQuestions.setOnClickListener {
+            val bottomSheetDialog = BottomSheetDialog(this@MultipleQuestionnaireActivity)
+            val dialogBinding =
+                SearchQuestionsBottomSheetLayoutBinding.inflate(layoutInflater)
+            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetDialog.setContentView(dialogBinding.root)
+
+            dialogBinding.searchButton.setOnClickListener {
+                val query = dialogBinding.searchInput.text.toString()
+                viewModel.getMultipleQuestion(
+                    adolescentId, "", "next", questionnaireType, query
+                )
+                bottomSheetDialog.dismiss()
+            }
+            bottomSheetDialog.show()
+        }
+
         viewModel.isLoading.observe(this) { value ->
             if (value) {
                 binding.nextButton.isEnabled = false
@@ -158,7 +176,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
                 }
 
                 // Create a map of question id to SubmittedResponses
-                submittedAdolescentResponses = mutableMapOf<String, SubmittedAdolescentResponse>()
+                submittedAdolescentResponses = mutableMapOf()
                 submittedResponses?.forEach { submittedResponse ->
                     submittedAdolescentResponses[submittedResponse.questionId] = submittedResponse
                 }
