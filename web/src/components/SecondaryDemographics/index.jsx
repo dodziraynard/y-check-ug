@@ -21,9 +21,7 @@ function SecondaryDemographics() {
     return (
 
         <Fragment>
-            <div className="review-widget">
-
-            <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
+            <section className='page-review mt-3' style={{ maxWidth: "1024px", margin: "auto" }}>
                 <div className="d-flex justify-content-between">
                     <div className="">
                         <Heading as="h3" size="sm" mb={4}>Secondary Demographics</Heading>
@@ -38,7 +36,7 @@ function SecondaryDemographics() {
                 demographics={secondaryDemographics}/>
                 }  
             </section>
-            </div>
+           
         </Fragment>
     )
 

@@ -34,10 +34,10 @@ function BasicDemographics() {
                 </div>
                 <DemographicsTable
                     demographics={basicDemographics}/>
-                <SecondaryDemographics/>
-                <CommunityDemographics/>
             </section>
             </div>
+                <SecondaryDemographics/>
+                <CommunityDemographics/>
         </Fragment>
     )
 
