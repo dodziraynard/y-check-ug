@@ -173,4 +173,4 @@ class AgeDistributionDemographics(generics.GenericAPIView):
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
         response_data = get_age_distribution_data()
-        return Response({"age_distribution": response_data})
+        return Response({"age_distributions": response_data})

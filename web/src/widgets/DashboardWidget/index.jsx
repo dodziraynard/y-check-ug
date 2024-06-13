@@ -7,8 +7,8 @@ import FlagYieldsPieChart from '../../components/graph/FlagYieldsPieChart';
 const PieChart = React.lazy(() => import('../../components/graph/PieChart'));
 const BarChart = React.lazy(() => import('../../components/graph/BarChart'));
 import BasicDemographics from '../../components/BasicDemographics';
-import SecondaryDemographics from '../../components/SecondaryDemographics';
-import CommunityDemographics from '../../components/CommunityDemographics';
+import AgeDistributions from '../../components/AgeDistribution';
+
 function DashboardWidget() {
 
     return (
@@ -45,6 +45,9 @@ function DashboardWidget() {
                 </div>
                 <div className="col-12 mt-3 col-lg-6 my-5">
                     <BasicDemographics />
+                </div>
+                <div className="col-12 mt-3 col-lg-6 my-5">
+                    <AgeDistributions />
                 </div>
             </div>
         </div>

@@ -251,6 +251,11 @@ export const resourceApiSlice = createApi({
                     return `/community-demographics/`;
                 },
             }),
+            getAgeDistributions: builder.query({
+                query() {
+                    return `/age-distributions/`;
+                },
+            }),
 
             putUpdateAdolescentStatus: builder.mutation({
                 query({ body, pid }) {
@@ -335,7 +340,8 @@ export const {
     useLazyGetFlagColourDistributionQuery,
     useLazyGetBasicDemographicsQuery,
     useLazyGetSecondaryDemographicsQuery,
-    useLazyGetCommunityDemographicsQuery
+    useLazyGetCommunityDemographicsQuery,
+    useLazyGetAgeDistributionsQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;
