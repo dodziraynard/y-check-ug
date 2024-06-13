@@ -30,7 +30,7 @@ def get_demographic_data(adolescent_type):
     for age in age_gender_counts:
         for gender in ['male', 'female', 'total']:
             count = age_gender_counts[age][gender]
-            percentage = (count / total_adolescents) * 100
+            percentage = (count / max(1, total_adolescents)) * 100
             age_gender_counts[age][f'{gender}_percentage'] = percentage
 
     # Prepare the response data
@@ -82,7 +82,7 @@ def get_age_distribution_data():
     total_adolescents = total_counts['total']
     for age in age_type_counts:
         count = age_type_counts[age]['total']
-        percentage = (count / total_adolescents) * 100
+        percentage = (count / max(1, total_adolescents)) * 100
         age_type_counts[age]['percentage'] = percentage
 
     # Prepare the response data
