@@ -106,10 +106,7 @@ class GetRecommendedServices(generics.GenericAPIView):
             return Response({"error_message": f"{pid} not found."})
 
         problematic_flags = SummaryFlag.objects.filter(
-            adolescent=adolescent).exclude(
-                (Q(computed_color_code=Colors.GREEN.value)
-                 & Q(updated_color_code=None))
-                | Q(updated_color_code=Colors.GREEN.value))
+            adolescent=adolescent, final_color_code=Colors.RED.value)
         label_ids = problematic_flags.values_list("label", flat=True)
 
         already_referred_services = Referral.objects.filter(
