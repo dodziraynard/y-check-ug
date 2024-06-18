@@ -85,4 +85,5 @@ urlpatterns += [
     path("secondary-demographics/", views.SecondaryDemographics.as_view()),
     path("community-demographics/", views.CommunityDemographics.as_view()),
     path("age-distributions/", views.AgeDistributionDemographics.as_view()),
+    path("flag-colour-type-distribution/", views.FlagColourDistributionTypeView.as_view()),
 ]
