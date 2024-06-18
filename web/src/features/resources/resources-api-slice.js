@@ -256,6 +256,11 @@ export const resourceApiSlice = createApi({
                     return `/age-distributions/`;
                 },
             }),
+            getPositiveScreened: builder.query({
+                query() {
+                    return `/positive-screened/`;
+                },
+            }),
 
             putUpdateAdolescentStatus: builder.mutation({
                 query({ body, pid }) {
@@ -341,7 +346,8 @@ export const {
     useLazyGetBasicDemographicsQuery,
     useLazyGetSecondaryDemographicsQuery,
     useLazyGetCommunityDemographicsQuery,
-    useLazyGetAgeDistributionsQuery
+    useLazyGetAgeDistributionsQuery,
+    useLazyGetPositiveScreenedQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;

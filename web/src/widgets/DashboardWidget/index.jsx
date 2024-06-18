@@ -8,7 +8,7 @@ const PieChart = React.lazy(() => import('../../components/graph/PieChart'));
 const BarChart = React.lazy(() => import('../../components/graph/BarChart'));
 import BasicDemographics from '../../components/BasicDemographics';
 import AgeDistributions from '../../components/AgeDistribution';
-
+import PositiveScreen from '../../components/PositiveScreen';
 function DashboardWidget() {
 
     return (
@@ -48,6 +48,7 @@ function DashboardWidget() {
                 </div>
                 <div className="col-12 mt-3 col-lg-6 my-5">
                     <AgeDistributions />
+                    <PositiveScreen/>
                 </div>
             </div>
         </div>

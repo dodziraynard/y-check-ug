@@ -322,7 +322,7 @@ class PendingReferralNotifications(generics.GenericAPIView):
             })
 
 
-class FlagColourDistributionTypeView(generics.GenericAPIView):
+class PositiveScreenedView(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
@@ -341,7 +341,7 @@ class FlagColourDistributionTypeView(generics.GenericAPIView):
             if total_red_flags > 0:
                 result.append({
                     "name": label.name,
-                    "Total Red Flags": total_red_flags,
+                    "total": total_red_flags,
                     **category_counts
                 })
 
