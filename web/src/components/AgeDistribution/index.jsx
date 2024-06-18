@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
 import { useLazyGetAgeDistributionsQuery } from '../../features/resources/resources-api-slice';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
+import * as XLSX from 'xlsx';
 
 function AgeDistributions() {
     const [getAgaDistribution, { data: response = [], isLoading, error }] = useLazyGetAgeDistributionsQuery()
@@ -15,7 +16,26 @@ function AgeDistributions() {
         if (response && Array.isArray(response?.age_distributions)) {
             setAgeDistributions(response?.age_distributions);
         }
-      }, [response])
+    }, [response])
+
+    const exportToExcel = () => {
+        const data = ageDistributions.map(distribution => ({
+            Age: distribution?.Age,
+            Basic: distribution?.Basic,
+            Community: distribution?.Community,
+            Secondary: distribution?.Secondary,
+            Total: distribution?.Total,
+            Percentage: distribution?.Percentage
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Age Distributions");
+
+        XLSX.writeFile(workbook, "AgeDistributions.xlsx");
+    };
+
+    
     return (
 
         <Fragment>
@@ -27,7 +47,12 @@ function AgeDistributions() {
                         <Heading as="h3" size="sm" mb={4}>Age Distribution</Heading>
                     </div>
                     <div className="mx-2">
-                        <button className="btn btn-sm btn-outline-primary d-flex" > <i className="bi bi-file-spreadsheet-fill"></i>  Export</button> 
+                            <button 
+                                className="btn btn-sm btn-outline-primary d-flex" 
+                                onClick={exportToExcel}
+                            >
+                                <i className="bi bi-file-spreadsheet-fill"></i> Export
+                            </button> 
                     </div>
                 </div>
                 { isLoading? <Spinner/> :
