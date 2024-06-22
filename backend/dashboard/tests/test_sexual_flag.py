@@ -20,8 +20,8 @@ class SexualFlaggingTestCase(TestCase):
         assert Question.objects.filter(
             question_id__in=questions_ids).count() == len(questions_ids)
 
-    def test_sexual_red_flag1(self):
-        """Test that SEXUAL RISK is flagged red if Q604 >= 2"""
+    def test_sexual_green_flag(self):
+        """Test that SEXUAL RISK is flagged red if Q604 > 2"""
 
         # GIVEN:
         adolescent = self.adolescent
@@ -45,7 +45,7 @@ class SexualFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="SEXUAL RISK").first().get_final_colour() == Colors.RED.value
+            label__name="SEXUAL RISK").first().get_final_colour() == Colors.GREEN.value
 
     def test_sexual_red_flag2(self):
         """Test that SEXUAL RISK is flagged red if Q604 >= 2"""

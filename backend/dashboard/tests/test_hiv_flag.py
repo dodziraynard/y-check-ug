@@ -16,7 +16,7 @@ class HIVFlaggingTestCase(TestCase):
         return super().setUp()
 
     def test_hiv_questions_exists(self):
-        questions_ids = ["Q1000", "Q1001", "Q1002", "Q1003", "Q1004"]
+        questions_ids = ["Q1003", "Q1004", "Q1005", "Q1006"]
         assert Question.objects.filter(
             question_id__in=questions_ids).count() == len(questions_ids)
 
@@ -25,8 +25,8 @@ class HIVFlaggingTestCase(TestCase):
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q1001", "Q1002", "Q1003"]
-        responses = ["Yes", "Positive", "No"]
+        questions_ids = ["Q1003", "Q1004", "Q1005"]
+        responses = ["No", "Don’t want to say", "No"]
 
         # WHEN:
         # Respond
@@ -45,15 +45,15 @@ class HIVFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="HIV").first().get_final_colour() == Colors.RED.value
+            label__name="HIV R").first().get_final_colour() == Colors.RED.value
 
     def test_hiv_red_flag2(self):
         """Test that HIV is flagged red"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q1001", "Q1000"]
-        responses = ["Yes", "Yes, I am HIV positive"]
+        questions_ids = ["Q1006"]
+        responses = ["Yes"]
 
         # WHEN:
         # Respond
@@ -72,14 +72,14 @@ class HIVFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="HIV").first().get_final_colour() == Colors.RED.value
+            label__name="HIV R").first().get_final_colour() == Colors.RED.value
 
     def test_hiv_green_flag1(self):
         """Test that HIV is flagged green"""
 
         # GIVEN:
         adolescent = self.adolescent
-        questions_ids = ["Q1001"]
+        questions_ids = ["Q1006"]
         responses = ["No"]
 
         # WHEN:
@@ -99,4 +99,4 @@ class HIVFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="HIV").first().get_final_colour() == Colors.GREEN.value
+            label__name="HIV R").first().get_final_colour() == Colors.GREEN.value
