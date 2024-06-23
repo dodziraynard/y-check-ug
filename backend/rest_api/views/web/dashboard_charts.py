@@ -11,7 +11,7 @@ from rest_framework import generics
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from .types import FlagStatus
-from .utils import get_demographic_data
+from .utils import get_demographic_data,get_age_distribution_data
 logger = logging.getLogger(__name__)
 
 
@@ -166,3 +166,11 @@ class CommunityDemographics(generics.GenericAPIView):
     def get(self, request, format=None):
         response_data = get_demographic_data(adolescent_type="community")
         return Response({"community_demographics": response_data})
+    
+class AgeDistributionDemographics(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, format=None):
+        response_data = get_age_distribution_data()
+        return Response({"age_distributions": response_data})

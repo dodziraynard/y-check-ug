@@ -21,9 +21,9 @@ class PhysicalDisabilityFlaggingTestCase(TestCase):
             question_id__in=questions_ids).count() == len(questions_ids)
 
     def test_physical_disability_red_flag1(self):
-        """Test that PHYSICAL DISABILITY is flagged red 
-        if responds ‘Yes, a lot of difficulty’, ‘Cannot do it at all’,
-        or ‘Don’t know’ to Q901, Q902, Q903 OR Q904
+        """Test that PHYSICAL IMPAIRMENT is flagged red 
+        if responds 'Yes, a lot of difficulty', 'Cannot do it at all',
+        or to Q901, Q902, Q903 OR Q904
         """
 
         # GIVEN:
@@ -48,7 +48,7 @@ class PhysicalDisabilityFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="PHYSICAL DISABILITY").first().get_final_colour() == Colors.RED.value
+            label__name="PHYSICAL IMPAIRMENT").first().get_final_colour() == Colors.RED.value
 
     def test_physical_disability_red_flag2(self):
         """Test that PHYSICAL DISABILITY is flagged red 
@@ -78,12 +78,11 @@ class PhysicalDisabilityFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="PHYSICAL DISABILITY").first().get_final_colour() == Colors.RED.value
+            label__name="PHYSICAL IMPAIRMENT").first().get_final_colour() == Colors.RED.value
 
-    def test_physical_disability_red_flag3(self):
+    def test_physical_disability_orange_flag(self):
         """Test that PHYSICAL DISABILITY is flagged red 
-        if responds ‘Yes, a lot of difficulty’, ‘Cannot do it at all’,
-        or ‘Don’t know’ to Q901, Q902, Q903 OR Q904
+        if responds ‘Don’t know’ to Q901, Q902, Q903 OR Q904
         """
 
         # GIVEN:
@@ -108,7 +107,7 @@ class PhysicalDisabilityFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="PHYSICAL DISABILITY").first().get_final_colour() == Colors.RED.value
+            label__name="PHYSICAL IMPAIRMENT").first().get_final_colour() == Colors.ORANGE.value
 
     def test_physical_disability_green_flag1(self):
         """Test that PHYSICAL DISABILITY is flagged green 
@@ -138,7 +137,7 @@ class PhysicalDisabilityFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="PHYSICAL DISABILITY").first().get_final_colour() == Colors.GREEN.value
+            label__name="PHYSICAL IMPAIRMENT").first().get_final_colour() == Colors.GREEN.value
 
     def test_physical_disability_green_flag2(self):
         """Test that PHYSICAL DISABILITY is flagged green 
@@ -168,4 +167,4 @@ class PhysicalDisabilityFlaggingTestCase(TestCase):
         # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
-            label__name="PHYSICAL DISABILITY").first().get_final_colour() == Colors.GREEN.value
+            label__name="PHYSICAL IMPAIRMENT").first().get_final_colour() == Colors.GREEN.value

@@ -11,7 +11,8 @@ from dashboard.models import *
 from rest_framework import generics
 from django.contrib.auth import authenticate
 from django.db.models import Q
-
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -320,3 +321,29 @@ class PendingReferralNotifications(generics.GenericAPIView):
                 total_pending_referral_count,
             })
 
+
+class PositiveScreenedView(generics.GenericAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        red_flag_code = Colors.RED.value
+        categories = ["basic", "secondary", "community"]
+        result = []
+
+        for label in FlagLabel.objects.all():
+            red_flags = SummaryFlag.objects.filter(final_color_code=red_flag_code, label=label)
+            category_counts = {
+                category: red_flags.filter(adolescent__type=category).count()
+                for category in categories
+            }
+            total_red_flags = sum(category_counts.values())
+            if total_red_flags > 0:
+                result.append({
+                    "name": label.name,
+                    "total": total_red_flags,
+                    **category_counts
+                })
+
+        response_data = {"red_flag_distribution": result}
+        return Response(response_data)

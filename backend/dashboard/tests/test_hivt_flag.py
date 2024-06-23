@@ -16,11 +16,11 @@ class HIVTFlaggingTestCase(TestCase):
         return super().setUp()
 
     def test_hivt_questions_exists(self):
-        questions_ids = ["Q13.16", "Q13.13"]
+        questions_ids = ["Q13.16"]
         assert Question.objects.filter(
             question_id__in=questions_ids).count() == len(questions_ids)
 
-    def test_hivt_red_flag1(self):
+    def test_hivt_red_flag(self):
         """Test that HIV Tis flagged red"""
 
         # GIVEN:
@@ -47,56 +47,56 @@ class HIVTFlaggingTestCase(TestCase):
             adolescent=self.adolescent,
             label__name="HIV T").first().get_final_colour() == Colors.RED.value
 
-    def test_hivt_red_flag2(self):
-        """Test that HIV Tis flagged red"""
+    # def test_hivt_red_flag2(self):
+    #     """Test that HIV Tis flagged red"""
 
-        # GIVEN:
-        adolescent = self.adolescent
-        questions_ids = ["Q13.13"]
-        responses = ["Reports positive, Not on ART"]
+    #     # GIVEN:
+    #     adolescent = self.adolescent
+    #     questions_ids = ["Q13.13"]
+    #     responses = ["Reports positive, Not on ART"]
 
-        # WHEN:
-        # Respond
-        for index, response_value in enumerate(responses):
-            question = Question.objects.filter(
-                question_id=questions_ids[index]).first()
-            response = AdolescentResponse.objects.create(
-                adolescent=adolescent,
-                question=question,
-            )
-            response.chosen_options.set(
-                question.options.filter(value=response_value))
+    #     # WHEN:
+    #     # Respond
+    #     for index, response_value in enumerate(responses):
+    #         question = Question.objects.filter(
+    #             question_id=questions_ids[index]).first()
+    #         response = AdolescentResponse.objects.create(
+    #             adolescent=adolescent,
+    #             question=question,
+    #         )
+    #         response.chosen_options.set(
+    #             question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+    #     SummaryFlag.compute_flag_color(adolescent)
 
-        # THEN:
-        assert SummaryFlag.objects.filter(
-            adolescent=self.adolescent,
-            label__name="HIV T").first().get_final_colour() == Colors.RED.value
+    #     # THEN:
+    #     assert SummaryFlag.objects.filter(
+    #         adolescent=self.adolescent,
+    #         label__name="HIV T").first().get_final_colour() == Colors.RED.value
 
-    def test_hivt_green_flag2(self):
-        """Test that HIV Tis flagged green"""
+    # def test_hivt_green_flag2(self):
+    #     """Test that HIV Tis flagged green"""
 
-        # GIVEN:
-        adolescent = self.adolescent
-        questions_ids = ["Q13.13"]
-        responses = ["Yes"]
+    #     # GIVEN:
+    #     adolescent = self.adolescent
+    #     questions_ids = ["Q13.13"]
+    #     responses = ["Yes"]
 
-        # WHEN:
-        # Respond
-        for index, response_value in enumerate(responses):
-            question = Question.objects.filter(
-                question_id=questions_ids[index]).first()
-            response = AdolescentResponse.objects.create(
-                adolescent=adolescent,
-                question=question,
-            )
-            response.chosen_options.set(
-                question.options.filter(value=response_value))
+    #     # WHEN:
+    #     # Respond
+    #     for index, response_value in enumerate(responses):
+    #         question = Question.objects.filter(
+    #             question_id=questions_ids[index]).first()
+    #         response = AdolescentResponse.objects.create(
+    #             adolescent=adolescent,
+    #             question=question,
+    #         )
+    #         response.chosen_options.set(
+    #             question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+    #     SummaryFlag.compute_flag_color(adolescent)
 
-        # THEN:
-        assert SummaryFlag.objects.filter(
-            adolescent=self.adolescent,
-            label__name="HIV T").first().get_final_colour() == Colors.GREEN.value
+    #     # THEN:
+    #     assert SummaryFlag.objects.filter(
+    #         adolescent=self.adolescent,
+    #         label__name="HIV T").first().get_final_colour() == Colors.GREEN.value

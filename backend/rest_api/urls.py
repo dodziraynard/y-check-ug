@@ -84,4 +84,6 @@ urlpatterns += [
     path("basic-demographics/", views.BasicDemographics.as_view()),
     path("secondary-demographics/", views.SecondaryDemographics.as_view()),
     path("community-demographics/", views.CommunityDemographics.as_view()),
+    path("age-distributions/", views.AgeDistributionDemographics.as_view()),
+    path("positive-screened/", views.PositiveScreenedView.as_view()),
 ]

@@ -27,7 +27,7 @@ class HomeFlaggingTestCase(TestCase):
         adolescent = self.adolescent
 
         # WHEN:
-        # Respond 'well’ to q102
+        # Respond 'Very fine to q102
         question_q102 = Question.objects.filter(
             text__icontains="I am fine with people I stay with").first()
         response_q102 = AdolescentResponse.objects.create(
@@ -35,9 +35,9 @@ class HomeFlaggingTestCase(TestCase):
             question=question_q102,
         )
         response_q102.chosen_options.set(
-            question_q102.options.filter(value__icontains="well"))
+            question_q102.options.filter(value__icontains="Very fine"))
 
-        # Respond 'Yes, about most things' to q103
+        # # Respond 'Yes, about most problems' to q103
         question_q103 = Question.objects.filter(
             text__icontains="I have someone at").first()
         response_q103 = AdolescentResponse.objects.create(
@@ -45,15 +45,17 @@ class HomeFlaggingTestCase(TestCase):
             question=question_q103,
         )
         response_q103.chosen_options.set(
-            question_q103.options.filter(value__icontains="Yes, about most things"))
+            question_q103.options.filter(value__icontains="Yes, about most problems"))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(self.adolescent)     
+        
 
-        # THEN:
+        # # THEN:
         assert SummaryFlag.objects.filter(
             adolescent=self.adolescent,
             label__name="HOME").first().get_final_colour() == Colors.GREEN.value
-
+    
+    
     def test_home_orange_flag(self):
         """Test that correct responses to home questions yield orange flag."""
 
@@ -61,7 +63,7 @@ class HomeFlaggingTestCase(TestCase):
         adolescent = self.adolescent
 
         # WHEN:
-        # Respond 'somehow to q102
+        # Respond 'Sometimes fine to q102
         question_q102 = Question.objects.filter(
             text__icontains="I am fine with people I stay with").first()
         response_q102 = AdolescentResponse.objects.create(
@@ -69,17 +71,17 @@ class HomeFlaggingTestCase(TestCase):
             question=question_q102,
         )
         response_q102.chosen_options.set(
-            question_q102.options.filter(value__icontains="somehow"))
+            question_q102.options.filter(value__icontains="Sometimes fine"))
 
         # Respond 'Yes, about most things' to q103
         question_q103 = Question.objects.filter(
-            text__icontains="I have someone at").first()
+            text__icontains="I have someone at home that I can talk to about my problems").first()
         response_q103 = AdolescentResponse.objects.create(
             adolescent=adolescent,
             question=question_q103,
         )
         response_q103.chosen_options.set(
-            question_q103.options.filter(value__icontains="Yes, about most things"))
+            question_q103.options.filter(value__icontains="Depending on the problem"))
 
         SummaryFlag.compute_flag_color(self.adolescent)
 
@@ -103,7 +105,7 @@ class HomeFlaggingTestCase(TestCase):
             question=question_q102,
         )
         response_q102.chosen_options.set(
-            question_q102.options.filter(value__icontains="sometimes"))
+            question_q102.options.filter(value__icontains="Sometimes fine"))
 
         SummaryFlag.compute_flag_color(adolescent)
 
@@ -119,7 +121,7 @@ class HomeFlaggingTestCase(TestCase):
         adolescent = self.adolescent
 
         # WHEN:
-        # Respond 'we don’t get along to q102
+        # Respond 'Not fine at all to q102
         question_q102 = Question.objects.filter(
             text__icontains="I am fine with people I stay with").first()
         response_q102 = AdolescentResponse.objects.create(
@@ -127,9 +129,9 @@ class HomeFlaggingTestCase(TestCase):
             question=question_q102,
         )
         response_q102.chosen_options.set(
-            question_q102.options.filter(value__icontains="we don’t get along"))
+            question_q102.options.filter(value__icontains="Not fine at all"))
 
-        # Respond 'Yes, about most things' to q103
+        # Respond 'No one' to q103
         question_q103 = Question.objects.filter(
             text__icontains="I have someone at").first()
         response_q103 = AdolescentResponse.objects.create(
@@ -161,7 +163,7 @@ class HomeFlaggingTestCase(TestCase):
             question=question_q102,
         )
         response_q102.chosen_options.set(
-            question_q102.options.filter(value__icontains="we don’t get along"))
+            question_q102.options.filter(value__icontains="Not fine at all"))
 
         SummaryFlag.compute_flag_color(adolescent)
 
