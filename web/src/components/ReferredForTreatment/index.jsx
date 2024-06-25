@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 
 function ReferredForTreatment() {
     const [getReferredForTreatment, { data: response = [], isLoading, error }] = useLazyGetReferredForTreatmentQuery()
-    const [treaTedOnsite, settreaTedOnsite] = useState([])
+    const [referredForTreatment, setReferredForTreatment] = useState([])
 
     useEffect(() => {
         getReferredForTreatment();
@@ -14,12 +14,12 @@ function ReferredForTreatment() {
 
     useEffect(() => {
         if (response && Array.isArray(response?.referred_for_treatment)) {
-            settreaTedOnsite(response?.referred_for_treatment);
+            setReferredForTreatment(response?.referred_for_treatment);
         }
     }, [response])
 
     const exportToExcel = () => {
-        const data = treaTedOnsite.map(referred => ({
+        const data = referredForTreatment.map(referred => ({
             Condition: referred?.name,
             Total: referred?.total,
             Basic: referred?.basic,
@@ -67,7 +67,7 @@ function ReferredForTreatment() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {treaTedOnsite.map((referred, index) => (
+                            {referredForTreatment.map((referred, index) => (
                                 <Tr key={index}>
                                 <Td>{referred?.name}</Td>
                                 <Td>{referred?.total}</Td>
