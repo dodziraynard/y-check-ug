@@ -19,8 +19,8 @@
 
         <ImageButton
             android:id="@+id/next_unanswered_question_button"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_2sdp"
             android:backgroundTint="@android:color/white"
@@ -32,8 +32,8 @@
 
         <ImageButton
             android:id="@+id/search_questions"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_2sdp"
             android:backgroundTint="@android:color/white"
@@ -45,8 +45,8 @@
 
         <ImageButton
             android:id="@+id/close_quiz_button"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_2sdp"
             android:backgroundTint="@android:color/white"

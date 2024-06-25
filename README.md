@@ -2,11 +2,11 @@
 
 ## Commands
 * Test fitures
-```python
-python manage.py dumpdata dashboard.Section dashboard.QuestionGroup dashboard.Question > dashboard/fixtures/v1.json
+```bash
+make dft
 ```
 
 ## Testing
-```python
-python manage.py test
+```bash
+make run_tests
 ```

@@ -321,7 +321,7 @@ function AdolescentReferralsWidget() {
                     <div className='d-flex justify-content-end'>
                         <Button className="d-flex" onClick={showNewReferralModal}>
                             <i className="bi bi-h-circle me-2"></i>
-                            New Referral
+                            New Action
                         </Button>
                     </div>
                 </section>

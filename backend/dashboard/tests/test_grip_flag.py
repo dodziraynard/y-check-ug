@@ -13,7 +13,7 @@ class GripFlaggingTestCase(TestCase):
         self.adolescent = mommy.make(Adolescent)
         self.adolescent.gender = "male"
         self.adolescent.dob = self.adolescent.created_at - \
-            timedelta(days=round(10 * 365.25))
+            timedelta(days=round(10 * 365.3))
         return super().setUp()
 
     def test_grip_questions_exists(self):

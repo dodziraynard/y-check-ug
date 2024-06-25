@@ -470,7 +470,7 @@ function SummaryFlagWidget() {
                                 <Link to={"referrals?new=true"}>
                                     <Button className="d-flex mx-2" >
                                         <i className="bi bi-plus me-2"></i>
-                                        New Referral
+                                        New Action
                                     </Button>
                                 </Link> : ""
                             }
@@ -478,7 +478,7 @@ function SummaryFlagWidget() {
                                 <Link to={"referrals"}>
                                     <Button className="d-flex">
                                         <i className="bi bi-h-circle me-2"></i>
-                                        View referrals
+                                        View actions
                                     </Button>
                                 </Link> : ""
                             }
