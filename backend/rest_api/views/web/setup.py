@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate
 from django.db.models import Q
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from django.db.models import Count, F
 
 class GroupsAPI(SimpleCrudMixin):
     """
@@ -455,4 +456,86 @@ class ReferredForTreatedView(generics.GenericAPIView):
 
         return Response(response_data)
     
+    
+from django.db.models import Count, F
+
+class FeedbackQuestion(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        
+        question_id = "Q1200"
+        question = Question.objects.get(question_id=question_id)
+
+        # Fetch all responses for this question
+        responses = AdolescentResponse.objects.filter(question=question).annotate(
+            adolescent_type=F('adolescent__type'),
+            response_value=F('chosen_options__value')
+        )
+
+        # Group by adolescent type and response option, and count them
+        stats = responses.values(
+            'adolescent_type', 'response_value'
+        ).annotate(count=Count('id'))
+
+        # Total counts per adolescent type
+        total_counts = responses.values('adolescent_type').annotate(total=Count('id'))
+
+        # Unique response values
+        unique_responses = list(responses.values_list('response_value', flat=True).distinct())
+
+        # Initialize the results dictionary dynamically
+        result = {
+            "basic": {response: 0 for response in unique_responses + ["Total"]},
+            "community": {response: 0 for response in unique_responses + ["Total"]},
+            "secondary": {response: 0 for response in unique_responses + ["Total"]},
+            "Total": {response: 0 for response in unique_responses + ["Total"]}
+        }
+
+        # Populate the result dictionary with counts and percentages
+        for stat in stats:
+            adolescent_type = stat['adolescent_type']
+            response_value = stat['response_value']
+            count = stat['count']
+
+            # Update counts
+            result[adolescent_type][response_value] = count
+            result[adolescent_type]["Total"] += count
+            result["Total"][response_value] += count
+            result["Total"]["Total"] += count
+
+        # Calculate percentages
+        for key in ["basic", "community", "secondary", "Total"]:
+            total = result[key]["Total"]
+            if total > 0:
+                for response in unique_responses:
+                    count = result[key][response]
+                    percentage = (count / total) * 100
+                    result[key][response] = f"{count} ({percentage:.1f}%)"
+                result[key]["Total"] = f"{total} (100.0%)"
+
+        # Transform the result into the desired format
+        final_result = {"responses": []}
+        for response in unique_responses:
+            row = {
+                "options": response,
+                "Basic": result["basic"][response],
+                "Community": result["community"][response],
+                "Secondary": result["secondary"][response],
+                "Total": result["Total"][response]
+            }
+            final_result["responses"].append(row)
+
+        # Calculate and append the total row
+        total_row = {
+            "options": "Total",
+            "Basic": f"{result['basic']['Total']}",
+            "Community": f"{result['community']['Total']}",
+            "Secondary": f"{result['secondary']['Total']}",
+            "Total": f"{result['Total']['Total']}"
+        }
+        final_result["responses"].append(total_row)
+
+        return Response(final_result)
+
     
