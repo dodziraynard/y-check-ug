@@ -271,6 +271,11 @@ export const resourceApiSlice = createApi({
                     return `/referred-for-treatment/`;
                 },
             }),
+            getQuestionFeedback: builder.query({
+                query() {
+                    return `/referred-for-treatment/`;
+                },
+            }),
 
             putUpdateAdolescentStatus: builder.mutation({
                 query({ body, pid }) {
@@ -359,7 +364,8 @@ export const {
     useLazyGetAgeDistributionsQuery,
     useLazyGetPositiveScreenedQuery,
     useLazyGetTreatedOnsiteQuery,
-    useLazyGetReferredForTreatmentQuery
+    useLazyGetReferredForTreatmentQuery,
+    useLazyGetQuestionFeedbackQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;

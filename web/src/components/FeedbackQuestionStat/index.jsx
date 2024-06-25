@@ -1,37 +1,37 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import { useLazyGetTreatedOnsiteQuery } from '../../features/resources/resources-api-slice';
+import { useLazyGetQuestionFeedbackQuery } from '../../features/resources/resources-api-slice';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 import * as XLSX from 'xlsx';
 
-function TreaTedOnsite() {
-    const [getTreatedOnsite, { data: response = [], isLoading, error }] = useLazyGetTreatedOnsiteQuery()
-    const [treaTedOnsite, settreaTedOnsite] = useState([])
+function FeedBackQuestionStat() {
+    const [getQuestionFeedback, { data: response = [], isLoading, error }] = useLazyGetQuestionFeedbackQuery()
+    const [questionFeedback, setQuestionFeedback] = useState([])
 
     useEffect(() => {
-        getTreatedOnsite();
+        getQuestionFeedback();
     }, []);
 
     useEffect(() => {
-        if (response && Array.isArray(response?.treated_onsite)) {
-            settreaTedOnsite(response?.treated_onsite);
+        if (response && Array.isArray(response?.responses)) {
+            setQuestionFeedback(response?.responses);
         }
     }, [response])
 
     const exportToExcel = () => {
-        const data = treaTedOnsite.map(onsite => ({
-            Condition: onsite?.name,
-            Total: onsite?.total,
-            Basic: onsite?.basic,
-            Community: onsite?.community,
-            Secondary: onsite?.secondary,
+        const data = questionFeedback.map(question => ({
+            Condition: question?.options,
+            Basic: question?.Basic,
+            Community: question?.Community,
+            Secondary: question?.Secondary,
+            Total: question?.Total,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "TreaTed Onsite");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Question 1200");
 
-        XLSX.writeFile(workbook, "treaTedOnsite.xlsx");
+        XLSX.writeFile(workbook, "Q1200.xlsx");
     };
 
     
@@ -43,7 +43,7 @@ function TreaTedOnsite() {
             <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
                 <div className="d-flex justify-content-between">
                     <div className="">
-                        <Heading as="h3" size="sm" mb={4}>Treated Onsite </Heading>
+                        <Heading as="h3" size="sm" mb={4}>Did adolescent complete questionnaire by himself or herself? </Heading>
                     </div>
                     <div className="mx-2">
                             <button 
@@ -55,25 +55,25 @@ function TreaTedOnsite() {
                     </div>
                 </div>
                 { isLoading? <Spinner/> :
-                    <TableContainer mt={4} maxHeight="550px" overflowY="auto" >
+                    <TableContainer mt={4} maxHeight="550px" overflowY="auto">
                         <Table variant="simple">
                         <Thead>
                             <Tr>
-                            <Th borderColor="None">Condition</Th>
-                            <Th borderColor="black">Total</Th>
+                            <Th borderColor="None">Options</Th>
                             <Th borderColor="black">Basic</Th>
                             <Th borderColor="black">Community</Th>
                             <Th borderColor="black">Secondary</Th>
+                            <Th borderColor="black">Total</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {treaTedOnsite.map((onsite, index) => (
+                            {questionFeedback.map((question, index) => (
                                 <Tr key={index}>
-                                <Td>{onsite?.name}</Td>
-                                <Td>{onsite?.total}</Td>
-                                <Td>{onsite?.basic}</Td>
-                                <Td>{onsite?.community}</Td>
-                                <Td>{onsite?.secondary}</Td>
+                                <Td>{question?.options}</Td>
+                                <Td>{question?.Basic}</Td>
+                                <Td>{question?.Community}</Td>
+                                <Td>{question?.Secondary}</Td>
+                                <Td>{question?.Total}</Td>
                                 </Tr>
                             ))}
                         </Tbody>
@@ -86,4 +86,4 @@ function TreaTedOnsite() {
     )
 
 }
-export default TreaTedOnsite;
+export default FeedBackQuestionStat;

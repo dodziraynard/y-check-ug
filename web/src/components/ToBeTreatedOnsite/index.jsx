@@ -43,7 +43,7 @@ function ToBeTreaTedOnsite() {
             <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
                 <div className="d-flex justify-content-between">
                     <div className="">
-                        <Heading as="h3" size="sm" mb={4}>To Be TreaTed Onsite </Heading>
+                        <Heading as="h3" size="sm" mb={4}>To Be Treated Onsite </Heading>
                     </div>
                     <div className="mx-2">
                             <button 
@@ -55,7 +55,7 @@ function ToBeTreaTedOnsite() {
                     </div>
                 </div>
                 { isLoading? <Spinner/> :
-                    <TableContainer mt={4} >
+                    <TableContainer mt={4} maxHeight="550px" overflowY="auto" >
                         <Table variant="simple">
                         <Thead>
                             <Tr>

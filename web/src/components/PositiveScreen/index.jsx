@@ -55,7 +55,7 @@ function PositiveScreen() {
                     </div>
                 </div>
                 { isLoading? <Spinner/> :
-                    <TableContainer mt={4} >
+                    <TableContainer mt={4} maxHeight="550px" overflowY="auto" >
                         <Table variant="simple">
                         <Thead>
                             <Tr>
