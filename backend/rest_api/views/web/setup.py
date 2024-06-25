@@ -322,14 +322,20 @@ class PendingReferralNotifications(generics.GenericAPIView):
             })
 
 
-class PositiveScreenedView(generics.GenericAPIView):
+# **********    DASHBOARD REPORT **********************
 
-    permission_classes = [permissions.IsAuthenticated]
+class PositiveScreenedView(generics.GenericAPIView):
+    """ get all positive screened and to be treated onsite flags"""
+
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
         red_flag_code = Colors.RED.value
         categories = ["basic", "secondary", "community"]
         result = []
+
+        referrals = Referral.objects.filter(is_onsite=True).select_related('adolescent').prefetch_related('services__related_flag_labels')
+        onsite_adolescents = {referral.adolescent for referral in referrals}
 
         for label in FlagLabel.objects.all():
             red_flags = SummaryFlag.objects.filter(final_color_code=red_flag_code, label=label)
@@ -344,6 +350,70 @@ class PositiveScreenedView(generics.GenericAPIView):
                     "total": total_red_flags,
                     **category_counts
                 })
+                
+        # Sort red_flag_distribution by name
+        result = sorted(result, key=lambda x: x["name"])
 
-        response_data = {"red_flag_distribution": result}
+        # Aggregate data for each flag label
+        to_be_treated_onsite = []
+        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+        
+        for flag_label, counts in flag_label_distribution.items():
+            total = sum(counts.values())
+            if total > 0:
+                to_be_treated_onsite.append({
+                    "name": flag_label,
+                    "total": total,
+                    **counts
+                })
+                
+        to_be_treated_onsite = sorted(to_be_treated_onsite, key=lambda x: x["name"])
+
+        response_data = {
+            "red_flag_distribution": result,
+            "to_be_treated_onsite": to_be_treated_onsite
+        }
+
+        return Response(response_data)
+
+
+class TreatedOnsiteView(generics.GenericAPIView):
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        red_flag_code = Colors.RED.value
+        categories = ["basic", "secondary", "community"]
+
+        referrals = Referral.objects.filter(is_onsite=True, status="completed").select_related('adolescent').prefetch_related('services__related_flag_labels')
+        onsite_adolescents = {referral.adolescent for referral in referrals}
+
+        treated_onsite = []
+        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+        for flag_label, counts in flag_label_distribution.items():
+            total = sum(counts.values())
+            if total > 0:
+                treated_onsite.append({
+                    "name": flag_label,
+                    "total": total,
+                    **counts
+                })
+
+        # Sort treated_onsite by name
+        treated_onsite = sorted(treated_onsite, key=lambda x: x["name"])
+
+        response_data = {
+            "treated_onsite": treated_onsite
+        }
+
         return Response(response_data)
