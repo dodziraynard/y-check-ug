@@ -327,7 +327,7 @@ class PendingReferralNotifications(generics.GenericAPIView):
 class PositiveScreenedView(generics.GenericAPIView):
     """ get all positive screened and to be treated onsite flags"""
 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         red_flag_code = Colors.RED.value
@@ -384,7 +384,7 @@ class PositiveScreenedView(generics.GenericAPIView):
 
 class TreatedOnsiteView(generics.GenericAPIView):
 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         red_flag_code = Colors.RED.value
@@ -417,3 +417,42 @@ class TreatedOnsiteView(generics.GenericAPIView):
         }
 
         return Response(response_data)
+    
+    
+class ReferredForTreatedView(generics.GenericAPIView):
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        red_flag_code = Colors.RED.value
+        categories = ["basic", "secondary", "community"]
+
+        referrals = Referral.objects.filter(is_onsite=False).select_related('adolescent').prefetch_related('services__related_flag_labels')
+        onsite_adolescents = {referral.adolescent for referral in referrals}
+
+        referred_for_treatment = []
+        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+        for flag_label, counts in flag_label_distribution.items():
+            total = sum(counts.values())
+            if total > 0:
+                referred_for_treatment.append({
+                    "name": flag_label,
+                    "total": total,
+                    **counts
+                })
+
+        # Sort referred_for_treatment by name
+        referred_for_treatment = sorted(referred_for_treatment, key=lambda x: x["name"])
+
+        response_data = {
+            "referred_for_treatment": referred_for_treatment
+        }
+
+        return Response(response_data)
+    
+    

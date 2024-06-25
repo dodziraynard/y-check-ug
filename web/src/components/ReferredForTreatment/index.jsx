@@ -1,37 +1,37 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import { useLazyGetTreatedOnsiteQuery } from '../../features/resources/resources-api-slice';
+import { useLazyGetReferredForTreatmentQuery } from '../../features/resources/resources-api-slice';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 import * as XLSX from 'xlsx';
 
-function TreaTedOnsite() {
-    const [getTreatedOnsite, { data: response = [], isLoading, error }] = useLazyGetTreatedOnsiteQuery()
+function ReferredForTreatment() {
+    const [getReferredForTreatment, { data: response = [], isLoading, error }] = useLazyGetReferredForTreatmentQuery()
     const [treaTedOnsite, settreaTedOnsite] = useState([])
 
     useEffect(() => {
-        getTreatedOnsite();
+        getReferredForTreatment();
     }, []);
 
     useEffect(() => {
-        if (response && Array.isArray(response?.treated_onsite)) {
-            settreaTedOnsite(response?.treated_onsite);
+        if (response && Array.isArray(response?.referred_for_treatment)) {
+            settreaTedOnsite(response?.referred_for_treatment);
         }
     }, [response])
 
     const exportToExcel = () => {
-        const data = treaTedOnsite.map(onsite => ({
-            Condition: onsite?.name,
-            Total: onsite?.total,
-            Basic: onsite?.basic,
-            Community: onsite?.community,
-            Secondary: onsite?.secondary,
+        const data = treaTedOnsite.map(referred => ({
+            Condition: referred?.name,
+            Total: referred?.total,
+            Basic: referred?.basic,
+            Community: referred?.community,
+            Secondary: referred?.secondary,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "TreaTed Onsite");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Referred For Treatment");
 
-        XLSX.writeFile(workbook, "treaTedOnsite.xlsx");
+        XLSX.writeFile(workbook, "referredForTreatment.xlsx");
     };
 
     
@@ -43,7 +43,7 @@ function TreaTedOnsite() {
             <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
                 <div className="d-flex justify-content-between">
                     <div className="">
-                        <Heading as="h3" size="sm" mb={4}>TreaTed Onsite </Heading>
+                        <Heading as="h3" size="sm" mb={4}>Referred For Treatment </Heading>
                     </div>
                     <div className="mx-2">
                             <button 
@@ -67,13 +67,13 @@ function TreaTedOnsite() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {treaTedOnsite.map((onsite, index) => (
+                            {treaTedOnsite.map((referred, index) => (
                                 <Tr key={index}>
-                                <Td>{onsite?.name}</Td>
-                                <Td>{onsite?.total}</Td>
-                                <Td>{onsite?.basic}</Td>
-                                <Td>{onsite?.community}</Td>
-                                <Td>{onsite?.secondary}</Td>
+                                <Td>{referred?.name}</Td>
+                                <Td>{referred?.total}</Td>
+                                <Td>{referred?.basic}</Td>
+                                <Td>{referred?.community}</Td>
+                                <Td>{referred?.secondary}</Td>
                                 </Tr>
                             ))}
                         </Tbody>
@@ -86,4 +86,4 @@ function TreaTedOnsite() {
     )
 
 }
-export default TreaTedOnsite;
+export default ReferredForTreatment;

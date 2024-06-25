@@ -11,6 +11,7 @@ import AgeDistributions from '../../components/AgeDistribution';
 import PositiveScreen from '../../components/PositiveScreen';
 import ToBeTreaTedOnsite from '../../components/ToBeTreatedOnsite';
 import TreaTedOnsite from '../../components/TreatedOnsite';
+import ReferredForTreatment from '../../components/ReferredForTreatment';
 function DashboardWidget() {
 
     return (
@@ -57,6 +58,9 @@ function DashboardWidget() {
                 </div>
                 <div className="col-12 mt-1 col-lg-6 my-5">
                     <TreaTedOnsite />
+                </div>
+                <div className="col-12 mt-1 col-lg-6 my-5">
+                    <ReferredForTreatment />
                 </div>
             </div>
         </div>

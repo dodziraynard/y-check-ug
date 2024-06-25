@@ -87,4 +87,5 @@ urlpatterns += [
     path("age-distributions/", views.AgeDistributionDemographics.as_view()),
     path("positive-screened/", views.PositiveScreenedView.as_view()),
     path("treated-onsite/", views.TreatedOnsiteView.as_view()),
+    path("referred-for-treatment/", views.ReferredForTreatedView.as_view()),
 ]
