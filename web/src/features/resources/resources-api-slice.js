@@ -273,7 +273,7 @@ export const resourceApiSlice = createApi({
             }),
             getQuestionFeedback: builder.query({
                 query() {
-                    return `/referred-for-treatment/`;
+                    return `/feedback-question-q1200-stats/`;
                 },
             }),
 
