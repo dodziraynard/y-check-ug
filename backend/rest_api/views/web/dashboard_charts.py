@@ -12,6 +12,8 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from .types import FlagStatus
 from .utils import get_demographic_data,get_age_distribution_data
+from django.db.models import Count, F
+
 logger = logging.getLogger(__name__)
 
 
@@ -174,3 +176,220 @@ class AgeDistributionDemographics(generics.GenericAPIView):
     def get(self, request, format=None):
         response_data = get_age_distribution_data()
         return Response({"age_distributions": response_data})
+    
+    
+class PositiveScreenedView(generics.GenericAPIView):
+    """ get all positive screened and to be treated onsite flags"""
+
+    permission_classes = [permissions.IsAuthenticated]
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, *args, **kwargs):
+        red_flag_code = Colors.RED.value
+        categories = ["basic", "secondary", "community"]
+        result = []
+
+        referrals = Referral.objects.filter(is_onsite=True).select_related('adolescent').prefetch_related('services__related_flag_labels')
+        onsite_adolescents = {referral.adolescent for referral in referrals}
+
+        for label in FlagLabel.objects.all():
+            red_flags = SummaryFlag.objects.filter(final_color_code=red_flag_code, label=label)
+            category_counts = {
+                category: red_flags.filter(adolescent__type=category).count()
+                for category in categories
+            }
+            total_red_flags = sum(category_counts.values())
+            if total_red_flags > 0:
+                result.append({
+                    "name": label.name,
+                    "total": total_red_flags,
+                    **category_counts
+                })
+                
+        # Sort red_flag_distribution by name
+        result = sorted(result, key=lambda x: x["name"])
+
+        # Aggregate data for each flag label
+        to_be_treated_onsite = []
+        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+        
+        for flag_label, counts in flag_label_distribution.items():
+            total = sum(counts.values())
+            if total > 0:
+                to_be_treated_onsite.append({
+                    "name": flag_label,
+                    "total": total,
+                    **counts
+                })
+                
+        to_be_treated_onsite = sorted(to_be_treated_onsite, key=lambda x: x["name"])
+
+        response_data = {
+            "red_flag_distribution": result,
+            "to_be_treated_onsite": to_be_treated_onsite
+        }
+
+        return Response(response_data)
+
+
+class TreatedOnsiteView(generics.GenericAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, *args, **kwargs):
+        red_flag_code = Colors.RED.value
+        categories = ["basic", "secondary", "community"]
+
+        referrals = Referral.objects.filter(is_onsite=True, status="completed").select_related('adolescent').prefetch_related('services__related_flag_labels')
+        onsite_adolescents = {referral.adolescent for referral in referrals}
+
+        treated_onsite = []
+        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+        for flag_label, counts in flag_label_distribution.items():
+            total = sum(counts.values())
+            if total > 0:
+                treated_onsite.append({
+                    "name": flag_label,
+                    "total": total,
+                    **counts
+                })
+
+        # Sort treated_onsite by name
+        treated_onsite = sorted(treated_onsite, key=lambda x: x["name"])
+
+        response_data = {
+            "treated_onsite": treated_onsite
+        }
+
+        return Response(response_data)
+    
+    
+class ReferredForTreatedView(generics.GenericAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, *args, **kwargs):
+        red_flag_code = Colors.RED.value
+        categories = ["basic", "secondary", "community"]
+
+        referrals = Referral.objects.filter(is_onsite=False).select_related('adolescent').prefetch_related('services__related_flag_labels')
+        onsite_adolescents = {referral.adolescent for referral in referrals}
+
+        referred_for_treatment = []
+        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+        for flag_label, counts in flag_label_distribution.items():
+            total = sum(counts.values())
+            if total > 0:
+                referred_for_treatment.append({
+                    "name": flag_label,
+                    "total": total,
+                    **counts
+                })
+
+        # Sort referred_for_treatment by name
+        referred_for_treatment = sorted(referred_for_treatment, key=lambda x: x["name"])
+
+        response_data = {
+            "referred_for_treatment": referred_for_treatment
+        }
+
+        return Response(response_data)
+    
+    
+
+class FeedbackQuestion(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        
+        question_id = "Q1200"
+        question = Question.objects.get(question_id=question_id)
+
+        # Fetch all responses for this question
+        responses = AdolescentResponse.objects.filter(question=question).annotate(
+            adolescent_type=F('adolescent__type'),
+            response_value=F('chosen_options__value')
+        )
+
+        # Group by adolescent type and response option, and count them
+        stats = responses.values(
+            'adolescent_type', 'response_value'
+        ).annotate(count=Count('id'))
+
+        # Total counts per adolescent type
+        total_counts = responses.values('adolescent_type').annotate(total=Count('id'))
+
+        # Unique response values
+        unique_responses = list(responses.values_list('response_value', flat=True).distinct())
+
+        # Initialize the results dictionary dynamically
+        result = {
+            "basic": {response: 0 for response in unique_responses + ["Total"]},
+            "community": {response: 0 for response in unique_responses + ["Total"]},
+            "secondary": {response: 0 for response in unique_responses + ["Total"]},
+            "Total": {response: 0 for response in unique_responses + ["Total"]}
+        }
+
+        # Populate the result dictionary with counts and percentages
+        for stat in stats:
+            adolescent_type = stat['adolescent_type']
+            response_value = stat['response_value']
+            count = stat['count']
+
+            # Update counts
+            result[adolescent_type][response_value] = count
+            result[adolescent_type]["Total"] += count
+            result["Total"][response_value] += count
+            result["Total"]["Total"] += count
+
+        # Calculate percentages
+        for key in ["basic", "community", "secondary", "Total"]:
+            total = result[key]["Total"]
+            if total > 0:
+                for response in unique_responses:
+                    count = result[key][response]
+                    percentage = (count / total) * 100
+                    result[key][response] = f"{count} ({percentage:.1f}%)"
+                result[key]["Total"] = f"{total} (100.0%)"
+
+        # Transform the result into the desired format
+        final_result = {"responses": []}
+        for response in unique_responses:
+            row = {
+                "options": response,
+                "Basic": result["basic"][response],
+                "Community": result["community"][response],
+                "Secondary": result["secondary"][response],
+                "Total": result["Total"][response]
+            }
+            final_result["responses"].append(row)
+
+        # Calculate and append the total row
+        total_row = {
+            "options": "Total",
+            "Basic": f"{result['basic']['Total']}",
+            "Community": f"{result['community']['Total']}",
+            "Secondary": f"{result['secondary']['Total']}",
+            "Total": f"{result['Total']['Total']}"
+        }
+        final_result["responses"].append(total_row)
+
+        return Response(final_result)
+
+    

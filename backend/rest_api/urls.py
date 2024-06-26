@@ -88,5 +88,5 @@ urlpatterns += [
     path("positive-screened/", views.PositiveScreenedView.as_view()),
     path("treated-onsite/", views.TreatedOnsiteView.as_view()),
     path("referred-for-treatment/", views.ReferredForTreatedView.as_view()),
-    path("feedback-question-q1200-stats/", views.ReferredForTreatedView.as_view()),
+    path("feedback-question-q1200-stats/", views.FeedbackQuestion.as_view()),
 ]
