@@ -261,6 +261,26 @@ export const resourceApiSlice = createApi({
                     return `/positive-screened/`;
                 },
             }),
+            getTreatedOnsite: builder.query({
+                query() {
+                    return `/treated-onsite/`;
+                },
+            }),
+            getReferredForTreatment: builder.query({
+                query() {
+                    return `/referred-for-treatment/`;
+                },
+            }),
+            getReferredAndTreated: builder.query({
+                query() {
+                    return `/referred-and-treated/`;
+                },
+            }),
+            getQuestionFeedback: builder.query({
+                query() {
+                    return `/feedback-question-q1200-stats/`;
+                },
+            }),
 
             putUpdateAdolescentStatus: builder.mutation({
                 query({ body, pid }) {
@@ -347,7 +367,11 @@ export const {
     useLazyGetSecondaryDemographicsQuery,
     useLazyGetCommunityDemographicsQuery,
     useLazyGetAgeDistributionsQuery,
-    useLazyGetPositiveScreenedQuery
+    useLazyGetPositiveScreenedQuery,
+    useLazyGetTreatedOnsiteQuery,
+    useLazyGetReferredForTreatmentQuery,
+    useLazyGetQuestionFeedbackQuery,
+    useLazyGetReferredAndTreatedQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;

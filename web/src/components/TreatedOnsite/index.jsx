@@ -1,49 +1,49 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import { useLazyGetPositiveScreenedQuery } from '../../features/resources/resources-api-slice';
+import { useLazyGetTreatedOnsiteQuery } from '../../features/resources/resources-api-slice';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 import * as XLSX from 'xlsx';
 
-function PositiveScreen() {
-    const [getPositiveScreened, { data: response = [], isLoading, error }] = useLazyGetPositiveScreenedQuery()
-    const [positiveScreen, setPositiveScreen] = useState([])
+function TreaTedOnsite() {
+    const [getTreatedOnsite, { data: response = [], isLoading, error }] = useLazyGetTreatedOnsiteQuery()
+    const [treaTedOnsite, settreaTedOnsite] = useState([])
 
     useEffect(() => {
-        getPositiveScreened();
+        getTreatedOnsite();
     }, []);
 
     useEffect(() => {
-        if (response && Array.isArray(response?.red_flag_distribution)) {
-            setPositiveScreen(response?.red_flag_distribution);
+        if (response && Array.isArray(response?.treated_onsite)) {
+            settreaTedOnsite(response?.treated_onsite);
         }
     }, [response])
 
     const exportToExcel = () => {
-        const data = positiveScreen.map(positive => ({
-            Condition: positive?.name,
-            Total: positive?.total,
-            Basic: positive?.basic,
-            Community: positive?.community,
-            Secondary: positive?.secondary,
+        const data = treaTedOnsite.map(onsite => ({
+            Condition: onsite?.name,
+            Total: onsite?.total,
+            Basic: onsite?.basic,
+            Community: onsite?.community,
+            Secondary: onsite?.secondary,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Positive Screen");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "TreaTed Onsite");
 
-        XLSX.writeFile(workbook, "PositiveScreen.xlsx");
+        XLSX.writeFile(workbook, "treaTedOnsite.xlsx");
     };
 
     
     return (
 
         <Fragment>
-            <div className="review-widget my-3">
+            <div className="review-widget">
 
             <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
                 <div className="d-flex justify-content-between">
                     <div className="">
-                        <Heading as="h3" size="sm" mb={4}>Screened Positive</Heading>
+                        <Heading as="h3" size="sm" mb={4}>Treated Onsite </Heading>
                     </div>
                     <div className="mx-2">
                             <button 
@@ -67,13 +67,13 @@ function PositiveScreen() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {positiveScreen.map((positive, index) => (
+                            {treaTedOnsite.map((onsite, index) => (
                                 <Tr key={index}>
-                                <Td>{positive?.name}</Td>
-                                <Td>{positive?.total}</Td>
-                                <Td>{positive?.basic}</Td>
-                                <Td>{positive?.community}</Td>
-                                <Td>{positive?.secondary}</Td>
+                                <Td>{onsite?.name}</Td>
+                                <Td>{onsite?.total}</Td>
+                                <Td>{onsite?.basic}</Td>
+                                <Td>{onsite?.community}</Td>
+                                <Td>{onsite?.secondary}</Td>
                                 </Tr>
                             ))}
                         </Tbody>
@@ -86,4 +86,4 @@ function PositiveScreen() {
     )
 
 }
-export default PositiveScreen;
+export default TreaTedOnsite;
