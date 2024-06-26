@@ -1,25 +1,25 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import { useLazyGetReferredForTreatmentQuery } from '../../features/resources/resources-api-slice';
+import { useLazyGetReferredAndTreatedQuery } from '../../features/resources/resources-api-slice';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
 import * as XLSX from 'xlsx';
 
-function ReferredForTreatment() {
-    const [getReferredForTreatment, { data: response = [], isLoading, error }] = useLazyGetReferredForTreatmentQuery()
-    const [referredForTreatment, setReferredForTreatment] = useState([])
+function ReferredAndTreated() {
+    const [getReferredAndTreated, { data: response = [], isLoading, error }] = useLazyGetReferredAndTreatedQuery()
+    const [referredAndTreated, setReferredAndTreated] = useState([])
 
     useEffect(() => {
-        getReferredForTreatment();
+        getReferredAndTreated();
     }, []);
 
     useEffect(() => {
-        if (response && Array.isArray(response?.referred_for_treatment)) {
-            setReferredForTreatment(response?.referred_for_treatment);
+        if (response && Array.isArray(response?.referred_and_treated)) {
+            setReferredAndTreated(response?.referred_and_treated);
         }
     }, [response])
 
     const exportToExcel = () => {
-        const data = referredForTreatment.map(referred => ({
+        const data = referredAndTreated.map(referred => ({
             Condition: referred?.name,
             Total: referred?.total,
             Basic: referred?.basic,
@@ -29,9 +29,9 @@ function ReferredForTreatment() {
 
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Referred For Treatment");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Referred And Treated");
 
-        XLSX.writeFile(workbook, "referredForTreatment.xlsx");
+        XLSX.writeFile(workbook, "referredAndTreated.xlsx");
     };
 
     
@@ -43,7 +43,7 @@ function ReferredForTreatment() {
             <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
                 <div className="d-flex justify-content-between">
                     <div className="">
-                        <Heading as="h3" size="sm" mb={4}>Referred For Treatment </Heading>
+                        <Heading as="h3" size="sm" mb={4}>Referred And Treated </Heading>
                     </div>
                     <div className="mx-2">
                             <button 
@@ -59,7 +59,7 @@ function ReferredForTreatment() {
                         <Table variant="simple">
                         <Thead>
                             <Tr>
-                            <Th borderColor="None">Condition (referred)</Th>
+                            <Th borderColor="None">Condition (treated)</Th>
                             <Th borderColor="black">Total</Th>
                             <Th borderColor="black">Basic</Th>
                             <Th borderColor="black">Community</Th>
@@ -67,7 +67,7 @@ function ReferredForTreatment() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {referredForTreatment.map((referred, index) => (
+                            {referredAndTreated.map((referred, index) => (
                                 <Tr key={index}>
                                 <Td>{referred?.name}</Td>
                                 <Td>{referred?.total}</Td>
@@ -86,4 +86,4 @@ function ReferredForTreatment() {
     )
 
 }
-export default ReferredForTreatment;
+export default ReferredAndTreated;

@@ -12,6 +12,7 @@ import PositiveScreen from '../../components/PositiveScreen';
 import ToBeTreaTedOnsite from '../../components/ToBeTreatedOnsite';
 import TreaTedOnsite from '../../components/TreatedOnsite';
 import ReferredForTreatment from '../../components/ReferredForTreatment';
+import ReferredAndTreated from '../../components/ReferredAndTreated';
 import FeedBackQuestionStat from '../../components/FeedbackQuestionStat';
 function DashboardWidget() {
 
@@ -64,7 +65,7 @@ function DashboardWidget() {
                     <ReferredForTreatment />
                 </div>
                 <div className="col-12 mt-1 col-lg-6 my-5">
-                    <ReferredForTreatment />
+                    <ReferredAndTreated />
                 </div>
                 <div className="col-12 mt-1 col-lg-12">
                     <FeedBackQuestionStat />

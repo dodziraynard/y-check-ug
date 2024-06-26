@@ -107,3 +107,33 @@ def get_age_distribution_data():
     })
 
     return response_data
+
+
+
+def get_completed_treatment(is_onsite, status):
+    red_flag_code = Colors.RED.value
+    categories = ["basic", "secondary", "community"]
+
+    referrals = Referral.objects.filter(is_onsite=is_onsite, status=status).select_related('adolescent').prefetch_related('services__related_flag_labels')
+    onsite_adolescents = {referral.adolescent for referral in referrals}
+
+    treated = []
+    flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+    for referral in referrals:
+        for service in referral.services.all():
+            for flag_label in service.related_flag_labels.all():
+                flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+
+    for flag_label, counts in flag_label_distribution.items():
+        total = sum(counts.values())
+        if total > 0:
+            treated.append({
+                "name": flag_label,
+                "total": total,
+                **counts
+            })
+
+    # Sort treated by name
+    treated = sorted(treated, key=lambda x: x["name"])
+    return treated
+

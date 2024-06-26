@@ -271,6 +271,11 @@ export const resourceApiSlice = createApi({
                     return `/referred-for-treatment/`;
                 },
             }),
+            getReferredAndTreated: builder.query({
+                query() {
+                    return `/referred-and-treated/`;
+                },
+            }),
             getQuestionFeedback: builder.query({
                 query() {
                     return `/feedback-question-q1200-stats/`;
@@ -365,7 +370,8 @@ export const {
     useLazyGetPositiveScreenedQuery,
     useLazyGetTreatedOnsiteQuery,
     useLazyGetReferredForTreatmentQuery,
-    useLazyGetQuestionFeedbackQuery
+    useLazyGetQuestionFeedbackQuery,
+    useLazyGetReferredAndTreatedQuery
 } = resourceApiSlice;
 
 export default resourceApiSlice;

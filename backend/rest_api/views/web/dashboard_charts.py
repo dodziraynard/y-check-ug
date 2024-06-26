@@ -11,7 +11,7 @@ from rest_framework import generics
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from .types import FlagStatus
-from .utils import get_demographic_data,get_age_distribution_data
+from .utils import get_demographic_data,get_age_distribution_data, get_completed_treatment
 from django.db.models import Count, F
 
 logger = logging.getLogger(__name__)
@@ -242,37 +242,10 @@ class TreatedOnsiteView(generics.GenericAPIView):
     
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
-        red_flag_code = Colors.RED.value
-        categories = ["basic", "secondary", "community"]
-
-        referrals = Referral.objects.filter(is_onsite=True, status="completed").select_related('adolescent').prefetch_related('services__related_flag_labels')
-        onsite_adolescents = {referral.adolescent for referral in referrals}
-
-        treated_onsite = []
-        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
-        for referral in referrals:
-            for service in referral.services.all():
-                for flag_label in service.related_flag_labels.all():
-                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
-
-        for flag_label, counts in flag_label_distribution.items():
-            total = sum(counts.values())
-            if total > 0:
-                treated_onsite.append({
-                    "name": flag_label,
-                    "total": total,
-                    **counts
-                })
-
-        # Sort treated_onsite by name
-        treated_onsite = sorted(treated_onsite, key=lambda x: x["name"])
-
-        response_data = {
-            "treated_onsite": treated_onsite
-        }
-
-        return Response(response_data)
-    
+        
+        response_data = get_completed_treatment(is_onsite=True, status="completed")
+        return Response({"treated_onsite": response_data})  
+  
     
 class ReferredForTreatedView(generics.GenericAPIView):
 
@@ -310,6 +283,17 @@ class ReferredForTreatedView(generics.GenericAPIView):
         }
 
         return Response(response_data)
+    
+
+class ReferredAndTreatedView(generics.GenericAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    
+    @method_decorator(cache_page(60 * 2))
+    def get(self, request, *args, **kwargs):
+        
+        response_data = get_completed_treatment(is_onsite=False, status="completed")
+        return Response({"referred_and_treated": response_data})  
     
     
 
