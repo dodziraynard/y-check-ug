@@ -17,6 +17,7 @@ function AgeDistributions() {
                         <Heading as="h3" size="sm" mb={4}>Age Distribution</Heading>
                     </div>
                 </div>
+                
                 <div className="overflow-scroll">
                     <Suspense fallback={<PageLoading />}>
                         <TableView
@@ -43,7 +44,6 @@ function AgeDistributions() {
                         />
                     </Suspense>
                 </div>   
-               
             </section>
             </div>
         </Fragment>
