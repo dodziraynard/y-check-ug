@@ -191,25 +191,26 @@ function AdolescentReferralsWidget() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">
-                                {selectedReferral ? "Edit Referral" : "New Referral"}
+                                {selectedReferral ? "Edit Action" : "New Action"}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body overflow-scroll">
                             <form onSubmit={handleFormSubmit}>
                                 <div className="form-group my-4">
-                                    <label htmlFor="facility_id"><strong>Name of facility</strong></label>
+                                    <label htmlFor="facility_id"><strong>Location</strong></label>
                                     {isLoadingFacilities ? <Spinner size={"md"} /> :
                                         <select className='form-select'
                                             onChange={(event) => setFacilityId(event.target.value)}
                                             name='facility_id' id='facility_id' required>
-                                            <option value="">Choose facility</option>
+                                            <option value="">Choose location</option>
                                             {facilities?.map((facility, index) => <option key={index} value={facility.id} defaultValue={facility.id}>{facility.name}</option>)}
                                         </select>
                                     }
                                 </div>
-
-                                <div className="form-group my-4">
+                                
+                                {/* I don't fee what value this field provides in the reports. */}
+                                {/* <div className="form-group my-4">
                                     <label htmlFor="service_type"><strong>Type of initiating service</strong></label>
                                     <select className='form-select'
                                         defaultValue={serviceType || ""}
@@ -220,15 +221,15 @@ function AdolescentReferralsWidget() {
                                         <option value="SECONDARY">SECONDARY</option>
                                         <option value="TERTIARY">TERTIARY</option>
                                     </select>
-                                </div>
+                                </div> */}
 
                                 <div className="form-group my-4">
-                                    <label htmlFor="service_services"><strong>Services referred for</strong></label>
+                                    <label htmlFor="service_services"><strong>Services for this action</strong></label>
                                     <TagInput tags={services?.map((service) => service.name)} selectedTags={selectedServices} setSelectedTags={setSelectedServices} maxSelection={(services?.length ?? 1) * 2} required />
                                 </div>
 
                                 <div className="form-group my-4">
-                                    <label htmlFor="referral_reason"><strong>Reason for referral</strong></label>
+                                    <label htmlFor="referral_reason"><strong>Reason for action</strong></label>
                                     <textarea className='form-control'
                                         onChange={(event) => setReferralReason(event.target.value)}
                                         value={referralReason || ""}
@@ -264,7 +265,7 @@ function AdolescentReferralsWidget() {
                         <table className='table m-4'>
                             <thead>
                                 <tr>
-                                    <th>Facility</th>
+                                    <th>Location</th>
                                     <th>Services</th>
                                     <th>Reason</th>
                                     <th>Status</th>

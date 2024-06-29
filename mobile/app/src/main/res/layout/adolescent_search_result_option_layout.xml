@@ -67,13 +67,13 @@
             android:id="@+id/screening_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#1AFC7600"
             android:clickable="true"
             android:drawablePadding="10dp"
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
             android:text="@string/screening_test"
             android:textSize="@dimen/text_small"
-            android:background="#1AFC7600"
             app:drawableLeftCompat="@drawable/baseline_psychology_24"
             app:drawableTint="@color/text_color" />
 
@@ -151,6 +151,25 @@
             android:text="@string/evaluation"
             android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_question_answer_24"
+            app:drawableTint="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/border_color" />
+
+        <TextView
+            android:id="@+id/process_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="15dp"
+            android:text="@string/process_overview"
+            android:textSize="@dimen/text_small"
+            app:drawableLeftCompat="@drawable/baseline_remove_done_24"
             app:drawableTint="@color/text_color" />
 
         <View

@@ -52,7 +52,6 @@ function App() {
           <Route path="/dashboard/password-reset" element={<Suspense fallback={<PageLoading />}><ChangeDefaultPassword /></Suspense>} />
           <Route path="/dashboard/patients" element={<Suspense fallback={<PageLoading />}><PatientsWidget /></Suspense>} />
           <Route path="/dashboard/patients/:pid/summary" element={<Suspense fallback={<PageLoading />}><SummaryFlagWidget /></Suspense>} />
-          <Route path="/dashboard/patients/:pid/review" element={<Suspense fallback={<PageLoading />}><ProcessReviewWidget /></Suspense>} />
           <Route path="/dashboard/patients/:pid/summary/referrals" element={<Suspense fallback={<PageLoading />}><AdolescentReferralsWidget /></Suspense>} />
           <Route path="/dashboard/referrals" element={<Suspense fallback={<PageLoading />}><ReferralsWidget /></Suspense>} />
           <Route path="/dashboard/treatments" element={<Suspense fallback={<PageLoading />}><TreatmentsWidget /></Suspense>} />
@@ -86,6 +85,7 @@ function App() {
             <Route path="picture" element={<Suspense fallback={<PageLoading />}><ProfilePictureWidget /></Suspense>} />
           </Route>
         </Route>
+        <Route path="/dashboard/patients/:pid/review" element={<Suspense fallback={<PageLoading />}><ProcessReviewWidget /></Suspense>} />
         <Route path="*" element={<Suspense fallback={<PageLoading />}><Error404Screen /></Suspense>} />
       </Routes>
     </Router>

@@ -181,4 +181,5 @@
     <string name="good_evening">Good evening</string>
     <string name="update_available">Update Available</string>
     <string name="app_new_version_info">Your current application version is %1$s, while an updated version, %2$s, is now available. Would you like to proceed with the update?</string>
+    <string name="process_overview">Process Overview</string>
 </resources>

@@ -168,9 +168,13 @@ function ProcessReviewWidget() {
   return (
     <Fragment>
       <div className="review-widget">
-        <BreadCrumb items={[{ "name": "Patients", "url": "/dashboard/patients" }, { "name": "Process Review", "url": "" }]} />
 
         <section className='page-review' style={{ maxWidth: "1024px", margin: "auto" }}>
+
+          <p className="text-end">
+            <button className='btn btn-sm btn-danger' onClick={()=> window.history.back()}>Exit</button>
+          </p>
+
           <Box as="section" mt={4}>
             <Text color="gray.600">
               Summary of the entire process for <strong>{adolescent?.fullname}</strong> ({adolescent?.pid}).

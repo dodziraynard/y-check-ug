@@ -149,7 +149,7 @@ function DashboardPage() {
                     <NavLink to="/dashboard/referrals">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-h-circle'></i>
-                            <span className="label">Referrals</span>
+                            <span className="label">Referrals (Actions)</span>
                         </div>
                     </NavLink>
                     : ""
@@ -221,7 +221,6 @@ function DashboardPage() {
                     </NavLink>
                     : ""
                     }
-
 
                     <div className="drop-container position-relative ">
                         <div className="d-flex align-items-center">

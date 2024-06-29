@@ -16,7 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,10 +25,10 @@ SECRET_KEY = os.environ.get(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
-
+MANUAL_AUTHENTICATION_TOKEN = os.environ.get("MANUAL_AUTHENTICATION_TOKEN",
+                                             "null")
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -52,7 +51,6 @@ INSTALLED_APPS = [
     "django_celery_beat",
 ]
 
-
 AUTH_USER_MODEL = 'accounts.User'
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
@@ -67,6 +65,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':
     ('rest_framework.permissions.IsAuthenticatedOrReadOnly', ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        "ycheck.utils.manual_authentication.ManualAuthBackend",
         'knox.auth.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ]
@@ -104,7 +103,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ycheck.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -124,19 +122,22 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -158,7 +159,6 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
 
-
 MEDIA_URL = '/assets/'
 
 MEDIA_ROOT = BASE_DIR / "assets"
@@ -170,10 +170,13 @@ TEMP_REPORT_URL = MEDIA_URL + "temp/reports/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "http://*").split(",")
-CSRF_ALLOWED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "http://*").split(",")
-CORS_ORIGINS_WHITELIST = os.environ.get("CSRF_TRUSTED_ORIGINS", "http://*").split(",")
- 
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS",
+                                      "http://*").split(",")
+CSRF_ALLOWED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS",
+                                      "http://*").split(",")
+CORS_ORIGINS_WHITELIST = os.environ.get("CSRF_TRUSTED_ORIGINS",
+                                        "http://*").split(",")
+
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

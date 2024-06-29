@@ -24,3 +24,14 @@ class HeaderInterceptor(private var context: Context?) : Interceptor {
         return chain.proceed(chain.request())
     }
 }
+
+class WebViewHeaderInterceptor() : Interceptor {
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request: Request = chain.request()
+            .newBuilder()
+            .addHeader("Authorization", "Token null")
+            .build()
+        return chain.proceed(request)
+    }
+}

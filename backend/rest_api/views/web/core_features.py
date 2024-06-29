@@ -6,8 +6,6 @@ from ycheck.utils.functions import apply_filters
 from dashboard.forms import FacilityForm
 from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
 from django.db.models import Q
