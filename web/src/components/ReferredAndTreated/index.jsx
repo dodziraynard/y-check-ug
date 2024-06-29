@@ -1,39 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import { useLazyGetReferredAndTreatedQuery } from '../../features/resources/resources-api-slice';
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
-import * as XLSX from 'xlsx';
+import { Heading } from '@chakra-ui/react';
+import TableView from '../Table';
+import React, { Suspense, Fragment } from 'react';
+import PageLoading from '../../components/PageLoading';
+import { BASE_API_URI } from '../../utils/constants';
 
 function ReferredAndTreated() {
-    const [getReferredAndTreated, { data: response = [], isLoading, error }] = useLazyGetReferredAndTreatedQuery()
-    const [referredAndTreated, setReferredAndTreated] = useState([])
-
-    useEffect(() => {
-        getReferredAndTreated();
-    }, []);
-
-    useEffect(() => {
-        if (response && Array.isArray(response?.referred_and_treated)) {
-            setReferredAndTreated(response?.referred_and_treated);
-        }
-    }, [response])
-
-    const exportToExcel = () => {
-        const data = referredAndTreated.map(referred => ({
-            Condition: referred?.name,
-            Total: referred?.total,
-            Basic: referred?.basic,
-            Community: referred?.community,
-            Secondary: referred?.secondary,
-        }));
-
-        const worksheet = XLSX.utils.json_to_sheet(data);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Referred And Treated");
-
-        XLSX.writeFile(workbook, "referredAndTreated.xlsx");
-    };
-
     
     return (
 
@@ -45,41 +16,31 @@ function ReferredAndTreated() {
                     <div className="">
                         <Heading as="h3" size="sm" mb={4}>Referred And Treated </Heading>
                     </div>
-                    <div className="mx-2">
-                            <button 
-                                className="btn btn-sm btn-outline-primary d-flex" 
-                                onClick={exportToExcel}
-                            >
-                                <i className="bi bi-file-spreadsheet-fill"></i> Export
-                            </button> 
-                    </div>
                 </div>
-                { isLoading? <Spinner/> :
-                    <TableContainer mt={4} maxHeight="550px" overflowY="auto">
-                        <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                            <Th borderColor="None">Condition (treated)</Th>
-                            <Th borderColor="black">Total</Th>
-                            <Th borderColor="black">Basic</Th>
-                            <Th borderColor="black">Community</Th>
-                            <Th borderColor="black">Secondary</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {referredAndTreated.map((referred, index) => (
-                                <Tr key={index}>
-                                <Td>{referred?.name}</Td>
-                                <Td>{referred?.total}</Td>
-                                <Td>{referred?.basic}</Td>
-                                <Td>{referred?.community}</Td>
-                                <Td>{referred?.secondary}</Td>
-                                </Tr>
-                            ))}
-                        </Tbody>
-                        </Table>
-                    </TableContainer>
-                }
+                <div className="overflow-scroll">
+                    <Suspense fallback={<PageLoading />}>
+                        <TableView
+                            responseDataAttribute="referred_and_treated"
+                            dataSourceUrl={`${BASE_API_URI}/referred-and-treated/`}
+                            headers={[
+                                {
+                                    key: "name", value: "Condition (treated)"
+                                }, {
+                                }, {
+                                    key: "total", value: "Total"
+                                }, {
+                                }, {
+                                    key: "basic", value: "Basic"
+                                }, {
+                                }, {
+                                    key: "community", value: "Community"
+                                }, {
+                                }, {
+                                    key: "secondary", value: "Secondary"
+                                }]}
+                        />
+                    </Suspense>
+                </div>   
             </section>
             </div>
         </Fragment>
