@@ -18,7 +18,7 @@ class Referral(UpstreamSyncBaseModel):
     facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
     is_onsite = models.BooleanField(default=False)
     referral_reason = models.TextField()
-    service_type = models.CharField(max_length=200)
+    service_type = models.CharField(max_length=200,null=True, blank=True)
     services = models.ManyToManyField(Service)
     created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
 
