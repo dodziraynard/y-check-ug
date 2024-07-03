@@ -351,6 +351,7 @@ class ReferralTreatment(generics.GenericAPIView):
         provided_treaments = request.data.get("provided_treaments")
         is_referred = request.data.get("is_referred")
         no_referral_reason = request.data.get("no_referral_reason")
+        reason_for_referral = request.data.get("reason_for_referral")
         remarks = request.data.get("remarks")
         further_referral_facility = request.data.get(
             "further_referral_facility")
@@ -368,6 +369,7 @@ class ReferralTreatment(generics.GenericAPIView):
             "is_referred": is_referred,
             "further_referral_facility_id": further_referral_facility,
             "no_referral_reason": no_referral_reason,
+            "reason_for_referral": reason_for_referral,
             "remarks": remarks,
         }
         if not treatment:

@@ -22,6 +22,7 @@ class Treatment(UpstreamSyncBaseModel):
     provided_treaments = models.TextField(null=True, blank=True)
     is_referred = models.BooleanField()
     no_referral_reason = models.TextField(null=True, blank=True)
+    reason_for_referral = models.TextField(null=True, blank=True)
     further_referral_facility = models.ForeignKey(
         Facility, on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)

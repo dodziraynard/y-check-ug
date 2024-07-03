@@ -42,6 +42,7 @@ function ReferralDetailWidget() {
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
     const [remarks, setRemarks] = useState("")
     const [noOnwardReferralReason, setNoOnwardReferralReason] = useState("")
+    const [OnwardReferralReason, setOnwardReferralReason] = useState("")
     const [providedTreatment, setProvidedTreatment] = useState("")
     const [selectedFacilityId, setSelectedFacilityId] = useState("")
 
@@ -51,9 +52,11 @@ function ReferralDetailWidget() {
         if (fullTreatmentProvided) {
             setIsFurtherReferred(false)
             setNoOnwardReferralReason(null)
+            setOnwardReferralReason(null)
             setSelectedFacilityId(null)
         } else if (isFurtherReferred) {
             setNoOnwardReferralReason(null)
+            setOnwardReferralReason(null)
         }
 
         const body = {
@@ -65,6 +68,7 @@ function ReferralDetailWidget() {
             remarks: remarks,
             further_referral_facility: selectedFacilityId,
             no_referral_reason: noOnwardReferralReason,
+            reason_for_referral: OnwardReferralReason,
             condition_treatments_details: conditionTreatments
         }
         putTreatment({ body, referralId })
@@ -112,6 +116,7 @@ function ReferralDetailWidget() {
             setProvidedTreatment(treatment.provided_treaments)
             setIsFurtherReferred(treatment.is_referred)
             setNoOnwardReferralReason(treatment.no_referral_reason)
+            setOnwardReferralReason(treatment.reason_for_referral)
             setRemarks(treatment.remarks)
 
             treatment.condition_treatments?.forEach(conTreatment => {
@@ -302,18 +307,42 @@ function ReferralDetailWidget() {
                                                     </table>
                                                 </div>
                                             </div>
-
-                                            {fullTreatmentProvided &&
-                                                <div className="cgroup my-3">
-                                                    <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
-                                                    <textarea className='form-control'
-                                                        value={providedTreatment}
-                                                        required
-                                                        onChange={(event) => setProvidedTreatment(event.target.value)}
-                                                        name="treatment" id="treatment"
-                                                        cols="30" rows="4"></textarea>
+                                           
+                                            <div className="form-group my-3">
+                                                <p className='m-0'><strong>Has the adolescent received full treatment for the condition he/she was referred</strong></p>
+                                                <div className="d-flex m-0">
+                                                    <div className="form-group mt-0 me-3">
+                                                        <input className='form-check-input me-2'
+                                                            type="radio" name="treatment"
+                                                            required
+                                                            onChange={() => setFullTreamentProvided(true)}
+                                                            checked={fullTreatmentProvided == true}
+                                                            id="treatment_yes" />
+                                                        <label htmlFor="treatment_yes">Yes</label>
+                                                    </div>
+                                                    <div className="form-group mt-0 me-3">
+                                                        <input className='form-check-input me-2'
+                                                            required
+                                                            type="radio" name="treatment"
+                                                            onChange={() => setFullTreamentProvided(false)}
+                                                            checked={fullTreatmentProvided == false}
+                                                            id="treatment_no" />
+                                                        <label htmlFor="treatment_no">No</label>
+                                                    </div>
                                                 </div>
-                                            }
+                                            </div>
+                                            
+                                            
+                                            <div className="cgroup my-3">
+                                                <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
+                                                <textarea className='form-control'
+                                                    value={providedTreatment}
+                                                    required
+                                                    onChange={(event) => setProvidedTreatment(event.target.value)}
+                                                    name="treatment" id="treatment"
+                                                    cols="30" rows="4"></textarea>
+                                            </div>
+                                            
 
                                             {!fullTreatmentProvided &&
                                                 <div className="form-group my-3">
@@ -359,6 +388,8 @@ function ReferralDetailWidget() {
                                                     <textarea className='form-control'
                                                         name="treatment" id="treatment"
                                                         required
+                                                        value={noOnwardReferralReason}
+                                                        onChange={(event) => setNoOnwardReferralReason(event.target.value)}
                                                         cols="30" rows="4"></textarea>
                                                 </div>
                                             }
@@ -368,9 +399,9 @@ function ReferralDetailWidget() {
                                                     <label htmlFor=''><strong>Reason for referral</strong></label>
                                                     <textarea className='form-control'
                                                         name="treatment"
-                                                        value={noOnwardReferralReason}
+                                                        value={OnwardReferralReason}
                                                         required
-                                                        onChange={(event) => setNoOnwardReferralReason(event.target.value)}
+                                                        onChange={(event) => setOnwardReferralReason(event.target.value)}
                                                         id="treatment"
                                                         cols="30"
                                                         rows="4"></textarea>
