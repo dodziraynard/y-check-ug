@@ -292,6 +292,7 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
 
     def get_is_referred(self, obj):
         return Referral.objects.filter(
+            adolescent=obj.adolescent,
             services__related_flag_labels=obj.label).exists()
 
     class Meta:
