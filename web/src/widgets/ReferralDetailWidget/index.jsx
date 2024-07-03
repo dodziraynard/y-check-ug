@@ -178,6 +178,10 @@ function ReferralDetailWidget() {
         return found
     }
 
+    useEffect(() => {
+        setFullTreamentProvided(Boolean(referral?.services && referral?.services?.length == conditionTreatments.length))
+    }, [conditionTreatments])
+
     monitorAndLoadResponse(referralResponse, "referral", setReferral)
     monitorAndLoadResponse(referralResponse, "adolescent", setAdolescent)
     monitorAndLoadResponse(referralResponse, "relevant_adolescent_responses", setRelevantAdolescentResponses)
@@ -254,7 +258,7 @@ function ReferralDetailWidget() {
                                     {pictureConfirmed &&
                                         <div>
                                             <div className="form-group my-3">
-                                                <p className='m-0'><strong>Which of the following conditions have been treated for the aodelecent?</strong></p>
+                                                <p className='m-0'><strong>Which of the following conditions have been treated for the adolescent?</strong></p>
                                                 <div className="m-0">
                                                     <table className='my-3'>
                                                         <thead>
@@ -303,17 +307,15 @@ function ReferralDetailWidget() {
                                                 </div>
                                             </div>
 
-                                            {fullTreatmentProvided &&
-                                                <div className="cgroup my-3">
-                                                    <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
-                                                    <textarea className='form-control'
-                                                        value={providedTreatment}
-                                                        required
-                                                        onChange={(event) => setProvidedTreatment(event.target.value)}
-                                                        name="treatment" id="treatment"
-                                                        cols="30" rows="4"></textarea>
-                                                </div>
-                                            }
+                                            <div className="group my-3">
+                                                <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
+                                                <textarea className='form-control'
+                                                    value={providedTreatment}
+                                                    required
+                                                    onChange={(event) => setProvidedTreatment(event.target.value)}
+                                                    name="treatment" id="treatment"
+                                                    cols="30" rows="4"></textarea>
+                                            </div>
 
                                             {!fullTreatmentProvided &&
                                                 <div className="form-group my-3">
@@ -346,12 +348,14 @@ function ReferralDetailWidget() {
                                                     <label htmlFor='facility_id'><strong>Where was the adolescent further referred?</strong></label>
                                                     {isLoadingFacilities && <Spinner />}
                                                     <select className='form-select'
+                                                        defaultValue={selectedFacilityId}
                                                         onChange={(event) => setSelectedFacilityId(event.target.value)}
                                                         name='facility_id' id='facility_id' required>
                                                         <option defaultValue="">Choose facility</option>
-                                                        {facilities?.map(facility => <option value={facility.id} selected={selectedFacilityId === facility.id}>{facility.name}</option>)}
+                                                        {facilities?.map(facility => <option key={facility.id} value={facility.id}>{facility.name}</option>)}
                                                     </select>
-                                                </div>}
+                                                </div>
+                                            }
 
                                             {!isFurtherReferred && !fullTreatmentProvided &&
                                                 <div className="form-group my-3">

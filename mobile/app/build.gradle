@@ -26,6 +26,8 @@ android {
 
         resValue "string", "test_base_api_url", properties.getProperty("test.base.api.url", "https://0.0.0.0/api/")
         resValue "string", "live_base_api_url", properties.getProperty("live.base.api.url", "https://0.0.0.0/api/")
+        resValue "string", "test_frontend_url", properties.getProperty("test.frontend.url", "https://www.ycheckgh.com")
+        resValue "string", "live_frontend_url", properties.getProperty("live.frontend.url", "https://www.ycheckgh.com")
         resValue "string", "app_version", "v$versionName"
     }
 

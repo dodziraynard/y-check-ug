@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".process_overview.ProcessOverviewActivity"
+            android:name=".ui.process_overview.ProcessOverviewActivity"
             android:exported="false" />
         <activity
             android:name=".ui.adolescent_enrollment.PagedAdolescentRegistrationActivity"

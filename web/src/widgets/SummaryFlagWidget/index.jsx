@@ -197,7 +197,7 @@ function SummaryFlagWidget() {
         })
         setProblematicFlags(probFlags)
         setOtherFlags(othFlags)
-    }, [flags, adolescentResponded])
+    }, [flags, setAdolescentResponded])
 
     return (
         <Fragment>
