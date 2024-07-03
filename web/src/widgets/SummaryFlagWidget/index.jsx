@@ -184,7 +184,9 @@ function SummaryFlagWidget() {
             })
             setAdolescentResponded(responseStatus)
         }
+    }, [flags, setAdolescentResponded])
 
+    useEffect(() => {
         //  Separate flags
         const probFlags = []
         const othFlags = []
@@ -197,7 +199,7 @@ function SummaryFlagWidget() {
         })
         setProblematicFlags(probFlags)
         setOtherFlags(othFlags)
-    }, [flags, setAdolescentResponded])
+    }, [flags, adolescentResponded])
 
     return (
         <Fragment>
