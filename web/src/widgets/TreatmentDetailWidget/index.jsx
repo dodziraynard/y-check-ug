@@ -33,6 +33,7 @@ function TreatmentDetailWidget() {
     const [fullTreatmentProvided, setFullTreamentProvided] = useState(false)
     const [remarks, setRemarks] = useState("")
     const [noOnwardReferralReason, setNoOnwardReferralReason] = useState("")
+    const [OnwardReferralReason, setOnwardReferralReason] = useState("")
     const [providedTreatment, setProvidedTreatment] = useState("")
     const [selectedFacilityId, setSelectedFacilityId] = useState("")
 
@@ -68,6 +69,7 @@ function TreatmentDetailWidget() {
             setProvidedTreatment(treatment.provided_treaments)
             setIsFurtherReferred(treatment.is_referred)
             setNoOnwardReferralReason(treatment.no_referral_reason)
+            setOnwardReferralReason(treatment.reason_for_referral)
             setRemarks(treatment.remarks)
 
             treatment.condition_treatments?.forEach(conTreatment => {
@@ -209,17 +211,40 @@ function TreatmentDetailWidget() {
                         </div>
                     </div>
 
-                    {fullTreatmentProvided &&
-                        <div className="form-group my-3">
-                            <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
-                            <textarea className='form-control'
-                                value={providedTreatment}
-                                required
-                                readOnly
-                                name="treatment" id="treatment"
-                                cols="30" rows="4"></textarea>
+                    <div className="form-group my-3">
+                        <p className='m-0'><strong>Has the adolescent received full treatment for the condition he/she was referred</strong></p>
+                        <div className="d-flex m-0">
+                            <div className="form-group mt-0 me-3">
+                                <input className='form-check-input me-2'
+                                    type="radio" name="treatment"
+                                    required
+                                    checked={fullTreatmentProvided == true}
+                                    id="treatment_yes" />
+                                <label htmlFor="treatment_yes">Yes</label>
+                            </div>
+                            <div className="form-group mt-0 me-3">
+                                <input className='form-check-input me-2'
+                                    required
+                                    type="radio" name="treatment"
+                                    checked={fullTreatmentProvided == false}
+                                    id="treatment_no" />
+                                <label htmlFor="treatment_no">No</label>
+                            </div>
                         </div>
-                    }
+                    </div>
+                                            
+
+                
+                    <div className="form-group my-3">
+                        <label htmlFor=''><strong>What treatment was provided to the adolescent?</strong></label>
+                        <textarea className='form-control'
+                            value={providedTreatment}
+                            required
+                            readOnly
+                            name="treatment" id="treatment"
+                            cols="30" rows="4"></textarea>
+                    </div>
+                
 
                     {!fullTreatmentProvided &&
                         <div className="form-group my-3">
@@ -230,7 +255,7 @@ function TreatmentDetailWidget() {
                                         type="radio" name="further_referral"
                                         required
                                         disabled
-                                        checked={fullTreatmentProvided == true}
+                                        checked={isFurtherReferred == true}
                                         id="further_referral_yes" />
                                     <label htmlFor="further_referral_yes">Yes</label>
                                 </div>
@@ -239,7 +264,7 @@ function TreatmentDetailWidget() {
                                         required
                                         disabled
                                         type="radio" name="further_referral"
-                                        checked={fullTreatmentProvided == false}
+                                        checked={isFurtherReferred == false}
                                         id="further_referral_no" />
                                     <label htmlFor="further_referral_no">No</label>
                                 </div>
@@ -265,6 +290,7 @@ function TreatmentDetailWidget() {
                             <textarea className='form-control'
                                 name="treatment" id="treatment"
                                 required
+                                value={noOnwardReferralReason}
                                 disabled
                                 cols="30" rows="4"></textarea>
                         </div>
@@ -275,7 +301,7 @@ function TreatmentDetailWidget() {
                             <label htmlFor=''><strong>Reason for referral</strong></label>
                             <textarea className='form-control'
                                 name="treatment"
-                                value={noOnwardReferralReason}
+                                value={OnwardReferralReason}
                                 required
                                 disabled
                                 id="treatment"
