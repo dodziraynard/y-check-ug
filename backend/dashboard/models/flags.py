@@ -349,7 +349,7 @@ class FlagCondition(UpstreamSyncBaseModel):
                 adolescent=adolescent,
                 label__name="ANAEMIA").first()
                 if summary_flag:
-                    summary_flag.context = f"Status: {anaemia_status}"
+                    summary_flag.context = f"Status: {anaemia_status.value}"
                     summary_flag.save()
 
             case "time_difference_between":
