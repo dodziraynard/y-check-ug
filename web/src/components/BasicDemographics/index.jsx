@@ -1,41 +1,11 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useToast, Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import { useLazyGetBasicDemographicsQuery } from '../../features/resources/resources-api-slice';
+import { Heading } from '@chakra-ui/react';
 import CommunityDemographics from '../CommunityDemographics';
-import DemographicsTable from "../DemographicsTable";
 import SecondaryDemographics from '../SecondaryDemographics';
-import * as XLSX from 'xlsx';
-
+import TableView from '../Table';
+import React, { Suspense, Fragment } from 'react';
+import PageLoading from '../../components/PageLoading';
+import { BASE_API_URI } from '../../utils/constants';
 function BasicDemographics() {
-    const [getBasicDemographics, { data: response = [], isLoading, error }] = useLazyGetBasicDemographicsQuery()
-    const [basicDemographics, setBasicDemographics] = useState([])
-
-    useEffect(() => {
-        getBasicDemographics();
-       
-    }, []);
-
-    useEffect(() => {
-        if (response && Array.isArray(response?.basic_demographics)) {
-            setBasicDemographics(response?.basic_demographics);
-        }
-    }, [response])
-
-    const exportToExcel = () => {
-        const data = basicDemographics.map(distribution => ({
-            Age: distribution?.Age,
-            Female: distribution?.female,
-            Male: distribution?.male,
-            Total: distribution?.Total,
-            Percentage: distribution?.Percentage
-        }));
-
-        const worksheet = XLSX.utils.json_to_sheet(data);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Basic Demographics");
-
-        XLSX.writeFile(workbook, "BasicDemographics.xlsx");
-    };
     return (
 
         <Fragment>
@@ -45,18 +15,31 @@ function BasicDemographics() {
                 <div className="d-flex justify-content-between">
                     <div className="">
                         <Heading as="h3" size="sm" mb={4}>Basic Demographics</Heading>
-                    </div>
-                    <div className="mx-2">
-                            <button 
-                                className="btn btn-sm btn-outline-primary d-flex" 
-                                onClick={exportToExcel}
-                            >
-                                <i className="bi bi-file-spreadsheet-fill"></i> Export
-                            </button> 
-                    </div>
+                    </div>                           
                 </div>
-                <DemographicsTable
-                    demographics={basicDemographics}/>
+                <div className="overflow-scroll">
+                    <Suspense fallback={<PageLoading />}>
+                        <TableView
+                            responseDataAttribute="basic_demographics"
+                            dataSourceUrl={`${BASE_API_URI}/basic-demographics/`}
+                            headers={[
+                                {
+                                    key: "Age", value: "Age"
+                                }, {
+                                }, {
+                                    key: "female", value: "Female"
+                                }, {
+                                }, {
+                                    key: "male", value: "Male"
+                                }, {
+                                }, {
+                                    key: "Total", value: "Total"
+                                }, {
+                                    key: "Percentage", value: "Percentage"
+                                }]}
+                        />
+                    </Suspense>
+                </div>   
             </section>
             </div>
                 <SecondaryDemographics/>
