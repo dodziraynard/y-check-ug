@@ -410,7 +410,7 @@ function ReferralDetailWidget() {
                 <BreadCrumb items={[{ "name": "Referrals", "url": "/dashboard/referrals" }, { "name": referral?.facility_name }]} />
                 {isLoadingReferral ? <span className="text-center"><Spinner size={"lg"} /></span> : ""}
                 <section className='page-referral-detail'>
-                    <h4>Referral Detail</h4>
+                    <h4>Action Detail</h4>
                     <div>
                         <h5 className='text-primary'>Adolescent Profile</h5>
                         <hr />

@@ -124,7 +124,7 @@ function ProcessReviewWidget() {
   };
 
   const getDisplayStatus = (status) => {
-    return getStatusColor(status) === 'red.500' ? 'Must be referred' : status;
+    return getStatusColor(status) === 'red.500' ? 'No action taken' : status;
   };
 
   const handleUpdateAdolescentStatus = async () => {
@@ -223,7 +223,7 @@ function ProcessReviewWidget() {
                         <Text as="p" color="gray.500"> ({referral.services.map(service => service.name).join(', ')})</Text>
                       </Td>
                       <Td color={referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "red.500" : "green.500"}>
-                        {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "Must be completed" : referral.status}
+                        {referral.is_onsite && referral.status?.toLowerCase() !== "completed" ? "No action taken" : referral.status}
                       </Td>
                     </Tr>
                   })}
