@@ -64,7 +64,7 @@ def get_age_distribution_data():
 
     for record in adolescents:
         age = record['age']
-        adolescent_type = record['type']
+        adolescent_type = (record['type'] or "").lower()
         count = record['count']
         
         # Update age_type_counts
@@ -118,11 +118,11 @@ def get_completed_treatment(is_onsite, status):
     onsite_adolescents = {referral.adolescent for referral in referrals}
 
     treated = []
-    flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+    flag_label_distribution = {label.name: {category.lower(): 0 for category in categories} for label in FlagLabel.objects.all()}
     for referral in referrals:
         for service in referral.services.all():
             for flag_label in service.related_flag_labels.all():
-                flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+                flag_label_distribution[flag_label.name][(referral.adolescent.type or "").lower()] += 1
 
     for flag_label, counts in flag_label_distribution.items():
         total = sum(counts.values())

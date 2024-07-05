@@ -13,6 +13,7 @@ import com.hrd.ycheck.databinding.UsernameAuthenticationBottomSheetLayoutBinding
 import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.models.User
 import com.hrd.ycheck.ui.authentication.AuthenticationActivityViewModel
+import com.hrd.ycheck.ui.questionnaire.MultipleQuestionnaireActivity
 import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 
@@ -47,7 +48,7 @@ class SurveyFeedbackActivity : AppCompatActivity() {
                 val username = dialogBinding.usernameInput.text.toString()
                 if (currentUser?.username?.equals(username) == true) {
                     dialogBinding.errorMessageLabel.visibility = View.GONE
-                    val intent = Intent(this, QuestionnaireActivity::class.java)
+                    val intent = Intent(this, MultipleQuestionnaireActivity::class.java)
                     intent.putExtra("adolescent", adolescent)
                     intent.putExtra("question_type", QuestionnaireType.SURVEY_FEEDBACK)
                     startActivity(intent)

@@ -4,6 +4,7 @@ package com.hrd.ycheck.components.compose
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +38,7 @@ fun MultipleQuestionnaireUI(
     totalSectionCount: Int = 8,
     audioPlayer: AudioPlayer? = null,
     showError: Boolean = true,
+    pid: String = "",
 ) {
     val context = LocalContext.current
     Column(
@@ -46,7 +48,7 @@ fun MultipleQuestionnaireUI(
             .background(Color(255, 255, 255, 50))
     ) {
         Text(
-            text = "Section $currentSectionNumber of $totalSectionCount",
+            text = "(${pid}) Section $currentSectionNumber of $totalSectionCount",
             color = colorResource(R.color.text_color),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth()

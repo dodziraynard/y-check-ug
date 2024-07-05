@@ -1,5 +1,6 @@
 package com.hrd.ycheck.ui.process_overview
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -17,6 +18,7 @@ import com.hrd.ycheck.BuildConfig
 import com.hrd.ycheck.R
 import com.hrd.ycheck.databinding.ActivityProcessOverviewBinding
 import com.hrd.ycheck.models.Adolescent
+import com.hrd.ycheck.utils.Constants
 import java.net.URL
 
 
@@ -65,12 +67,16 @@ class ProcessOverviewActivity : AppCompatActivity() {
         binding.webView.webViewClient = webViewClient
         binding.webView.settings.domStorageEnabled = true
 
+        val prefs =
+            getSharedPreferences(Constants.SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        val prefHost = prefs.getString(Constants.HOST_URL, "")
+        val prefUrl = URL(prefHost)
+
         val path = "/dashboard/patients/${adolescent?.pid}/review"
         val host = URL(if (BuildConfig.DEBUG) getString(R.string.test_frontend_url) else getString(R.string.live_frontend_url))
-        val protocol = host.protocol
-        val authority = host.authority
+        val protocol = if (prefHost.isNullOrBlank()) host.protocol else prefUrl.protocol
+        val authority =  if (prefHost.isNullOrBlank()) host.authority else prefUrl.host
         val url = String.format("%s://%s%s", protocol, authority, path);
-
         binding.webView.loadUrl(url)
     }
 

@@ -343,6 +343,15 @@ class FlagCondition(UpstreamSyncBaseModel):
                 anaemia_status = compute_anaemia_status(adolescent)
                 matched = bool(
                     self.expected_value) and anaemia_status and self.expected_value.lower().strip() == str(anaemia_status.value).lower()
+
+                # Add anaemia context
+                summary_flag = SummaryFlag.objects.filter(
+                adolescent=adolescent,
+                label__name="ANAEMIA").first()
+                if summary_flag:
+                    summary_flag.context = f"Status: {anaemia_status}"
+                    summary_flag.save()
+
             case "time_difference_between":
                 hours_spent = compute_time_difference(
                     adolescent, self.question1, self.question2)

@@ -210,11 +210,11 @@ class PositiveScreenedView(generics.GenericAPIView):
 
         # Aggregate data for each flag label
         to_be_treated_onsite = []
-        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        flag_label_distribution = {label.name: {category.lower(): 0 for category in categories} for label in FlagLabel.objects.all()}
         for referral in referrals:
             for service in referral.services.all():
                 for flag_label in service.related_flag_labels.all():
-                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+                    flag_label_distribution[flag_label.name][(referral.adolescent.type or "").lower()] += 1
 
         
         for flag_label, counts in flag_label_distribution.items():
