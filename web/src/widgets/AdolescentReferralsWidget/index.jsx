@@ -258,7 +258,7 @@ function AdolescentReferralsWidget() {
                 <BreadCrumb items={[{ "name": "Patients", "url": "/dashboard/patients" }, { "name": "Summary", "url": `/dashboard/patients/${pid}/summary` }, { "name": "Referrals", "url": "" }]} />
 
                 <section className="page-patients">
-                    <h4>Referrals</h4>
+                    <h4>Actions</h4>
                     {isLoadingReferrals ? <p className="text-center"><Spinner size={"lg"} /></p> : ""}
 
                     <div className="col-md-11 col-12 mx-auto">
