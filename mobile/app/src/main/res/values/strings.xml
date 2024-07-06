@@ -168,7 +168,7 @@
     <string name="choose_location">Choose location</string>
     <string name="counsellor_assessment">STATION 4B: Counsellor Assessment</string>
     <string name="exit_interview">Exit Interview</string>
-    <string name="evaluation">Evaluation</string>
+    <string name="evaluation">Process Evaluation</string>
     <string name="well_done_you_ve_completed_the_practice_questions_now_let_s_start_the_actual_survey">Well done, %1$s! You\'ve completed the practice questions. Now let\'s start the actual survey.</string>
     <string name="is_not_a_valid_number">%1$s is not a valid number</string>
     <string name="no_revelant_question">There are no relevant questions for you in this section at the moment.</string>
@@ -182,4 +182,5 @@
     <string name="update_available">Update Available</string>
     <string name="app_new_version_info">Your current application version is %1$s, while an updated version, %2$s, is now available. Would you like to proceed with the update?</string>
     <string name="process_overview">Process Overview</string>
+    <string name="check_point">Check Point</string>
 </resources>

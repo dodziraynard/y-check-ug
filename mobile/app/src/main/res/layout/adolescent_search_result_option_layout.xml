@@ -167,7 +167,7 @@
             android:drawablePadding="10dp"
             android:foreground="?android:selectableItemBackground"
             android:padding="15dp"
-            android:text="@string/process_overview"
+            android:text="@string/check_point"
             android:textSize="@dimen/text_small"
             app:drawableLeftCompat="@drawable/baseline_remove_done_24"
             app:drawableTint="@color/text_color" />

@@ -296,6 +296,11 @@ export const resourceApiSlice = createApi({
                     return `/adolescent-activity/?adolescent_id=${adolescent_id}`;
                 },
             }),
+            printReferralForm: builder.query({
+                query({ referral_id }) {
+                    return `referral-form/${referral_id}/print/`;
+                },
+            }),
             // apk
             putApkUploadFile: builder.mutation({
                 query(body) {
@@ -371,7 +376,10 @@ export const {
     useLazyGetTreatedOnsiteQuery,
     useLazyGetReferredForTreatmentQuery,
     useLazyGetQuestionFeedbackQuery,
-    useLazyGetReferredAndTreatedQuery
+    useLazyGetReferredAndTreatedQuery,
+
+    // Forms
+    useLazyPrintReferralFormQuery,
 } = resourceApiSlice;
 
 export default resourceApiSlice;

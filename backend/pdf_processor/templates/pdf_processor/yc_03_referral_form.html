@@ -10,250 +10,164 @@
         body {
             margin: 0;
             padding: 0;
+            font-family: 'Times New Roman', Times, serif;
         }
-
-        header {
-            padding: 20px;
-            background-color: #ffffff;
-        }
-        
-        header table {
-            width: 100%;
-        }
-        
-        header td {
-            text-align: center;
-        }
-        
-        header img {
-            width: 100px;
-            height: auto;
-        }
-        
-        
-        h1 {
-            margin: 0;
-        }
-
-        h3 {
-            text-align: center;
-            text-decoration: underline;
-        }
-
-        
-        .container {
-            width: 74%;
-            margin: 20px auto;
-            padding: 20px;
-            font-size: 18px;
-            margin-top: -20px;
-        }
-        .date, .name, .y_id {
-            width: 100%;
-        }
-        
-        .date td, .name td, .y_id td {
-            vertical-align: top;
-        }
-        
-        .date p, .name p{
-            margin: 0;
-        }
-        
-        .name span {
-            display: inline-block;
-            width: 450px;
-        }
-        
-        
-        table {
-            width: 100%; 
-        }
-        
-        th, td {
-            text-align: left; 
-        }
-        
-        th:first-child, td:first-child {
-            text-align: left; 
-        }
-        
-        
     </style>
 </head>
 
 <body>
-    <header>
-        <table>
-            <tr>
-                <td><img src="{% static 'images/logo.png' %}" alt="louis"></td>
-                <td style="margin-left: -100px;"><h1>YC_03 Referral Form for Service Providers</h1></td>
-                <td style="margin-left: 100px;"><img src="{% static 'images/logo.png' %}" alt=""></td>
-            </tr>
-        </table>
-    </header>
-    <h3>Complete this form in Capital Letters, paying attention to a Clear, Bold, and Easy to read handwriting.</h3>
-    <table style="border: 1px solid black; padding-top:5px; padding-bottom:5px; margin:0;">
-        <tr style="border: none;">
-            <td style="border: none;"><h2 style="border: none; margin-left: 50px;">PART 1</h2></td>
-        </tr>
-        <tr style="border: none;">
-            <td style="border: none;"><h2 style="text-align: center;">YOUNG PERSON MUST TAKE THIS FORM WITH THEM TO</h2></td>
-        </tr>
-        <tr style="border: none;">
-            <td style="border: none;"><h2 style="border: none; margin-left: 50px;">REFERRAL SERVICE: <span>____________________________</span></h2></td>
-        </tr>
-        <tr style="border: none;">
-            <td style="border: none;"><h2 style="border: none; margin-left: 50px;">LOCATION: <span>____________________________</span></h2></td>
+    <table>
+        <tr>
+            <td>
+                <img src="{{logo_url}}" height="50px">
+            </td>
+            <td style="text-align: center;" colspan="2">
+                <h1>YC_03 Referral Form for Service Providers</h1>
+            </td>
+            <td style="text-align: right;">
+                <img src="{{logo_url}}" height="50px">
+            </td>
         </tr>
     </table>
-    
-    <div style="margin-top: 10px;" >
-        <table>
-            <tr>
-                <td><strong>Dear esteemed colleague,</strong></td>
-                <td style="margin-left: 200px;" ><strong>Date:__________________</strong></td>
-            </tr>
-        </table>
-        
-        <table >
-            <tr>
-                <td><p><strong>Please receive</strong> (First NAME, SurNAME) <span>__________________________________________________________________________________</span> <strong>who attended</strong></p></td>
-            </tr>
-            <tr>
-                <td><p><strong>the Y-Check screening service delivered by Y-Check staff.</strong></p></td>
-            </tr>
-        </table>
-        
-        <table class="y_id">
-            <tr>
-                <td><p>Y-Check ID:________________________</p></td>
-                <td><p>Age:_______________________________</p></td>
-                <td><p>Sex:_______________________________</p></td>
-            </tr>
-        </table>
-        
-        <div class="y-table">
-            <table>
-                <tr>
-                    <th>Referred for management of:</th>
-                    <th>Clinical notes from Y-Check visit:</th>
-                </tr>
-                
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Malaria</span>
-                        </td>
-                    </div>
-                    <td>_____________________________________________________________</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Hearing impairment</span>
-                        </td>
-                    </div>
-                    <td>Right ear:________________________ Left ear:______________________</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Visual impairment</span>
-                        </td>
-                    </div>
-                    <td>Right eye:________________________ Left eye:_____________________</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Oral health</span>
-                        </td>
-                    </div>
-                    <td>_____________________________________________________________</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Physical impairment</span>
-                        </td>
-                    </div>
-                    <td>_____________________________________________________________</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Malnutrition</span>
-                        </td>
-                    </div>
-                    <td>BMI____________________________________________________kg/m2</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>Severe anaemia</span>
-                        </td>
-                    </div>
-                    <td>Hb_______________________________________________________g/dL</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>High blood pressure</span>
-                        </td>
-                    </div>
-                    <td>________________________________________________________mmHg</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>STI</span>
-                        </td>
-                    </div>
-                    <td>_____________________________________________________________</td>
-                </tr>
-                <tr style="padding: 5px;">
-                    <div class="">
-                        <td>
-                            <input type="checkbox">
-                            <span>HIV/AIDS</span>
-                        </td>
-                    </div>
-                    <td>_____________________________________________________________</td>
-                </tr>
-               
-            </table>
-        </div>
 
-        <p>Additional notes:</p>
-       <table class="date">
-           <tr>
-               <td>Name of Y-Check PA:__________________________________</td>
-               <td>Signature:___________________________</td>
-           </tr>
-       </table>
-       <table class="date">
-            <tr>
-                <td>Referring Organisation: ...............................................</td>
-            </tr>
-        </table>
-        <table class="date">
-            <tr>
-                <td>Contact details:(POPE) .........................................</td>
-            </tr>
-        </table>
-       
-    </div>
-    
+    <br>
+    <h3 style="text-align: center; text-decoration: underline;">
+        Complete this form in Capital Letters, paying attention to a Clear, Bold, and Easy to read handwriting
+    </h3>
+    <br>
+
+    <table style="border: 1px solid black; padding-top:5px; padding-bottom:5px; margin:0;">
+        <tr style="border: none;">
+            <td style="border: none;">
+                <h2 style="border: none; margin-left: 50px;">PART 1</h2>
+            </td>
+        </tr>
+        <tr style="border: none;">
+            <td style="border: none;">
+                <h2 style="text-align: center;">YOUNG PERSON MUST TAKE THIS FORM WITH THEM TO</h2>
+            </td>
+        </tr>
+        <tr style="border: none;">
+            <td style="border: none;">
+                <h2 style="border: none; margin-left: 50px;">
+                    LOCATION:
+                    <span style="text-decoration: underline;">
+                        {{referral.facility.name | upper}}
+                    </span>
+                </h2>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+    <table>
+        <tr>
+            <td style="text-align: left;">
+                <h2>Dear Esteemed Colleague,</h2>
+            </td>
+            <td style="text-align: right;">
+                <h2>
+                    Date:
+                    <span style="text-decoration: underline;">__{{referral.created_at|date:"M d, Y" | upper}}__</span>
+                </h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <table>
+        <tr>
+            <td>
+                <h2>
+                    Please receive (First Name, Surname)
+                    <span style="text-decoration: underline; margin-left: 10px; margin-right: 10px;">
+                        ____{{referral.adolescent.other_names | upper}}__,
+                        __{{referral.adolescent.surname | upper}}____
+                    </span>
+                    who attended the Y-Check screening service delivered by Y-Check staff.
+                </h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table>
+        <tr>
+            <td>
+                <h2 style="font-weight: 400;">Y-Check ID: <span
+                        style="text-decoration: underline;">____{{referral.adolescent.pid}}____</span></h2>
+            </td>
+            <td>
+                <h2 style="font-weight: 400;">Age: <span
+                        style="text-decoration: underline;">____{{referral.adolescent.get_age}}YEARS____</span></h2>
+            </td>
+            <td>
+                <h2 style="font-weight: 400;">Sex: <span
+                        style="text-decoration: underline;">____{{referral.adolescent.gender | upper}}____</span></h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+
+    <table>
+        <tr>
+            <th style="text-align: left;">
+                <h2 style="font-weight: 400;">Referred for management of:</h2>
+            </th>
+            <th colspan="2" style="text-align: left;">
+                <h2 style="font-weight: 400;">Clinical notes from Y-Check visit:</h2>
+            </th>
+        </tr>
+
+        {% for service in referral.services.all %}
+        <tr>
+            <td style="height: 30px;">
+                <h2 style="font-weight: 400; margin-left: 10px;">{{service.name | upper}}:</h2>
+            </td>
+            <td colspan="2" style="height: 30px;">
+                _______________________________________________________________________________________________</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+
+    <h2>Additional notes:</h2>
+    <h2 style="border-bottom: 1px solid gray; font-weight: 400;">
+        {{referral.referral_reason|safe}}
+    </h2>
+
+    <br>
+    <br>
+    <table>
+        <tr>
+            <td>
+                <h2>Name of Y-Check PA: {{referral.created_by.get_name | upper}}</h2>
+            </td>
+            <td>
+                <h2>Signature:___________________________</h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <td>
+                <h2>Referring Organisation: Y-Check Ghana</h2>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <h2>
+                    Contact details: Evans Agbenoo, +233 24 456 3742
+                </h2>
+            </td>
+        </tr>
+    </table>
+
 </body>
 
 </html>

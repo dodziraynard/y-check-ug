@@ -69,7 +69,11 @@ urlpatterns = [
     # apk
     path("upload-apk/", views.UploadApkAPI.as_view()),
     path("get-apk/", views.GetApk.as_view()),
+]
 
+# Forms
+urlpatterns += [
+     path("referral-form/<str:referral_id>/print/", views.GenerateReferralForm.as_view()),
 ]
 
 # Misc URLs

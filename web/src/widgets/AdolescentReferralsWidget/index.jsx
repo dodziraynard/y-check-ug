@@ -21,18 +21,18 @@ function AdolescentReferralsWidget() {
     const user = useSelector((state) => state.authentication.user);
     const { pid } = useParams()
     const newReferralModalRef = useRef(null);
+    const deleteReferralModalRef = useRef(null);
     const [searchParams] = useSearchParams();
     const createNewReferal = searchParams.get('new') === "true"
     const toast = useToast(null);
-    const deleteReferralModalRef = useRef(null);
     const [getReferrals, { data: referralsResponse = [], isLoading: isLoadingReferrals, error: referralsError }] = resourceApiSlice.useLazyGetReferralsQuery()
     const [getFacilities, { data: facilitiesResponse = [], isLoading: isLoadingFacilities, error: errorLoadingFacilities }] = useLazyGetAllFacilitiesQuery()
     const [getServices, { data: servicesResponse = [], isLoading: isLoadingServices, error: errorLoadingServices }] = useLazyGetRecommendedServicesQuery()
+    const [printReferralForm, { data: printFormResponse = [], isLoading: isLoadingPrintForm, error: errorPrintingForm }] = resourceApiSlice.useLazyPrintReferralFormQuery()
 
     const [putReferrals, { data, isLoading: isPuttingReferrals, error: errorPuttingReferrals }] = resourceApiSlice.usePutReferralsMutation()
     const [deleteReferral, { isLoading: isDeletingReferral, error: errorDeletingReferral }] = resourceApiSlice.useDeleteReferralsMutation()
 
-    const { trigger: getAdolescent, data: adolescentResponseData, adolescnetError, isLoadingAdolescent } = useAxios({ mainUrl: `${BASE_API_URI}/${pid}/web` });
 
     const [facilities, setFacilities] = useState([])
     const [services, setServices] = useState([])
@@ -129,6 +129,15 @@ function AdolescentReferralsWidget() {
         deleteReferralModal?.hide()
     }
 
+    useEffect(() => {
+        if (printFormResponse?.error_message) {
+            toastErrorMessage(printFormResponse?.error_message, toast)
+        }
+        if (printFormResponse?.download_link) {
+            window.open(printFormResponse?.download_link, '_blank').focus();
+        }
+    }, [printFormResponse])
+
     monitorAndLoadResponse(facilitiesResponse, "facilities", setFacilities)
     monitorAndLoadResponse(servicesResponse, "services", setServices)
     monitorAndLoadResponse(referralsResponse, "referrals", setReferrals)
@@ -208,8 +217,9 @@ function AdolescentReferralsWidget() {
                                         </select>
                                     }
                                 </div>
-                                
-                                {/* I don't fee what value this field provides in the reports. */}
+
+                                {/* I don't see what value this field provides in the reports. */}
+
                                 {/* <div className="form-group my-4">
                                     <label htmlFor="service_type"><strong>Type of initiating service</strong></label>
                                     <select className='form-select'
@@ -294,6 +304,11 @@ function AdolescentReferralsWidget() {
                                             </td>
                                             <td>
                                                 <div className='d-flex justify-content-end'>
+                                                    <button
+                                                        className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
+                                                        onClick={() => printReferralForm({ referral_id: referral.id })}>
+                                                        <i className="bi bi-printer me-1"></i> Print
+                                                    </button>
                                                     <button className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
                                                         onClick={() => showEditReferralModal(referral)}>
                                                         <i className="bi bi-pen me-1"></i> Edit

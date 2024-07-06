@@ -165,6 +165,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_ROOT = BASE_DIR / "assets"
 TEMP_REPORT_DIR = MEDIA_ROOT / "temp/reports/"
 TEMP_REPORT_URL = MEDIA_URL + "temp/reports/"
+X_FRAME_OPTIONS = 'ALLOW'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

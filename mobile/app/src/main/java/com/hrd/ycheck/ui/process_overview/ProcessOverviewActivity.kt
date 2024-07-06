@@ -11,7 +11,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.Debug
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.hrd.ycheck.BuildConfig
@@ -46,9 +45,7 @@ class ProcessOverviewActivity : AppCompatActivity() {
 
         val webViewClient = object : WebViewClient() {
             override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
+                view: WebView?, request: WebResourceRequest?, error: WebResourceError?
             ) {
                 super.onReceivedError(view, request, error)
                 Log.d("HRDTEST", "onReceivedError: $error")
@@ -67,15 +64,20 @@ class ProcessOverviewActivity : AppCompatActivity() {
         binding.webView.webViewClient = webViewClient
         binding.webView.settings.domStorageEnabled = true
 
-        val prefs =
-            getSharedPreferences(Constants.SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Constants.SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         val prefHost = prefs.getString(Constants.HOST_URL, "")
-        val prefUrl = URL(prefHost)
+
+        var prefUrl: URL? = null
+        try {
+            prefUrl = URL(prefHost)
+        } catch (_: Exception) {
+        }
 
         val path = "/dashboard/patients/${adolescent?.pid}/review"
-        val host = URL(if (BuildConfig.DEBUG) getString(R.string.test_frontend_url) else getString(R.string.live_frontend_url))
-        val protocol = if (prefHost.isNullOrBlank()) host.protocol else prefUrl.protocol
-        val authority =  if (prefHost.isNullOrBlank()) host.authority else prefUrl.host
+        val host =
+            URL(if (BuildConfig.DEBUG) getString(R.string.test_frontend_url) else getString(R.string.live_frontend_url))
+        val protocol = prefUrl?.protocol ?: host.protocol
+        val authority = prefUrl?.host ?: host.authority
         val url = String.format("%s://%s%s", protocol, authority, path);
         binding.webView.loadUrl(url)
     }
