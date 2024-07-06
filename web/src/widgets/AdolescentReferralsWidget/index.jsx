@@ -211,8 +211,7 @@ function AdolescentReferralsWidget() {
                                     <label htmlFor="facility_id"><strong>Location</strong></label>
                                     {isLoadingFacilities ? <Spinner size={"md"} /> :
                                         <select className='form-select'
-                                            defaultValue={selectedReferral?.facility}
-                                            value={selectedReferral?.facility}
+                                            value={facilityId || ""}
                                             onChange={(event) => setFacilityId(event.target.value)}
                                             name='facility_id' id='facility_id' required>
                                             <option value="">Choose location</option>
