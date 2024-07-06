@@ -33,7 +33,7 @@ class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
     photo = models.ImageField(
         upload_to='users', storage=OverwriteStorage(), blank=True, null=True)
     facility = models.ForeignKey(
-        "dashboard.Facility", on_delete=models.SET_NULL, blank=True, null=True)
+        "dashboard.Facility", related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
     gender = models.CharField(max_length=50, null=True,
                               blank=True, db_index=True)
     activated = models.BooleanField(default=False)
