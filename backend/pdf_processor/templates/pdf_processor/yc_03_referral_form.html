@@ -109,7 +109,7 @@
             </td>
             <td>
                 <h2 style="font-weight: 400;">Age: <span
-                        style="text-decoration: underline;">____{{referral.adolescent.get_age}}YEARS____</span></h2>
+                        style="text-decoration: underline;">____{{referral.adolescent.get_age}} YEARS____</span></h2>
             </td>
             <td>
                 <h2 style="font-weight: 400;">Sex: <span
@@ -145,7 +145,7 @@
 
     <h2>Additional notes:</h2>
     <h2 style="border-bottom: 1px solid gray; font-weight: 400;">
-        {{referral.referral_reason|safe}}
+        {{referral.referral_reason|safe|title}}
     </h2>
 
     <br>
