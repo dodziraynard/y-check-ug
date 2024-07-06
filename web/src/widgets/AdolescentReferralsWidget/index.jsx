@@ -7,17 +7,19 @@ import {
     useLazyGetRecommendedServicesQuery
 } from '../../features/resources/resources-api-slice';
 import { resourceApiSlice } from '../../features/resources/resources-api-slice';
-import { BASE_API_URI } from '../../utils/constants';
 import { useParams, Link } from "react-router-dom";
-import useAxios from '../../app/hooks/useAxios';
 import { Button, Spinner, Badge, useToast } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import { monitorAndLoadResponse, monitorShowErrorReduxHttpError, toastErrorMessage } from '../../utils/functions';
 import TagInput from '../../components/TagInput';
 import { useSearchParams } from "react-router-dom";
 import TextOverflow from '../../components/TextOverflow';
+import Permissions from '../../utils/permissions';
 
 function AdolescentReferralsWidget() {
+    const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
+    const hasPermission = userPermissions.has(Permissions.CHANGE_REFERRAL)
+
     const user = useSelector((state) => state.authentication.user);
     const { pid } = useParams()
     const newReferralModalRef = useRef(null);
@@ -164,7 +166,6 @@ function AdolescentReferralsWidget() {
         setIsOnsiteReferral(isOnsite)
     }, [facilities, facilityId])
 
-
     return (
         <Fragment>
             {/* Modals */}
@@ -210,28 +211,15 @@ function AdolescentReferralsWidget() {
                                     <label htmlFor="facility_id"><strong>Location</strong></label>
                                     {isLoadingFacilities ? <Spinner size={"md"} /> :
                                         <select className='form-select'
+                                            defaultValue={selectedReferral?.facility}
+                                            value={selectedReferral?.facility}
                                             onChange={(event) => setFacilityId(event.target.value)}
                                             name='facility_id' id='facility_id' required>
                                             <option value="">Choose location</option>
-                                            {facilities?.map((facility, index) => <option key={index} value={facility.id} defaultValue={facility.id}>{facility.name}</option>)}
+                                            {facilities?.map((facility, index) => <option key={index} value={facility.id}>{facility.name}</option>)}
                                         </select>
                                     }
                                 </div>
-
-                                {/* I don't see what value this field provides in the reports. */}
-
-                                {/* <div className="form-group my-4">
-                                    <label htmlFor="service_type"><strong>Type of initiating service</strong></label>
-                                    <select className='form-select'
-                                        defaultValue={serviceType || ""}
-                                        onChange={(event) => setServiceType(event.target.value)}
-                                        name='service_type' id='service_type' required>
-                                        <option value="">Choose service type</option>
-                                        <option value="BASIC">BASIC</option>
-                                        <option value="SECONDARY">SECONDARY</option>
-                                        <option value="TERTIARY">TERTIARY</option>
-                                    </select>
-                                </div> */}
 
                                 <div className="form-group my-4">
                                     <label htmlFor="service_services"><strong>Services for this action</strong></label>
@@ -309,10 +297,12 @@ function AdolescentReferralsWidget() {
                                                         onClick={() => printReferralForm({ referral_id: referral.id })}>
                                                         <i className="bi bi-printer me-1"></i> Print
                                                     </button>
-                                                    <button className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
-                                                        onClick={() => showEditReferralModal(referral)}>
-                                                        <i className="bi bi-pen me-1"></i> Edit
-                                                    </button>
+                                                    {hasPermission &&
+                                                        <button className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
+                                                            onClick={() => showEditReferralModal(referral)}>
+                                                            <i className="bi bi-pen me-1"></i> Edit
+                                                        </button>
+                                                    }
                                                     <Link to={`/dashboard/referrals/${referral.id}/details`} className="mx-1 btn btn-outline-primary btn-sm align-self-end d-flex"
                                                         onClick={() => null}>
                                                         <i className="bi bi-list me-1"></i> Feedback

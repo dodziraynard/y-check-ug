@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense } from 'react'
+import React, { Fragment, Suspense, useEffect } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 import { Badge } from '@chakra-ui/react';
@@ -6,10 +6,24 @@ import { Link } from 'react-router-dom';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
 import TextOverflow from '../../components/TextOverflow';
+import { resourceApiSlice } from '../../features/resources/resources-api-slice';
+import { toastErrorMessage } from '../../utils/functions';
 
 const TableView = React.lazy(() => import("../../components/Table"));
 
 function ReferralsWidget() {
+
+    const [printReferralForm, { data: printFormResponse = [], isLoading: isLoadingPrintForm, error: errorPrintingForm }] = resourceApiSlice.useLazyPrintReferralFormQuery()
+
+    useEffect(() => {
+        if (printFormResponse?.error_message) {
+            toastErrorMessage(printFormResponse?.error_message, toast)
+        }
+        if (printFormResponse?.download_link) {
+            window.open(printFormResponse?.download_link, '_blank').focus();
+        }
+    }, [printFormResponse])
+
     return (
         <Fragment>
             {/* Content */}
@@ -73,6 +87,11 @@ function ReferralsWidget() {
                                         value: "Actions", textAlign: "right", render: (item) => {
                                             return (
                                                 <div className="d-flex justify-content-end">
+                                                    <button
+                                                        className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
+                                                        onClick={() => printReferralForm({ referral_id: item.id })}>
+                                                        <i className="bi bi-printer me-1"></i> Print
+                                                    </button>
                                                     <Link to={`/dashboard/referrals/${item.id}/details`} className="mx-1 btn btn-outline-primary btn-sm d-flex align-items-center"
                                                         onClick={() => null}>
                                                         <i className="bi bi-list me-1"></i> More
