@@ -160,6 +160,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
 
 MEDIA_URL = '/assets/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_ROOT = BASE_DIR / "assets"
 TEMP_REPORT_DIR = MEDIA_ROOT / "temp/reports/"
