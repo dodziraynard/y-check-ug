@@ -78,7 +78,7 @@ class ProcessOverviewActivity : AppCompatActivity() {
         val host =
             URL(if (BuildConfig.DEBUG) getString(R.string.test_frontend_url) else getString(R.string.live_frontend_url))
         val protocol = prefUrl?.protocol ?: host.protocol
-        val authority = "192.168.1.102:3000" //prefUrl?.host ?: host.authority
+        val authority = prefUrl?.host ?: host.authority
         val url = String.format("%s://%s%s", protocol, authority, path);
         binding.webView.loadUrl(url)
     }
