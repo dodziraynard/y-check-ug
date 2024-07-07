@@ -293,7 +293,9 @@ function AdolescentReferralsWidget() {
                                                 <div className='d-flex justify-content-end'>
                                                     <button
                                                         className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
-                                                        onClick={() => printReferralForm({ referral_id: referral.id })}>
+                                                        onClick={() => printReferralForm({ referral_id: referral.id })}
+                                                        disabled={isLoadingPrintForm}>
+                                                        {isLoadingPrintForm && <Spinner size={"sm"} me={2}/>}
                                                         <i className="bi bi-printer me-1"></i> Print
                                                     </button>
                                                     {hasPermission &&

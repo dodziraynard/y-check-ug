@@ -1,7 +1,7 @@
-import React, { Fragment, Suspense, useEffect, useState,useRef } from 'react'
+import React, { Fragment, Suspense, useEffect, useState, useRef } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
-import {Button, Badge ,useToast, Spinner} from '@chakra-ui/react';
+import { Button, Badge, useToast, Spinner } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
@@ -48,7 +48,7 @@ function ReferralsWidget() {
         getFacilities()
 
         if (pid) {
-            getServices({ pid }); 
+            getServices({ pid });
         }
 
         // Set modals
@@ -73,7 +73,7 @@ function ReferralsWidget() {
         setServiceType(referral?.service_type)
         setReferralReason(referral?.referral_reason)
         setSelectedServices(referral?.services?.map((service) => service.name) ?? [])
-        setPid(referral?.adolescent?.pid || null); 
+        setPid(referral?.adolescent?.pid || null);
         newReferralModal?.show()
     }
 
@@ -131,7 +131,7 @@ function ReferralsWidget() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">
-                            Edit Action
+                                Edit Action
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -242,7 +242,9 @@ function ReferralsWidget() {
                                                 <div className="d-flex justify-content-end">
                                                     <button
                                                         className="mx-1 btn btn-outline-primary btn-sm  d-flex align-items-center"
-                                                        onClick={() => printReferralForm({ referral_id: item.id })}>
+                                                        onClick={() => printReferralForm({ referral_id: item.id })}
+                                                        disabled={isLoadingPrintForm}>
+                                                        {isLoadingPrintForm && <Spinner size={"sm"} me={2}/>}
                                                         <i className="bi bi-printer me-1"></i> Print
                                                     </button>
                                                     {hasPermission &&

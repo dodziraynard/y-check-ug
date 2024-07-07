@@ -63,6 +63,7 @@ class ProcessOverviewActivity : AppCompatActivity() {
         binding.webView.settings.loadsImagesAutomatically = true
         binding.webView.webViewClient = webViewClient
         binding.webView.settings.domStorageEnabled = true
+        binding.webView.getSettings().userAgentString = "YC_WEB_VIEW";
 
         val prefs = getSharedPreferences(Constants.SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         val prefHost = prefs.getString(Constants.HOST_URL, "")
@@ -77,7 +78,7 @@ class ProcessOverviewActivity : AppCompatActivity() {
         val host =
             URL(if (BuildConfig.DEBUG) getString(R.string.test_frontend_url) else getString(R.string.live_frontend_url))
         val protocol = prefUrl?.protocol ?: host.protocol
-        val authority = prefUrl?.host ?: host.authority
+        val authority = "192.168.1.102:3000" //prefUrl?.host ?: host.authority
         val url = String.format("%s://%s%s", protocol, authority, path);
         binding.webView.loadUrl(url)
     }

@@ -25,8 +25,8 @@ SECRET_KEY = os.environ.get(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
-MANUAL_AUTHENTICATION_TOKEN = os.environ.get("MANUAL_AUTHENTICATION_TOKEN",
-                                             "null")
+YCHECK_APP_USER_AGENT = os.environ.get("YCHECK_APP_USER_AGENT",
+                                             "YC_WEB_VIEW")
 
 ALLOWED_HOSTS = ['*']
 
