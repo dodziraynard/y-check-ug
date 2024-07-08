@@ -38,9 +38,9 @@
                 <h2>
                     Your child (Participant name)
                     <span style="text-decoration: underline; margin-left: 10px; margin-right: 10px;">
-                      louis seyram
+                        {{adolescent.other_names | upper}},
+                        {{adolescent.surname | upper}}
                     </span>
-                    who attended the Y-Check screening service delivered by Y-Check staff.
                 </h2>
             </td>
         </tr>
@@ -50,15 +50,15 @@
         <tr>
             <td>
                 <h2 style="font-weight: 400;">Y-Check ID: <span
-                        style="text-decoration: underline;">_____</span></h2>
+                        >{{adolescent.pid}}</span></h2>
             </td>
             <td>
                 <h2 style="font-weight: 400;">Age: <span
-                        style="text-decoration: underline;">____ YEARS____</span></h2>
+                       >{{adolescent.get_age}} YEARS</span></h2>
             </td>
             <td>
                 <h2 style="font-weight: 400;">Sex: <span
-                        style="text-decoration: underline;">________</span></h2>
+                       >{{adolescent.gender | upper}}</span></h2>
             </td>
         </tr>
     </table>
@@ -71,31 +71,59 @@
             <td style="text-align: right;">
                 <h2>
                     Date:
-                    <span style="text-decoration: underline;">15th aug, 2024 </span>
+                    <span style="text-decoration: underline;">{{adolescent.created_at|date:"M d, Y" | upper}}</span>
                 </h2>
             </td>
         </tr>
     </table>
     <br>
-        
-    <div class="description">
-        <p> A  <strong> Y-Check </strong>health check-up was conducted for your child today.</p>
-        <p> Your child's screening results (see overleaf) indicate that no problem was detected.</p>
-        <p> This means that at the moment, your child's health is as expected for their age.</p>
-        <p>This result does not rule out future problems. If you have any concerns about your child's</p>
-        <p>health at any stage in the future, contact your local health service provider.</p>
-    </div>
+    {% if no_red_flags_count == 0 %} 
+    <h2 style="font-weight: 400;">
+        A  <strong> Y-Check </strong>health check-up was conducted for your child today.
+    </h2>
+    <h2 style="font-weight: 400;">
+        Your child's screening results (see overleaf) indicate that no problem was detected
+    </h2>
+    <h2 style="font-weight: 400;">
+        This means that at the moment, your child's health is as expected for their age.
+    </h2>
+    <h2 style="font-weight: 400;">
+        This result does not rule out future problems. If you have any concerns about your child's
+    </h2>
+    <h2 style="font-weight: 400;">
+        health at any stage in the future, contact your local health service provider.
+    </h2>
+
+    {% else %}
+    <h2 style="font-weight: 400;">
+        A  <strong> Y-Check </strong>health check-up was conducted for your child today.
+    </h2>
+    <h2 style="font-weight: 400;">
+        Your child's screening results (see overleaf) indicate a possible problem
+    </h2>
+    <h2 style="font-weight: 400;">
+        This means that at the moment, your child's health is as expected for their age.
+    </h2>
+    <h2 style="font-weight: 400;">
+        This result does not rule out future problems. If you have any concerns about your child's
+    </h2>
+    <h2 style="font-weight: 400;">
+        health at any stage in the future, contact your local health service provider.
+    </h2>
+    {% endif %}
     <br>
     <table>
         <tr>
             <td>
-                <h2>Name of Y-Check PA: -------------------</h2>
+                <h2>Name of Y-Check PA: {{full_name | upper}} </h2>
             </td>
             <td>
                 <h2>Signature:___________________________</h2>
             </td>
         </tr>
     </table>
+    <br>
+    <br>
     <table>
         <tr>
             <td>
@@ -113,114 +141,55 @@
             </td>
         </tr>
     </table>
-    <div class="y-table">
-        <table>
-            <tr>
-                <th>Condition</th>
-                <th>
-                    Screened
-                    <div class="">
-                        <span>Yes</span>
-                        <span>No</span>
-                    </div>
-                </th>                    
-                <th>
-                    Possible problem
-                    <div class="">
-                        <span>Yes</span>
-                        <span>No</span>
-                    </div>
-                </th>                    
-                <th>
-                    Referral
-                    <div class="">
-                        <span>Yes</span>
-                        <span>No</span>
-                    </div>
-                </th>  
-                <th>Further details</th>
-            </tr>
-            <tr>
-                <td>
-                    Mental health
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td></td>
-            </tr>
-            
-            <tr>
-                <td>
-                    Suicide risk
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td></td>
-            </tr>
-            
-            <tr>
-                <td>
-                    Alcohol and drugs abuse
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td></td>
-
-            </tr>
-            
-            <tr>
-                <td>
-                    Malaria
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td>
-                    <input type="checkbox"> 
-                    <input type="checkbox"> 
-                </td>
-                <td></td>
-            </tr>
-            
-            
-        </table>
+    <br>
+    <table>
+        <tr>
+            <th style="text-align: left;">Condition</th>
+            <th style="text-align: left;">
+                Screened
+                <div class="">
+                    <span>Yes</span>
+                    <span>No</span>
+                </div>
+            </th>                    
+            <th style="text-align: left;">
+                Possible problem
+                <div class="">
+                    <span>Yes</span>
+                    <span>No</span>
+                </div>
+            </th>
+            <th style="text-align: left;">
+                Referral
+                <div class="">
+                    <span>Yes</span>
+                    <span>No</span>
+                </div>
+            </th>                      
+            <th>Further details</th>
+        </tr>
+        {% for flag in red_flags %}
+        <tr>
+            <td>{{ flag.label.name }}</td>
+            <td>
+                <span>Yes</span>
+                
+            </td>
+            <td>
+                <span>
+                    {% if flag.computed_color_code == '#ff0000' %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
         
-    </div>
+        
+    </table>
+        
 
 
 </body>

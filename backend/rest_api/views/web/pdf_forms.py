@@ -2,7 +2,7 @@ import logging
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from django.conf import settings
-from dashboard.models import Referral
+from dashboard.models import *
 from django.shortcuts import render
 from ycheck.utils.constants import Colors
 
@@ -49,15 +49,18 @@ class GenerateScreeningForm(generics.GenericAPIView):
     def get(self, request, adolescent_id):
 
         try:
-            adolescent = Adolescent.objects.get(id=adolescent_id)
+            adolescent = Adolescent.objects.get(pid=adolescent_id)
         except Adolescent.DoesNotExist:
             return Response({"error_message": "Adolescent not found."})
 
+        red_or_green_flag_codes = [Colors.RED.value, Colors.GREEN.value]
         red_flag_code = Colors.RED.value
-        red_flags = SummaryFlag.objects.filter(adolescent=adolescent, final_color_code=red_flag_code)
-
-
-        filename = f"{red_flags.adolescent.get_name().lower()}.pdf"
+        red_flags = SummaryFlag.objects.filter(adolescent=adolescent, final_color_code__in=red_or_green_flag_codes)
+        no_red_flags = SummaryFlag.objects.filter(adolescent=adolescent, final_color_code=red_flag_code)
+        user = request.user
+        full_name = f"{user.surname} {user.other_names}"
+        
+        filename = f"{adolescent.get_name().lower()}.pdf"
         template_name = "pdf_processor/try.html"
 
         parent = settings.TEMP_REPORT_DIR
@@ -67,6 +70,9 @@ class GenerateScreeningForm(generics.GenericAPIView):
         context = {
             "logo_url": request.build_absolute_uri("/static/images/logo.png"),
             "red_flags": red_flags,
+            "adolescent":adolescent,
+            "full_name":full_name,
+            "no_red_flags_count": no_red_flags.count(),
         }
         render_to_pdf_file(template_name, filename_path, context)
 

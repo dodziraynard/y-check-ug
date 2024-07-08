@@ -98,11 +98,11 @@ class SummaryFlag(UpstreamSyncBaseModel):
             (Q(study_phase=None) | Q(study_phase__iexact=adolescent.study_phase))
         )
 
-        try:
-            questions = questions.distinct("question_id")
-        except Exception as e:
-            logger.exception(str(e))
-            questions = questions.distinct()
+        # try:
+        #     questions = questions.distinct("question_id")
+        # except Exception as e:
+        #     logger.exception(str(e))
+        #     questions = questions.distinct()
 
         for question in questions:
             response = question.get_response(adolescent)
