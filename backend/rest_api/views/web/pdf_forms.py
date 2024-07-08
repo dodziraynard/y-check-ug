@@ -3,6 +3,8 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from django.conf import settings
 from dashboard.models import Referral
+from django.shortcuts import render
+from ycheck.utils.constants import Colors
 
 from pdf_processor.utils import render_to_pdf_file
 
@@ -35,3 +37,43 @@ class GenerateReferralForm(generics.GenericAPIView):
             "download_link": request.build_absolute_uri(download_link)
         }
         return Response(response_data)
+
+
+def home(request):
+    return render(request,'pdf_processor/try.html')
+
+
+class GenerateScreeningForm(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, adolescent_id):
+
+        try:
+            adolescent = Adolescent.objects.get(id=adolescent_id)
+        except Adolescent.DoesNotExist:
+            return Response({"error_message": "Adolescent not found."})
+
+        red_flag_code = Colors.RED.value
+        red_flags = SummaryFlag.objects.filter(adolescent=adolescent, final_color_code=red_flag_code)
+
+
+        filename = f"{red_flags.adolescent.get_name().lower()}.pdf"
+        template_name = "pdf_processor/try.html"
+
+        parent = settings.TEMP_REPORT_DIR
+        parent.mkdir(parents=True, exist_ok=True)
+        filename_path = parent / filename
+
+        context = {
+            "logo_url": request.build_absolute_uri("/static/images/logo.png"),
+            "red_flags": red_flags,
+        }
+        render_to_pdf_file(template_name, filename_path, context)
+
+        download_link = settings.TEMP_REPORT_URL + filename
+        response_data = {
+            "download_link": request.build_absolute_uri(download_link)
+        }
+        return Response(response_data)
+    
+    

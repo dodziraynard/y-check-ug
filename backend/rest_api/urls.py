@@ -6,6 +6,7 @@ from rest_api import views
 app_label = "rest_api"
 urlpatterns = [
     path("mobile-config/", views.MobileConfigAPI.as_view()),
+    path("home/", views.home),
     path("auth/login/", views.UserLoginAPI.as_view()),
     path("auth/logout/", views.UserLogoutAPI.as_view()),
     path("auth/register/", views.UserRegistrationAPI.as_view()),
@@ -74,6 +75,7 @@ urlpatterns = [
 # Forms
 urlpatterns += [
      path("referral-form/<str:referral_id>/print/", views.GenerateReferralForm.as_view()),
+     path("screening-form/<str:adolescent_id>/print/", views.GenerateScreeningForm.as_view()),
 ]
 
 # Misc URLs
