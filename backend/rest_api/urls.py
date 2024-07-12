@@ -6,7 +6,6 @@ from rest_api import views
 app_label = "rest_api"
 urlpatterns = [
     path("mobile-config/", views.MobileConfigAPI.as_view()),
-    path("home/", views.home),
     path("auth/login/", views.UserLoginAPI.as_view()),
     path("auth/logout/", views.UserLogoutAPI.as_view()),
     path("auth/register/", views.UserRegistrationAPI.as_view()),
@@ -93,7 +92,7 @@ urlpatterns += [
     path("age-distributions/", views.AgeDistributionDemographics.as_view()),
     path("positive-screened/", views.PositiveScreenedView.as_view()),
     path("treated-onsite/", views.TreatedOnsiteView.as_view()),
-    path("referred-for-treatment/", views.ReferredForTreatedView.as_view()),
+    path("referred-for-treatment/", views.ReferredForTreatmentView.as_view()),
     path("referred-and-treated/", views.ReferredAndTreatedView.as_view()),
     path("feedback-question-q1200-stats/", views.FeedbackQuestion.as_view()),
 ]

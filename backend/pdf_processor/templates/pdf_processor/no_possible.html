@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Y-Check Referral Letter Parent</title>
+    <title>Y-Check Letter Parent</title>
     <style>
         body {
             margin: 0;
@@ -19,7 +19,7 @@
                 <img src="{{logo_url}}" height="50px">
             </td>
             <td style="text-align: center;" colspan="2">
-                <h1>YC_04 Referral Letter for Parents Guardians v1.1</h1>
+                <h1>Letter for Parents Guardians v1.1</h1>
             </td>
             <td style="text-align: right;">
                 <img src="{{logo_url}}" height="50px">
@@ -77,7 +77,6 @@
         </tr>
     </table>
     <br>
-    {% if no_red_flags_count == 0 %} 
     <h2 style="font-weight: 400;">
         A  <strong> Y-Check </strong>health check-up was conducted for your child today.
     </h2>
@@ -93,24 +92,6 @@
     <h2 style="font-weight: 400;">
         health at any stage in the future, contact your local health service provider.
     </h2>
-
-    {% else %}
-    <h2 style="font-weight: 400;">
-        A  <strong> Y-Check </strong>health check-up was conducted for your child today.
-    </h2>
-    <h2 style="font-weight: 400;">
-        Your child's screening results (see overleaf) indicate a possible problem
-    </h2>
-    <h2 style="font-weight: 400;">
-        This means that at the moment, your child's health is as expected for their age.
-    </h2>
-    <h2 style="font-weight: 400;">
-        This result does not rule out future problems. If you have any concerns about your child's
-    </h2>
-    <h2 style="font-weight: 400;">
-        health at any stage in the future, contact your local health service provider.
-    </h2>
-    {% endif %}
     <br>
     <table>
         <tr>
@@ -136,40 +117,54 @@
         <tr>
             <td>
                 <h2>
-                    Contact details: Evans Kofi Agbeno, +233 24 456 3742
+                    Contact details of Lead Clinician: Evans Kofi Agbeno, +233 24 456 3742
                 </h2>
             </td>
         </tr>
     </table>
     <br>
+    <pdf:nextpage></pdf:nextpage>
     <table>
         <tr>
-            <th style="text-align: left;">Condition</th>
-            <th style="text-align: left;">
+            <td>
+                <img src="{{logo_url}}" height="50px">
+            </td>
+            <td style="text-align: right;">
+                <img src="{{logo_url}}" height="50px">
+            </td>
+        </tr>        
+    </table>
+    <h1 style="text-align: center; margin: 0; padding: 0;">Screening Report</h1>
+    <br>
+
+    <table>
+        <tr style="border-bottom: 1px solid black;">
+            <th style="text-align: left; border: none;">Condition</th>
+            <th style="text-align: left; border: none;">
                 Screened
                 <div class="">
-                    <span>Yes</span>
+                    <span>Yes</span> 
                     <span>No</span>
                 </div>
             </th>                    
-            <th style="text-align: left;">
+            <th style="text-align: left; border: none;">
                 Possible problem
                 <div class="">
                     <span>Yes</span>
                     <span>No</span>
                 </div>
             </th>
-            <th style="text-align: left;">
+            <th style="text-align: left; border: none;">
                 Referral
                 <div class="">
                     <span>Yes</span>
                     <span>No</span>
                 </div>
             </th>                      
-            <th>Further details</th>
+            <th style="border: none;">Further details</th>
         </tr>
         {% for flag in red_flags %}
-        <tr>
+        <tr style="padding: 5px;">
             <td>{{ flag.label.name }}</td>
             <td>
                 <span>Yes</span>
@@ -184,9 +179,12 @@
                     {% endif %}
                 </span>
             </td>
+            <td>
+                <span>No</span>
+                
+            </td>
         </tr>
         {% endfor %}
-        
         
     </table>
         

@@ -39,8 +39,6 @@ class GenerateReferralForm(generics.GenericAPIView):
         return Response(response_data)
 
 
-def home(request):
-    return render(request,'pdf_processor/try.html')
 
 
 class GenerateScreeningForm(generics.GenericAPIView):
@@ -53,27 +51,41 @@ class GenerateScreeningForm(generics.GenericAPIView):
         except Adolescent.DoesNotExist:
             return Response({"error_message": "Adolescent not found."})
 
-        red_or_green_flag_codes = [Colors.RED.value, Colors.GREEN.value]
+        red_or_green_flag_codes = [Colors.RED.value, Colors.GREEN.value, Colors.ORANGE.value]
         red_flag_code = Colors.RED.value
         red_flags = SummaryFlag.objects.filter(adolescent=adolescent, final_color_code__in=red_or_green_flag_codes)
         no_red_flags = SummaryFlag.objects.filter(adolescent=adolescent, final_color_code=red_flag_code)
+        
+        referrals = Referral.objects.filter(adolescent=adolescent, is_onsite=False).select_related('adolescent').prefetch_related('services__related_flag_labels')
+
+        flag_labels = set()
+        for referral in referrals:
+            for service in referral.services.all():
+                for flag_label in service.related_flag_labels.all():
+                    flag_labels.add(flag_label.name)
+
         user = request.user
         full_name = f"{user.surname} {user.other_names}"
         
-        filename = f"{adolescent.get_name().lower()}.pdf"
-        template_name = "pdf_processor/try.html"
-
+        filename = f"{adolescent.get_name().lower()}-{adolescent.pid}.pdf"
+        template_name = None
         parent = settings.TEMP_REPORT_DIR
         parent.mkdir(parents=True, exist_ok=True)
         filename_path = parent / filename
-
+        
         context = {
             "logo_url": request.build_absolute_uri("/static/images/logo.png"),
             "red_flags": red_flags,
             "adolescent":adolescent,
             "full_name":full_name,
-            "no_red_flags_count": no_red_flags.count(),
+            "flag_labels": flag_labels,
+            "referrals":referrals,
         }
+        if no_red_flags.count() <= 0:
+            template_name = "pdf_processor/no_possible.html"
+        else:
+            template_name = "pdf_processor/possible_problem.html"
+        
         render_to_pdf_file(template_name, filename_path, context)
 
         download_link = settings.TEMP_REPORT_URL + filename
