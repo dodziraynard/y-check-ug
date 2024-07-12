@@ -247,7 +247,7 @@ class TreatedOnsiteView(generics.GenericAPIView):
         return Response({"treated_onsite": response_data})  
   
     
-class ReferredForTreatedView(generics.GenericAPIView):
+class ReferredForTreatmentView(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
     

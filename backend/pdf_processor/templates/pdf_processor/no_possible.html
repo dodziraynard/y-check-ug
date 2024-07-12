@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y-Check Letter Parent</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <img src="{{logo_url}}" height="50px">
+            </td>
+            <td style="text-align: center;" colspan="2">
+                <h1>Letter for Parents Guardians v1.1</h1>
+            </td>
+            <td style="text-align: right;">
+                <img src="{{logo_url}}" height="50px">
+            </td>
+        </tr>
+    </table>
+    <br>
+    <h3 style="text-align: center; text-decoration: underline;">
+        Complete this form in Capital Letters, paying attention to a Clear, Bold, and Easy to read handwriting
+    </h3>
+    <br>
+
+    <table>
+        <tr>
+            <td>
+                <h2>
+                    Your child (Participant name)
+                    <span style="text-decoration: underline; margin-left: 10px; margin-right: 10px;">
+                        {{adolescent.other_names | upper}},
+                        {{adolescent.surname | upper}}
+                    </span>
+                </h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table>
+        <tr>
+            <td>
+                <h2 style="font-weight: 400;">Y-Check ID: <span
+                        >{{adolescent.pid}}</span></h2>
+            </td>
+            <td>
+                <h2 style="font-weight: 400;">Age: <span
+                       >{{adolescent.get_age}} YEARS</span></h2>
+            </td>
+            <td>
+                <h2 style="font-weight: 400;">Sex: <span
+                       >{{adolescent.gender | upper}}</span></h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table>
+        <tr>
+            <td style="text-align: left;">
+                <h2>Dear Parent/Guardian,</h2>
+            </td>
+            <td style="text-align: right;">
+                <h2>
+                    Date:
+                    <span style="text-decoration: underline;">{{adolescent.created_at|date:"M d, Y" | upper}}</span>
+                </h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <h2 style="font-weight: 400;">
+        A  <strong> Y-Check </strong>health check-up was conducted for your child today.
+    </h2>
+    <h2 style="font-weight: 400;">
+        Your child's screening results (see overleaf) indicate that no problem was detected
+    </h2>
+    <h2 style="font-weight: 400;">
+        This means that at the moment, your child's health is as expected for their age.
+    </h2>
+    <h2 style="font-weight: 400;">
+        This result does not rule out future problems. If you have any concerns about your child's
+    </h2>
+    <h2 style="font-weight: 400;">
+        health at any stage in the future, contact your local health service provider.
+    </h2>
+    <br>
+    <table>
+        <tr>
+            <td>
+                <h2>Name of Y-Check PA: {{full_name | upper}} </h2>
+            </td>
+            <td>
+                <h2>Signature:___________________________</h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <td>
+                <h2>Referring Organisation: Y-Check Ghana</h2>
+            </td>
+        </tr>
+    </table>
+  
+    <table>
+        <tr>
+            <td>
+                <h2>
+                    Contact details of Lead Clinician: Evans Kofi Agbeno, +233 24 456 3742
+                </h2>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <pdf:nextpage></pdf:nextpage>
+    <table>
+        <tr>
+            <td>
+                <img src="{{logo_url}}" height="50px">
+            </td>
+            <td style="text-align: right;">
+                <img src="{{logo_url}}" height="50px">
+            </td>
+        </tr>        
+    </table>
+    <h1 style="text-align: center; margin: 0; padding: 0;">Screening Report</h1>
+    <br>
+
+    <table>
+        <tr style="border-bottom: 1px solid black;">
+            <th style="text-align: left; border: none;">Condition</th>
+            <th style="text-align: left; border: none;">
+                Screened
+                <div class="">
+                    <span>Yes</span> 
+                    <span>No</span>
+                </div>
+            </th>                    
+            <th style="text-align: left; border: none;">
+                Possible problem
+                <div class="">
+                    <span>Yes</span>
+                    <span>No</span>
+                </div>
+            </th>
+            <th style="text-align: left; border: none;">
+                Referral
+                <div class="">
+                    <span>Yes</span>
+                    <span>No</span>
+                </div>
+            </th>                      
+            <th style="border: none;">Further details</th>
+        </tr>
+        {% for flag in red_flags %}
+        <tr style="padding: 5px;">
+            <td>{{ flag.label.name }}</td>
+            <td>
+                <span>Yes</span>
+                
+            </td>
+            <td>
+                <span>
+                    {% if flag.computed_color_code == '#ff0000' %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </span>
+            </td>
+            <td>
+                <span>No</span>
+                
+            </td>
+        </tr>
+        {% endfor %}
+        
+    </table>
+        
+
+
+</body>
+</html>

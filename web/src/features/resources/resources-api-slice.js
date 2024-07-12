@@ -301,6 +301,11 @@ export const resourceApiSlice = createApi({
                     return `referral-form/${referral_id}/print/`;
                 },
             }),
+            printScreeninglForm: builder.query({
+                query({ adolescent_id }) {
+                    return `screening-form/${adolescent_id}/print/`;
+                },
+            }),
             // apk
             putApkUploadFile: builder.mutation({
                 query(body) {
@@ -380,6 +385,7 @@ export const {
 
     // Forms
     useLazyPrintReferralFormQuery,
+    useLazyPrintScreeninglFormQuery,
 } = resourceApiSlice;
 
 export default resourceApiSlice;

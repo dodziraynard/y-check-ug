@@ -12,9 +12,11 @@ import { Button, Spinner, useToast, Tooltip } from '@chakra-ui/react';
 import { Modal } from 'bootstrap';
 import SummaryFlagLegend from '../../components/SummaryFlagLegend';
 import Permissions from '../../utils/permissions';
+import { resourceApiSlice } from '../../features/resources/resources-api-slice';
 
 function SummaryFlagWidget() {
     const userPermissions = useSelector((state) => new Set(state.authentication.userPermissions));
+    const [printReferralForm, { data: printFormResponse = [], isLoading: isLoadingPrintForm, error: errorPrintingForm }] = resourceApiSlice.useLazyPrintScreeninglFormQuery()
 
     const profileModalRef = useRef(null);
     const responseModalRef = useRef(null);
@@ -201,6 +203,16 @@ function SummaryFlagWidget() {
         setOtherFlags(othFlags)
     }, [flags, adolescentResponded])
 
+
+    useEffect(() => {
+        if (printFormResponse?.error_message) {
+            toastErrorMessage(printFormResponse?.error_message, toast)
+        }
+        if (printFormResponse?.download_link) {
+            window.open(printFormResponse?.download_link, '_blank').focus();
+        }
+    }, [printFormResponse])
+
     return (
         <Fragment>
             {/* Profile details modal */}
@@ -341,6 +353,13 @@ function SummaryFlagWidget() {
                                     <Button size='sm' onClick={() => profileModal?.show()}>View Profile</Button>
                                 </div>
                                 : ""}
+                            <button
+                                className="btn btn-outline-primary btn-sm ms-auto d-flex align-items-cente "
+                                onClick={() => printReferralForm({ adolescent_id: pid})}
+                                disabled={isLoadingPrintForm}>
+                                {isLoadingPrintForm && <Spinner size={"sm"} me={2}/>}
+                                <i className="bi bi-printer me-1"></i> Print
+                            </button>
                         </section>
 
                         <div>
