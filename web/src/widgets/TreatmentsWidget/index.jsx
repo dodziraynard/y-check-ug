@@ -37,6 +37,7 @@ function TreatmentsWidget() {
                             <TableView
                                 responseDataAttribute="treatments"
                                 dataSourceUrl={`${BASE_API_URI}/treatments/`}
+                                filterByDate={true}
                                 filters={facilities?.map(facility => ({
                                     key: `facility_name:${facility.name}`,
                                     value: facility.name
