@@ -198,8 +198,6 @@ function ReferralsWidget() {
                                     key: `facility:${facility.id}`,
                                     value: facility.name
                                 })) || []} 
-                               
-                                
                                 headers={[
                                     {
                                         key: "photo", value: "Photo", textAlign: "center", render: (item) => {
