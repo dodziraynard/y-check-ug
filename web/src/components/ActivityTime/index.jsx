@@ -1,26 +1,22 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react';
-import { Button, Spinner, useToast } from '@chakra-ui/react';
+import React, {  Suspense } from 'react';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
-import { useDispatch } from 'react-redux';
 import { formatDuration } from '../../utils/functions';
+import { useSelector } from 'react-redux';
 
 const TableView = React.lazy(() => import("../../components/Table"));
 
 function ActivityTime() {
-    const dispatch = useDispatch()
-    const [triggerReload, setTriggerReload] = useState(0);
-    const toast = useToast()
-    const [users, setUsers] = useState([])
-    const [urlParams, setUrlParams] = useState("");
-
+    const startDate = useSelector((state) => state.global.dashboardDataStartDate);
+    const endDate = useSelector((state) => state.global.dashboardDataEndDate);
+  
     return (
         <div className="page-users">
             <div className="overflow-scroll">
                 <Suspense fallback={<PageLoading />}>
                     <TableView
                         responseDataAttribute="activities"
-                        dataSourceUrl={`${BASE_API_URI}/adolescent-activity/`}
+                        dataSourceUrl={`${BASE_API_URI}/adolescent-activity?start_date=${startDate}&end_date=${endDate}`}
                         headers={[
                             {
                                 key: "activity", value: "Activity"

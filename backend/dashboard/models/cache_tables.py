@@ -12,6 +12,8 @@ class ComputedAverageActivityTime(UpstreamSyncBaseModel):
     average_time_in_seconds = models.IntegerField(default=0)
     order = models.IntegerField(default=0)
     required = models.BooleanField(default=False)
+    start_date = models.DateTimeField(blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.activity

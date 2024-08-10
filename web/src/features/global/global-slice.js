@@ -6,6 +6,8 @@ export const globalSlice = createSlice({
         groups: [],
         referralInReview: null,
         configurations: null,
+        dashboardDataStartDate: "",
+        dashboardDataEndDate: "",
     },
     reducers: {
         setGroups: (state, action) => {
@@ -17,8 +19,14 @@ export const globalSlice = createSlice({
         setConfigurations: (state, action) => {
             state.configurations = action.payload
         },
+        setDashboardDataStartDate: (state, action) => {
+            state.dashboardDataStartDate = action.payload
+        },
+        setDashboardDataEndDate: (state, action) => {
+            state.dashboardDataEndDate = action.payload
+        },
     },
 });
 
-export const { setGroups, setReferralInReview, setConfigurations } = globalSlice.actions;
+export const { setGroups, setReferralInReview, setConfigurations, setDashboardDataStartDate, setDashboardDataEndDate } = globalSlice.actions;
 export default globalSlice.reducer;

@@ -106,4 +106,6 @@ def compute_activity_average_time(start_time: datetime, end_time: datetime):
             key=comp_key)[0]
         comp_time.activity = activity
         comp_time.average_time_in_seconds = average
+        comp_time.start_date = start_time
+        comp_time.end_date = end_time
         comp_time.save()

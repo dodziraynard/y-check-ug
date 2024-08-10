@@ -230,8 +230,8 @@ export const resourceApiSlice = createApi({
 
             // Adolescent
             getAllAdolescentTypes: builder.query({
-                query() {
-                    return `/web-adolescents-types/`;
+                query({ start_date = "", end_date = "" }) {
+                    return `/web-adolescents-types?start_date=${start_date}&end_date=${end_date}`;
                 },
             }),
 

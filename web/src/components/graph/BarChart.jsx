@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJs, LinearScale, CategoryScale, BarElement, Legend, Title } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { useLazyGetAllAdolescentTypesQuery } from '../../features/resources/resources-api-slice';
+import { useSelector } from 'react-redux';
 
 ChartJs.register(
   LinearScale, CategoryScale, BarElement, Legend, Title
@@ -9,20 +10,32 @@ ChartJs.register(
 
 
 const BarChart = () => {
-
+  const startDate = useSelector((state) => state.global.dashboardDataStartDate);
+  const endDate = useSelector((state) => state.global.dashboardDataEndDate);
   const [getAdolescentTypes, { data: response = [], isFetching }] = useLazyGetAllAdolescentTypesQuery();
 
+  const [users, setUsers] = useState(0)
+  const [adolescents, setAdolescents] = useState(0)
+  const [referrals, setReferrals] = useState(0)
+  const [treatments, setTreatments] = useState(0)
+  const [services, setServices] = useState(0)
+  const [facilities, setFacilities] = useState(0)
+
   useEffect(() => {
-    getAdolescentTypes(); 
-  }, [getAdolescentTypes]);
+    getAdolescentTypes({
+      start_date: startDate,
+      end_date: endDate,
+    });
+  }, [getAdolescentTypes, startDate, endDate]);
 
-  const users = response?.total_user || 0;
-  const adolescents = response?.total_adolescent || 0;
-  const referrals = response?.total_referal || 0;
-  const treatments = response?.total_treatment || 0;
-  const services = response?.total_service || 0;
-  const facilities = response?.total_facility || 0;
-
+  useEffect(() => {
+    setUsers(response?.total_user || 0)
+    setAdolescents(response?.total_adolescent || 0)
+    setReferrals(response?.total_referal || 0)
+    setTreatments(response?.total_treatment || 0)
+    setServices(response?.total_service || 0)
+    setFacilities(response?.total_facility || 0)
+  }, [response])
 
   const Options = {
     plugins: {
@@ -38,7 +51,7 @@ const BarChart = () => {
       },
     },
   };
-  
+
   const data = {
     labels: [
       'Users',
@@ -63,7 +76,7 @@ const BarChart = () => {
       },
     ]
   };
-  
+
   return (
     <div className='section' >
       <Bar options={Options} data={data} />

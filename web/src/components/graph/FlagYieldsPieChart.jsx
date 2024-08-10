@@ -2,20 +2,27 @@ import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2';
 import React, { useEffect, useState } from 'react';
 import { useLazyGetFlagColourDistributionQuery } from '../../features/resources/resources-api-slice';
+import { useSelector } from 'react-redux';
 
 ChartJs.register(
   Tooltip, Title, ArcElement, Legend
 )
 
 function FlagYieldsPieChart() {
+  const startDate = useSelector((state) => state.global.dashboardDataStartDate);
+  const endDate = useSelector((state) => state.global.dashboardDataEndDate);
   const [getFlagColourDistribution, { data: response = [], isFetching }] = useLazyGetFlagColourDistributionQuery();
 
   const [chartLabels, setChartLabels] = useState([])
   const [chartData, setChartData] = useState([])
 
   useEffect(() => {
-    getFlagColourDistribution()
-  }, [getFlagColourDistribution])
+    getFlagColourDistribution({
+      start_date: startDate,
+      end_date: endDate
+    }
+    )
+  }, [getFlagColourDistribution, startDate, endDate])
 
   useEffect(() => {
     if (response?.flag_distribution) {

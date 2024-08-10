@@ -22,6 +22,7 @@ function TreatmentsWidget() {
                             <TableView
                                 responseDataAttribute="treatments"
                                 dataSourceUrl={`${BASE_API_URI}/treatments/`}
+                                filterByDate={true}
                                 headers={[
                                     {
                                         key: "photo", value: "Photo", textAlign: "center", render: (item) => {

@@ -11,8 +11,11 @@ from rest_framework import generics
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from .types import FlagStatus
-from .utils import get_demographic_data,get_age_distribution_data, get_completed_treatment
+from .utils import get_demographic_data, get_age_distribution_data, get_completed_treatment
 from django.db.models import Count, F
+from dateutil.parser import parse
+from django.utils import timezone
+from django.utils.timezone import make_aware
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +34,11 @@ def to_dict(flag_status, adolescent_pid):
         "final_color_code": get_color_name(flag_status.final_color_code),
         "computed_color_code": get_color_name(flag_status.computed_color_code),
     }
+
+
+def _get_date(date):
+    if date:
+        return make_aware(parse(date))
 
 
 class AllAdolescentsFlagCheckView(generics.GenericAPIView):
@@ -85,6 +93,9 @@ class FlagColourDistributionView(generics.GenericAPIView):
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
+        start_date = _get_date(request.GET.get("start_date"))
+        end_date = _get_date(request.GET.get("end_date"))
+
         colors = [Colors.GREEN, Colors.RED, Colors.ORANGE]
         result = {}
         for condition in FlagLabel.objects.all():
@@ -92,6 +103,11 @@ class FlagColourDistributionView(generics.GenericAPIView):
             for color in colors:
                 flags = SummaryFlag.objects.filter(
                     final_color_code=color.value, label=condition)
+                if start_date:
+                    flags = flags.filter(
+                        adolescent__created_at__gte=start_date)
+                if end_date:
+                    flags = flags.filter(adolescent__created_at__lte=end_date)
                 dist[color.name] = flags.count()
             result[condition.name] = dist
 
@@ -104,33 +120,45 @@ class GetAdolescentType(generics.GenericAPIView):
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
+        start_date = _get_date(request.GET.get("start_date")) or make_aware(
+            datetime(2023, 1, 1))
+        end_date = _get_date(request.GET.get("end_date")) or timezone.now()
+
+        adolescents = Adolescent.objects.filter(created_at__gte=start_date,
+                                                created_at__lte=end_date)
 
         # BASIC
-        basic_count = Adolescent.objects.filter(type="basic").count()
+        basic_count = adolescents.filter(type="basic").count()
 
         # SECONDARY
-        secondary_count = Adolescent.objects.filter(type="secondary").count()
+        secondary_count = adolescents.filter(type="secondary").count()
 
         # COMMUNITY
-        community_count = Adolescent.objects.filter(type="community").count()
+        community_count = adolescents.filter(type="community").count()
 
         # TOTAL ADOLESCENTS
-        total_adolescent_count = Adolescent.objects.all().count()
+        total_adolescent_count = adolescents.all().count()
 
         # TOTAL USERS
         total_user_count = User.objects.all().count()
 
         # TOTAL TREATMENTS
-        total_treatment_count = Treatment.objects.all().count()
+        total_treatment_count = Treatment.objects.filter(
+            adolescent__created_at__gte=start_date,
+            adolescent__created_at__lte=end_date,
+        ).count()
 
         # TOTAL REFERRALS
-        total_referral_count = Referral.objects.all().count()
+        total_referral_count = Referral.objects.filter(
+            adolescent__created_at__gte=start_date,
+            adolescent__created_at__lte=end_date,
+        ).count()
 
         # TOTAL SERVICES
-        total_service_count = Service.objects.all().count()
+        total_service_count = Service.objects.filter().count()
 
         # TOTAL FACILITIES
-        total_facility_count = Facility.objects.all().count()
+        total_facility_count = Facility.objects.filter().count()
 
         return Response({
             "basic": basic_count,
@@ -153,6 +181,7 @@ class BasicDemographics(generics.GenericAPIView):
         response_data = get_demographic_data(adolescent_type="basic")
         return Response({"basic_demographics": response_data})
 
+
 class SecondaryDemographics(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -160,7 +189,8 @@ class SecondaryDemographics(generics.GenericAPIView):
     def get(self, request, format=None):
         response_data = get_demographic_data(adolescent_type="secondary")
         return Response({"secondary_demographics": response_data})
-    
+
+
 class CommunityDemographics(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -168,7 +198,8 @@ class CommunityDemographics(generics.GenericAPIView):
     def get(self, request, format=None):
         response_data = get_demographic_data(adolescent_type="community")
         return Response({"community_demographics": response_data})
-    
+
+
 class AgeDistributionDemographics(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -176,23 +207,26 @@ class AgeDistributionDemographics(generics.GenericAPIView):
     def get(self, request, format=None):
         response_data = get_age_distribution_data()
         return Response({"age_distributions": response_data})
-    
-    
+
+
 class PositiveScreenedView(generics.GenericAPIView):
     """ get all positive screened and to be treated onsite flags"""
 
     permission_classes = [permissions.IsAuthenticated]
+
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
         red_flag_code = Colors.RED.value
         categories = ["basic", "secondary", "community"]
         result = []
 
-        referrals = Referral.objects.filter(is_onsite=True).select_related('adolescent').prefetch_related('services__related_flag_labels')
+        referrals = Referral.objects.filter(is_onsite=True).select_related(
+            'adolescent').prefetch_related('services__related_flag_labels')
         onsite_adolescents = {referral.adolescent for referral in referrals}
 
         for label in FlagLabel.objects.all():
-            red_flags = SummaryFlag.objects.filter(final_color_code=red_flag_code, label=label)
+            red_flags = SummaryFlag.objects.filter(
+                final_color_code=red_flag_code, label=label)
             category_counts = {
                 category: red_flags.filter(adolescent__type=category).count()
                 for category in categories
@@ -204,19 +238,25 @@ class PositiveScreenedView(generics.GenericAPIView):
                     "total": total_red_flags,
                     **category_counts
                 })
-                
+
         # Sort red_flag_distribution by name
         result = sorted(result, key=lambda x: x["name"])
 
         # Aggregate data for each flag label
         to_be_treated_onsite = []
-        flag_label_distribution = {label.name: {category.lower(): 0 for category in categories} for label in FlagLabel.objects.all()}
+        flag_label_distribution = {
+            label.name: {
+                category.lower(): 0
+                for category in categories
+            }
+            for label in FlagLabel.objects.all()
+        }
         for referral in referrals:
             for service in referral.services.all():
                 for flag_label in service.related_flag_labels.all():
-                    flag_label_distribution[flag_label.name][(referral.adolescent.type or "").lower()] += 1
+                    flag_label_distribution[flag_label.name][(
+                        referral.adolescent.type or "").lower()] += 1
 
-        
         for flag_label, counts in flag_label_distribution.items():
             total = sum(counts.values())
             if total > 0:
@@ -225,8 +265,9 @@ class PositiveScreenedView(generics.GenericAPIView):
                     "total": total,
                     **counts
                 })
-                
-        to_be_treated_onsite = sorted(to_be_treated_onsite, key=lambda x: x["name"])
+
+        to_be_treated_onsite = sorted(to_be_treated_onsite,
+                                      key=lambda x: x["name"])
 
         response_data = {
             "red_flag_distribution": result,
@@ -239,32 +280,41 @@ class PositiveScreenedView(generics.GenericAPIView):
 class TreatedOnsiteView(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
-    
+
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
-        
-        response_data = get_completed_treatment(is_onsite=True, status="completed")
-        return Response({"treated_onsite": response_data})  
-  
-    
+
+        response_data = get_completed_treatment(is_onsite=True,
+                                                status="completed")
+        return Response({"treated_onsite": response_data})
+
+
 class ReferredForTreatedView(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
-    
+
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
         red_flag_code = Colors.RED.value
         categories = ["basic", "secondary", "community"]
 
-        referrals = Referral.objects.filter(is_onsite=False).select_related('adolescent').prefetch_related('services__related_flag_labels')
+        referrals = Referral.objects.filter(is_onsite=False).select_related(
+            'adolescent').prefetch_related('services__related_flag_labels')
         onsite_adolescents = {referral.adolescent for referral in referrals}
 
         referred_for_treatment = []
-        flag_label_distribution = {label.name: {category: 0 for category in categories} for label in FlagLabel.objects.all()}
+        flag_label_distribution = {
+            label.name: {
+                category: 0
+                for category in categories
+            }
+            for label in FlagLabel.objects.all()
+        }
         for referral in referrals:
             for service in referral.services.all():
                 for flag_label in service.related_flag_labels.all():
-                    flag_label_distribution[flag_label.name][referral.adolescent.type] += 1
+                    flag_label_distribution[flag_label.name][
+                        referral.adolescent.type] += 1
 
         for flag_label, counts in flag_label_distribution.items():
             total = sum(counts.values())
@@ -276,58 +326,70 @@ class ReferredForTreatedView(generics.GenericAPIView):
                 })
 
         # Sort referred_for_treatment by name
-        referred_for_treatment = sorted(referred_for_treatment, key=lambda x: x["name"])
+        referred_for_treatment = sorted(referred_for_treatment,
+                                        key=lambda x: x["name"])
 
-        response_data = {
-            "referred_for_treatment": referred_for_treatment
-        }
+        response_data = {"referred_for_treatment": referred_for_treatment}
 
         return Response(response_data)
-    
+
 
 class ReferredAndTreatedView(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
-    
+
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
-        
-        response_data = get_completed_treatment(is_onsite=False, status="completed")
-        return Response({"referred_and_treated": response_data})  
-    
-    
+
+        response_data = get_completed_treatment(is_onsite=False,
+                                                status="completed")
+        return Response({"referred_and_treated": response_data})
+
 
 class FeedbackQuestion(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        
+
         question_id = "Q1200"
         question = Question.objects.get(question_id=question_id)
 
         # Fetch all responses for this question
-        responses = AdolescentResponse.objects.filter(question=question).annotate(
-            adolescent_type=F('adolescent__type'),
-            response_value=F('chosen_options__value')
-        )
+        responses = AdolescentResponse.objects.filter(
+            question=question).annotate(
+                adolescent_type=F('adolescent__type'),
+                response_value=F('chosen_options__value'))
 
         # Group by adolescent type and response option, and count them
-        stats = responses.values(
-            'adolescent_type', 'response_value'
-        ).annotate(count=Count('id'))
+        stats = responses.values('adolescent_type',
+                                 'response_value').annotate(count=Count('id'))
 
         # Total counts per adolescent type
-        total_counts = responses.values('adolescent_type').annotate(total=Count('id'))
+        total_counts = responses.values('adolescent_type').annotate(
+            total=Count('id'))
 
         # Unique response values
-        unique_responses = list(responses.values_list('response_value', flat=True).distinct())
+        unique_responses = list(
+            responses.values_list('response_value', flat=True).distinct())
 
         # Initialize the results dictionary dynamically
         result = {
-            "basic": {response: 0 for response in unique_responses + ["Total"]},
-            "community": {response: 0 for response in unique_responses + ["Total"]},
-            "secondary": {response: 0 for response in unique_responses + ["Total"]},
-            "Total": {response: 0 for response in unique_responses + ["Total"]}
+            "basic": {
+                response: 0
+                for response in unique_responses + ["Total"]
+            },
+            "community": {
+                response: 0
+                for response in unique_responses + ["Total"]
+            },
+            "secondary": {
+                response: 0
+                for response in unique_responses + ["Total"]
+            },
+            "Total": {
+                response: 0
+                for response in unique_responses + ["Total"]
+            }
         }
 
         # Populate the result dictionary with counts and percentages
@@ -375,5 +437,3 @@ class FeedbackQuestion(generics.GenericAPIView):
         final_result["responses"].append(total_row)
 
         return Response(final_result)
-
-    

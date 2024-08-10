@@ -1,22 +1,34 @@
 import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import { useLazyGetAllAdolescentTypesQuery } from '../../features/resources/resources-api-slice';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 ChartJs.register(
   Tooltip, Title, ArcElement, Legend
 )
 
 function PieChart() {
+  const startDate = useSelector((state) => state.global.dashboardDataStartDate);
+  const endDate = useSelector((state) => state.global.dashboardDataEndDate);
   const [getAdolescentTypes, { data: response = [], isFetching }] = useLazyGetAllAdolescentTypesQuery();
 
-  useEffect(() => {
-    getAdolescentTypes();
-  }, [getAdolescentTypes]);
+  const [basicCount, setBasicCount] = useState(0)
+  const [secondaryCount, setSecondaryCount] = useState(0)
+  const [communityCount, setCommunityCount] = useState(0)
 
-  const basicCount = response?.basic || 0;
-  const secondaryCount = response?.secondary || 0;
-  const communityCount = response?.community || 0;
+  useEffect(() => {
+    getAdolescentTypes({
+      start_date: startDate,
+      end_date: endDate,
+    });
+  }, [getAdolescentTypes, startDate, endDate]);
+
+  useEffect(() => {
+    setBasicCount(response?.basic || 0)
+    setSecondaryCount(response?.secondary || 0)
+    setCommunityCount(response?.community || 0)
+  }, [response])
 
   const chartOptions = {
     plugins: {

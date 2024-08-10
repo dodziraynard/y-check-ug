@@ -37,7 +37,7 @@ class NewAdolescentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewAdolescentBinding
     private lateinit var viewModel: AdolescentActivityViewModel
     private lateinit var adolescent: Adolescent
-    private var pidPrefix: String = "YC-"
+    private var pidPrefix: String = "YG-"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,20 @@ class NewAdolescentActivity : AppCompatActivity() {
             binding.editPhotoButton.visibility = View.GONE
             val uuid = UUID.randomUUID().toString()
             adolescent = Adolescent(
-                "", "", "", 1694350811258, "", null, "", "", "", "", "", "", "", uuid = uuid
+                "",
+                "",
+                StudyPhase.IMPLEMENTATION,
+                1694350811258,
+                "",
+                null,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                uuid = uuid
             )
         } else {
             adolescent = postedAdolescent
@@ -231,7 +244,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         binding.adolescentTypeGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.adolescent_type_basic -> {
-                    pidPrefix = "YC1"
+                    pidPrefix = "YG1"
                     adolescent.type = AdolescentTypes.BASIC
                     viewModel.getCheckupLocations("type:${AdolescentTypes.BASIC}")
                     binding.residentialStatusContainer.visibility = View.GONE
@@ -243,7 +256,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 }
 
                 R.id.adolescent_type_secondary -> {
-                    pidPrefix = "YC2"
+                    pidPrefix = "YG2"
 
                     adolescent.type = AdolescentTypes.SECONDARY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.SECONDARY}")
@@ -256,7 +269,7 @@ class NewAdolescentActivity : AppCompatActivity() {
                 }
 
                 R.id.adolescent_type_community -> {
-                    pidPrefix = "YC3"
+                    pidPrefix = "YG3"
 
                     adolescent.type = AdolescentTypes.COMMUNITY
                     viewModel.getCheckupLocations("type:${AdolescentTypes.COMMUNITY}")
@@ -384,12 +397,12 @@ class NewAdolescentActivity : AppCompatActivity() {
 
                 AdolescentTypes.SECONDARY.lowercase() -> {
                     minAge = 15
-                    maxAge = 19
+                    maxAge = 17
                 }
 
                 AdolescentTypes.COMMUNITY.lowercase() -> {
                     minAge = 15
-                    maxAge = 17
+                    maxAge = 19
                 }
             }
 

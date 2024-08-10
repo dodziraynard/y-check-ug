@@ -104,6 +104,7 @@
                             android:id="@+id/study_phase_implementation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:checked="true"
                             android:text="@string/implementation" />
                     </RadioGroup>
 
@@ -256,7 +257,7 @@
                             android:id="@+id/id_prefix"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="YC-"
+                            android:text="YG-"
                             android:textColor="@color/text_color"
                             android:textStyle="bold" />
 
