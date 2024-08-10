@@ -1,14 +1,29 @@
-import React, { Fragment, Suspense } from 'react'
+import React, { Fragment, Suspense, useEffect, useState, useRef } from 'react'
 import BreadCrumb from '../../components/BreadCrumb';
 import './style.scss';
 import { Link } from 'react-router-dom';
 import PageLoading from '../../components/PageLoading';
 import { BASE_API_URI } from '../../utils/constants';
 import TextOverflow from '../../components/TextOverflow';
+import {
+    useLazyGetAllFacilitiesQuery,
+} from '../../features/resources/resources-api-slice';
+import { monitorAndLoadResponse,} from '../../utils/functions';
 
 const TableView = React.lazy(() => import("../../components/Table"));
 
 function TreatmentsWidget() {
+    
+    const [facilities, setFacilities] = useState([])
+    const [getFacilities, { data: facilitiesResponse = [], isLoading: isLoadingFacilities, error: errorLoadingFacilities }] = useLazyGetAllFacilitiesQuery()
+    useEffect(() => {
+        getFacilities()
+        
+    }, [])
+
+    monitorAndLoadResponse(facilitiesResponse, "facilities", setFacilities)
+
+
     return (
         <Fragment>
             {/* Content */}
@@ -22,7 +37,10 @@ function TreatmentsWidget() {
                             <TableView
                                 responseDataAttribute="treatments"
                                 dataSourceUrl={`${BASE_API_URI}/treatments/`}
-                                filterByDate={true}
+                                filters={facilities?.map(facility => ({
+                                    key: `facility_name:${facility.name}`,
+                                    value: facility.name
+                                })) || []} 
                                 headers={[
                                     {
                                         key: "photo", value: "Photo", textAlign: "center", render: (item) => {
