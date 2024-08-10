@@ -77,7 +77,6 @@ function ReferralsWidget() {
         newReferralModal?.show()
     }
 
-
     const handleFormSubmit = async (event) => {
         event.preventDefault()
         const body = {
@@ -195,6 +194,10 @@ function ReferralsWidget() {
                                     { key: `status:review`, value: `Review` },
                                     { key: `status:completed`, value: `Completed` },
                                 ]}
+                                filters2={facilities?.map(facility => ({
+                                    key: `facility:${facility.id}`,
+                                    value: facility.name
+                                })) || []} 
                                 headers={[
                                     {
                                         key: "photo", value: "Photo", textAlign: "center", render: (item) => {
