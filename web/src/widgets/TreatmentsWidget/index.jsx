@@ -37,7 +37,7 @@ function TreatmentsWidget() {
                                 dataSourceUrl={`${BASE_API_URI}/treatments/`}
                                 filterByDate={true}
                                 filters={facilities?.map(facility => ({
-                                    key: `facility_name:${facility.name}`,
+                                    key: `referral__facility:${facility.id}`,
                                     value: facility.name
                                 })) || []} 
                                 headers={[

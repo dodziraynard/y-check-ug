@@ -13,6 +13,8 @@ from dashboard.models import Adolescent, SummaryFlag, Referral, Facility, Servic
 from rest_framework.response import Response
 from django.db.utils import IntegrityError
 from rest_api.serializers import *
+from django.utils import timezone
+from dateutil.parser import parse
 
 logger = logging.getLogger(__name__)
 
@@ -225,9 +227,21 @@ class MyReferrals(generics.GenericAPIView):
     serializer_class = ReferralSerializer
 
     def get(self, request, *args, **kwargs):
-        referrals = Referral.objects.all().order_by("-created_at")
         query = request.GET.get("query") or request.GET.get("q")
         filters = request.GET.getlist("filters")
+        start_date = make_aware(
+            parse(request.GET.get("start_date") or "2023-01-01"))
+
+        end_date = make_aware(
+            parse(
+                request.GET.get("end_date")
+                or timezone.now().strftime('%Y-%m-%d')))
+
+        referrals = Referral.objects.filter(
+            created_at__gte=start_date,
+            created_at__lte=end_date,
+        ).order_by("-created_at")
+
         if not request.user.has_perm("setup.access_all_referrals"):
             referrals = referrals.filter(facility=request.user.facility)
 
