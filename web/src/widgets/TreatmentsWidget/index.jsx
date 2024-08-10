@@ -18,7 +18,6 @@ function TreatmentsWidget() {
     const [getFacilities, { data: facilitiesResponse = [], isLoading: isLoadingFacilities, error: errorLoadingFacilities }] = useLazyGetAllFacilitiesQuery()
     useEffect(() => {
         getFacilities()
-        
     }, [])
 
     monitorAndLoadResponse(facilitiesResponse, "facilities", setFacilities)
