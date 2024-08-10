@@ -22,7 +22,6 @@ function TreatmentsWidget() {
 
     monitorAndLoadResponse(facilitiesResponse, "facilities", setFacilities)
 
-
     return (
         <Fragment>
             {/* Content */}
