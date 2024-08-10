@@ -163,7 +163,7 @@ class AdolescentFlagCheckView(generics.GenericAPIView):
                     adolescent=flag.adolescent,
                     services__related_flag_labels=flag.label)
 
-                status = "pending" if not referrals.exists() else "referred"
+                status = "pending" if not referrals.exists() else "action taken"
 
             results.append(
                 to_dict(
