@@ -118,7 +118,7 @@ function ProcessReviewWidget() {
   }, [errorUpdatingAdolescent, toast])
 
   const getStatusColor = (status) => {
-    if (status === 'completed' || status === 'referred' || status === 'normal')
+    if (status === 'completed' || status === 'action taken' || status === 'normal')
       return 'green.500'
     return 'red.500';
   };
