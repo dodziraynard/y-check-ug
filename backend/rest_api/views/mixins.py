@@ -36,10 +36,10 @@ class SimpleCrudMixin(generics.GenericAPIView):
             if start_date:
                 start_date = datetime.strptime(start_date, '%Y-%m-%d')
                 objects = objects.filter(
-                    created_at__gte=make_aware(start_date))
+                    created_at__date__gte=make_aware(start_date))
             if end_date:
                 end_date = datetime.strptime(end_date, '%Y-%m-%d')
-                objects = objects.filter(created_at__lte=make_aware(end_date))
+                objects = objects.filter(created_at__date__lte=make_aware(end_date))
 
         if hasattr(self.model_class, "deleted"):  # type: ignore
             objects = objects.filter(deleted=False)

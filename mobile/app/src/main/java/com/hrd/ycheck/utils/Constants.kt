@@ -39,7 +39,7 @@ object Genders {
 
 object StudyPhase {
     const val PILOT = "pilot"
-    const val IMPLEMENTATION = "initial"
+    const val IMPLEMENTATION = "implementation"
 }
 
 object ResidentialStatus {

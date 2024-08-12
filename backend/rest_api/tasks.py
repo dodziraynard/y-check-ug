@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 
 @shared_task()
 def compute_activity_average_time(start_time: datetime, end_time: datetime):
-    adolescents = Adolescent.objects.filter(created_at__gte=start_time,
-                                            created_at__lte=end_time)
+    adolescents = Adolescent.objects.filter(created_at__date__gte=start_time,
+                                            created_at__date__lte=end_time)
     adolescent_time_spent = defaultdict(list)
 
     for adolescent in adolescents:

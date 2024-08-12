@@ -40,8 +40,8 @@ def generate_referral_stats_report(self,
 
     rows = []
     referrals = Referral.objects.filter(
-        created_at__gte=from_date,
-        created_at__lte=to_date,
+        created_at__date__gte=from_date,
+        created_at__date__lte=to_date,
     )
     facilities = set(referrals.values_list("facility__name", flat=True))
     for facility in facilities:

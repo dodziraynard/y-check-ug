@@ -30,8 +30,8 @@ def generate_table_1_report(self, filename="report.pdf", from_date=None, to_date
         to_date = timezone.now()
 
     adolescents = Adolescent.objects.filter(
-        created_at__gte=from_date,
-        created_at__lte=to_date,
+        created_at__date__gte=from_date,
+        created_at__date__lte=to_date,
     )
     set_task_state(self, "RETRIEVING RECORDS", 1,
                    info=f"Retrieving invoice data.")

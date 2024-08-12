@@ -238,8 +238,8 @@ class MyReferrals(generics.GenericAPIView):
                 or timezone.now().strftime('%Y-%m-%d')))
 
         referrals = Referral.objects.filter(
-            created_at__gte=start_date,
-            created_at__lte=end_date,
+            created_at__date__gte=start_date,
+            created_at__date__lte=end_date,
         ).order_by("-created_at")
 
         if not request.user.has_perm("setup.access_all_referrals"):

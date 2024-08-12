@@ -124,8 +124,8 @@ class GetAdolescentType(generics.GenericAPIView):
             datetime(2023, 1, 1))
         end_date = _get_date(request.GET.get("end_date")) or timezone.now()
 
-        adolescents = Adolescent.objects.filter(created_at__gte=start_date,
-                                                created_at__lte=end_date)
+        adolescents = Adolescent.objects.filter(created_at__date__gte=start_date,
+                                                created_at__date__lte=end_date)
 
         # BASIC
         basic_count = adolescents.filter(type="basic").count()
@@ -144,14 +144,14 @@ class GetAdolescentType(generics.GenericAPIView):
 
         # TOTAL TREATMENTS
         total_treatment_count = Treatment.objects.filter(
-            adolescent__created_at__gte=start_date,
-            adolescent__created_at__lte=end_date,
+            adolescent__created_at__date__gte=start_date,
+            adolescent__created_at__date__lte=end_date,
         ).count()
 
         # TOTAL REFERRALS
         total_referral_count = Referral.objects.filter(
-            adolescent__created_at__gte=start_date,
-            adolescent__created_at__lte=end_date,
+            adolescent__created_at__date__gte=start_date,
+            adolescent__created_at__date__lte=end_date,
         ).count()
 
         # TOTAL SERVICES
