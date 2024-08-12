@@ -149,7 +149,7 @@ function DashboardPage() {
                     <NavLink to="/dashboard/referrals">
                         <div className="menu-item" id="action_center">
                             <i className='icon bi bi-h-circle'></i>
-                            <span className="label">Referrals (Actions)</span>
+                            <span className="label">Actions</span>
                         </div>
                     </NavLink>
                     : ""
