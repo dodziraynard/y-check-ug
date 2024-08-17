@@ -161,7 +161,8 @@ class Question(UpstreamSyncBaseModel):
             self.previous_response_requirements.filter(
                 question__number__gt=current_question.number).exists()
 
-    def are_previous_response_conditions_met(self, adolescent):
+    def are_previous_response_conditions_met(self, adolescent: Adolescent,
+                                             study_phase: StudyPhase):
         if self.previous_question_group:
             group_value = self.previous_question_group.get_group_value(
                 adolescent)
@@ -173,7 +174,8 @@ class Question(UpstreamSyncBaseModel):
         conditions_met = []
         for response in self.previous_response_requirements.all():
             conditions_met.append(
-                response.is_previous_response_condition_met(adolescent))
+                response.is_previous_response_condition_met(
+                    adolescent, study_phase))
 
         # Ensure at least one of the conditions is met.
         return any(conditions_met) or len(conditions_met) == 0

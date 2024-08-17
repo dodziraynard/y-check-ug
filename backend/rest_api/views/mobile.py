@@ -269,13 +269,12 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
             id=current_question_id).first()
 
         current_section: Section = current_question.section if current_question else None
+        if action == "next_unanswered":
+            target_questions = target_questions.exclude(
+                responses__adolescent=adolescent,
+                responses__study_phase=study_phase,
+            )
         if current_question:
-            if action == "next_unanswered":
-                target_questions = target_questions.exclude(
-                    adolescentresponse__adolescent=adolescent,
-                    adolescentresponse__study_phase=study_phase,
-                )
-
             if action in ["next", "next_unanswered"]:
                 target_questions = target_questions.filter(
                     number__gt=current_question.number).order_by("number")
@@ -308,7 +307,8 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
                 last_invalid_question_number = question.number
                 break
 
-            if not question.are_previous_response_conditions_met(adolescent):
+            if not question.are_previous_response_conditions_met(
+                    adolescent, study_phase):
 
                 # If we have questions to answer i.e., index > len(invalid_questions_ids)
                 # and 'question' is not eligible,
@@ -447,16 +447,19 @@ class PostMutipleResponses(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         adolescent_id = request.data.get("adolescent_id")
+        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+        if not adolescent:
+            return Response({"error_message": "Adolescent not found."})
+
+        study_phase = request.data.get("study_phase") or adolescent.study_phase
+
         question_responses_json = request.data.get("question_responses_json")
         last_answered_question = None
+
         for current_question_id, responses in json.loads(
                 question_responses_json).items():
             value = responses.get("first")
             option_ids = responses.get("second")
-
-            adolescent = Adolescent.objects.filter(id=adolescent_id).first()
-            if not adolescent:
-                return Response({"error_message": "Adolescent not found."})
 
             current_question = Question.objects.filter(
                 id=current_question_id).first()
@@ -469,12 +472,16 @@ class PostMutipleResponses(generics.GenericAPIView):
 
             try:
                 response, _ = AdolescentResponse.objects.get_or_create(
-                    question=current_question, adolescent=adolescent)
+                    study_phase=study_phase,
+                    question=current_question,
+                    adolescent=adolescent)
             except AdolescentResponse.MultipleObjectsReturned:
                 AdolescentResponse.objects.filter(
                     question=current_question, adolescent=adolescent).delete()
                 response = AdolescentResponse.objects.create(
-                    question=current_question, adolescent=adolescent)
+                    study_phase=study_phase,
+                    question=current_question,
+                    adolescent=adolescent)
 
             if current_question.input_type in [
                     ResponseInputType.TEXT_FIELD.value,

@@ -3,7 +3,7 @@ from rest_api import views
 
 # yapf: disable
 
-app_label = "rest_api"
+app_name = "rest_api"
 urlpatterns = [
     path("mobile-config/", views.MobileConfigAPI.as_view()),
     path("auth/login/", views.UserLoginAPI.as_view()),
@@ -18,7 +18,7 @@ urlpatterns = [
     path("upload-adolescent-photo/", views.UploadAdolescentPhoto.as_view()),
     path("get-multiple-questions/", views.GetNextAvailableQuestions.as_view(), name="get-multiple-questions"),
     path("post-survey-response/", views.RespondToSurveyQuestion.as_view()),
-    path("post-multiple-responses/", views.PostMutipleResponses.as_view()),
+    path("post-multiple-responses/", views.PostMutipleResponses.as_view(), name="post-multiple-responses"),
 
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
