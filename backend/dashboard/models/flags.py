@@ -1,6 +1,7 @@
 import sys
 import logging
 from django.db import models
+from django.db.utils import NotSupportedError
 from dashboard.models.types import StudyPhase
 from dashboard.models.constant import STUDY_PHASE_CHOICES
 from dashboard.models.conditions_util_functions import (
@@ -62,8 +63,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
     @classmethod
     def compute_flag_color(cls, adolescent: Adolescent,
                            study_phase: StudyPhase):
-        flag_label = FlagLabel.objects.exclude(
-            exclude_study_phase=study_phase)
+        flag_label = FlagLabel.objects.exclude(exclude_study_phase=study_phase)
         for label in flag_label:
             color = label.get_flag_color(adolescent, study_phase)
             if not color:
@@ -94,7 +94,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
             name += f"->{self.updated_color_code}"
         return name
 
-    def get_responses(self):
+    def get_responses(self, study_phase: StudyPhase):
         result = []
         adolescent = self.adolescent
         colors = self.label.colors.all()
@@ -123,16 +123,19 @@ class SummaryFlag(UpstreamSyncBaseModel):
                   (~Q(adolescent_type__iexact=adolescent.type)
                    & Q(invert_adolescent_attribute_requirements=True))))
             & (Q(study_phase=None)
-               | Q(study_phase__iexact=adolescent.study_phase)))
+               | Q(study_phase__iexact=adolescent.study_phase))).exclude(
+                Q(section__exclude_study_phase=study_phase)
+                | Q(exclude_study_phase=study_phase))
 
         try:
             questions = questions.distinct("question_id")
-        except Exception as e:
-            logger.exception(str(e))
+            questions.exists()  # Try evaluate query.
+        except NotSupportedError as e:
+            # Do not select distinct on field if DB doesn't support.
             questions = questions.distinct()
 
         for question in questions:
-            response = question.get_response(adolescent)
+            response = question.get_response(adolescent, study_phase)
             data = {
                 "question": question.text,
                 "question_id": question.question_id,
@@ -364,7 +367,8 @@ class FlagCondition(UpstreamSyncBaseModel):
                         group_value
                     ) and self.range_min <= group_value <= self.range_max
             case "invoke_bmi_sd_function":
-                adolescent_bmi_sd = compute_bmi_sd_function(adolescent, study_phase)
+                adolescent_bmi_sd = compute_bmi_sd_function(
+                    adolescent, study_phase)
                 if not (self.range_min and self.range_max):
                     return True
                 matched = self.range_min <= adolescent_bmi_sd <= self.range_max

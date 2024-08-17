@@ -30,7 +30,7 @@ urlpatterns = [
     path("web-adolescents-types/", views.GetAdolescentType.as_view()),
 
     path("<str:pid>/referrals/", views.AdolescentReferrals.as_view()),
-    path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view()),
+    path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view(), name="referral-details"),
     path("referrals/<str:referral_id>/treatment-feedback/",
          views.ReferralTreatment.as_view()),
     path("treatments/", views.TreatmentsAPI.as_view()),

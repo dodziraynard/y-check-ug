@@ -320,7 +320,7 @@ class ReferralDetail(generics.GenericAPIView):
                 adolescent=referral.adolescent).distinct()
             responses = [
                 response for flag in flags
-                for response in flag.get_responses()
+                for response in flag.get_responses(referral.study_phase)
             ]
             relevant_adolescent_responses[service.id] = responses
 
