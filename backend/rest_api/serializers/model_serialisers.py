@@ -288,7 +288,7 @@ class SummaryFlagSerializer(serializers.ModelSerializer):
             return f"{obj.comment} ({obj.updated_by.get_name()}, {timeago.format(obj.updated_at, now)})"
 
     def get_responses(self, obj):
-        return obj.get_responses()
+        return obj.get_responses(obj.study_phase)
 
     def get_is_referred(self, obj):
         return Referral.objects.filter(

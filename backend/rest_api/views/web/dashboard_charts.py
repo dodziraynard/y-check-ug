@@ -64,7 +64,7 @@ class AllAdolescentsFlagCheckView(generics.GenericAPIView):
         for flag in flags:
             all_results.append(
                 to_dict(
-                    FlagStatus(flag.label.name, flag.final_color_code,
+                    FlagStatus(flag.label.name, flag.final_color_code or Colors.GREY.value,
                                flag.computed_color_code), flag.adolescent.pid))
 
         total_pages = max(1, math.ceil(all_flags.count() / page_size))

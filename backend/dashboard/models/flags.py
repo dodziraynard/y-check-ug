@@ -39,6 +39,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
     # For report generation only.
     final_color_code = models.CharField(choices=COLOR_CHOICES,
                                         max_length=10,
+                                        default=Colors.GREY.value,
                                         null=True,
                                         blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -124,8 +125,8 @@ class SummaryFlag(UpstreamSyncBaseModel):
                    & Q(invert_adolescent_attribute_requirements=True))))
             & (Q(study_phase=None)
                | Q(study_phase__iexact=adolescent.study_phase))).exclude(
-                Q(section__exclude_study_phase=study_phase)
-                | Q(exclude_study_phase=study_phase))
+                   Q(section__exclude_study_phase=study_phase)
+                   | Q(exclude_study_phase=study_phase))
 
         try:
             questions = questions.distinct("question_id")
@@ -157,6 +158,10 @@ class SummaryFlag(UpstreamSyncBaseModel):
 
         self.save()
         return result
+
+    def save(self, *args, **kwargs) -> None:
+
+        return super().save(*args, **kwargs)
 
 
 class FlagLabel(UpstreamSyncBaseModel):

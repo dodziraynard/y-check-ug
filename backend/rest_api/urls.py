@@ -23,7 +23,7 @@ urlpatterns = [
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
-    path("<str:pid>/summary-flags/",
+    path("<str:pid>/<str:study_phase>/summary-flags/",
          views.GetSummaryFlags.as_view(), name="summary_flags"),
     path("<str:pid>/recommended-services/",
          views.GetRecommendedServices.as_view()),
