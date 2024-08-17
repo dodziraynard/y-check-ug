@@ -1,6 +1,8 @@
 import sys
 import logging
 from django.db import models
+from dashboard.models.types import StudyPhase
+from dashboard.models.constant import STUDY_PHASE_CHOICES
 from dashboard.models.conditions_util_functions import (
     compute_bmi_sd_function,
     compute_grip_test,
@@ -19,47 +21,66 @@ logger = logging.getLogger(__name__)
 
 
 class SummaryFlag(UpstreamSyncBaseModel):
-    adolescent = models.ForeignKey(
-        Adolescent, on_delete=models.CASCADE, db_index=True)
-    label = models.ForeignKey(
-        "dashboard.FlagLabel", on_delete=models.CASCADE, db_index=True)
-    comment = models.CharField(
-        max_length=200, default="This value was inferred/computed.")
-    computed_color_code = models.CharField(
-        choices=COLOR_CHOICES, max_length=10)
-    updated_color_code = models.CharField(
-        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
+    adolescent = models.ForeignKey(Adolescent,
+                                   on_delete=models.CASCADE,
+                                   db_index=True)
+    label = models.ForeignKey("dashboard.FlagLabel",
+                              on_delete=models.CASCADE,
+                              db_index=True)
+    comment = models.CharField(max_length=200,
+                               default="This value was inferred/computed.")
+    computed_color_code = models.CharField(choices=COLOR_CHOICES,
+                                           max_length=10)
+    updated_color_code = models.CharField(choices=COLOR_CHOICES,
+                                          max_length=10,
+                                          null=True,
+                                          blank=True)
     # For report generation only.
-    final_color_code = models.CharField(
-        choices=COLOR_CHOICES, max_length=10, null=True, blank=True)
+    final_color_code = models.CharField(choices=COLOR_CHOICES,
+                                        max_length=10,
+                                        null=True,
+                                        blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(
-        "accounts.User", null=True, blank=True, on_delete=models.CASCADE)
+    updated_by = models.ForeignKey("accounts.User",
+                                   null=True,
+                                   blank=True,
+                                   on_delete=models.CASCADE)
     context = models.TextField(null=True, blank=True)
+    study_phase = models.CharField(max_length=50,
+                                   choices=STUDY_PHASE_CHOICES,
+                                   blank=True,
+                                   null=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['adolescent', 'label'], name='Adolescent flag')
+                fields=['adolescent', 'label', 'study_phase'],
+                name='unique_summary_flag_per_study_phase')
         ]
 
     @classmethod
-    def compute_flag_color(cls, adolescent: Adolescent):
-        flag_lables = FlagLabel.objects.all()
-        for label in flag_lables:
-            color = label.get_flag_color(adolescent)
+    def compute_flag_color(cls, adolescent: Adolescent,
+                           study_phase: StudyPhase):
+        flag_label = FlagLabel.objects.exclude(
+            exclude_study_phase=study_phase)
+        for label in flag_label:
+            color = label.get_flag_color(adolescent, study_phase)
             if not color:
                 # This flag is no longer applicable, delete.
-                SummaryFlag.objects.filter(
-                    adolescent=adolescent, label=label).delete()
+                SummaryFlag.objects.filter(adolescent=adolescent,
+                                           study_phase=str(study_phase),
+                                           label=label).delete()
                 continue
 
-            flag = SummaryFlag.objects.filter(
-                adolescent=adolescent, label=label).first()
+            flag = SummaryFlag.objects.filter(adolescent=adolescent,
+                                              study_phase=str(study_phase),
+                                              label=label).first()
             if not flag:
-                flag = SummaryFlag.objects.create(
-                    adolescent=adolescent, label=label, computed_color_code=color)
+                flag = SummaryFlag.objects.create(adolescent=adolescent,
+                                                  study_phase=str(study_phase),
+                                                  label=label,
+                                                  computed_color_code=color)
             elif flag.computed_color_code != color:
                 flag.computed_color_code = color
                 flag.save()
@@ -83,7 +104,9 @@ class SummaryFlag(UpstreamSyncBaseModel):
         for condition in flag_conditions:
             if condition.operator == "range_sum_between" and condition.question1 and condition.question2:
                 ids = Question.objects.filter(
-                    number__gte=condition.question1.number, number__lte=condition.question2.number).values_list("question_id", flat=True)
+                    number__gte=condition.question1.number,
+                    number__lte=condition.question2.number).values_list(
+                        "question_id", flat=True)
                 question_ids.extend(ids)
             elif condition.question1:
                 question_ids.append(condition.question1.question_id)
@@ -91,12 +114,16 @@ class SummaryFlag(UpstreamSyncBaseModel):
                 question_ids.append(condition.question2.question_id)
 
         questions = Question.objects.filter(
-            Q(question_id__in=question_ids) &
-            (Q(gender=None) | Q(gender__iexact=adolescent.gender)) &
-            ((Q(adolescent_type=None) | (Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=False))) |
-             (Q(adolescent_type=None) | (~Q(adolescent_type__iexact=adolescent.type) & Q(invert_adolescent_attribute_requirements=True)))) &
-            (Q(study_phase=None) | Q(study_phase__iexact=adolescent.study_phase))
-        )
+            Q(question_id__in=question_ids)
+            & (Q(gender=None) | Q(gender__iexact=adolescent.gender))
+            & ((Q(adolescent_type=None) |
+                (Q(adolescent_type__iexact=adolescent.type)
+                 & Q(invert_adolescent_attribute_requirements=False)))
+               | (Q(adolescent_type=None) |
+                  (~Q(adolescent_type__iexact=adolescent.type)
+                   & Q(invert_adolescent_attribute_requirements=True))))
+            & (Q(study_phase=None)
+               | Q(study_phase__iexact=adolescent.study_phase)))
 
         try:
             questions = questions.distinct("question_id")
@@ -131,27 +158,31 @@ class SummaryFlag(UpstreamSyncBaseModel):
 
 class FlagLabel(UpstreamSyncBaseModel):
     name = models.CharField(max_length=50, unique=True, db_index=True)
+    exclude_study_phase = models.CharField(max_length=50,
+                                           choices=STUDY_PHASE_CHOICES,
+                                           blank=True,
+                                           null=True)
 
     def __str__(self) -> str:
         return self.name
 
-    def get_flag_color(self, adolescent):
-        colors = self.colors.all().order_by("-priority", "is_fallback", "-color_name")
+    def get_flag_color(self, adolescent, study_phase):
+        colors = self.colors.all().order_by("-priority", "is_fallback",
+                                            "-color_name")
         fallback_color = None
         for color in colors:
             if color.is_fallback:
                 fallback_color = color  # There should be only one fallback per color group
 
             conditions = color.conditions.filter(
-                (Q(min_age=None) | Q(min_age__gte=adolescent.get_age())) &
-                (Q(max_age=None) | Q(max_age__lte=adolescent.get_age()))
-            )
+                (Q(min_age=None) | Q(min_age__gte=adolescent.get_age()))
+                & (Q(max_age=None) | Q(max_age__lte=adolescent.get_age())))
             required_conditions = conditions.filter(
                 is_required=True).order_by("-priority")
             optional_conditions = conditions.filter(
                 is_required=False).order_by("-priority")
             for condition in required_conditions:
-                matched = condition.check_condition(adolescent)
+                matched = condition.check_condition(adolescent, study_phase)
                 if matched != True:
                     break  # To go different color.
             else:  # All required conditions are satisfied.
@@ -159,7 +190,8 @@ class FlagLabel(UpstreamSyncBaseModel):
                 if not optional_conditions:
                     return color.color_code
                 for condition in optional_conditions:
-                    matched = condition.check_condition(adolescent)
+                    matched = condition.check_condition(
+                        adolescent, study_phase)
                     if matched:
                         return color.color_code
         if fallback_color:
@@ -172,10 +204,14 @@ class FlagColor(UpstreamSyncBaseModel):
         ("ORANGE", "ORANGE"),
         ("GREEN", "GREEN"),
     ]
-    flag_label = models.ForeignKey(
-        FlagLabel, related_name="colors", on_delete=models.CASCADE, db_index=True)
-    color_name = models.CharField(
-        max_length=20, choices=color_name_choices, null=True, blank=True)
+    flag_label = models.ForeignKey(FlagLabel,
+                                   related_name="colors",
+                                   on_delete=models.CASCADE,
+                                   db_index=True)
+    color_name = models.CharField(max_length=20,
+                                  choices=color_name_choices,
+                                  null=True,
+                                  blank=True)
     color_code = models.CharField(max_length=10, choices=COLOR_CHOICES)
     is_fallback = models.BooleanField(default=False)
     priority = models.IntegerField(default=1)
@@ -192,7 +228,8 @@ class FlagCondition(UpstreamSyncBaseModel):
 
     OPERATORS = [
         ("equal_expected_value", "equal_expected_value"),
-        ("less_than_expected_integer_value", "less_than_expected_integer_value"),
+        ("less_than_expected_integer_value",
+         "less_than_expected_integer_value"),
         ("q1_q2_difference_is_equal_to_expected_integer_value",
          "q1_q2_difference_is_equal_to_expected_integer_value"),
         ("q1_q2_difference_is_less_than_expected_integer_value",
@@ -210,19 +247,32 @@ class FlagCondition(UpstreamSyncBaseModel):
     ]
     name = models.CharField(max_length=100, null=True, blank=True)
 
-    flag_color = models.ForeignKey(
-        FlagColor, related_name="conditions", on_delete=models.CASCADE, db_index=True)
-    question1 = models.ForeignKey(
-        Question, related_name="flag1s", on_delete=models.CASCADE, null=True, blank=True)
+    flag_color = models.ForeignKey(FlagColor,
+                                   related_name="conditions",
+                                   on_delete=models.CASCADE,
+                                   db_index=True)
+    question1 = models.ForeignKey(Question,
+                                  related_name="flag1s",
+                                  on_delete=models.CASCADE,
+                                  null=True,
+                                  blank=True)
     # For only difference.
-    question2 = models.ForeignKey(
-        Question, on_delete=models.CASCADE, related_name="flag2s", null=True, blank=True)
-    question_group = models.ForeignKey(QuestionGroup, related_name="flag_conditions",
-                                       on_delete=models.CASCADE, null=True, blank=True)
+    question2 = models.ForeignKey(Question,
+                                  on_delete=models.CASCADE,
+                                  related_name="flag2s",
+                                  null=True,
+                                  blank=True)
+    question_group = models.ForeignKey(QuestionGroup,
+                                       related_name="flag_conditions",
+                                       on_delete=models.CASCADE,
+                                       null=True,
+                                       blank=True)
 
     expected_value = models.CharField(max_length=100, null=True, blank=True)
-    expected_integer_value = models.DecimalField(
-        null=True, blank=True, decimal_places=2, max_digits=20)
+    expected_integer_value = models.DecimalField(null=True,
+                                                 blank=True,
+                                                 decimal_places=2,
+                                                 max_digits=20)
     operator = models.CharField(max_length=100, choices=OPERATORS)
 
     invert_operator_evaluation = models.BooleanField(default=False)
@@ -257,15 +307,19 @@ class FlagCondition(UpstreamSyncBaseModel):
             self.range_max = None
         return super().save(*arg, **kwargs)
 
-    def _handle_range_sum_operator(self, adolescent):
-        if not (self.range_min != None and self.range_max != None and self.question1 and self.question2):
+    def _handle_range_sum_operator(self, adolescent, study_phase: StudyPhase):
+        if not (self.range_min != None and self.range_max != None
+                and self.question1 and self.question2):
             return True
         responses = AdolescentResponse.objects.filter(
             question__number__gte=self.question1.number,
             question__number__lte=self.question2.number,
+            study_phase=str(study_phase),
             adolescent=adolescent)
         all_values = [
-            value for response in responses for value in response.get_values_as_list(numeric=True)]
+            value for response in responses
+            for value in response.get_values_as_list(numeric=True)
+        ]
         total = sum(all_values)
         matched = self.range_min <= total <= self.range_max
         return matched if not self.invert_operator_evaluation else not matched
@@ -281,16 +335,22 @@ class FlagCondition(UpstreamSyncBaseModel):
                 diff = value_1 - value_2
         return diff
 
-    def check_condition(self, adolescent: Adolescent):
+    def check_condition(self, adolescent: Adolescent, study_phase: StudyPhase):
         response1 = AdolescentResponse.objects.filter(
-            question=self.question1, adolescent=adolescent).first()
+            study_phase=str(study_phase),
+            question=self.question1,
+            adolescent=adolescent,
+        ).first()
         response2 = AdolescentResponse.objects.filter(
-            question=self.question2, adolescent=adolescent).first() if self.question2 else None
+            study_phase=str(study_phase),
+            question=self.question2,
+            adolescent=adolescent).first() if self.question2 else None
 
         if self.adolescent_type and self.adolescent_type != adolescent.type:
             return False
 
-        if self.gender and adolescent.gender and self.gender.lower() != adolescent.gender.lower():
+        if self.gender and adolescent.gender and self.gender.lower(
+        ) != adolescent.gender.lower():
             return False
 
         matched = None
@@ -298,33 +358,41 @@ class FlagCondition(UpstreamSyncBaseModel):
             case "group_value_between":
                 question_group = self.question_group
                 group_value = question_group.get_group_value(
-                    adolescent) if question_group else sys.maxsize
+                    adolescent, study_phase) if question_group else sys.maxsize
                 matched = bool(self.range_min) and bool(
-                    self.range_max) and bool(group_value) and self.range_min <= group_value <= self.range_max
+                    self.range_max) and bool(
+                        group_value
+                    ) and self.range_min <= group_value <= self.range_max
             case "invoke_bmi_sd_function":
-                adolescent_bmi_sd = compute_bmi_sd_function(adolescent)
+                adolescent_bmi_sd = compute_bmi_sd_function(adolescent, study_phase)
                 if not (self.range_min and self.range_max):
                     return True
                 matched = self.range_min <= adolescent_bmi_sd <= self.range_max
             case "equal_expected_value":
                 # Use "0" as default value for no-response.
-                response_values = list(map(str, response1.get_values_as_list())) if bool(
-                    response1) else ["0"]
-                matched = bool(self.expected_value) and self.expected_value.strip(
-                ).lower() in response_values
+                response_values = list(map(str, response1.get_values_as_list())
+                                       ) if bool(response1) else ["0"]
+                matched = bool(
+                    self.expected_value) and self.expected_value.strip().lower(
+                    ) in response_values
             case "less_than_expected_integer_value":
                 # Use 0 as default value for no-response
                 response_values = response1.get_values_as_list(
                     numeric=True) if bool(response1) else [0]
-                matched = self.expected_integer_value != None and all([float(self.expected_integer_value) > round(float(res), 2)
-                                                                       for res in response_values])
+                matched = self.expected_integer_value != None and all([
+                    float(self.expected_integer_value) > round(float(res), 2)
+                    for res in response_values
+                ])
             case "min_age":
-                matched = self.expected_integer_value != None and self.expected_integer_value <= adolescent.get_age()
+                matched = self.expected_integer_value != None and self.expected_integer_value <= adolescent.get_age(
+                )
             case "gender_is":
                 matched = bool(
-                    self.expected_value) and self.expected_value.strip() == adolescent.gender
+                    self.expected_value) and self.expected_value.strip(
+                    ) == adolescent.gender
             case "range_sum_between":
-                matched = self._handle_range_sum_operator(adolescent)
+                matched = self._handle_range_sum_operator(
+                    adolescent, study_phase)
             case "q1_q2_difference_is_equal_to_expected_integer_value":
                 diff = self._process_diff_value(response1, response2)
                 matched = diff == self.expected_integer_value
@@ -332,35 +400,48 @@ class FlagCondition(UpstreamSyncBaseModel):
                 diff = self._process_diff_value(response1, response2)
                 matched = diff != None and self.expected_integer_value != None and diff < self.expected_integer_value
             case "compute_right_grip_test":
-                test_result = round(compute_grip_test(
-                    adolescent, for_right_arm=True), 2)
+                test_result = round(
+                    compute_grip_test(adolescent,
+                                      study_phase,
+                                      for_right_arm=True), 2)
                 matched = self.expected_integer_value == test_result
             case "compute_left_grip_test":
-                test_result = round(compute_grip_test(
-                    adolescent, for_right_arm=False), 2)
+                test_result = round(
+                    compute_grip_test(adolescent,
+                                      study_phase,
+                                      for_right_arm=False), 2)
                 matched = self.expected_integer_value == test_result
             case "compute_anaemia_status":
-                anaemia_status = compute_anaemia_status(adolescent)
+                anaemia_status = compute_anaemia_status(
+                    adolescent, study_phase)
                 matched = bool(
-                    self.expected_value) and anaemia_status and self.expected_value.lower().strip() == str(anaemia_status.value).lower()
+                    self.expected_value
+                ) and anaemia_status and self.expected_value.lower().strip(
+                ) == str(anaemia_status.value).lower()
 
                 # Add anaemia context
                 summary_flag = SummaryFlag.objects.filter(
-                adolescent=adolescent,
-                label__name="ANAEMIA").first()
+                    study_phase=str(study_phase),
+                    adolescent=adolescent,
+                    label__name="ANAEMIA").first()
                 if summary_flag:
                     summary_flag.context = f"Status: {anaemia_status.value}"
                     summary_flag.save()
 
             case "time_difference_between":
-                hours_spent = compute_time_difference(
-                    adolescent, self.question1, self.question2)
+                hours_spent = compute_time_difference(adolescent,
+                                                      self.question1,
+                                                      self.question2,
+                                                      study_phase)
                 matched = self.range_min <= hours_spent <= self.range_max
             case "compute_vision_status":
-                vision_status = compute_vision_status(
-                    adolescent, self.question1)
+                vision_status = compute_vision_status(adolescent,
+                                                      self.question1,
+                                                      study_phase)
                 matched = bool(
-                    self.expected_value) and vision_status and self.expected_value.lower().strip() == vision_status.lower()
+                    self.expected_value
+                ) and vision_status and self.expected_value.lower().strip(
+                ) == vision_status.lower()
         if matched != None:
             return matched if not self.invert_operator_evaluation else not matched
         return matched

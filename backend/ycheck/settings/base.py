@@ -25,8 +25,7 @@ SECRET_KEY = os.environ.get(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
-YCHECK_APP_USER_AGENT = os.environ.get("YCHECK_APP_USER_AGENT",
-                                             "YC_WEB_VIEW")
+YCHECK_APP_USER_AGENT = os.environ.get("YCHECK_APP_USER_AGENT", "YC_WEB_VIEW")
 
 ALLOWED_HOSTS = ['*']
 
@@ -62,8 +61,10 @@ REST_KNOX = {
     'AUTH_HEADER_PREFIX': 'Token',
 }
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES':
-    ('rest_framework.permissions.IsAuthenticatedOrReadOnly', ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         "ycheck.utils.manual_authentication.ManualAuthBackend",
         'knox.auth.TokenAuthentication',

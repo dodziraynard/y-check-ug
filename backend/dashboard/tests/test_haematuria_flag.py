@@ -40,7 +40,7 @@
 #             response.chosen_options.set(
 #                 question.options.filter(value=response_value))
 
-#         SummaryFlag.compute_flag_color(adolescent)
+#         SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
 #         # THEN:
 #         assert SummaryFlag.objects.filter(
@@ -67,7 +67,7 @@
 #             response.chosen_options.set(
 #                 question.options.filter(value=response_value))
 
-#         SummaryFlag.compute_flag_color(adolescent)
+#         SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
 #         # THEN:
 #         assert SummaryFlag.objects.filter(
