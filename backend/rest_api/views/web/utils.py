@@ -168,4 +168,4 @@ def remove_non_flagged_questions(
         non_problematic_questions = flag.get_questions()
 
         questions = questions.exclude(non_problematic_questions)
-    return questions.exclude(exclude_if_not_flagged=True)
+    return questions
