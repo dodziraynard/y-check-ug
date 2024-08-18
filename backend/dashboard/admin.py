@@ -90,9 +90,6 @@ class SummaryFlagAdmin(admin.ModelAdmin):
 
 
 class SectionAdmin(admin.ModelAdmin):
-    inlines = [
-        QuestionInline,
-    ]
     list_display = ["number", "name", "question_type", "exclude_study_phase"]
 
 
