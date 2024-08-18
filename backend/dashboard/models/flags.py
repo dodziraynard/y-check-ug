@@ -185,7 +185,6 @@ class FlagLabel(UpstreamSyncBaseModel):
                                            choices=STUDY_PHASE_CHOICES,
                                            blank=True,
                                            null=True)
-    exclude_if_not_flagged = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.name

@@ -1,4 +1,3 @@
-from django.db.models.query import QuerySet
 from django.db.models import Count
 from dashboard.models import *
 
@@ -149,12 +148,3 @@ def get_completed_treatment(is_onsite, status):
     # Sort treated by name
     treated = sorted(treated, key=lambda x: x["name"])
     return treated
-
-
-def remove_non_flagged_questions(questions: QuerySet, adolescent: Adolescent):
-    flags = SummaryFlag.objects.filter(label__exclude_if_not_flagged=True,
-                                       adolescent=adolescent,
-                                       study_phase=adolescent.study_phase)
-    for flag in flags:
-        questions = questions.exclude(flag.get_questions())
-    return questions

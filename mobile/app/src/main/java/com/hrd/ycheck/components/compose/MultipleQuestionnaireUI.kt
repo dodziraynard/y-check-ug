@@ -3,6 +3,7 @@ package com.hrd.ycheck.components.compose
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hrd.ycheck.R
@@ -39,6 +41,7 @@ fun MultipleQuestionnaireUI(
     audioPlayer: AudioPlayer? = null,
     showError: Boolean = true,
     pid: String = "",
+    studyPhase: String = ""
 ) {
     val context = LocalContext.current
     Column(
@@ -47,12 +50,20 @@ fun MultipleQuestionnaireUI(
             .padding(10.dp)
             .background(Color(255, 255, 255, 50))
     ) {
-        Text(
-            text = "(${pid}) Section $currentSectionNumber of $totalSectionCount",
-            color = colorResource(R.color.text_color),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth()
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(
+                text = "(${pid}) Section $currentSectionNumber of $totalSectionCount",
+                color = colorResource(R.color.text_color),
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = "   [${studyPhase.uppercase()}]",
+                color = colorResource(R.color.secondary_200),
+                fontWeight = FontWeight.Bold,
+            )
+        }
         LinearProgressIndicator(
             progress = (currentSectionNumber).toFloat() / totalSectionCount.toFloat(),
             color = accentAmber,

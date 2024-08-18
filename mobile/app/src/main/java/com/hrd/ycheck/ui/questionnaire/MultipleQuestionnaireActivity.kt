@@ -335,7 +335,8 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
                             totalSectionCount = totalSessions,
                             audioPlayer = audioPlayer,
                             pid = adolescent?.pid ?: "",
-                            showError = showError
+                            showError = showError,
+                            studyPhase = studyPhase,
                         )
                     }
                 }
