@@ -58,6 +58,8 @@ class FlagColorAdmin(admin.ModelAdmin):
         'color_code__icontains'
     ]
     inlines = [FlagConditionInline]
+    ordering = ["flag_label__name", "color_name"]
+    list_display = ["flag_label", "color_name", "is_fallback"]
 
 
 class AdolescentResponseAdmin(admin.ModelAdmin):
