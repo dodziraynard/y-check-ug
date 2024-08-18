@@ -21,6 +21,10 @@ class FlagConditionInline(admin.TabularInline):
     model = FlagCondition
 
 
+class QuestionInline(admin.TabularInline):
+    model = Question
+
+
 class QuestionAdmin(admin.ModelAdmin):
     search_fields = ["id", 'text__icontains', 'number', 'question_id']
     ordering = ['number']
@@ -31,17 +35,15 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class FlagLabelAdmin(admin.ModelAdmin):
-    inlines = [
-        FlagColorInline
-    ]
+    inlines = [FlagColorInline]
 
 
 class FlagColorAdmin(admin.ModelAdmin):
-    search_fields = ["id", 'flag_label__name__icontains',
-                     'color_name__icontains', 'color_code__icontains']
-    inlines = [
-        FlagConditionInline
+    search_fields = [
+        "id", 'flag_label__name__icontains', 'color_name__icontains',
+        'color_code__icontains'
     ]
+    inlines = [FlagConditionInline]
 
 
 class AdolescentResponseAdmin(admin.ModelAdmin):
@@ -57,12 +59,19 @@ class FlagConditionAdmin(admin.ModelAdmin):
 
 
 class SummaryFlagAdmin(admin.ModelAdmin):
-    search_fields = ['adolescent__surname__icontains',
-                     "adolescent__other_names__icontains"]
+    search_fields = [
+        'adolescent__surname__icontains', "adolescent__other_names__icontains"
+    ]
+
+
+class SectionAdmin(admin.ModelAdmin):
+    inlines = [
+        QuestionInline,
+    ]
 
 
 admin.site.register(CheckupLocation)
-admin.site.register(Section)
+admin.site.register(Section, SectionAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(PreviousResponseRequirement)
 admin.site.register(Option)
