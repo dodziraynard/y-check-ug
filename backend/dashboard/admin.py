@@ -23,7 +23,9 @@ class FlagConditionInline(admin.TabularInline):
 
 class QuestionInline(admin.TabularInline):
     ordering = ["number"]
-    fields = ["number", "text", "exclude_study_phase", "exclude_if_not_flagged"]
+    fields = [
+        "number", "text", "exclude_study_phase", "exclude_if_not_flagged"
+    ]
     model = Question
 
 
@@ -34,10 +36,20 @@ class QuestionAdmin(admin.ModelAdmin):
         OptionInline,
         PreviousResponseRequirementInline,
     ]
+    list_display = [
+        "number",
+        "question_id",
+        "text",
+        "question_type",
+        "section",
+        "exclude_study_phase",
+        "exclude_if_not_flagged",
+    ]
 
 
 class FlagLabelAdmin(admin.ModelAdmin):
     inlines = [FlagColorInline]
+    list_display = ["name", "exclude_study_phase", "exclude_if_not_flagged"]
 
 
 class FlagColorAdmin(admin.ModelAdmin):
@@ -70,6 +82,7 @@ class SectionAdmin(admin.ModelAdmin):
     inlines = [
         QuestionInline,
     ]
+    list_display = ["number", "name", "question_type", "exclude_study_phase"]
 
 
 admin.site.register(CheckupLocation)

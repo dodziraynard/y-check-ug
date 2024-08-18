@@ -64,8 +64,8 @@ class SummaryFlag(UpstreamSyncBaseModel):
     @classmethod
     def compute_flag_color(cls, adolescent: Adolescent,
                            study_phase: StudyPhase):
-        flag_label = FlagLabel.objects.exclude(exclude_study_phase=study_phase)
-        for label in flag_label:
+        flag_labels = FlagLabel.objects.exclude(exclude_study_phase=study_phase)
+        for label in flag_labels:
             color = label.get_flag_color(adolescent, study_phase)
             if not color:
                 # This flag is no longer applicable, delete.
