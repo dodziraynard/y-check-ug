@@ -8,7 +8,6 @@ from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
-from django.db.models import Q
 from dashboard.models import Adolescent, SummaryFlag, Referral, Facility, Service
 from rest_framework.response import Response
 from django.db.utils import IntegrityError
@@ -60,16 +59,18 @@ class GetSummaryFlags(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated, APILevelPermissionCheck]
     serializer_class = SummaryFlagSerializer
 
-    def get(self, request, pid, *args, **kwargs):
+    def get(self, request, pid, study_phase, *args, **kwargs):
         adolescent = Adolescent.objects.filter(pid=pid).first()
         if not adolescent:
             return Response({"error_message": f"{pid} not found."})
 
         # Compute flags
-        SummaryFlag.compute_flag_color(adolescent=adolescent)
+        SummaryFlag.compute_flag_color(adolescent=adolescent,
+                                       study_phase=study_phase)
 
         # Retrieve all flags
         flags = SummaryFlag.objects.filter(
+            study_phase=study_phase,
             adolescent=adolescent).order_by("label__name")
         data = SummaryFlagSerializer(flags, many=True).data
         repsonse_data = {
@@ -320,7 +321,7 @@ class ReferralDetail(generics.GenericAPIView):
                 adolescent=referral.adolescent).distinct()
             responses = [
                 response for flag in flags
-                for response in flag.get_responses()
+                for response in flag.get_responses(referral.study_phase)
             ]
             relevant_adolescent_responses[service.id] = responses
 

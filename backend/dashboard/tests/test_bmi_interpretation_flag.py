@@ -11,7 +11,11 @@ class BMIFlaggingTestCase(TestCase):
 
     def setUp(self) -> None:
         # Given
-        self.adolescent = mommy.make(Adolescent)
+        self.study_phase = str(StudyPhase.PILOT)
+        self.adolescent = mommy.make(
+            Adolescent,
+            study_phase=self.study_phase,
+        )
         return super().setUp()
 
     def test_bmi_questions_exists(self):
@@ -45,8 +49,8 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="100"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)  # compute BMI
-        SummaryFlag.compute_flag_color(self.adolescent)  # Update context
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # compute BMI
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # Update context
 
         # THEN:
         assert "Obesity" in SummaryFlag.objects.filter(
@@ -80,8 +84,8 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="20"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)  # compute BMI
-        SummaryFlag.compute_flag_color(self.adolescent)  # Update context
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # compute BMI
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # Update context
 
         # THEN:
         assert "Thinness" in SummaryFlag.objects.filter(
@@ -115,8 +119,8 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="100"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)  # compute BMI
-        SummaryFlag.compute_flag_color(self.adolescent)  # Update context
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # compute BMI
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # Update context
 
         # THEN:
         assert "Overweight" in SummaryFlag.objects.filter(
@@ -150,8 +154,8 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="55"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)  # compute BMI
-        SummaryFlag.compute_flag_color(self.adolescent)  # Update context
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # compute BMI
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # Update context
 
         # THEN:
         assert "Normal" in SummaryFlag.objects.filter(
@@ -185,8 +189,8 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="47"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)  # compute BMI
-        SummaryFlag.compute_flag_color(self.adolescent)  # Update context
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # compute BMI
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)  # Update context
 
         # THEN:
         assert "Normal" in SummaryFlag.objects.filter(

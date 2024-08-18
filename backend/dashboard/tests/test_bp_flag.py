@@ -10,7 +10,11 @@ class BPFlaggingTestCase(TestCase):
 
     def setUp(self) -> None:
         # Given
-        self.adolescent = mommy.make(Adolescent)
+        self.study_phase = str(StudyPhase.PILOT)
+        self.adolescent = mommy.make(
+            Adolescent,
+            study_phase=self.study_phase,
+        )
         self.adolescent.dob = self.adolescent.created_at - \
             timedelta(days=round(17 * 365.25))
         return super().setUp()
@@ -38,7 +42,7 @@ class BPFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value,
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -63,7 +67,7 @@ class BPFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value,
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -88,7 +92,7 @@ class BPFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value,
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -113,7 +117,7 @@ class BPFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value,
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -138,7 +142,7 @@ class BPFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value,
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -163,7 +167,7 @@ class BPFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value,
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(

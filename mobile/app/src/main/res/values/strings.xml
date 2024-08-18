@@ -183,4 +183,6 @@
     <string name="app_new_version_info">Your current application version is %1$s, while an updated version, %2$s, is now available. Would you like to proceed with the update?</string>
     <string name="process_overview">Process Overview</string>
     <string name="check_point">Check Point</string>
+    <string name="follow_up">Follow up</string>
+    <string name="follow_up_lower">follow up</string>
 </resources>

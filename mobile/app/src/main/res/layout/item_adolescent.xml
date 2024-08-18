@@ -32,9 +32,10 @@
             tools:src="@drawable/profile_avatar" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 tools:text="Raynard Dodzi" />
+
 
             <TextView
                 android:id="@+id/pid_label"
@@ -63,5 +65,20 @@
                 android:textSize="@dimen/_10sdp"
                 tools:text="Ghana Senior High School" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_followup"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="wrap_content"
+            android:background="#33FC7600"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/follow_up_lower"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/color_700"
+            android:textStyle="bold" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

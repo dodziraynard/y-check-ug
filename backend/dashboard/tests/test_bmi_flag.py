@@ -10,7 +10,11 @@ class BMIFlaggingTestCase(TestCase):
 
     def setUp(self) -> None:
         # Given
-        self.adolescent = mommy.make(Adolescent)
+        self.study_phase = str(StudyPhase.PILOT)
+        self.adolescent = mommy.make(
+            Adolescent,
+            study_phase=self.study_phase,
+        )
         return super().setUp()
 
     def test_bmi_questions_exists(self):
@@ -44,7 +48,7 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="100"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -78,7 +82,7 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="100"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -112,7 +116,7 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="55"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -147,7 +151,7 @@ class BMIFlaggingTestCase(TestCase):
             question=weight_question,
             text="47"
         )
-        SummaryFlag.compute_flag_color(self.adolescent)
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(

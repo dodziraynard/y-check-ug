@@ -1,9 +1,12 @@
 from django.db import models
+
+from dashboard.models.types import StudyPhase
 from .questions import AdolescentResponse
 from ycheck.utils.constants import COLOR_CHOICES
 from .mixin import UpstreamSyncBaseModel
 from .flags import SummaryFlag
 
+# yapf: disable
 
 class PreviousResponseRequirement(UpstreamSyncBaseModel):
     requirement_for = models.ForeignKey(
@@ -28,31 +31,41 @@ class PreviousResponseRequirement(UpstreamSyncBaseModel):
         else:
             return "INVALID REQUIREMENTS"
 
-    def is_previous_response_condition_met(self, adolescent):
+    # yapf: enable
+
+    def is_previous_response_condition_met(self, adolescent,
+                                           study_phase: StudyPhase):
         # Check previous flag requirements
         if self.dependent_on_flag and self.expected_flag_color:
-            
+
             # Compute/update all flag colors before checking the conditions.
-            SummaryFlag.compute_flag_color(adolescent=adolescent)
+            SummaryFlag.compute_flag_color(adolescent=adolescent,
+                                           study_phase=study_phase)
 
-            summary = SummaryFlag.objects.filter(label=self.dependent_on_flag, adolescent=adolescent).first()
+            summary = SummaryFlag.objects.filter(
+                label=self.dependent_on_flag, adolescent=adolescent).first()
 
-            if (summary and self.dependent_on_flag
-                    and summary.get_final_colour() != self.expected_flag_color):
+            if (summary and self.dependent_on_flag and
+                    summary.get_final_colour() != self.expected_flag_color):
                 return False
         elif self.question:
             # Check previous response value requirements.
             response = AdolescentResponse.objects.filter(
+                study_phase=str(study_phase),
                 question=self.question, adolescent=adolescent).first()
             if not response:
                 return False
             matched = False
 
             if self.min_integer_value == None and self.response_is:
-                matched = self.response_is.lower() in response.get_values_as_list()
+                matched = self.response_is.lower(
+                ) in response.get_values_as_list()
 
-            elif self.response_is and self.response_is.isdigit() and self.min_integer_value:
-                matched = all([int(self.min_integer_value) > int(res)
-                               for res in response.get_values_as_list(numeric=True)])
+            elif self.response_is and self.response_is.isdigit(
+            ) and self.min_integer_value:
+                matched = all([
+                    int(self.min_integer_value) > int(res)
+                    for res in response.get_values_as_list(numeric=True)
+                ])
             return matched if not self.is_inverted else not matched
         return True

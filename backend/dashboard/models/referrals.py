@@ -1,6 +1,7 @@
 from functools import reduce
 from django.db import models
 
+from dashboard.models.constant import STUDY_PHASE_CHOICES
 from ycheck.utils.constants import ReferralStatus
 from .adolescent import *
 from .service import Service
@@ -24,17 +25,28 @@ class Referral(UpstreamSyncBaseModel):
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(
-        max_length=100, default=ReferralStatus.NEW.value, choices=referral_status_choices)
+    status = models.CharField(max_length=100,
+                              default=ReferralStatus.NEW.value,
+                              choices=referral_status_choices)
+    study_phase = models.CharField(max_length=50,
+                                   choices=STUDY_PHASE_CHOICES,
+                                   blank=True,
+                                   null=True)
 
     def __str__(self) -> str:
         return f"{self.adolescent.get_name()} - {self.status}"
 
+    def save(self, *args, **kwargs) -> None:
+        if self.study_phase == None:
+            self.study_phase = self.adolescent.study_phase
+        return super().save(*args, **kwargs)
+
     @staticmethod
     def generate_query(query):
-        queries = [models.Q(**{f"{key}__icontains": query})
-                   for key in ["adolescent__pid",
-                               "adolescent__surname",
-                               "facility__name",
-                               "adolescent__other_names"]]
+        queries = [
+            models.Q(**{f"{key}__icontains": query}) for key in [
+                "adolescent__pid", "adolescent__surname", "facility__name",
+                "adolescent__other_names"
+            ]
+        ]
         return reduce(lambda x, y: x | y, queries)

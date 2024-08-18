@@ -1,9 +1,12 @@
+from django.db.models.query import QuerySet
 from django.db.models import Count
 from dashboard.models import *
 
+
 def get_demographic_data(adolescent_type):
     # Query to get counts of adolescents grouped by age and gender
-    adolescents = Adolescent.objects.filter(type=adolescent_type).values('age', 'gender').annotate(count=Count('id'))
+    adolescents = Adolescent.objects.filter(type=adolescent_type).values(
+        'age', 'gender').annotate(count=Count('id'))
 
     # Initialize dictionaries to store counts
     age_gender_counts = {}
@@ -13,14 +16,14 @@ def get_demographic_data(adolescent_type):
         age = record['age']
         gender = record['gender']
         count = record['count']
-        
+
         # Update age_gender_counts
         if age not in age_gender_counts:
             age_gender_counts[age] = {'male': 0, 'female': 0, 'total': 0}
-        
+
         age_gender_counts[age][gender] = count
         age_gender_counts[age]['total'] += count
-        
+
         # Update total counts
         total_counts[gender] += count
         total_counts['total'] += count
@@ -46,8 +49,10 @@ def get_demographic_data(adolescent_type):
 
     response_data.append({
         'Age': 'Total',
-        'female': f"{total_counts['female']} ({(total_counts['female'] / max(1, total_adolescents)) * 100:.0f}%)",
-        'male': f"{total_counts['male']} ({(total_counts['male'] / max(1, total_adolescents)) * 100:.0f}%)",
+        'female':
+        f"{total_counts['female']} ({(total_counts['female'] / max(1, total_adolescents)) * 100:.0f}%)",
+        'male':
+        f"{total_counts['male']} ({(total_counts['male'] / max(1, total_adolescents)) * 100:.0f}%)",
         'Total': total_adolescents
     })
 
@@ -56,7 +61,8 @@ def get_demographic_data(adolescent_type):
 
 def get_age_distribution_data():
     # Query to get counts of adolescents grouped by age and type
-    adolescents = Adolescent.objects.values('age', 'type').annotate(count=Count('id'))
+    adolescents = Adolescent.objects.values('age',
+                                            'type').annotate(count=Count('id'))
 
     # Initialize dictionaries to store counts
     age_type_counts = {}
@@ -66,14 +72,19 @@ def get_age_distribution_data():
         age = record['age']
         adolescent_type = (record['type'] or "").lower()
         count = record['count']
-        
+
         # Update age_type_counts
         if age not in age_type_counts:
-            age_type_counts[age] = {'basic': 0, 'community': 0, 'secondary': 0, 'total': 0}
-        
+            age_type_counts[age] = {
+                'basic': 0,
+                'community': 0,
+                'secondary': 0,
+                'total': 0
+            }
+
         age_type_counts[age][adolescent_type] = count
         age_type_counts[age]['total'] += count
-        
+
         # Update total counts
         total_counts[adolescent_type] += count
         total_counts['total'] += count
@@ -109,31 +120,41 @@ def get_age_distribution_data():
     return response_data
 
 
-
 def get_completed_treatment(is_onsite, status):
-    red_flag_code = Colors.RED.value
     categories = ["basic", "secondary", "community"]
 
-    referrals = Referral.objects.filter(is_onsite=is_onsite, status=status).select_related('adolescent').prefetch_related('services__related_flag_labels')
-    onsite_adolescents = {referral.adolescent for referral in referrals}
+    referrals = Referral.objects.filter(
+        is_onsite=is_onsite, status=status).select_related(
+            'adolescent').prefetch_related('services__related_flag_labels')
 
     treated = []
-    flag_label_distribution = {label.name: {category.lower(): 0 for category in categories} for label in FlagLabel.objects.all()}
+    flag_label_distribution = {
+        label.name: {
+            category.lower(): 0
+            for category in categories
+        }
+        for label in FlagLabel.objects.all()
+    }
     for referral in referrals:
         for service in referral.services.all():
             for flag_label in service.related_flag_labels.all():
-                flag_label_distribution[flag_label.name][(referral.adolescent.type or "").lower()] += 1
+                flag_label_distribution[flag_label.name][(
+                    referral.adolescent.type or "").lower()] += 1
 
     for flag_label, counts in flag_label_distribution.items():
         total = sum(counts.values())
         if total > 0:
-            treated.append({
-                "name": flag_label,
-                "total": total,
-                **counts
-            })
+            treated.append({"name": flag_label, "total": total, **counts})
 
     # Sort treated by name
     treated = sorted(treated, key=lambda x: x["name"])
     return treated
 
+
+def remove_non_flagged_questions(questions: QuerySet, adolescent: Adolescent):
+    flags = SummaryFlag.objects.filter(label__exclude_if_not_flagged=True,
+                                       adolescent=adolescent,
+                                       study_phase=adolescent.study_phase)
+    for flag in flags:
+        questions = questions.exclude(flag.get_questions())
+    return questions

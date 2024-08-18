@@ -10,7 +10,11 @@ class HomeFlaggingTestCase(TestCase):
 
     def setUp(self) -> None:
         # Given
-        self.adolescent = mommy.make(Adolescent)
+        self.study_phase = str(StudyPhase.PILOT)
+        self.adolescent = mommy.make(
+            Adolescent,
+            study_phase=self.study_phase,
+        )
         self.adolescent.dob = self.adolescent.created_at - \
             timedelta(days=round(17 * 365.25))
         return super().setUp()
@@ -47,7 +51,7 @@ class HomeFlaggingTestCase(TestCase):
         response_q103.chosen_options.set(
             question_q103.options.filter(value__icontains="Yes, about most problems"))
 
-        SummaryFlag.compute_flag_color(self.adolescent)     
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)     
         
 
         # # THEN:
@@ -83,7 +87,7 @@ class HomeFlaggingTestCase(TestCase):
         response_q103.chosen_options.set(
             question_q103.options.filter(value__icontains="Depending on the problem"))
 
-        SummaryFlag.compute_flag_color(self.adolescent)
+        SummaryFlag.compute_flag_color(self.adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -107,7 +111,7 @@ class HomeFlaggingTestCase(TestCase):
         response_q102.chosen_options.set(
             question_q102.options.filter(value__icontains="Sometimes fine"))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -141,7 +145,7 @@ class HomeFlaggingTestCase(TestCase):
         response_q103.chosen_options.set(
             question_q103.options.filter(value__icontains="No one"))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -165,7 +169,7 @@ class HomeFlaggingTestCase(TestCase):
         response_q102.chosen_options.set(
             question_q102.options.filter(value__icontains="Not fine at all"))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(

@@ -30,6 +30,7 @@ import com.hrd.ycheck.utils.ActivityTags
 import com.hrd.ycheck.utils.AudioPlayer
 import com.hrd.ycheck.utils.QuestionnaireType
 import com.hrd.ycheck.utils.QuestionnaireType.SURVEY_PRACTICE
+import com.hrd.ycheck.utils.StudyPhase
 
 
 class MultipleQuestionnaireActivity : AppCompatActivity() {
@@ -37,8 +38,8 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
     private lateinit var binding: ActivityQuestionnaireBinding
     private var newAdolescentResponses: MutableMap<String, NewAdolescentResponse>? = null
     private var currentQuestions: List<Question>? = null
-    private var currentSessionNumber = 0;
-    private var totalSessions = 0;
+    private var currentSessionNumber = 0
+    private var totalSessions = 0
     private var submittedAdolescentResponses: MutableMap<String, SubmittedAdolescentResponse> =
         mutableMapOf()
     private var adolescent: Adolescent? = null
@@ -46,6 +47,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
     private var currentQuestionId: String = "-1"
     private var stack = ArrayDeque<String>()
     private lateinit var audioPlayer: AudioPlayer
+    private lateinit var studyPhase: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,13 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
         questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
         currentQuestionId = intent.getStringExtra("current_question_id") ?: "-1"
+        val isFollowup = intent.getBooleanExtra("isFollowup", false)
+        studyPhase = if (isFollowup)
+            StudyPhase.FOLLOWUP
+        else {
+            adolescent?.studyPhase ?: StudyPhase.IMPLEMENTATION
+        }
+
         val congratulatedFor = intent.getLongExtra("congratulated_for_session_number", -1L)
         val serialisedStack = intent.getStringExtra("serialisedStack") ?: ""
         stack = ArrayDeque(serialisedStack.split(","))
@@ -94,7 +103,13 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
         val adolescentId = adolescent!!.id
         // Auto load first questions
-        viewModel.getMultipleQuestion(adolescentId, currentQuestionId, "next", questionnaireType)
+        viewModel.getMultipleQuestion(
+            adolescentId,
+            currentQuestionId,
+            "next",
+            questionnaireType,
+            studyPhase = studyPhase
+        )
         binding.nextButton.setOnClickListener {
             viewModel.action.value = "next"
             validateAndSubmit(adolescentId)
@@ -107,7 +122,11 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
                 // Load next questions
                 viewModel.getMultipleQuestion(
-                    adolescentId, currentQuestionId, viewModel.action.value, questionnaireType
+                    adolescentId,
+                    currentQuestionId,
+                    viewModel.action.value,
+                    questionnaireType,
+                    studyPhase = studyPhase
                 )
             }
         }
@@ -127,7 +146,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
             dialogBinding.searchButton.setOnClickListener {
                 val query = dialogBinding.searchInput.text.toString()
                 viewModel.getMultipleQuestion(
-                    adolescentId, "", "next", questionnaireType, query
+                    adolescentId, "", "next", questionnaireType, query, studyPhase = studyPhase
                 )
                 bottomSheetDialog.dismiss()
             }
@@ -149,7 +168,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         binding.previousButton.setOnClickListener {
             currentQuestionId = if (stack.isNotEmpty()) stack.removeLast() else "0"
             viewModel.getMultipleQuestion(
-                adolescentId, currentQuestionId, "next", questionnaireType
+                adolescentId, currentQuestionId, "next", questionnaireType, studyPhase = studyPhase
             )
         }
 

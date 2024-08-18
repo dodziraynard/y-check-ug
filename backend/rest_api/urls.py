@@ -3,7 +3,7 @@ from rest_api import views
 
 # yapf: disable
 
-app_label = "rest_api"
+app_name = "rest_api"
 urlpatterns = [
     path("mobile-config/", views.MobileConfigAPI.as_view()),
     path("auth/login/", views.UserLoginAPI.as_view()),
@@ -16,22 +16,21 @@ urlpatterns = [
     path("checkup-location/", views.GetCheckupLocation.as_view()),
     path("adolescents/", views.MobileAdolescentsAPI.as_view()),
     path("upload-adolescent-photo/", views.UploadAdolescentPhoto.as_view()),
-    path("get-survey-questions/", views.GetSurveyQuestions.as_view()),
-    path("get-multiple-questions/", views.GetNextAvailableQuestions.as_view()),
+    path("get-multiple-questions/", views.GetNextAvailableQuestions.as_view(), name="get-multiple-questions"),
     path("post-survey-response/", views.RespondToSurveyQuestion.as_view()),
-    path("post-multiple-responses/", views.PostMutipleResponses.as_view()),
+    path("post-multiple-responses/", views.PostMutipleResponses.as_view(), name="post-multiple-responses"),
 
     # Adolescents
     path("web-adolescents/", views.AdolescentsAPI.as_view()),
     path("adolescent-profile/<str:pid>/", views.GetAdolescentProfile.as_view()),
-    path("<str:pid>/summary-flags/",
+    path("<str:pid>/<str:study_phase>/summary-flags/",
          views.GetSummaryFlags.as_view(), name="summary_flags"),
     path("<str:pid>/recommended-services/",
          views.GetRecommendedServices.as_view()),
     path("web-adolescents-types/", views.GetAdolescentType.as_view()),
 
     path("<str:pid>/referrals/", views.AdolescentReferrals.as_view()),
-    path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view()),
+    path("referrals/<str:referral_id>/detail/", views.ReferralDetail.as_view(), name="referral-details"),
     path("referrals/<str:referral_id>/treatment-feedback/",
          views.ReferralTreatment.as_view()),
     path("treatments/", views.TreatmentsAPI.as_view()),

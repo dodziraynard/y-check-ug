@@ -10,7 +10,11 @@ class WorkFlaggingTestCase(TestCase):
 
     def setUp(self) -> None:
         # Given
-        self.adolescent = mommy.make(Adolescent)
+        self.study_phase = str(StudyPhase.PILOT)
+        self.adolescent = mommy.make(
+            Adolescent,
+            study_phase=self.study_phase,
+        )
         self.adolescent.dob = self.adolescent.created_at - \
             timedelta(days=round(17 * 365.25))
 
@@ -41,7 +45,7 @@ class WorkFlaggingTestCase(TestCase):
             response.chosen_options.set(
                 question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -68,7 +72,7 @@ class WorkFlaggingTestCase(TestCase):
             response.chosen_options.set(
                 question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -95,7 +99,7 @@ class WorkFlaggingTestCase(TestCase):
             response.chosen_options.set(
                 question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -122,7 +126,7 @@ class WorkFlaggingTestCase(TestCase):
             response.chosen_options.set(
                 question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -149,7 +153,7 @@ class WorkFlaggingTestCase(TestCase):
             response.chosen_options.set(
                 question.options.filter(value=response_value))
 
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(
@@ -174,7 +178,7 @@ class WorkFlaggingTestCase(TestCase):
                 question=question,
                 text=response_value
             )
-        SummaryFlag.compute_flag_color(adolescent)
+        SummaryFlag.compute_flag_color(adolescent, self.study_phase)
 
         # THEN:
         assert SummaryFlag.objects.filter(

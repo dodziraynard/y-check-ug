@@ -80,11 +80,17 @@ class SearchAdolescentActivity : AppCompatActivity() {
 
         // On search result item click
         adapter.setOnItemClickListener(object : AdolescentAdapter.OnItemClickListener {
-            override fun itemClickListener(adolescent: Adolescent) {
+            override fun itemClickListener(adolescent: Adolescent, isFollowup: Boolean) {
                 val bottomSheetDialog = BottomSheetDialog(this@SearchAdolescentActivity)
                 val dialogBinding =
                     AdolescentSearchResultOptionLayoutBinding.inflate(layoutInflater)
                 bottomSheetDialog.setContentView(dialogBinding.root)
+
+                if (isFollowup) {
+                    dialogBinding.textFollowup.visibility = View.VISIBLE
+                } else {
+                    dialogBinding.textFollowup.visibility = View.GONE
+                }
 
                 dialogBinding.preScreeningOption.setOnClickListener {
                     val intent =
@@ -94,6 +100,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                         )
                     intent.putExtra("question_type", QuestionnaireType.PRE_SCREENING)
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     startActivity(intent)
                 }
                 dialogBinding.screeningOption.setOnClickListener {
@@ -104,6 +111,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                         )
                     intent.putExtra("question_type", QuestionnaireType.SURVEY)
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     startActivity(intent)
                 }
                 dialogBinding.physicalAssessmentOption.setOnClickListener {
@@ -113,6 +121,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     intent.putExtra("question_type", QuestionnaireType.PHYSICAL_ASSESSMENT)
                     startActivity(intent)
                 }
@@ -123,6 +132,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     intent.putExtra("question_type", QuestionnaireType.LAB_ASSESSMENT)
                     startActivity(intent)
                 }
@@ -133,6 +143,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     intent.putExtra("question_type", QuestionnaireType.CLINICAL_ASSESSMENT)
                     startActivity(intent)
                 }
@@ -143,6 +154,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     intent.putExtra("question_type", QuestionnaireType.COUNSELLOR_ASSESSMENT)
                     startActivity(intent)
                 }
@@ -153,6 +165,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     intent.putExtra("question_type", QuestionnaireType.EVALUATION)
                     startActivity(intent)
                 }
@@ -163,6 +176,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             ProcessOverviewActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     startActivity(intent)
                 }
                 dialogBinding.exitInterview.setOnClickListener {
@@ -172,6 +186,7 @@ class SearchAdolescentActivity : AppCompatActivity() {
                             MultipleQuestionnaireActivity::class.java
                         )
                     intent.putExtra("adolescent", adolescent)
+                    intent.putExtra("isFollowup", isFollowup)
                     intent.putExtra("question_type", QuestionnaireType.EXIT_INTERVIEW)
                     startActivity(intent)
                 }

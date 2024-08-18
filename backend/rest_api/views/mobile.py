@@ -7,6 +7,8 @@ from django.utils.timezone import make_aware
 from django.contrib.auth import authenticate
 from knox.models import AuthToken
 from django.db.models import Q
+from rest_api.views.web.utils import remove_non_flagged_questions
+from dashboard.models.types import StudyPhase
 from setup.models import MobileConfig
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -220,117 +222,6 @@ class UploadAdolescentPhoto(generics.GenericAPIView):
         return Response(response_data)
 
 
-class GetSurveyQuestions(generics.GenericAPIView):
-    """
-    Retrieve a list of checkup locations.
-    """
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = QuestionSerializer
-
-    def get(self, request, *args, **kwargs):
-        current_question_id = request.GET.get("current_question_id")
-        adolescent_id = request.GET.get("adolescent_id")
-        action = request.GET.get("action", "next")
-        question_type = request.GET.get("question_type", "survey")
-
-        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
-        if not adolescent:
-            return Response({"error_message": "Adolescent not found."})
-
-        # All available questions for this questionnaire type
-        target_questions = Question.objects.filter(question_type=question_type)
-
-        # Filter questions for adolescent attributes
-        target_questions = target_questions.filter(
-            (Q(gender=None) | Q(gender__iexact=adolescent.gender)) & (
-                # Adolescent type is not required
-                Q(adolescent_type=None) |
-
-                # OR
-                (
-                    # Or required type is set and not invertted
-                    Q(adolescent_type__iexact=adolescent.type)
-                    & Q(invert_adolescent_attribute_requirements=False) |
-
-                    # Or required type is set and invertted
-                    ~Q(adolescent_type__iexact=adolescent.type)
-                    & Q(invert_adolescent_attribute_requirements=True)))
-            & (Q(study_phase=None)
-               | Q(study_phase__iexact=adolescent.study_phase)))
-
-        current_question = target_questions.filter(
-            id=current_question_id).first()
-
-        current_section = current_question.section if current_question else None
-        if current_question:
-            if action == "next_unanswered":
-                target_questions = target_questions.exclude(
-                    adolescentresponse__adolescent=adolescent)
-
-            if action in ["next", "next_unanswered"]:
-                target_questions = target_questions.filter(
-                    number__gt=current_question.number).order_by("number")
-            else:
-                target_questions = target_questions.filter(
-                    number__lt=current_question.number).order_by("-number")
-        else:
-            target_questions = target_questions.order_by("number")
-
-        # Filter out questions not meeting
-        # depenpency requirements.
-        invalid_questions_ids = []
-        for question in target_questions:
-            if not question.are_previous_response_conditions_met(adolescent):
-                invalid_questions_ids.append(question.id)
-
-            # Check age requirements
-            if question.min_age and adolescent.get_age() < question.min_age:
-                invalid_questions_ids.append(question.id)
-            if question.max_age and adolescent.get_age() > question.max_age:
-                invalid_questions_ids.append(question.id)
-
-        question = target_questions.exclude(
-            id__in=invalid_questions_ids).first()
-        new_section = None
-        if question and question.section != current_section:
-            new_section = question.section
-
-        response = AdolescentResponse.objects.filter(
-            question=question, adolescent=adolescent).first()
-
-        current_session_number = Section.objects.filter(
-            question_type=question_type,
-            number__lte=question.section.number).count() if question else 0
-        total_sessions = Section.objects.filter(
-            question_type=question_type, ).count()
-
-        # Community adolescents have only 10 sesions.
-        if adolescent.type == "community":
-            total_sessions = min(total_sessions, 10)
-
-        response_data = {
-            "question":
-            QuestionSerializer(question,
-                               context={
-                                   "request": request,
-                                   "adolescent": adolescent
-                               }).data if question else None,
-            "new_section":
-            SectionSerializer(new_section).data
-            if new_section and action == "next" else None,
-            "current_session_number":
-            current_session_number,
-            "total_sessions":
-            total_sessions,
-            "current_response":
-            AdolescentResponseSerialiser(response,
-                                         context={
-                                             "request": request
-                                         }).data if response else None,
-        }
-        return Response(response_data)
-
-
 class GetNextAvailableQuestions(generics.GenericAPIView):
     """
     Returns the list of questions whose dependency conditions are already satisfied.
@@ -350,8 +241,14 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
         if not adolescent:
             return Response({"error_message": "Adolescent not found."})
 
+        study_phase = request.GET.get("study_phase") or adolescent.study_phase
+
         # All available questions for this questionnaire type
-        target_questions = Question.objects.filter(question_type=question_type)
+        # Exclude sections not availble for this phase.
+        target_questions = Question.objects.filter(
+            question_type=question_type).exclude(
+                Q(section__exclude_study_phase=study_phase)
+                | Q(exclude_study_phase=study_phase))
 
         # Filter questions for adolescent attributes
         target_questions = target_questions.filter(
@@ -371,19 +268,23 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
             & (Q(study_phase=None)
                | Q(study_phase__iexact=adolescent.study_phase)))
 
+        if study_phase == str(StudyPhase.FOLLOWUP):
+            target_questions = remove_non_flagged_questions(target_questions, adolescent)
+
         current_question = target_questions.filter(
             id=current_question_id).first()
 
         current_section: Section = current_question.section if current_question else None
+        if action == "next_unanswered":
+            target_questions = target_questions.exclude(
+                responses__adolescent=adolescent,
+                responses__study_phase=study_phase,
+            )
         if current_question:
-            if action == "next_unanswered":
-                target_questions = target_questions.exclude(
-                    responses__adolescent=adolescent)
-
             if action in ["next", "next_unanswered"]:
                 target_questions = target_questions.filter(
                     number__gt=current_question.number).order_by("number")
-            else: # previous
+            else:  # previous
                 target_questions = target_questions.filter(
                     number__lt=current_question.number).order_by("number")
         else:
@@ -412,7 +313,8 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
                 last_invalid_question_number = question.number
                 break
 
-            if not question.are_previous_response_conditions_met(adolescent):
+            if not question.are_previous_response_conditions_met(
+                    adolescent, study_phase):
 
                 # If we have questions to answer i.e., index > len(invalid_questions_ids)
                 # and 'question' is not eligible,
@@ -438,7 +340,9 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
             section=new_section or current_section)[:max_questions]
         if questions.exists():
             responses = AdolescentResponse.objects.filter(
-                question__in=questions, adolescent=adolescent)
+                study_phase=study_phase,
+                question__in=questions,
+                adolescent=adolescent)
             current_section_number = Section.objects.filter(
                 question_type=question_type,
                 number__lte=first_question.section.number).count(
@@ -549,16 +453,19 @@ class PostMutipleResponses(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         adolescent_id = request.data.get("adolescent_id")
+        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
+        if not adolescent:
+            return Response({"error_message": "Adolescent not found."})
+
+        study_phase = request.data.get("study_phase") or adolescent.study_phase
+
         question_responses_json = request.data.get("question_responses_json")
         last_answered_question = None
+
         for current_question_id, responses in json.loads(
                 question_responses_json).items():
             value = responses.get("first")
             option_ids = responses.get("second")
-
-            adolescent = Adolescent.objects.filter(id=adolescent_id).first()
-            if not adolescent:
-                return Response({"error_message": "Adolescent not found."})
 
             current_question = Question.objects.filter(
                 id=current_question_id).first()
@@ -571,12 +478,16 @@ class PostMutipleResponses(generics.GenericAPIView):
 
             try:
                 response, _ = AdolescentResponse.objects.get_or_create(
-                    question=current_question, adolescent=adolescent)
+                    study_phase=study_phase,
+                    question=current_question,
+                    adolescent=adolescent)
             except AdolescentResponse.MultipleObjectsReturned:
                 AdolescentResponse.objects.filter(
                     question=current_question, adolescent=adolescent).delete()
                 response = AdolescentResponse.objects.create(
-                    question=current_question, adolescent=adolescent)
+                    study_phase=study_phase,
+                    question=current_question,
+                    adolescent=adolescent)
 
             if current_question.input_type in [
                     ResponseInputType.TEXT_FIELD.value,

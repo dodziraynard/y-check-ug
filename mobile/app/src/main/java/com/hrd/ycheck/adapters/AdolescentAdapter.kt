@@ -19,7 +19,7 @@ class AdolescentAdapter(private val context: Context) :
     private var listener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun itemClickListener(adolescent: Adolescent)
+        fun itemClickListener(adolescent: Adolescent, isFollowup: Boolean =false)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -47,6 +47,9 @@ class AdolescentAdapter(private val context: Context) :
 
                 cardView.setOnClickListener {
                     listener?.itemClickListener(adolescent)
+                }
+                btnFollowup.setOnClickListener {
+                    listener?.itemClickListener(adolescent, true)
                 }
             }
         }
