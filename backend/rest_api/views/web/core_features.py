@@ -70,8 +70,8 @@ class GetSummaryFlags(generics.GenericAPIView):
 
         # Retrieve all flags
         flags = SummaryFlag.objects.filter(
-            study_phase=study_phase,
-            adolescent=adolescent).order_by("label__name")
+            study_phase=study_phase, adolescent=adolescent).exclude(
+                label__exclude_study_phase=study_phase).order_by("label__name")
         data = SummaryFlagSerializer(flags, many=True).data
         repsonse_data = {
             "summary_flags": data,

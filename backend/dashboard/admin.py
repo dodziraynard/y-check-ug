@@ -70,6 +70,15 @@ class AdolescentAdmin(admin.ModelAdmin):
 
 class FlagConditionAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    list_display = [
+        "name",
+        "question1",
+        "question2",
+        "expected_value",
+        "expected_integer_value",
+        "operator",
+        "flag_color",
+    ]
 
 
 class SummaryFlagAdmin(admin.ModelAdmin):
