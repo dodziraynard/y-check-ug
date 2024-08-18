@@ -164,8 +164,9 @@ def remove_non_flagged_questions(
         study_phase=adolescent.study_phase,
     ).exclude(final_color_code=Colors.RED.value)
 
+    non_problematic_questions_ids = []
     for flag in non_problematic_flags:
-        non_problematic_questions = flag.get_questions()
-
-        questions = questions.exclude(non_problematic_questions)
+        non_problematic_questions_ids.extend(
+            list(flag.get_questions().values_list("id", flat=True)))
+    questions = questions.exclude(id__in=non_problematic_questions_ids)
     return questions
