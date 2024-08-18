@@ -22,6 +22,7 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
         binding = ActivityAdolescentIntroductionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         adolescent = intent.getParcelableExtra("adolescent")
+        val isFollowup = intent.getBooleanExtra("isFollowup", false)
 
         if (adolescent == null) {
             Toast.makeText(this, getString(R.string.no_adolescent_found), Toast.LENGTH_LONG).show()
@@ -34,6 +35,7 @@ class AdolescentIntroductionActivity : AppCompatActivity() {
             val intent = Intent(this, MultipleQuestionnaireActivity::class.java)
             intent.putExtra("question_type", QuestionnaireType.SURVEY_PRACTICE)
             intent.putExtra("adolescent", adolescent)
+            intent.putExtra("isFollowup", isFollowup)
             startActivity(intent)
             finish()
         }

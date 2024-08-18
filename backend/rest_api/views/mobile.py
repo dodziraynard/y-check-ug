@@ -7,6 +7,7 @@ from django.utils.timezone import make_aware
 from django.contrib.auth import authenticate
 from knox.models import AuthToken
 from django.db.models import Q
+from rest_api.views.web.utils import remove_non_flagged_questions
 from dashboard.models.types import StudyPhase
 from setup.models import MobileConfig
 from rest_framework import generics, permissions, status
@@ -266,6 +267,9 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
                     & Q(invert_adolescent_attribute_requirements=True)))
             & (Q(study_phase=None)
                | Q(study_phase__iexact=adolescent.study_phase)))
+
+        if study_phase == str(StudyPhase.FOLLOWUP):
+            target_questions = remove_non_flagged_questions(target_questions, adolescent)
 
         current_question = target_questions.filter(
             id=current_question_id).first()

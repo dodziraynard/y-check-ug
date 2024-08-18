@@ -2,6 +2,7 @@ package com.hrd.ycheck.ui.questionnaire
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -48,6 +49,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
     private var stack = ArrayDeque<String>()
     private lateinit var audioPlayer: AudioPlayer
     private lateinit var studyPhase: String
+    private var isFollowup: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,8 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
 
         questionnaireType = intent.getStringExtra("question_type") ?: QuestionnaireType.SURVEY
         currentQuestionId = intent.getStringExtra("current_question_id") ?: "-1"
-        val isFollowup = intent.getBooleanExtra("isFollowup", false)
+        isFollowup = intent.getBooleanExtra("isFollowup", false)
+
         studyPhase = if (isFollowup)
             StudyPhase.FOLLOWUP
         else {
@@ -413,6 +416,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         val intent = Intent(this, SessionEndActivity::class.java)
         intent.putExtra("current_question_id", currentQuestionId)
         intent.putExtra("question_type", questionType)
+        intent.putExtra("isFollowup", isFollowup)
         intent.putExtra("congratulated_for_session_number", currentSessionNumber)
         intent.putExtra("adolescent", adolescent)
         intent.putExtra("message", message)

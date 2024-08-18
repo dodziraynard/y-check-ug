@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hrd.ycheck.databinding.ActivitySessionEndBinding
 import com.hrd.ycheck.models.Adolescent
 import com.hrd.ycheck.ui.questionnaire.MultipleQuestionnaireActivity
-import com.hrd.ycheck.ui.questionnaire.QuestionnaireActivity
 import com.hrd.ycheck.utils.QuestionnaireType
 import kotlin.random.Random
 
@@ -31,6 +30,7 @@ class SessionEndActivity : AppCompatActivity() {
         val adolescent: Adolescent? = intent.getParcelableExtra("adolescent")
         val congratulatedFor = intent.getLongExtra("congratulated_for_session_number", -1L)
         val serialisedStack = intent.getStringExtra("serialisedStack") ?: ""
+        val isFollowup = intent.getBooleanExtra("isFollowup", false)
 
         val message =
             intent.getStringExtra("message") ?: "You have successfully completed the session."
@@ -44,6 +44,7 @@ class SessionEndActivity : AppCompatActivity() {
             intent.putExtra("question_type", questionnaireType)
             intent.putExtra("congratulated_for_session_number", congratulatedFor)
             intent.putExtra("adolescent", adolescent)
+            intent.putExtra("isFollowup", isFollowup)
             intent.putExtra("serialisedStack", serialisedStack)
             startActivity(intent)
             finish()
