@@ -178,6 +178,11 @@ class SummaryFlag(UpstreamSyncBaseModel):
         self.save()
         return result
 
+    def save(self, *args, **kwargs) -> None:
+        if self.study_phase == None:
+            self.study_phase = self.adolescent.study_phase
+        return super().save(*args, **kwargs)
+
 
 class FlagLabel(UpstreamSyncBaseModel):
     name = models.CharField(max_length=50, unique=True, db_index=True)
