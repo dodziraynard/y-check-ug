@@ -22,6 +22,8 @@ class FlagConditionInline(admin.TabularInline):
 
 
 class QuestionInline(admin.TabularInline):
+    ordering = ["number"]
+    fields = ["number", "text", "exclude_study_phase", "exclude_if_not_flagged"]
     model = Question
 
 
