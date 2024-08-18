@@ -165,8 +165,7 @@ def remove_non_flagged_questions(
     ).exclude(final_color_code=Colors.RED.value)
 
     for flag in non_problematic_flags:
-        non_problematic_questions = flag.get_questions().filter(
-            exclude_if_not_flagged=True)
+        non_problematic_questions = flag.get_questions()
 
         questions = questions.exclude(non_problematic_questions)
-    return questions
+    return questions.exclude(exclude_if_not_flagged=True)

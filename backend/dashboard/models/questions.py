@@ -152,7 +152,7 @@ class Question(UpstreamSyncBaseModel):
                                            choices=STUDY_PHASE_CHOICES,
                                            blank=True,
                                            null=True)
-    exclude_if_not_flagged = models.BooleanField(default=False, blank=True, null=True)
+    exclude_if_not_flagged = models.BooleanField(default=None, blank=True, null=True)
 
 
     def has_previous_question_requirement(self, current_question):
