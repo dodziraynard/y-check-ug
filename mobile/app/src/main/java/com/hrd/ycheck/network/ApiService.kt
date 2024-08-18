@@ -91,6 +91,7 @@ interface ApiService {
         @Query("action") action: String? = "next",
         @Query("question_type") questionType: String? = "survey",
         @Query("query") query: String? = "",
+        @Query("study_phase") studyPhase: String = "",
     ): Call<GetMultipleQuestionsResponse?>?
 
     @FormUrlEncoded

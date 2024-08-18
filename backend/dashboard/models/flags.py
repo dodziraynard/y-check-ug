@@ -95,6 +95,25 @@ class SummaryFlag(UpstreamSyncBaseModel):
             name += f"->{self.updated_color_code}"
         return name
 
+    def get_questions(self):
+        colors = self.label.colors.all()
+        flag_conditions = FlagCondition.objects.filter(flag_color__in=colors)
+        question_ids = []
+
+        for condition in flag_conditions:
+            if condition.operator == "range_sum_between" and condition.question1 and condition.question2:
+                ids = Question.objects.filter(
+                    number__gte=condition.question1.number,
+                    number__lte=condition.question2.number).values_list(
+                        "question_id", flat=True)
+                question_ids.extend(ids)
+            elif condition.question1:
+                question_ids.append(condition.question1.question_id)
+            if condition.question2:
+                question_ids.append(condition.question2.question_id)
+
+        return Question.objects.filter(question_id__in=question_ids)
+
     def get_responses(self, study_phase: StudyPhase):
         result = []
         adolescent = self.adolescent
@@ -159,10 +178,6 @@ class SummaryFlag(UpstreamSyncBaseModel):
         self.save()
         return result
 
-    def save(self, *args, **kwargs) -> None:
-
-        return super().save(*args, **kwargs)
-
 
 class FlagLabel(UpstreamSyncBaseModel):
     name = models.CharField(max_length=50, unique=True, db_index=True)
@@ -170,6 +185,7 @@ class FlagLabel(UpstreamSyncBaseModel):
                                            choices=STUDY_PHASE_CHOICES,
                                            blank=True,
                                            null=True)
+    exclude_if_not_flagged = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.name

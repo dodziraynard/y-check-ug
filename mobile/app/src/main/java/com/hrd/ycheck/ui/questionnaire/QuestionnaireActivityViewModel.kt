@@ -77,7 +77,8 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
         action: String?,
         questionType: String,
         query: String? = null,
-    ) {
+        studyPhase: String,
+        ) {
         isLoading.value = true
         apiService?.getMultipleQuestion(
             adolescentId,
@@ -85,6 +86,7 @@ class QuestionnaireActivityViewModel(application: Application) : AndroidViewMode
             action,
             questionType,
             query,
+            studyPhase,
         )?.enqueue(object : Callback<GetMultipleQuestionsResponse?> {
             override fun onResponse(
                 call: Call<GetMultipleQuestionsResponse?>,

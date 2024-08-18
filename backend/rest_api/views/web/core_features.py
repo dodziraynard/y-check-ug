@@ -8,7 +8,6 @@ from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
 from rest_api.permissions import APILevelPermissionCheck
 from rest_framework import generics, permissions, status
 from ycheck.utils.constants import Colors, ReferralStatus
-from django.db.models import Q
 from dashboard.models import Adolescent, SummaryFlag, Referral, Facility, Service
 from rest_framework.response import Response
 from django.db.utils import IntegrityError
