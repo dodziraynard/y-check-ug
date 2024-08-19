@@ -182,8 +182,6 @@ class BasicDemographics(generics.GenericAPIView):
             datetime(2023, 1, 1))
         end_date = _get_date(request.GET.get("end_date")) or timezone.now()
         response_data = get_demographic_data(adolescent_type="basic",start_date=start_date,end_date=end_date)
-        print(response_data)
-
         return Response({"basic_demographics": response_data})
 
 
@@ -208,7 +206,6 @@ class CommunityDemographics(generics.GenericAPIView):
             datetime(2023, 1, 1))
         end_date = _get_date(request.GET.get("end_date")) or timezone.now()
         response_data = get_demographic_data(adolescent_type="community",start_date=start_date,end_date=end_date)
-        print(response_data)
         return Response({"community_demographics": response_data})
 
 
