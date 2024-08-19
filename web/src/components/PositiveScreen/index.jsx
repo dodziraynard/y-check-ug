@@ -22,6 +22,7 @@ function PositiveScreen() {
                         <TableView
                             responseDataAttribute="red_flag_distribution"
                             dataSourceUrl={`${BASE_API_URI}/positive-screened/`}
+                            filterByDate={true}
                             headers={[
                                 {
                                     key: "name", value: "Condition"

@@ -20,6 +20,7 @@ function SecondaryDemographics() {
                         <TableView
                             responseDataAttribute="secondary_demographics"
                             dataSourceUrl={`${BASE_API_URI}/secondary-demographics/`}
+                            filterByDate={true}
                             headers={[
                                 {
                                     key: "Age", value: "Age"

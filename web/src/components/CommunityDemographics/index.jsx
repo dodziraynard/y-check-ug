@@ -21,6 +21,7 @@ function CommunityDemographics() {
                         <TableView
                             responseDataAttribute="community_demographics"
                             dataSourceUrl={`${BASE_API_URI}/community-demographics/`}
+                            filterByDate={true}
                             headers={[
                                 {
                                     key: "Age", value: "Age"
