@@ -3,9 +3,11 @@ from django.db.models import Count
 from dashboard.models import *
 
 
-def get_demographic_data(adolescent_type):
+def get_demographic_data(adolescent_type,start_date, end_date):
     # Query to get counts of adolescents grouped by age and gender
-    adolescents = Adolescent.objects.filter(type=adolescent_type).values(
+    adolescents = Adolescent.objects.filter(created_at__date__gte=start_date,
+                                            created_at__date__lte=end_date,
+                                            type=adolescent_type).values(
         'age', 'gender').annotate(count=Count('id'))
 
     # Initialize dictionaries to store counts
@@ -57,6 +59,8 @@ def get_demographic_data(adolescent_type):
     })
 
     return response_data
+
+
 
 
 def get_age_distribution_data():

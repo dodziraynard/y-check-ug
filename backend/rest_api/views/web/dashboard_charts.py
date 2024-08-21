@@ -178,7 +178,10 @@ class BasicDemographics(generics.GenericAPIView):
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
-        response_data = get_demographic_data(adolescent_type="basic")
+        start_date = _get_date(request.GET.get("start_date")) or make_aware(
+            datetime(2023, 1, 1))
+        end_date = _get_date(request.GET.get("end_date")) or timezone.now()
+        response_data = get_demographic_data(adolescent_type="basic",start_date=start_date,end_date=end_date)
         return Response({"basic_demographics": response_data})
 
 
@@ -187,7 +190,10 @@ class SecondaryDemographics(generics.GenericAPIView):
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
-        response_data = get_demographic_data(adolescent_type="secondary")
+        start_date = _get_date(request.GET.get("start_date")) or make_aware(
+            datetime(2023, 1, 1))
+        end_date = _get_date(request.GET.get("end_date")) or timezone.now()
+        response_data = get_demographic_data(adolescent_type="secondary",start_date=start_date,end_date=end_date)
         return Response({"secondary_demographics": response_data})
 
 
@@ -196,7 +202,10 @@ class CommunityDemographics(generics.GenericAPIView):
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, format=None):
-        response_data = get_demographic_data(adolescent_type="community")
+        start_date = _get_date(request.GET.get("start_date")) or make_aware(
+            datetime(2023, 1, 1))
+        end_date = _get_date(request.GET.get("end_date")) or timezone.now()
+        response_data = get_demographic_data(adolescent_type="community",start_date=start_date,end_date=end_date)
         return Response({"community_demographics": response_data})
 
 
@@ -216,6 +225,9 @@ class PositiveScreenedView(generics.GenericAPIView):
 
     @method_decorator(cache_page(60 * 2))
     def get(self, request, *args, **kwargs):
+        start_date = _get_date(request.GET.get("start_date")) or make_aware(
+            datetime(2023, 1, 1))
+        end_date = _get_date(request.GET.get("end_date")) or timezone.now()
         red_flag_code = Colors.RED.value
         categories = ["basic", "secondary", "community"]
         result = []
@@ -228,7 +240,7 @@ class PositiveScreenedView(generics.GenericAPIView):
             red_flags = SummaryFlag.objects.filter(
                 final_color_code=red_flag_code, label=label)
             category_counts = {
-                category: red_flags.filter(adolescent__type=category).count()
+                category: red_flags.filter(adolescent__created_at__gte=start_date, adolescent__created_at__lte=end_date, adolescent__type=category).count()
                 for category in categories
             }
             total_red_flags = sum(category_counts.values())
