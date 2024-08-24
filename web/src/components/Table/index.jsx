@@ -4,6 +4,7 @@ import useAxios from '../../app/hooks/useAxios';
 import { useSearchParams } from "react-router-dom";
 
 import { Spinner } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 
 function TableView({ headers,
     responseDataAttribute = "images",
@@ -27,6 +28,8 @@ function TableView({ headers,
     const [filter2, setFilter2] = useState(filters2?.filter((filter) => filter?.defaultValue)[0]?.key)
     const [sortAscending, setSortAscending] = useState(true)
     const [searchParams] = useSearchParams();
+    const globalStartDate = useSelector((state) => state.global.dashboardDataStartDate);
+    const globalEndDate = useSelector((state) => state.global.dashboardDataEndDate);
 
     const [bulkSelectedIds, setBulkSelectedIds] = useState([])
     const [selectedItems, setSelectedItems] = useState([])
@@ -35,10 +38,22 @@ function TableView({ headers,
     // Filter inputs
     const [search, setSearch] = useState(searchParams.get('query') || "");
     const [sort, setSort] = useState('');
+    
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [pageSize, setPageSize] = useState(100);
 
+    useEffect(() => {
+        if (globalStartDate) {
+            setStartDate(globalStartDate);
+        }
+        if (globalEndDate) {
+            setEndDate(globalEndDate);
+        }
+        trigger(`${dataSourceUrl}?page=${page}&q=${search}&page_size=${pageSize}&filters=${filter}&filters=${filter2}&start_date=${startDate}&end_date=${endDate}`);
+    }, [globalStartDate, globalEndDate]);
+
+    
     // Pagination
     const [page, setPage] = useState(1);
     const [customPage, setCustomPage] = useState(1);
