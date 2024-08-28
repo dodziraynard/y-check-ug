@@ -41,28 +41,6 @@ def download_flags_services_location():
 
 
 @shared_task()
-def download_adoplescents():
-
-    print("Downloading adolescent")
-    download_entities_from_upstream("adolescent", Adolescent)
-
-    print("Downloading adolescentresponse")
-    download_entities_from_upstream("adolescentresponse", AdolescentResponse)
-
-    print("Downloading summaryflag")
-    download_entities_from_upstream("summaryflag", SummaryFlag)
-
-    print("Downloading referral")
-    download_entities_from_upstream("referral", Referral)
-
-    print("Downloading treatment")
-    download_entities_from_upstream("treatment", Treatment)
-
-    print("Downloading conditiontreatment")
-    download_entities_from_upstream("conditiontreatment", ConditionTreatment)
-
-
-@shared_task()
 def download_all_setup_data():
     config, _ = NodeConfig.objects.get_or_create()
 
@@ -175,8 +153,6 @@ def download_questions_from_upstream():
                 config.questions_download_status_message = "Couldn't download all options"
                 config.questions_download_status = SyncStatus.FAILED.value
 
-            download_entities_from_upstream("flaglabel", FlagLabel)
-
             previous_req_donwnloaded = download_entities_from_upstream(
                 "previousresponserequirement", PreviousResponseRequirement)
             if not previous_req_donwnloaded:
@@ -199,30 +175,28 @@ def download_questions_from_upstream():
         config.save()
 
 
-def download_entities_from_upstream(model_name, model):
+def download_entities_from_upstream(model_name, model, start_page=1):
     logger.info(f"Tiggered download for {model_name}")
 
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host:
         logger.info("No host or syncing already in progress.")
         return False
-    page = 1
-    total_page = None
+    page = start_page
     while page:
-        logger.info("Donwloading %s page %s of %s", model_name, str(page), str(total_page))
         params = {"page": page}
-        url = "?".join(
+        url = "?".join([
             config.up_stream_host + f"/api/sync/download/{model_name}/",
-            urllib.parse.urlencode(params))
+            urllib.parse.urlencode(params),
+        ])
         response = requests.get(url)
         if response.status_code == 200:
             data_items = response.json().get("data")
-            page = response.json().get("next_page")
-            total_page = response.json().get("total")
+            total_page = response.json().get("total_pages")
             logger.info("Retrieved %s: %s items", model_name, len(data_items))
             for index, data_dict in enumerate(data_items, 1):
                 text = colored(
-                    f"Inserting ..... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%",
+                    f"Page {page} of {total_page}: Inserting ... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%",
                     "light_cyan")
                 logger.debug(text)
                 try:
@@ -231,8 +205,10 @@ def download_entities_from_upstream(model_name, model):
                     logger.info("Downloaded %s: %s", model_name, str(obj))
                 except Exception as e:
                     logger.error("Exception %s: %s", model_name, str(e))
-            return True
-    return False
+            page = response.json().get("next_page")
+        else:
+            return False
+    return True
 
 
 def prepare_entity_files(objects: list[UpstreamSyncBaseModel],
