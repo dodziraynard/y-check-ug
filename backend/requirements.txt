@@ -16,7 +16,7 @@ gunicorn>=20.0
 geocoder>=1.0
 gevent>=22.0
 redis>=4.5.1
-django-rest-knox>4.2.0
+django-rest-knox==4.2.0
 psycopg2-binary>=2.8.6
 timeago>=1.0.16
 uuid7>=0.1.0
