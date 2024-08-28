@@ -382,68 +382,6 @@ class GetNextAvailableQuestions(generics.GenericAPIView):
         return Response(response_data)
 
 
-class RespondToSurveyQuestion(generics.GenericAPIView):
-    """
-    Retrieve a list of checkup locations.
-    """
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = ResponseSerialiser
-
-    def post(self, request, *args, **kwargs):
-        current_question_id = request.data.get("question_id")
-        adolescent_id = request.data.get("adolescent_id")
-        value = request.data.get("value")
-        option_ids = request.data.getlist("option_ids")
-
-        adolescent = Adolescent.objects.filter(id=adolescent_id).first()
-        if not adolescent:
-            return Response({"error_message": "Adolescent not found."})
-
-        current_question = Question.objects.filter(
-            id=current_question_id).first()
-        if not current_question:
-            return Response({"error_message": "Question not found."})
-
-        try:
-            response, _ = AdolescentResponse.objects.get_or_create(
-                question=current_question, adolescent=adolescent)
-        except AdolescentResponse.MultipleObjectsReturned:
-            AdolescentResponse.objects.filter(question=current_question,
-                                              adolescent=adolescent).delete()
-            response = AdolescentResponse.objects.create(
-                question=current_question, adolescent=adolescent)
-
-        if current_question.input_type in [
-                ResponseInputType.TEXT_FIELD.value,
-                ResponseInputType.NUMBER_FIELD.value,
-                ResponseInputType.RANGER_SLIDER.value
-        ]:
-            if not value:
-                return Response(
-                    {"error_message": "Simple value field is required."})
-            response.text = value
-
-        elif current_question.input_type in [
-                ResponseInputType.CHECKBOXES.value,
-                ResponseInputType.RADIO_BUTTON.value
-        ]:
-            if not option_ids:
-                return Response(
-                    {"error_message": "Valid option ids are required."})
-
-            options = Option.objects.filter(question=current_question,
-                                            id__in=option_ids)
-            response.chosen_options.set(options, clear=True)
-        response.save()
-
-        response_data = {
-            "message": "Saved successfully",
-            "success": True,
-            "current_response": AdolescentResponseSerialiser(response).data,
-        }
-        return Response(response_data)
-
-
 class PostMutipleResponses(generics.GenericAPIView):
     """
     Post responses to multiple questions.

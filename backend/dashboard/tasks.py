@@ -1,6 +1,7 @@
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from django.utils import timezone
 import json
+import urllib.parse
 import logging
 import requests
 from accounts.models import User, SyncGroup
@@ -36,8 +37,29 @@ def download_flags_services_location():
 
     config.general_sync_message = "Downloading checkup locations"
     config.save()
-    download_entities_from_upstream(
-        "checkuplocation", CheckupLocation)
+    download_entities_from_upstream("checkuplocation", CheckupLocation)
+
+
+@shared_task()
+def download_adoplescents():
+
+    print("Downloading adolescent")
+    download_entities_from_upstream("adolescent", Adolescent)
+
+    print("Downloading adolescentresponse")
+    download_entities_from_upstream("adolescentresponse", AdolescentResponse)
+
+    print("Downloading summaryflag")
+    download_entities_from_upstream("summaryflag", SummaryFlag)
+
+    print("Downloading referral")
+    download_entities_from_upstream("referral", Referral)
+
+    print("Downloading treatment")
+    download_entities_from_upstream("treatment", Treatment)
+
+    print("Downloading conditiontreatment")
+    download_entities_from_upstream("conditiontreatment", ConditionTreatment)
 
 
 @shared_task()
@@ -80,7 +102,8 @@ def download_users_from_upstream():
             total_users = len(users)
             for index, user_dict in enumerate(users, 1):
                 text = colored(
-                    f"Downloading ..... {index}/{len(users)} i.e., {round(index/len(users)*100, 2)}%", "light_cyan")
+                    f"Downloading ..... {index}/{len(users)} i.e., {round(index/len(users)*100, 2)}%",
+                    "light_cyan")
                 logger.debug(text)
                 try:
                     UpstreamSyncBaseModel.deserialise_into_object(
@@ -89,8 +112,9 @@ def download_users_from_upstream():
                     user_id = user_dict.get("surname")
                     surname = user_dict.get("other_names")
                     other_names = user_dict.get("id")
-                    logger.debug("error", user_id, surname,
-                                 other_names, type(e), str(e))
+                    logger.debug(
+                        "error user_id=%s, surname=%s, other_names=%s, error-type=%s, error=%s",
+                        user_id, surname, other_names, type(e), str(e))
                     continue
                 config.users_download_status_message = f"Downloaded {index}/{total_users}, {int(index/total_users*100)}%"
                 config.save()
@@ -99,7 +123,7 @@ def download_users_from_upstream():
             config.users_download_status_message = "User query request failed."
             config.users_download_status = SyncStatus.FAILED.value
     except Exception as e:
-        logger.exception("User download failed with error %s", str(e))
+        logger.error("User download failed with error %s", str(e))
         config.users_download_status_message = f"Error occured: {str(e)}"
         config.users_download_status = SyncStatus.FAILED.value
     finally:
@@ -136,7 +160,8 @@ def download_questions_from_upstream():
             total_questions = len(questions)
             for index, question_dict in enumerate(questions, 1):
                 text = colored(
-                    f"Downloading ..... {index}/{len(questions)} i.e., {round(index/len(questions)*100, 2)}%", "light_cyan")
+                    f"Downloading ..... {index}/{len(questions)} i.e., {round(index/len(questions)*100, 2)}%",
+                    "light_cyan")
                 logger.debug(text)
 
                 UpstreamSyncBaseModel.deserialise_into_object(
@@ -165,8 +190,8 @@ def download_questions_from_upstream():
             config.questions_download_status_message = "User query request failed."
             config.questions_download_status = SyncStatus.FAILED.value
     except Exception as e:
-        logger.exception(
-            "Error occured while downloading questions: %s", str(e))
+        logger.error("Error occured while downloading questions: %s, data=%s",
+                     str(e))
         config.questions_download_status_message = f"Error occured: {str(e)}"
         config.questions_download_status = SyncStatus.FAILED.value
     finally:
@@ -181,31 +206,42 @@ def download_entities_from_upstream(model_name, model):
     if not config.up_stream_host:
         logger.info("No host or syncing already in progress.")
         return False
-    url = config.up_stream_host + f"/api/sync/download/{model_name}/"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data_items = response.json().get("data")
-        logger.info("Retrieved %s: %s items", model_name, len(data_items))
-        for index, data_dict in enumerate(data_items, 1):
-            text = colored(
-                f"Downloading ..... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%", "light_cyan")
-            logger.debug(text)
-            try:
-                obj = UpstreamSyncBaseModel.deserialise_into_object(
-                    model, data_dict)
-                logger.info("Downloaded %s: %s", model_name, str(obj))
-            except Exception as e:
-                logger.exception("Downloaded %s: %s", model_name, str(e))
-        return True
+    page = 1
+    total_page = None
+    while page:
+        logger.info("Donwloading %s page %s of %s", model_name, str(page), str(total_page))
+        params = {"page": page}
+        url = "?".join(
+            config.up_stream_host + f"/api/sync/download/{model_name}/",
+            urllib.parse.urlencode(params))
+        response = requests.get(url)
+        if response.status_code == 200:
+            data_items = response.json().get("data")
+            page = response.json().get("next_page")
+            total_page = response.json().get("total")
+            logger.info("Retrieved %s: %s items", model_name, len(data_items))
+            for index, data_dict in enumerate(data_items, 1):
+                text = colored(
+                    f"Inserting ..... {index}/{len(data_items)} i.e., {round(index/len(data_items)*100, 2)}%",
+                    "light_cyan")
+                logger.debug(text)
+                try:
+                    obj = UpstreamSyncBaseModel.deserialise_into_object(
+                        model, data_dict)
+                    logger.info("Downloaded %s: %s", model_name, str(obj))
+                except Exception as e:
+                    logger.error("Exception %s: %s", model_name, str(e))
+            return True
     return False
 
 
-def prepare_entity_files(objects: list[UpstreamSyncBaseModel], model_name: str) -> dict | None:
+def prepare_entity_files(objects: list[UpstreamSyncBaseModel],
+                         model_name: str) -> dict | None:
     logger.debug("Upload all %s files triggered.", model_name)
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host:
-        logger.debug(
-            "No hosts configured or %s upload already in process", model_name)
+        logger.debug("No hosts configured or %s upload already in process",
+                     model_name)
         return
 
     failed_ids = []
@@ -222,19 +258,21 @@ def prepare_entity_files(objects: list[UpstreamSyncBaseModel], model_name: str) 
             files = {'file': open(file, 'rb')}
             values = {"field_name": field}
             response = requests.post(url, files=files, data=values)
-            if not (response.status_code == 200 and response.json().get("success")):
+            if not (response.status_code == 200
+                    and response.json().get("success")):
                 failed_ids.append(item.id)
 
     objects.exclude(id__in=list(set(failed_ids))).update(synced=True)
 
 
-def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: str, status_field: str):
+def upload_entity_and_update_status(model: UpstreamSyncBaseModel,
+                                    model_name: str, status_field: str):
     logger.debug("Upload all %s entities triggered.", model_name)
 
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host:
-        logger.debug(
-            "No hosts configured or %s upload already in process", model_name)
+        logger.debug("No hosts configured or %s upload already in process",
+                     model_name)
         return
     setattr(config, status_field, SyncStatus.PROGRESS.value)
     setattr(config, f"{status_field}_message", "")
@@ -262,8 +300,8 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
         # Now upload files associated with the objects.
         prepare_entity_files(updated_objects, model_name)
     else:
-        logger.debug("Request to %s returned %s",
-                     url, response.content.decode())
+        logger.debug("Request to %s returned %s", url,
+                     response.content.decode())
         setattr(config, f"{status_field}_message", response.content.decode())
     setattr(config, status_field, SyncStatus.IDLE.value)
     config.save()
@@ -271,31 +309,43 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel, model_name: st
 
 @shared_task()
 def upload_treatments():
-    upload_entity_and_update_status(
-        Treatment, "treatment", "treatments_upload_status")
-    upload_entity_and_update_status(
-        ConditionTreatment, "conditiontreatment", "treatments_upload_status")
+    upload_entity_and_update_status(Treatment, "treatment",
+                                    "treatments_upload_status")
+    upload_entity_and_update_status(ConditionTreatment, "conditiontreatment",
+                                    "treatments_upload_status")
 
 
 @shared_task()
 def upload_referrals():
-    upload_entity_and_update_status(
-        Referral, "referral", "referrals_upload_status")
+    upload_entity_and_update_status(Referral, "referral",
+                                    "referrals_upload_status")
 
 
 @shared_task()
 def upload_adolescents():
     upload_entity_and_update_status(
-        Adolescent, "adolescent", "adolescents_upload_status")
+        Adolescent,
+        "adolescent",
+        "adolescents_upload_status",
+    )
 
     upload_entity_and_update_status(
-        AdolescentResponse, "adolescentresponse", "adolescents_upload_status")
+        AdolescentResponse,
+        "adolescentresponse",
+        "adolescents_upload_status",
+    )
 
     upload_entity_and_update_status(
-        SummaryFlag, "summaryflag", "adolescents_upload_status")
+        SummaryFlag,
+        "summaryflag",
+        "adolescents_upload_status",
+    )
 
     upload_entity_and_update_status(
-        AdolescentActivityTime, "adolescentactivitytime", "adolescents_upload_status")
+        AdolescentActivityTime,
+        "adolescentactivitytime",
+        "adolescents_upload_status",
+    )
 
 
 @shared_task()
@@ -304,7 +354,7 @@ def sync_object_deletion():
     deleted_objects = DeletionBackLog.objects.all()[:50]
     if deleted_objects.count() == 0:
         return
-    logger.debug("Found %s objects for deletion", deleted_objects.count())
+    logger.debug("Found %s objects for deletion", str(deleted_objects.count()))
 
     config, _ = NodeConfig.objects.get_or_create()
     if not config.up_stream_host:
@@ -312,8 +362,9 @@ def sync_object_deletion():
         return
 
     url = config.up_stream_host + f"/api/sync/delete-entities/"
-    data = {"data_items": json.dumps(
-        [obj.serialise() for obj in deleted_objects])}
+    data = {
+        "data_items": json.dumps([obj.serialise() for obj in deleted_objects])
+    }
     response = requests.post(url, data=data)
 
     if response.status_code == 200:
@@ -337,46 +388,43 @@ schedule_every_2_minutes, created = IntervalSchedule.objects.get_or_create(
 
 def setup_period_tasks():
     # Download setup data
-    if not PeriodicTask.objects.filter(task='dashboard.tasks.download_all_setup_data').exists():
+    if not PeriodicTask.objects.filter(
+            task='dashboard.tasks.download_all_setup_data').exists():
         PeriodicTask.objects.create(
             interval=schedule_every_5_hour,
             name='Download Setup Data',
             task='dashboard.tasks.download_all_setup_data',
-            start_time=timezone.now()
-        )
+            start_time=timezone.now())
 
     # Upload adolescent
-    if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_adolescents').exists():
-        PeriodicTask.objects.create(
-            interval=schedule_every_2_minutes,
-            name='Upload Adolescents',
-            task='dashboard.tasks.upload_adolescents',
-            start_time=timezone.now()
-        )
+    if not PeriodicTask.objects.filter(
+            task='dashboard.tasks.upload_adolescents').exists():
+        PeriodicTask.objects.create(interval=schedule_every_2_minutes,
+                                    name='Upload Adolescents',
+                                    task='dashboard.tasks.upload_adolescents',
+                                    start_time=timezone.now())
 
     # Upload referrals
-    if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_referrals').exists():
-        PeriodicTask.objects.create(
-            interval=schedule_every_2_minutes,
-            name='Upload Referrals',
-            task='dashboard.tasks.upload_referrals',
-            start_time=timezone.now()
-        )
+    if not PeriodicTask.objects.filter(
+            task='dashboard.tasks.upload_referrals').exists():
+        PeriodicTask.objects.create(interval=schedule_every_2_minutes,
+                                    name='Upload Referrals',
+                                    task='dashboard.tasks.upload_referrals',
+                                    start_time=timezone.now())
 
     # Upload treatments
-    if not PeriodicTask.objects.filter(task='dashboard.tasks.upload_treatments').exists():
-        PeriodicTask.objects.create(
-            interval=schedule_every_2_minutes,
-            name='Upload Treatments',
-            task='dashboard.tasks.upload_treatments',
-            start_time=timezone.now()
-        )
+    if not PeriodicTask.objects.filter(
+            task='dashboard.tasks.upload_treatments').exists():
+        PeriodicTask.objects.create(interval=schedule_every_2_minutes,
+                                    name='Upload Treatments',
+                                    task='dashboard.tasks.upload_treatments',
+                                    start_time=timezone.now())
 
     # Sync deleted objects
-    if not PeriodicTask.objects.filter(task='dashboard.tasks.sync_object_deletion').exists():
+    if not PeriodicTask.objects.filter(
+            task='dashboard.tasks.sync_object_deletion').exists():
         PeriodicTask.objects.create(
             interval=schedule_every_2_minutes,
             name='Sync Object Deletion',
             task='dashboard.tasks.sync_object_deletion',
-            start_time=timezone.now()
-        )
+            start_time=timezone.now())

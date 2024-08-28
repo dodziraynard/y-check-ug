@@ -582,7 +582,7 @@ class NewAdolescentActivity : AppCompatActivity() {
         val consents =
             listOf(IAFConsents.ADOLESCENT, IAFConsents.PARENT, IAFConsents.ADOLESCENT_PARENT)
 
-        if (!((consents.contains(adolescent.consent) && age > 18) || (adolescent.consent == IAFConsents.ADOLESCENT_PARENT && age < 18))) {
+        if (!((consents.contains(adolescent.consent) && age >= 18) || (adolescent.consent == IAFConsents.ADOLESCENT_PARENT && age < 18))) {
             binding.icfConfErrorMessageLabel.visibility = View.VISIBLE
             if (age < 18) {
                 binding.icfConfErrorMessageLabel.text =
