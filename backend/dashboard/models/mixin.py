@@ -233,7 +233,7 @@ class UpstreamSyncMethodsModel():
         # Save to compute content hash.
         obj.save()
 
-        # Use update instead of save to prevent reset synced to False.
+        # Use update instead of save to prevent reseting synced to False.
         if synced:
             model.objects.filter(id=obj.id).update(synced=True)
         return obj
