@@ -14,11 +14,11 @@ from django.db import IntegrityError
 
 from setup.models import NodeConfig
 
-
 logger = logging.getLogger(__name__)
 
 
 class UpstreamSyncManager(BaseUserManager):
+
     def get_queryset(self) -> models.QuerySet:
         return super().get_queryset()
 
@@ -27,22 +27,32 @@ class UpstreamSyncMethodsModel():
 
     def _get_serialised_value(self, field):
         if type(field) == models.fields.related.ManyToManyField:
-            return list(getattr(self, field.name).all().values_list("id", flat=True))
-        if type(field) in [models.fields.DateTimeField, models.fields.DateField]:
+            return list(
+                getattr(self, field.name).all().values_list("id", flat=True))
+        if type(field) in [
+                models.fields.DateTimeField, models.fields.DateField
+        ]:
             date = getattr(self, field.name)
             if date:
                 return date.isoformat()
             return None
         if type(field) == models.fields.BooleanField:
             return getattr(self, field.name)
-        if type(field) in [models.fields.UUIDField, models.fields.DecimalField]:
+        if type(field) in [
+                models.fields.UUIDField, models.fields.DecimalField
+        ]:
             return str(getattr(self, field.name))
-        if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
+        if type(field) in [
+                models.fields.files.ImageField, models.fields.files.FileField
+        ]:
             file = getattr(self, field.name)
             if file:
                 return file.url
             return None
-        if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
+        if type(field) in [
+                models.fields.related.ForeignKey,
+                models.fields.related.OneToOneField
+        ]:
             obj = getattr(self, field.name)
             if obj:
                 return obj.id
@@ -51,7 +61,9 @@ class UpstreamSyncMethodsModel():
 
     @classmethod
     def _get_deserialised_value(cls, field, value):
-        if type(field) in [models.fields.DateTimeField, models.fields.DateField]:
+        if type(field) in [
+                models.fields.DateTimeField, models.fields.DateField
+        ]:
             if isinstance(value, str):
                 return datetime.fromisoformat(value).astimezone()
             return None
@@ -61,7 +73,10 @@ class UpstreamSyncMethodsModel():
         fields = self.get_fields()
         result = []
         for field in fields:
-            if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
+            if type(field) in [
+                    models.fields.files.ImageField,
+                    models.fields.files.FileField
+            ]:
                 result.append(field.name)
         return result
 
@@ -109,16 +124,21 @@ class UpstreamSyncMethodsModel():
                          response.status_code)
 
     @classmethod
-    def deserialise_into_object(cls, model, data: dict, download_files=True):
+    def deserialise_into_object(cls,
+                                model,
+                                data: dict,
+                                download_files=True,
+                                synced=True):
         if not isinstance(data, dict):
-            logger.debug(
-                "Valid data type. Expected dict but got %s", type(data))
+            logger.debug("Valid data type. Expected dict but got %s",
+                         type(data))
             return None
 
         # Check if this data already exists and skip.
         content_hash = data.get("content_hash", "random-string")
         obj = model.objects.filter(content_hash=content_hash).first()
-        if content_hash and content_hash != "None" and hasattr(model, "content_hash") and obj:
+        if content_hash and content_hash != "None" and hasattr(
+                model, "content_hash") and obj:
             return obj
 
         parameters = {}
@@ -126,16 +146,23 @@ class UpstreamSyncMethodsModel():
         many_to_many_params = {}
         obj = None
         for key, value in data.items():
-            if not (hasattr(model, key) and hasattr(getattr(model, key), "field")):
+            if not (hasattr(model, key)
+                    and hasattr(getattr(model, key), "field")):
                 continue
             field = getattr(model, key).field
             if type(field) == models.fields.related.ManyToManyField:
                 many_to_many_params[key] = cls._get_deserialised_value(
                     field, value)
                 continue
-            if type(field) in [models.fields.files.ImageField, models.fields.files.FileField]:
+            if type(field) in [
+                    models.fields.files.ImageField,
+                    models.fields.files.FileField
+            ]:
                 continue
-            if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
+            if type(field) in [
+                    models.fields.related.ForeignKey,
+                    models.fields.related.OneToOneField
+            ]:
                 key += "_id"
             if field.name in ["id"]:
                 unique_parameters[key] = cls._get_deserialised_value(
@@ -159,7 +186,10 @@ class UpstreamSyncMethodsModel():
                 for field_name in model._meta.constraints[0].fields:
                     field = getattr(model, field_name).field
                     key = field.name
-                    if type(field) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
+                    if type(field) in [
+                            models.fields.related.ForeignKey,
+                            models.fields.related.OneToOneField
+                    ]:
                         key += "_id"
                     params[key] = cls._get_deserialised_value(
                         field, data[field_name])
@@ -186,24 +216,35 @@ class UpstreamSyncMethodsModel():
                 # Host cannot download from local node.
                 host = config.up_stream_host
                 for field in obj.get_fields():
-                    if type(field) == models.fields.files.ImageField and data.get(field.name):
+                    if type(field
+                            ) == models.fields.files.ImageField and data.get(
+                                field.name):
                         source_url = host + data.get(field.name)
                         source_url = source_url.replace("//assets", "/assets")
                         obj._download_image(field.name, source_url)
 
-                    if type(field) == models.fields.files.FileField and data.get(field.name):
+                    if type(field
+                            ) == models.fields.files.FileField and data.get(
+                                field.name):
                         source_url = host + data.get(field.name)
                         source_url = source_url.replace("//assets", "/assets")
                         obj._download_file(field.name, source_url)
 
         # Save to compute content hash.
         obj.save()
+
+        # Use update instead of save to prevent reset synced to False.
+        if synced:
+            model.objects.filter(id=obj.id).update(synced=True)
         return obj
 
 
 class UpstreamSyncBaseModel(UpstreamSyncMethodsModel, models.Model):
-    id = models.CharField(primary_key=True, max_length=120,
-                          unique=True, default=uuid_extensions.uuid7, db_index=True)
+    id = models.CharField(primary_key=True,
+                          max_length=120,
+                          unique=True,
+                          default=uuid_extensions.uuid7,
+                          db_index=True)
     uuid = models.UUIDField(default=uuid_extensions.uuid7, null=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
@@ -219,11 +260,16 @@ class UpstreamSyncBaseModel(UpstreamSyncMethodsModel, models.Model):
     def get_hash(self):
         values = []
         fields = sorted(list(self._meta.fields), key=lambda a: a.name)
-        fields = list(filter(lambda a: a.name not in [
-                      "created_at", "updated_at", "localnode", "synced", "content_hash"], fields))
+        fields = list(
+            filter(
+                lambda a: a.name not in [
+                    "created_at", "updated_at", "localnode", "synced",
+                    "content_hash"
+                ], fields))
         for field in fields:
             values.extend([field.name, str(getattr(self, field.name))])
-        return hashlib.sha256(".".join(values).replace("None", "").encode()).hexdigest()
+        return hashlib.sha256(".".join(values).replace(
+            "None", "").encode()).hexdigest()
 
     def save(self, *args, **kwargs) -> None:
         self.synced = False
