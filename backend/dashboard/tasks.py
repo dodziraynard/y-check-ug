@@ -204,7 +204,8 @@ def download_entities_from_upstream(model_name, model, start_page=1):
                         model, data_dict)
                     logger.info("Downloaded %s: %s", model_name, str(obj))
                 except Exception as e:
-                    logger.error("Exception %s: %s", model_name, str(e))
+                    logger.exception("Exception %s: %s", model_name, str(e))
+                    raise e
             page = response.json().get("next_page")
         else:
             return False

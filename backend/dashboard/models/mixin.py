@@ -169,6 +169,8 @@ class UpstreamSyncMethodsModel():
                     field, value)
             parameters[key] = cls._get_deserialised_value(field, value)
 
+        parameters["synced"] = synced
+
         exists = model.objects.filter(**unique_parameters).exists()
 
         if exists:
@@ -206,7 +208,6 @@ class UpstreamSyncMethodsModel():
         # Set many to many relations.
         for key, value in many_to_many_params.items():
             getattr(obj, key).set(value)
-            obj.save()
 
         # Download files
         if download_files:
@@ -234,7 +235,7 @@ class UpstreamSyncMethodsModel():
         obj.save()
 
         # Use update instead of save to prevent reseting synced to False.
-        if synced:
+        if synced and not obj.synced:
             model.objects.filter(id=obj.id).update(synced=True)
         return obj
 
@@ -272,7 +273,8 @@ class UpstreamSyncBaseModel(UpstreamSyncMethodsModel, models.Model):
             "None", "").encode()).hexdigest()
 
     def save(self, *args, **kwargs) -> None:
-        self.synced = False
-        self.localnode = settings.NODE_NAME
-        self.content_hash = self.get_hash()
+        content_hash = self.get_hash()
+        self.synced = self.synced if content_hash == self.content_hash else False
+        self.content_hash = content_hash
+        self.localnode = settings.NODE_NAME if not self.synced else self.localnode
         return super().save(*args, **kwargs)
