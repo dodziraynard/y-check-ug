@@ -26,3 +26,4 @@ xhtml2pdf>0.2.9
 reportlab>=4.2.2
 pyserde>0.16.0
 python-dateutil>=2.9.0
+model-mommy==2.0.0

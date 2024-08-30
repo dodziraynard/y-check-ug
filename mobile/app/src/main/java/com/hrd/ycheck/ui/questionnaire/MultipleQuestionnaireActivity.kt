@@ -287,7 +287,7 @@ class MultipleQuestionnaireActivity : AppCompatActivity() {
         if (formIsValid) {
             // Convert questionResponsesMap to json JSon string
             val jsonString = Gson().toJson(questionResponsesMap)
-            viewModel.postMultipleResponses(adolescentId, jsonString)
+            viewModel.postMultipleResponses(adolescentId, jsonString, studyPhase)
         }
     }
 

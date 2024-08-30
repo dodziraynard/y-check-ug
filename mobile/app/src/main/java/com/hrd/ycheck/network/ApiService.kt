@@ -107,7 +107,8 @@ interface ApiService {
     @POST("post-multiple-responses/")
     fun postMultipleResponses(
         @Field("adolescent_id") adolescentId: String,
-        @Field("question_responses_json") questionResponsesJson: String
+        @Field("question_responses_json") questionResponsesJson: String,
+        @Field("study_phase") studyPhase: String
     ): Call<PostSurveyResponseResponse?>?
 
     @GET("get-schools/")

@@ -64,7 +64,8 @@ class SummaryFlag(UpstreamSyncBaseModel):
     @classmethod
     def compute_flag_color(cls, adolescent: Adolescent,
                            study_phase: StudyPhase):
-        flag_labels = FlagLabel.objects.exclude(exclude_study_phase=study_phase)
+        flag_labels = FlagLabel.objects.exclude(
+            exclude_study_phase=study_phase)
         for label in flag_labels:
             color = label.get_flag_color(adolescent, study_phase)
             if not color:
@@ -112,7 +113,8 @@ class SummaryFlag(UpstreamSyncBaseModel):
             if condition.question2:
                 question_ids.append(condition.question2.question_id)
 
-        return Question.objects.filter(question_id__in=question_ids)
+        return Question.objects.filter(
+            Q(question_id__in=question_ids) | Q(related_label=self.label))
 
     def get_responses(self, study_phase: StudyPhase):
         result = []
