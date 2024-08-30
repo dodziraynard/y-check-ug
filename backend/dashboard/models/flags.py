@@ -114,7 +114,7 @@ class SummaryFlag(UpstreamSyncBaseModel):
                 question_ids.append(condition.question2.question_id)
 
         return Question.objects.filter(
-            Q(question_id__in=question_ids) | Q(related_label=self.label))
+            Q(question_id__in=question_ids) | Q(related_labels=self.label))
 
     def get_responses(self, study_phase: StudyPhase):
         result = []

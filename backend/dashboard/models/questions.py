@@ -155,10 +155,9 @@ class Question(UpstreamSyncBaseModel):
     exclude_if_not_flagged = models.BooleanField(default=None,
                                                  blank=True,
                                                  null=True)
-    related_label = models.ForeignKey("FlagLabel",
+    related_labels = models.ManyToManyField("FlagLabel",
                                       related_name="questions",
                                       null=True,
-                                      on_delete=models.SET_NULL,
                                       blank=True)
 
     def has_previous_question_requirement(self, current_question):
