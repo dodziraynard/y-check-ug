@@ -1,3 +1,4 @@
 deployments
 .venv
 scripts
+.DS_Store

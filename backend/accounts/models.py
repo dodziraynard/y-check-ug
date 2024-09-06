@@ -5,6 +5,7 @@ from django.db.models import Q
 from io import BytesIO
 from django.core.files import File
 from PIL import Image as PillowImage, ImageOps
+from django.utils import timezone
 from django.contrib.auth.models import (
     AbstractBaseUser,
     Permission,
@@ -12,7 +13,6 @@ from django.contrib.auth.models import (
     PermissionsMixin)
 from accounts.managers import UserManager
 from dashboard.models.mixin import UpstreamSyncMethodsModel
-
 
 import geocoder
 
@@ -24,21 +24,15 @@ logger = logging.getLogger(__name__)
 
 class User(AbstractBaseUser, UpstreamSyncBaseModel, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True, db_index=True)
-    surname = models.CharField(
-        max_length=50, null=True, blank=True, db_index=True)
-    other_names = models.CharField(
-        max_length=50, null=True, blank=True, db_index=True)
-    phone = models.CharField(max_length=20, null=True,
-                             blank=True, db_index=True)
-    photo = models.ImageField(
-        upload_to='users', storage=OverwriteStorage(), blank=True, null=True)
-    facility = models.ForeignKey(
-        "dashboard.Facility", related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
-    gender = models.CharField(max_length=50, null=True,
-                              blank=True, db_index=True)
+    surname = models.CharField(max_length=50, null=True, blank=True, db_index=True)
+    other_names = models.CharField(max_length=50, null=True, blank=True, db_index=True)
+    phone = models.CharField(max_length=20, null=True, blank=True, db_index=True)
+    photo = models.ImageField(upload_to='users', storage=OverwriteStorage(), blank=True, null=True)
+    facility = models.ForeignKey("dashboard.Facility", related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
+    gender = models.CharField(max_length=50, null=True, blank=True, db_index=True)
     activated = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
     is_active = models.BooleanField(default=True)
@@ -116,7 +110,7 @@ class ActivityLog(models.Model):
     username = models.CharField(max_length=100)
     action = models.TextField()
     ip = models.CharField(max_length=100, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self) -> str:
         return "%s %s" % (self.username, self.action)

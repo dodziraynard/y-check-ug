@@ -1,6 +1,9 @@
 import logging
-from .base import *
+from dotenv import load_dotenv
+load_dotenv()
+
 from .logging_config import *
+from .base import *
 
 logger = logging.getLogger(__name__)
 

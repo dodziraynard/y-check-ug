@@ -11,7 +11,7 @@ from django.core import files
 from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import IntegrityError
-
+from django.utils import timezone
 from setup.models import NodeConfig
 
 logger = logging.getLogger(__name__)
@@ -249,7 +249,7 @@ class UpstreamSyncBaseModel(UpstreamSyncMethodsModel, models.Model):
     uuid = models.UUIDField(default=uuid_extensions.uuid7, null=True)
     localnode = models.CharField(max_length=100, null=True, blank=True)
     synced = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     content_hash = models.CharField(max_length=128, null=True, blank=True)
 

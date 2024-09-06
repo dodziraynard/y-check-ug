@@ -156,9 +156,8 @@ class Question(UpstreamSyncBaseModel):
                                                  blank=True,
                                                  null=True)
     related_labels = models.ManyToManyField("FlagLabel",
-                                      related_name="questions",
-                                      null=True,
-                                      blank=True)
+                                            related_name="questions",
+                                            blank=True)
 
     def has_previous_question_requirement(self, current_question):
         if not current_question:
