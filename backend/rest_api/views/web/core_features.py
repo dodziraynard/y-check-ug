@@ -2,6 +2,7 @@ import logging
 import math
 from typing import List
 from rest_framework import permissions
+from dashboard.cache import Cache
 from ycheck.utils.functions import apply_filters
 from dashboard.forms import FacilityForm
 from rest_api.views.mixins import QUERY_PAGE_SIZE, SimpleCrudMixin
@@ -16,6 +17,7 @@ from django.utils import timezone
 from dateutil.parser import parse
 
 logger = logging.getLogger(__name__)
+cache = Cache()
 
 
 class AdolescentsAPI(SimpleCrudMixin):
@@ -60,19 +62,27 @@ class GetSummaryFlags(generics.GenericAPIView):
     serializer_class = SummaryFlagSerializer
 
     def get(self, request, pid, study_phase, *args, **kwargs):
+        cache_key = Cache.get_summary_flag_key(pid, study_phase)
         adolescent = Adolescent.objects.filter(pid=pid).first()
         if not adolescent:
             return Response({"error_message": f"{pid} not found."})
 
-        # Compute flags
-        SummaryFlag.compute_flag_color(adolescent=adolescent,
-                                       study_phase=study_phase)
+        cached_data = cache.get_cache(cache_key)
+        if not cached_data:
+            # Compute flags
+            SummaryFlag.compute_flag_color(adolescent=adolescent,
+                                           study_phase=study_phase)
 
-        # Retrieve all flags
-        flags = SummaryFlag.objects.filter(
-            study_phase=study_phase, adolescent=adolescent).exclude(
-                label__exclude_study_phase=study_phase).order_by("label__name")
-        data = SummaryFlagSerializer(flags, many=True).data
+            # Retrieve all flags
+            flags = SummaryFlag.objects.filter(
+                study_phase=study_phase, adolescent=adolescent).exclude(
+                    label__exclude_study_phase=study_phase).order_by(
+                        "label__name")
+            data = SummaryFlagSerializer(flags, many=True).data
+            cache.save(cache_key, data)
+        else:
+            data = cached_data
+
         repsonse_data = {
             "summary_flags": data,
         }

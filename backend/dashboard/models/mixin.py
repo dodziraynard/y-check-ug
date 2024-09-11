@@ -12,9 +12,11 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import IntegrityError
 from django.utils import timezone
+from dashboard.cache import Cache
 from setup.models import NodeConfig
 
 logger = logging.getLogger(__name__)
+cache = Cache()
 
 
 class UpstreamSyncManager(BaseUserManager):
@@ -272,9 +274,24 @@ class UpstreamSyncBaseModel(UpstreamSyncMethodsModel, models.Model):
         return hashlib.sha256(".".join(values).replace(
             "None", "").encode()).hexdigest()
 
+    def _handle_summaryflag_cache_invalidation(self):
+        from dashboard.models import (
+            AdolescentResponse,
+            SummaryFlag,
+        )
+        cache_key = None
+        if isinstance(self, AdolescentResponse):
+            cache_key = Cache.get_summary_flag_key(self.adolescent.pid,
+                                                   self.study_phase)
+        elif type(self) in [SummaryFlag]:
+            cache_key = Cache.get_summary_flag_key(self.adolescent.pid,
+                                                   self.study_phase)
+        cache.delete(cache_key)
+
     def save(self, *args, **kwargs) -> None:
         content_hash = self.get_hash()
         self.synced = self.synced if content_hash == self.content_hash else False
         self.content_hash = content_hash
         self.localnode = settings.NODE_NAME if not self.synced else self.localnode
+        self._handle_summaryflag_cache_invalidation()
         return super().save(*args, **kwargs)
