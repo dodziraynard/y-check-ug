@@ -119,25 +119,9 @@ class SummaryFlag(UpstreamSyncBaseModel):
     def get_responses(self, study_phase: StudyPhase):
         result = []
         adolescent = self.adolescent
-        colors = self.label.colors.all()
-        flag_conditions = FlagCondition.objects.filter(flag_color__in=colors)
-        question_ids = []
 
-        for condition in flag_conditions:
-            if condition.operator == "range_sum_between" and condition.question1 and condition.question2:
-                ids = Question.objects.filter(
-                    number__gte=condition.question1.number,
-                    number__lte=condition.question2.number).values_list(
-                        "question_id", flat=True)
-                question_ids.extend(ids)
-            elif condition.question1:
-                question_ids.append(condition.question1.question_id)
-            if condition.question2:
-                question_ids.append(condition.question2.question_id)
-
-        questions = Question.objects.filter(
-            Q(question_id__in=question_ids)
-            & (Q(gender=None) | Q(gender__iexact=adolescent.gender))
+        questions = self.get_questions().filter(
+            (Q(gender=None) | Q(gender__iexact=adolescent.gender))
             & ((Q(adolescent_type=None) |
                 (Q(adolescent_type__iexact=adolescent.type)
                  & Q(invert_adolescent_attribute_requirements=False)))
