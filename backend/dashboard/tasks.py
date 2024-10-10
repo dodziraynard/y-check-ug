@@ -256,31 +256,33 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel,
     config.save()
 
     url = config.up_stream_host + f"/api/sync/upload/{model_name}/"
-    objects: list[UpstreamSyncBaseModel] = model.objects.filter(synced=False)
-    if objects.count() == 0:
+    total = model.objects.filter(synced=False).count()
+    if total == 0:
         return
+    for  _ in range(0, total, 1000):
+        allobjects = model.objects.filter(synced=False)[:1000]
+        objects = model.objects.filter(id__in=allobjects)
+        data = {"data_items": json.dumps([obj.serialise() for obj in objects])}
+        response = requests.post(url, data=data)
+        if response.status_code == 200:
+            response = response.json()
+            success_ids = response.get("success_ids", [])
+            logger.debug("%s %s entities uploaded successfully",
+                        str(len(success_ids)), model_name)
 
-    data = {"data_items": json.dumps([obj.serialise() for obj in objects])}
-    response = requests.post(url, data=data)
-    if response.status_code == 200:
-        response = response.json()
-        success_ids = response.get("success_ids", [])
-        logger.debug("%s %s entities uploaded successfully",
-                     str(len(success_ids)), model_name)
+            error_message = response.get("error_message")
+            updated_objects = objects.filter(id__in=success_ids)
+            if error_message:
+                logger.debug("Server errored: %s", error_message)
+                setattr(config, f"{status_field}_message", error_message)
 
-        error_message = response.get("error_message")
-        updated_objects = objects.filter(id__in=success_ids)
-        if error_message:
-            logger.debug("Server errored: %s", error_message)
-            setattr(config, f"{status_field}_message", error_message)
-
-        # Now upload files associated with the objects.
-        prepare_entity_files(updated_objects, model_name)
-    else:
-        logger.debug("Request to %s returned %s", url,
-                     response.content.decode())
-        setattr(config, f"{status_field}_message", response.content.decode())
-    setattr(config, status_field, SyncStatus.IDLE.value)
+            # Now upload files associated with the objects.
+            prepare_entity_files(updated_objects, model_name)
+        else:
+            logger.debug("Request to %s returned %s", url,
+                        response.content.decode())
+            setattr(config, f"{status_field}_message", response.content.decode())
+        setattr(config, status_field, SyncStatus.IDLE.value)
     config.save()
 
 
