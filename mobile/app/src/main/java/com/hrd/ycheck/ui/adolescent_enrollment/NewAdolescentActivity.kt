@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -123,7 +124,8 @@ class NewAdolescentActivity : AppCompatActivity() {
         }
 
         viewModel.checkupLocations.observe(this) { locs ->
-            val locations = listOf(getString(R.string.choose_location)) + locs.map { it.name }
+            val locations: List<String> =
+                listOf(getString(R.string.choose_location)) + locs.map { it.name }
             val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
                 applicationContext, android.R.layout.simple_dropdown_item_1line, locations
             )
@@ -134,13 +136,16 @@ class NewAdolescentActivity : AppCompatActivity() {
                     override fun onItemSelected(
                         parent: AdapterView<*>?, view: View?, position: Int, id: Long
                     ) {
-                        adolescent.checkupLocation = locations[position]
-                        if (binding.schoolContainer.visibility == View.GONE) {
-                            adolescent.school = locations[position]
+                        if (position > 0) {
+                            adolescent.checkupLocation = locations[position]
+                            if (binding.schoolContainer.visibility == View.GONE) {
+                                adolescent.school = locations[position]
+                            }
                         }
                     }
                 }
 
+            Log.d("HRDTES", "adolescent.checkupLocation: ${adolescent.checkupLocation}")
             // Update location spinner
             binding.checkupLocationSpinner.setSelection(locations.indexOf(adolescent.checkupLocation))
         }
@@ -158,10 +163,13 @@ class NewAdolescentActivity : AppCompatActivity() {
                     override fun onItemSelected(
                         parent: AdapterView<*>?, view: View?, position: Int, id: Long
                     ) {
-                        adolescent.school = allSchoolOptions[position]
+                        if (position > 0) {
+                            adolescent.school = allSchoolOptions[position]
+                        }
                     }
                 }
             // Update school spinner
+            Log.d("HRDTES", "adolescent.school: ${adolescent.school}")
             binding.schoolSpinner.setSelection(allSchoolOptions.indexOf(adolescent.school))
         }
 
@@ -578,7 +586,14 @@ class NewAdolescentActivity : AppCompatActivity() {
             binding.checkupLocationErrorMessageLabel.visibility = View.GONE
         }
 
-        // Consent location
+        if (adolescent.school?.isEmpty() != false) {
+            binding.schoolErrorMessageLabel.visibility = View.VISIBLE
+            return false
+        } else {
+            binding.schoolErrorMessageLabel.visibility = View.GONE
+        }
+
+        // Consent
         val consents =
             listOf(IAFConsents.ADOLESCENT, IAFConsents.PARENT, IAFConsents.ADOLESCENT_PARENT)
 

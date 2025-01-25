@@ -259,19 +259,20 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel,
     total = model.objects.filter(synced=False).count()
     if total == 0:
         return
-    for  _ in range(0, total, 1000):
+    for _ in range(0, total, 1000):
         allobjects = model.objects.filter(synced=False)[:1000]
-        objects = model.objects.filter(id__in=allobjects)
-        data = {"data_items": json.dumps([obj.serialise() for obj in objects])}
+        data = {
+            "data_items": json.dumps([obj.serialise() for obj in allobjects])
+        }
         response = requests.post(url, data=data)
         if response.status_code == 200:
             response = response.json()
             success_ids = response.get("success_ids", [])
             logger.debug("%s %s entities uploaded successfully",
-                        str(len(success_ids)), model_name)
+                         str(len(success_ids)), model_name)
 
             error_message = response.get("error_message")
-            updated_objects = objects.filter(id__in=success_ids)
+            updated_objects = model.objects.filter(id__in=success_ids)
             if error_message:
                 logger.debug("Server errored: %s", error_message)
                 setattr(config, f"{status_field}_message", error_message)
@@ -280,8 +281,9 @@ def upload_entity_and_update_status(model: UpstreamSyncBaseModel,
             prepare_entity_files(updated_objects, model_name)
         else:
             logger.debug("Request to %s returned %s", url,
-                        response.content.decode())
-            setattr(config, f"{status_field}_message", response.content.decode())
+                         response.content.decode())
+            setattr(config, f"{status_field}_message",
+                    response.content.decode())
         setattr(config, status_field, SyncStatus.IDLE.value)
     config.save()
 
@@ -363,6 +365,22 @@ schedule_every_2_minutes, created = IntervalSchedule.objects.get_or_create(
     every=2,
     period=IntervalSchedule.MINUTES,
 )
+
+
+@shared_task()
+def update_followup_completion_status():
+    adolescents = Adolescent.objects.filter(followup_completed=False,
+                                            process_status="completed")
+    for adolescent in adolescents:
+        exit_questions = Question.objects.filter(
+            question_type="exit_interview")
+        responses = AdolescentResponse.objects.filter(
+            adolescent=adolescent,
+            question__in=exit_questions,
+            study_phase="followup")
+        if responses.count() > 5:
+            adolescent.followup_completed = True
+            adolescent.save()
 
 
 def setup_period_tasks():

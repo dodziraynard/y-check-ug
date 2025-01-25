@@ -693,7 +693,7 @@
                         android:textColor="@color/color_warning"
                         android:textSize="@dimen/error_text_size"
                         android:visibility="gone"
-                        tools:text="Check-up location is required."
+                        android:text="Check-up location is required."
                         tools:visibility="visible" />
 
                     <LinearLayout

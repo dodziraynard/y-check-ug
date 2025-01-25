@@ -61,6 +61,7 @@ class Adolescent(UpstreamSyncBaseModel):
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)
+    followup_completed = models.BooleanField(default=False)
     created_by = models.ForeignKey("accounts.User",
                                    on_delete=models.SET_NULL,
                                    null=True,
