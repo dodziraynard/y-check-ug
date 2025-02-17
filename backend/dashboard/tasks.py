@@ -378,9 +378,12 @@ def update_followup_completion_status():
             adolescent=adolescent,
             question__in=exit_questions,
             study_phase="followup")
-        if responses.count() > 5:
+
+        if responses.count() > 10 and AdolescentResponse.objects.filter(
+                question__question_id="Q1200", adolescent=adolescent).exists():
             adolescent.followup_completed = True
-            adolescent.save()
+            Adolescent.objects.filter(id=adolescent.id).update(
+                followup_completed=True)
 
 
 def setup_period_tasks():

@@ -38,7 +38,8 @@ class Adolescent(UpstreamSyncBaseModel):
     consent = models.CharField(max_length=100, blank=True, null=True)
     process_status = models.CharField(max_length=50,
                                       default=ADOLESCENT_STATUS[0][0],
-                                      choices=ADOLESCENT_STATUS)
+                                      choices=ADOLESCENT_STATUS,
+                                      db_index=True)
     picture = models.ImageField(upload_to='images/',
                                 storage=OverwriteStorage(),
                                 blank=True,
@@ -61,7 +62,7 @@ class Adolescent(UpstreamSyncBaseModel):
     gender = models.CharField(max_length=50, blank=True, null=True)
     questionnaire_completed = models.BooleanField(default=False)
     completed_question = models.BooleanField(default=False)
-    followup_completed = models.BooleanField(default=False)
+    followup_completed = models.BooleanField(default=False, db_index=True)
     created_by = models.ForeignKey("accounts.User",
                                    on_delete=models.SET_NULL,
                                    null=True,
