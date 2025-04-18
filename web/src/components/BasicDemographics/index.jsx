@@ -22,7 +22,6 @@ function BasicDemographics() {
                         <TableView
                             responseDataAttribute="basic_demographics"
                             dataSourceUrl={`${BASE_API_URI}/basic-demographics/`}
-                            filterByDate={true}
                             headers={[
                                 {
                                     key: "Age", value: "Age"
